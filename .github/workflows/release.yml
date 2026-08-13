@@ -69,3 +69,7 @@ jobs:
         with:
           files: ./artifacts/*
           generate_release_notes: true
+          # The action does not infer this, so without it a `v0.1.0-rc.1` tag would be published as
+          # a full release and shown as "Latest" ahead of the stable version. A SemVer prerelease
+          # always carries a hyphen, and a stable version never does, so the tag decides.
+          prerelease: ${{ contains(github.ref_name, '-') }}
