@@ -57,12 +57,16 @@ jobs:
         with:
           user: ${{ secrets.NUGET_USER }} # nuget.org profile name, not the account's email address
 
+      # No --skip-duplicate. nuget.org answers 409 for several distinct conditions — the version
+      # already exists, the id is too similar to another, the id is reserved — and that flag
+      # collapses all of them into a success with one canned "already exists" message. That is how
+      # v0.1.0-rc.1 reported a green release while publishing nothing. A tag should be pushed once,
+      # so a genuine duplicate is also a real error worth failing on.
       - name: Publish to NuGet
         run: >
           dotnet nuget push "./artifacts/*.nupkg"
           --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
           --source https://api.nuget.org/v3/index.json
-          --skip-duplicate
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v3
