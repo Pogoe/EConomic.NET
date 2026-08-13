@@ -25,6 +25,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup Label="Test access">
+    <!-- The AOT smoke test drives the generated clients, which are deliberately internal. -->
+    <InternalsVisibleTo Include="EConomic.Net.AotSmokeTest" />
+    <!-- Paging is tested against a fake page source rather than a network. -->
+    <InternalsVisibleTo Include="EConomic.Net.Tests" />
+  </ItemGroup>
+
   <ItemGroup Label="Public API surface lock">
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />

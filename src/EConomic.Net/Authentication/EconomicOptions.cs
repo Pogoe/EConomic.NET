@@ -41,7 +41,14 @@ public sealed class EconomicOptions
     /// Whether to attach a generated <c>Idempotency-Key</c> header to non-GET requests that do not
     /// already carry one, so a retried write is not applied twice. Defaults to <see langword="true"/>.
     /// </summary>
+    /// <remarks>
+    /// Turning this off also stops writes being retried: without a key, repeating a <c>POST</c>
+    /// after an ambiguous failure could create the resource twice.
+    /// </remarks>
     public bool SendIdempotencyKeys { get; set; } = true;
+
+    /// <summary>How throttled and transient failures are retried.</summary>
+    public Http.EconomicRetryOptions Retry { get; set; } = new();
 
     /// <summary>
     /// Creates options pointing at e-conomic's read-only demo agreement. Intended for samples and tests.
@@ -68,6 +75,8 @@ public sealed class EconomicOptions
             throw new InvalidOperationException(
                 $"{nameof(AgreementGrantToken)} is required. Create one at https://www.e-conomic.com/developer/connect.");
         }
+
+        Retry.Validate();
     }
 
     /// <summary>Returns a description that deliberately omits both tokens.</summary>

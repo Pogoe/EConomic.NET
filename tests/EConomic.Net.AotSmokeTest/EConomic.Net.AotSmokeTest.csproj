@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Proves the AOT claim rather than asserting it. The analyzers cannot see that NSwag's
+    reflection-based System.Text.Json calls are backed by a source-generated resolver, so this
+    publishes native and exercises the real serialization path end to end. If trimming removed
+    metadata the client needs, this fails at run time - which is the point.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>EConomic.AotSmokeTest</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Report every trim and AOT warning from the library, one per call site. -->
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <SelfContained>true</SelfContained>
+    <!--
+      The trimmer cannot prove NSwag's JsonSerializer calls are safe, so it warns (IL2026) even
+      though the source-generated context roots every type they touch. IL2075 comes from
+      ConvertToString's enum reflection, which no endpoint reaches: every path and query parameter
+      in these specs is an int or a string. Warnings are therefore not the gate here - the
+      assertions the published binary runs are, and they fail loudly if trimming broke anything.
+    -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\EConomic.Net\EConomic.Net.csproj" />
+  </ItemGroup>
+
+</Project>

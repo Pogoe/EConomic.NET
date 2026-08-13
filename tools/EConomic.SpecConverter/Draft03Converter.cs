@@ -173,9 +173,21 @@ public static class Draft03Converter
                     break;
 
                 case "format" when value is JsonValue format:
-                    // draft-03 spells the date format "full-date".
+                    // draft-03 spells the date format "full-date". e-conomic labels 18 properties
+                    // that way whose own `pattern` is a full ISO-8601 timestamp — lastUpdated is
+                    // one, and it really does come back as 2022-06-02T08:53:29Z. The pattern is the
+                    // authority; trusting the label alone yields a DateOnly that cannot parse the
+                    // value the server sends.
                     var formatName = format.GetValue<string>();
-                    target["format"] = formatName == "full-date" ? "date" : formatName;
+                    if (formatName == "full-date")
+                    {
+                        var pattern = source["pattern"]?.GetValue<string>();
+                        formatName = pattern?.Contains('T', StringComparison.Ordinal) == true
+                            ? "date-time"
+                            : "date";
+                    }
+
+                    target["format"] = formatName;
                     break;
 
                 case "filterable" when value is JsonValue filterable:

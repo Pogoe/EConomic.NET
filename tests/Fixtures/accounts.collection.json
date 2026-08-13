@@ -1,0 +1,35 @@
+{
+  "collection": [
+    {
+      "accountNumber": 1000,
+      "accountType": "heading",
+      "balance": 0.0,
+      "blockDirectEntries": false,
+      "debitCredit": "debit",
+      "name": "RESULTATOPG\u00d8RELSE",
+      "accountingYears": "https://restapi.e-conomic.com/accounts/1000/accounting-years",
+      "self": "https://restapi.e-conomic.com/accounts/1000"
+    },
+    {
+      "accountNumber": 1001,
+      "accountType": "heading",
+      "balance": 0.0,
+      "blockDirectEntries": false,
+      "debitCredit": "debit",
+      "name": "Oms\u00e6tning",
+      "accountingYears": "https://restapi.e-conomic.com/accounts/1001/accounting-years",
+      "self": "https://restapi.e-conomic.com/accounts/1001"
+    }
+  ],
+  "pagination": {
+    "skipPages": 0,
+    "pageSize": 2,
+    "maxPageSizeAllowed": 1000,
+    "results": 200,
+    "resultsWithoutFilter": 200,
+    "firstPage": "https://restapi.e-conomic.com/accounts?pagesize=2&skippages=0",
+    "nextPage": "https://restapi.e-conomic.com/accounts?pagesize=2&skippages=1",
+    "lastPage": "https://restapi.e-conomic.com/accounts?pagesize=2&skippages=99"
+  },
+  "self": "https://restapi.e-conomic.com/accounts?pagesize=2"
+}

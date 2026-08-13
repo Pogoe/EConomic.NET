@@ -2,6 +2,99 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using EConomic.SpecConverter;
 
+// Subcommand: emit the public models, transports and client properties.
+if (args.Length > 0 && args[0].Equals("facade", StringComparison.Ordinal))
+{
+    var facadeSource = args.Length > 1 ? args[1] : Path.Combine("specs", "legacy-openapi", "_all.json");
+    var facadeFile = args.Length > 2 ? args[2] : Path.Combine("src", "EConomic.Net", "Rest", "Facade.g.cs");
+
+    if (!File.Exists(facadeSource))
+    {
+        Console.Error.WriteLine($"Merged document not found: {Path.GetFullPath(facadeSource)}");
+        return 1;
+    }
+
+    var facadeDocument = JsonNode.Parse(File.ReadAllText(facadeSource))!.AsObject();
+    var skippedProperties = new List<string>();
+    var facade = FacadeGenerator.Generate(facadeDocument, "EConomic.Rest", skippedProperties);
+    File.WriteAllText(facadeFile, facade.ReplaceLineEndings("\n"));
+
+    var resourceCount = FacadeGenerator.Resources(facadeDocument)
+        .Count(r => SchemaRegistry.PublishedEntities.Contains(r.Entity));
+
+    Console.WriteLine($"Wrote {facadeFile}: {resourceCount} resources");
+
+    if (skippedProperties.Count > 0)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"{skippedProperties.Count} propert(ies) the facade cannot express yet:");
+        foreach (var skipped in skippedProperties)
+        {
+            Console.WriteLine($"  {skipped}");
+        }
+    }
+
+    return 0;
+}
+
+// Subcommand: emit the public filter and sort surfaces from the merged document.
+if (args.Length > 0 && args[0].Equals("filters", StringComparison.Ordinal))
+{
+    var surfaceSource = args.Length > 1
+        ? args[1]
+        : Path.Combine("specs", "legacy-openapi", "_all.json");
+
+    var surfaceFile = args.Length > 2
+        ? args[2]
+        : Path.Combine("src", "EConomic.Net", "Rest", "Filters.g.cs");
+
+    if (!File.Exists(surfaceSource))
+    {
+        Console.Error.WriteLine($"Merged document not found: {Path.GetFullPath(surfaceSource)}");
+        Console.Error.WriteLine("Run the converter with no arguments first.");
+        return 1;
+    }
+
+    var surfaceDocument = JsonNode.Parse(File.ReadAllText(surfaceSource))!.AsObject();
+    var surfaces = FilterSurfaceGenerator.Generate(surfaceDocument, "EConomic.Rest");
+    File.WriteAllText(surfaceFile, surfaces.ReplaceLineEndings("\n"));
+
+    Console.WriteLine(
+        $"Wrote {surfaceFile}: surfaces for {FilterSurfaceGenerator.CollectionEntities(surfaceDocument).Count} collection entities");
+
+    return 0;
+}
+
+// Subcommand: emit the source-generated JSON context for an NSwag-generated file.
+if (args.Length > 0 && args[0].Equals("json-context", StringComparison.Ordinal))
+{
+    var generatedFile = args.Length > 1
+        ? args[1]
+        : Path.Combine("src", "EConomic.Net", "Rest", "Generated", "LegacyClients.g.cs");
+
+    var contextFile = args.Length > 2
+        ? args[2]
+        : Path.Combine("src", "EConomic.Net", "Rest", "Generated", "EconomicRestJsonContext.g.cs");
+
+    if (!File.Exists(generatedFile))
+    {
+        Console.Error.WriteLine($"Generated file not found: {Path.GetFullPath(generatedFile)}");
+        Console.Error.WriteLine("Run NSwag first: cd tools/nswag && dotnet nswag run legacy.nswag");
+        return 1;
+    }
+
+    var generated = File.ReadAllText(generatedFile);
+    var source = JsonContextGenerator.Generate(generated, "EConomic.Rest.Generated", "EconomicRestJsonContext");
+    File.WriteAllText(contextFile, source.ReplaceLineEndings("\n"));
+
+    Console.WriteLine(
+        $"Wrote {contextFile}: "
+        + $"{JsonContextGenerator.SerializationRoots(generated).Count} serialization roots, "
+        + $"{JsonContextGenerator.ClientClasses(generated).Count} client hooks");
+
+    return 0;
+}
+
 var inputDirectory = args.Length > 0 ? args[0] : Path.Combine("specs", "legacy");
 var outputDirectory = args.Length > 1 ? args[1] : Path.Combine("specs", "legacy-openapi");
 
@@ -132,12 +225,23 @@ var writeOptions = new JsonSerializerOptions { WriteIndented = true, NewLine = "
 var endpointCount = 0;
 var usedOverrides = new HashSet<string>(StringComparer.Ordinal);
 var overrideConflicts = new List<string>();
+var mergeConflicts = new List<string>();
+const string MergedDocumentName = "_all.json";
+
+// Two passes on purpose. Building a document registers its schemas, and registering a schema that
+// already exists merges the endpoint annotations into the stored copy. Embedding components during
+// the first pass would therefore freeze an early document's copy before a later one enriched it,
+// leaving the same component with different content in different files.
+var documents = new List<(string Resource, JsonObject Document)>();
 
 foreach (var (resource, endpoints) in byResource)
 {
-    var document = builder.Build(resource, endpoints);
+    documents.Add((resource, builder.Build(resource, endpoints)));
+    endpointCount += endpoints.Count;
+}
 
-    // Registration happens while building operations, so collect the names afterwards.
+foreach (var (resource, document) in documents)
+{
     builder.AddComponents(document, OpenApiDocumentBuilder.References(document["paths"]));
 
     foreach (var applied in ApplyNameOverrides(document, resource, overrideConflicts))
@@ -147,7 +251,6 @@ foreach (var (resource, endpoints) in byResource)
 
     var path = Path.Combine(outputDirectory, $"{resource}.json");
     File.WriteAllText(path, document.ToJsonString(writeOptions) + "\n");
-    endpointCount += endpoints.Count;
 }
 
 if (overrideConflicts.Count > 0)
@@ -179,8 +282,30 @@ if (staleOverrides.Count > 0)
     return 1;
 }
 
+// A single merged document as well as the per-resource ones. The per-resource files are the
+// reviewable artifact; code generation needs one document, because generating each separately
+// would emit a copy of every shared type per document and they would collide in one namespace.
+var merged = BuildMergedDocument(outputDirectory, mergeConflicts);
+if (mergeConflicts.Count > 0)
+{
+    Console.Error.WriteLine("Components with the same name but different content across documents:");
+    foreach (var conflict in mergeConflicts)
+    {
+        Console.Error.WriteLine($"  {conflict}");
+    }
+
+    return 1;
+}
+
+var mergedPath = Path.Combine(outputDirectory, MergedDocumentName);
+File.WriteAllText(mergedPath, merged.ToJsonString(writeOptions) + "\n");
+
 Console.WriteLine();
 Console.WriteLine($"Wrote {byResource.Count} documents covering {endpointCount} endpoints to {outputDirectory}");
+Console.WriteLine(
+    $"Merged into {MergedDocumentName}: "
+    + $"{merged["paths"]!.AsObject().Count} paths, "
+    + $"{merged["components"]!["schemas"]!.AsObject().Count} components");
 Console.WriteLine($"Components: {registry.Schemas.Count} distinct schemas after structural dedup");
 
 if (toleratedFiles.Count > 0)
@@ -214,6 +339,73 @@ if (unhandledKeywords.Count > 0)
 }
 
 return 0;
+
+// Combines the per-resource documents into one. Component names are globally unique because a
+// single registry assigns them, so identical names must carry identical content; anything else is
+// a bug worth failing on rather than silently picking a winner.
+static JsonObject BuildMergedDocument(string directory, List<string> conflicts)
+{
+    JsonObject? merged = null;
+    var paths = new JsonObject();
+    var schemas = new JsonObject();
+
+    var files = Directory.GetFiles(directory, "*.json")
+        .Where(f => !Path.GetFileName(f).StartsWith('_'))
+        .OrderBy(f => f, StringComparer.Ordinal);
+
+    foreach (var file in files)
+    {
+        var document = JsonNode.Parse(File.ReadAllText(file))!.AsObject();
+
+        merged ??= new JsonObject
+        {
+            ["openapi"] = document["openapi"]!.DeepClone(),
+            ["info"] = new JsonObject
+            {
+                ["title"] = "e-conomic legacy REST API",
+                ["version"] = "1.0.0",
+                ["description"] =
+                    "Every legacy endpoint in one document, merged from the per-resource files by "
+                    + "tools/EConomic.SpecConverter. This is the code generation input. Do not edit by hand.",
+            },
+            ["servers"] = document["servers"]!.DeepClone(),
+            ["security"] = document["security"]!.DeepClone(),
+        };
+
+        foreach (var (path, item) in document["paths"]!.AsObject())
+        {
+            paths[path] = item!.DeepClone();
+        }
+
+        foreach (var (name, schema) in document["components"]!["schemas"]!.AsObject())
+        {
+            var incoming = schema!.DeepClone();
+            if (schemas[name] is { } existing)
+            {
+                if (!JsonNode.DeepEquals(existing, incoming))
+                {
+                    conflicts.Add($"{name} (differs in {Path.GetFileName(file)})");
+                }
+
+                continue;
+            }
+
+            schemas[name] = incoming;
+        }
+    }
+
+    merged!["paths"] = paths;
+    merged["components"] = new JsonObject
+    {
+        ["securitySchemes"] = JsonNode
+            .Parse(File.ReadAllText(Directory.GetFiles(directory, "*.json")
+                .First(f => !Path.GetFileName(f).StartsWith('_'))))!["components"]!["securitySchemes"]!
+            .DeepClone(),
+        ["schemas"] = schemas,
+    };
+
+    return merged;
+}
 
 // Applies the curated names to a finished document, rewriting both the component keys and every
 // reference to them. Done after the fact so the table keys stay stable: renaming during

@@ -11,10 +11,16 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\EConomic.Net\EConomic.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Responses recorded from the demo agreement, so tests exercise real payloads. -->
+    <Content Include="..\Fixtures\*.json" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

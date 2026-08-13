@@ -46,6 +46,7 @@ public class EconomicApiException : Exception
     /// <param name="requestId">The value of the <c>X-RequestId</c> response header, if any.</param>
     /// <param name="rateLimit">The rate-limit budget reported on the response, if any.</param>
     /// <param name="rawBody">The raw response body, if it was read.</param>
+    /// <param name="innerException">The underlying cause, such as a deserialization failure.</param>
     public EconomicApiException(
         string message,
         HttpStatusCode statusCode,
@@ -53,8 +54,9 @@ public class EconomicApiException : Exception
         EconomicLegacyError? legacyError = null,
         string? requestId = null,
         RateLimitStatus? rateLimit = null,
-        string? rawBody = null)
-        : base(message)
+        string? rawBody = null,
+        Exception? innerException = null)
+        : base(message, innerException)
     {
         StatusCode = statusCode;
         ProblemDetails = problemDetails;

@@ -594,7 +594,9 @@
           },
           "closed": {
             "type": "boolean",
-            "description": "Determines if the accounting year is closed for further transactions."
+            "description": "Determines if the accounting year is closed for further transactions.",
+            "x-sortable": true,
+            "x-filterable": true
           },
           "year": {
             "type": "string",
@@ -667,17 +669,23 @@
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
             "x-default-sorting": "ascending",
-            "description": "The first date in the period formatted according to ISO-8601(YYYY-MM-DD)."
+            "description": "The first date in the period formatted according to ISO-8601(YYYY-MM-DD).",
+            "x-sortable": true,
+            "x-filterable": true
           },
           "toDate": {
             "type": "string",
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
-            "description": "The last date in the period formatted according to ISO-8601(YYYY-MM-DD)."
+            "description": "The last date in the period formatted according to ISO-8601(YYYY-MM-DD).",
+            "x-sortable": true,
+            "x-filterable": true
           },
           "closed": {
             "type": "boolean",
-            "description": "If true this indicates that the accounting period is closed for further transactions."
+            "description": "If true this indicates that the accounting period is closed for further transactions.",
+            "x-sortable": true,
+            "x-filterable": true
           },
           "entries": {
             "type": "string",

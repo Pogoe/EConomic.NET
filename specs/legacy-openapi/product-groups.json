@@ -936,7 +936,7 @@
                   "$ref": "#/components/schemas/ProductGroupsAccount"
                 },
                 "vatZone": {
-                  "$ref": "#/components/schemas/ProductGroupsVatZone"
+                  "$ref": "#/components/schemas/VatZone"
                 }
               }
             }
@@ -989,7 +989,7 @@
           "self"
         ]
       },
-      "ProductGroupsProduct": {
+      "Product": {
         "title": "Product",
         "type": "object",
         "description": "A specific product.",
@@ -1053,7 +1053,7 @@
           },
           "lastUpdated": {
             "type": "string",
-            "format": "date",
+            "format": "date-time",
             "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z",
             "x-filterable": true,
             "x-sortable": true,
@@ -1129,7 +1129,7 @@
               },
               "inventoryLastUpdated": {
                 "type": "string",
-                "format": "date",
+                "format": "date-time",
                 "pattern": "\\d{4}-\\d{2}-\\d{2}Td{2}:d{2}:d{2}Z",
                 "readOnly": true,
                 "description": "The last time this product was updated with regards to inventory."
@@ -1172,7 +1172,8 @@
             "properties": {
               "productGroupNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the product group."
+                "description": "Unique number identifying the product group.",
+                "x-filterable": true
               },
               "name": {
                 "type": "string",
@@ -1437,7 +1438,7 @@
           "self"
         ]
       },
-      "ProductGroupsVatZone": {
+      "VatZone": {
         "title": "Vat zone",
         "type": "object",
         "description": "A specific vat zone.",
@@ -1478,7 +1479,7 @@
             "type": "array",
             "description": "The array containing all the products.",
             "items": {
-              "$ref": "#/components/schemas/ProductGroupsProduct"
+              "$ref": "#/components/schemas/Product"
             }
           },
           "metaData": {

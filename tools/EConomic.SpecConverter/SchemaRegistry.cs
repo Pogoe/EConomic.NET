@@ -79,12 +79,30 @@ public sealed class SchemaRegistry
         // The POST body, which drops `self`. Named for symmetry with DeliveryLocationPUT.
         ["CustomersDeliveryLocation"] = "DeliveryLocationPOST",
 
+        // Reserving the unqualified name for the owning resource stops an earlier resource taking
+        // it, but the owner's own shape then deduplicates into the already-registered qualified
+        // one. These two are the resulting misnomers: nothing else holds the plain name.
+        ["ProductGroupsProduct"] = "Product",
+        ["ProductGroupsVatZone"] = "VatZone",
+
         // Two real shapes: /departmental-distributions omits `barred`, the per-type endpoints
         // include it. Each has its own collection envelope.
         ["DepartmentalDistribution"] = "DepartmentalDistributionSummary",
         ["DepartmentalDistribution2"] = "DepartmentalDistribution",
         ["DepartmentalDistribution3"] = "DepartmentalDistributionCollection",
         ["DepartmentalDistributionReference"] = "DepartmentalDistributionSummaryCollection",
+    };
+
+    /// <summary>
+    /// Entities exposed publicly: filter surfaces, models and client properties are emitted only
+    /// for these. Every entry is public API, so the set grows deliberately, one resource at a time.
+    /// </summary>
+    public static readonly IReadOnlySet<string> PublishedEntities = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "Account", "AccountingYear", "AppRole", "Currency", "Customer", "CustomerGroup",
+        "Department", "DepartmentalDistributionSummary", "Employee", "Journal", "Layout",
+        "PaymentTerms", "PaymentType", "Product", "ProductGroup", "Supplier", "Unit",
+        "VatAccount", "VatType", "VatZone",
     };
 
     private readonly Dictionary<string, string> _namesByStructure = new(StringComparer.Ordinal);

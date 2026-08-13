@@ -91,7 +91,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductGroupsVatZone"
+                  "$ref": "#/components/schemas/VatZone"
                 }
               }
             }
@@ -130,7 +130,7 @@
       }
     },
     "schemas": {
-      "ProductGroupsVatZone": {
+      "VatZone": {
         "title": "Vat zone",
         "type": "object",
         "description": "A specific vat zone.",
@@ -171,7 +171,7 @@
             "type": "array",
             "description": "The array containing all the vat zones.",
             "items": {
-              "$ref": "#/components/schemas/ProductGroupsVatZone"
+              "$ref": "#/components/schemas/VatZone"
             }
           },
           "metaData": {

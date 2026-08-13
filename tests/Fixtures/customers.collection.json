@@ -1,0 +1,162 @@
+{
+  "collection": [
+    {
+      "customerNumber": 1,
+      "currency": "DKK",
+      "paymentTerms": {
+        "paymentTermsNumber": 1,
+        "self": "https://restapi.e-conomic.com/payment-terms/1"
+      },
+      "customerGroup": {
+        "customerGroupNumber": 1,
+        "self": "https://restapi.e-conomic.com/customer-groups/1"
+      },
+      "address": "Avenue des Arts No 5",
+      "balance": -1600.0,
+      "dueAmount": 0.0,
+      "city": "Brussels",
+      "country": "Belgium",
+      "email": "customerone@mailinator.com",
+      "name": "Decathlon",
+      "zip": "1040",
+      "telephoneAndFaxNumber": "08343242525",
+      "vatZone": {
+        "vatZoneNumber": 1,
+        "self": "https://restapi.e-conomic.com/vat-zones/1"
+      },
+      "attention": {
+        "customerContactNumber": 1,
+        "customer": {
+          "customerNumber": 1,
+          "self": "https://restapi.e-conomic.com/customers/1"
+        },
+        "self": "https://restapi.e-conomic.com/customers/1/contacts/1"
+      },
+      "customerContact": {
+        "customerContactNumber": 2,
+        "customer": {
+          "customerNumber": 1,
+          "self": "https://restapi.e-conomic.com/customers/1"
+        },
+        "self": "https://restapi.e-conomic.com/customers/1/contacts/2"
+      },
+      "salesPerson": {
+        "employeeNumber": 1,
+        "self": "https://restapi.e-conomic.com/employees/1"
+      },
+      "lastUpdated": "2022-06-02T08:53:29Z",
+      "contacts": "https://restapi.e-conomic.com/customers/1/contacts",
+      "defaultDeliveryLocation": {
+        "deliveryLocationNumber": 1,
+        "self": "https://restapi.e-conomic.com/customers/1/delivery-locations/1"
+      },
+      "templates": {
+        "invoice": "https://restapi.e-conomic.com/customers/1/templates/invoice",
+        "invoiceLine": "https://restapi.e-conomic.com/customers/1/templates/invoiceline",
+        "self": "https://restapi.e-conomic.com/customers/1/templates"
+      },
+      "totals": {
+        "drafts": "https://restapi.e-conomic.com/invoices/totals/drafts/customers/1",
+        "booked": "https://restapi.e-conomic.com/invoices/totals/booked/customers/1",
+        "self": "https://restapi.e-conomic.com/customers/1/totals"
+      },
+      "deliveryLocations": "https://restapi.e-conomic.com/customers/1/delivery-locations",
+      "invoices": {
+        "drafts": "https://restapi.e-conomic.com/customers/1/invoices/drafts",
+        "booked": "https://restapi.e-conomic.com/customers/1/invoices/booked",
+        "self": "https://restapi.e-conomic.com/customers/1/invoices"
+      },
+      "mobilePhone": "066567657657575",
+      "eInvoicingDisabledByDefault": false,
+      "self": "https://restapi.e-conomic.com/customers/1"
+    },
+    {
+      "customerNumber": 2,
+      "currency": "DKK",
+      "paymentTerms": {
+        "paymentTermsNumber": 1,
+        "self": "https://restapi.e-conomic.com/payment-terms/1"
+      },
+      "customerGroup": {
+        "customerGroupNumber": 2,
+        "self": "https://restapi.e-conomic.com/customer-groups/2"
+      },
+      "address": "Avenue des arts no 3",
+      "balance": -42407.38,
+      "dueAmount": 0.0,
+      "city": "Brussels",
+      "country": "Belgium",
+      "email": "customerw@mailinator.com",
+      "name": "Intersport",
+      "zip": "1212",
+      "telephoneAndFaxNumber": "098786657",
+      "vatZone": {
+        "vatZoneNumber": 1,
+        "self": "https://restapi.e-conomic.com/vat-zones/1"
+      },
+      "attention": {
+        "customerContactNumber": 3,
+        "customer": {
+          "customerNumber": 2,
+          "self": "https://restapi.e-conomic.com/customers/2"
+        },
+        "self": "https://restapi.e-conomic.com/customers/2/contacts/3"
+      },
+      "customerContact": {
+        "customerContactNumber": 4,
+        "customer": {
+          "customerNumber": 2,
+          "self": "https://restapi.e-conomic.com/customers/2"
+        },
+        "self": "https://restapi.e-conomic.com/customers/2/contacts/4"
+      },
+      "salesPerson": {
+        "employeeNumber": 4,
+        "self": "https://restapi.e-conomic.com/employees/4"
+      },
+      "lastUpdated": "2022-06-02T08:54:01Z",
+      "contacts": "https://restapi.e-conomic.com/customers/2/contacts",
+      "defaultDeliveryLocation": {
+        "deliveryLocationNumber": 2,
+        "self": "https://restapi.e-conomic.com/customers/2/delivery-locations/2"
+      },
+      "templates": {
+        "invoice": "https://restapi.e-conomic.com/customers/2/templates/invoice",
+        "invoiceLine": "https://restapi.e-conomic.com/customers/2/templates/invoiceline",
+        "self": "https://restapi.e-conomic.com/customers/2/templates"
+      },
+      "totals": {
+        "drafts": "https://restapi.e-conomic.com/invoices/totals/drafts/customers/2",
+        "booked": "https://restapi.e-conomic.com/invoices/totals/booked/customers/2",
+        "self": "https://restapi.e-conomic.com/customers/2/totals"
+      },
+      "deliveryLocations": "https://restapi.e-conomic.com/customers/2/delivery-locations",
+      "invoices": {
+        "drafts": "https://restapi.e-conomic.com/customers/2/invoices/drafts",
+        "booked": "https://restapi.e-conomic.com/customers/2/invoices/booked",
+        "self": "https://restapi.e-conomic.com/customers/2/invoices"
+      },
+      "mobilePhone": "03435436",
+      "eInvoicingDisabledByDefault": false,
+      "self": "https://restapi.e-conomic.com/customers/2"
+    }
+  ],
+  "pagination": {
+    "skipPages": 0,
+    "pageSize": 2,
+    "maxPageSizeAllowed": 1000,
+    "results": 5,
+    "resultsWithoutFilter": 5,
+    "firstPage": "https://restapi.e-conomic.com/customers?pagesize=2&skippages=0",
+    "nextPage": "https://restapi.e-conomic.com/customers?pagesize=2&skippages=1",
+    "lastPage": "https://restapi.e-conomic.com/customers?pagesize=2&skippages=2"
+  },
+  "metaData": {
+    "create": {
+      "description": "Create a new customer",
+      "href": "https://restapi.e-conomic.com/customers?pagesize=2",
+      "httpMethod": "post"
+    }
+  },
+  "self": "https://restapi.e-conomic.com/customers?pagesize=2"
+}

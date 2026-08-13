@@ -68,10 +68,11 @@ dotnet_diagnostic.RS0017.severity = error
 # Public members need XML docs
 dotnet_diagnostic.CS1591.severity = error
 
-[src/EConomic.Net/Open/Generated/**.cs]
+[src/EConomic.Net/{Open,Rest}/Generated/**.cs]
 generated_code = true
 dotnet_analyzer_diagnostic.severity = none
 dotnet_diagnostic.CS1591.severity = none
+dotnet_diagnostic.IDE0005.severity = none
 
 [tests/**/*.cs]
 dotnet_diagnostic.CS1591.severity = none
