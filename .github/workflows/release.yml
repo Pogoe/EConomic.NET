@@ -7,7 +7,8 @@ on:
     tags: ['v*']
 
 permissions:
-  contents: write
+  contents: write # creating the GitHub release
+  id-token: write # requesting the OIDC token nuget.org exchanges for a publish key
 
 env:
   DOTNET_NOLOGO: true
@@ -17,15 +18,18 @@ jobs:
   publish:
     name: Pack and publish to NuGet
     runs-on: ubuntu-latest
-    environment: nuget # requires the NUGET_API_KEY secret; add an approval gate here if you want one
+    # The environment name is part of the nuget.org trusted publishing policy, so it is load-bearing
+    # rather than cosmetic: renaming it here stops the token exchange until the policy is updated to
+    # match. An approval gate can be added to this environment if a release should need sign-off.
+    environment: nuget
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
@@ -43,15 +47,25 @@ jobs:
       - name: Pack
         run: dotnet pack src/EConomic.Net --configuration Release --no-build --output ./artifacts
 
+      # Trusted publishing: GitHub signs a short-lived OIDC token describing this repository,
+      # workflow file and environment, and nuget.org exchanges it for an API key valid for one hour
+      # if that matches a policy configured on the account. No long-lived key is stored anywhere.
+      # The exchange happens immediately before the push because of that one-hour window.
+      - name: Exchange the OIDC token for a publish key
+        uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ secrets.NUGET_USER }} # nuget.org profile name, not the account's email address
+
       - name: Publish to NuGet
         run: >
           dotnet nuget push "./artifacts/*.nupkg"
-          --api-key "${{ secrets.NUGET_API_KEY }}"
+          --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
           --source https://api.nuget.org/v3/index.json
           --skip-duplicate
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ./artifacts/*
           generate_release_notes: true

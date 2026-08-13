@@ -17,6 +17,16 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <!--
+    Versioning. MinVer has no default tag prefix, so without this a `v0.1.0` tag is simply not
+    matched and the release publishes 0.0.0-alpha.0.<height> instead — a version that cannot be
+    taken back, since nuget.org unlists rather than deletes. The release workflow documents `v*`
+    tags, so the prefix has to be declared here to agree with it.
+  -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
   <!-- Reproducible builds -->
   <PropertyGroup>
     <Deterministic>true</Deterministic>

@@ -1,0 +1,194 @@
+# Contributing to EConomic.NET
+
+Thanks for taking an interest. Issues and pull requests are both welcome — a bug report describing
+what e-conomic actually returned is often more valuable than a patch, because most of the difficult
+decisions in this repository come from the API behaving differently than its documentation says.
+
+## Getting set up
+
+You need the **.NET 10 SDK** (pinned in `global.json`) and the **.NET 8** runtime or SDK, since the
+library multi-targets both.
+
+```bash
+dotnet tool restore                    # NSwag, used only when regenerating
+dotnet build EConomic.Net.slnx
+dotnet test tests/EConomic.Net.Tests
+```
+
+The solution is in `.slnx` format. Add projects with
+`dotnet sln EConomic.Net.slnx add <path>` rather than editing it by hand.
+
+## Repository layout
+
+```
+specs/                        API specifications. The source of truth for all generated code.
+  legacy/                     160 JSON Schema draft-03 files, e-conomic's originals. Never edit.
+  legacy-openapi/             OpenAPI 3.0 documents converted from them. Generated. Never edit.
+src/EConomic.Net/
+  Authentication/             EconomicOptions, EconomicAuthenticationHandler
+  Http/                       Retry, idempotency, rate-limit parsing
+  Exceptions/                 Unified error mapping across both API surfaces
+  Querying/                   Filter and sort translation, value escaping
+  Pagination/                 Page models and transparent paging
+  Rest/                       The legacy REST API surface
+    Generated/                NSwag output. Internal, analyzer-exempt, never edited by hand.
+tools/EConomic.SpecConverter/ Spec conversion and all code generation
+tools/nswag/                  NSwag configuration
+tests/                        Unit, integration and AOT smoke tests
+```
+
+## The rule that matters most
+
+**Generated client code is never public.** NSwag's output in `Rest/Generated/` is `internal`; the
+hand-written facade is what consumers see. This is the whole reason the facade exists: a
+specification refresh must not become a breaking change for the package.
+
+If you find yourself returning a generated type from a public member, stop and add a facade type.
+
+There is exactly one deliberate exception. The generated **filter and sort surfaces** are public,
+because they only work as a compile-time guard if consumers can write lambdas against them. A
+consequence worth understanding before you change them: a property losing `x-filterable` moves the
+public API baseline, and that is correct — it breaks callers either way, and a build error beats a
+runtime `400`.
+
+## Design rules for the public surface
+
+- **Async only.** Every I/O method returns `Task`/`ValueTask`, ends in `Async`, and takes a
+  `CancellationToken` as its last parameter. No sync-over-async, no `.Result`.
+- **Collections are `IAsyncEnumerable<T>`** that page transparently, plus an explicit
+  page-at-a-time method. Never silently fetch every page into a `Task<List<T>>`.
+- **Built on `IHttpClientFactory`.** Never `new HttpClient()` internally.
+- **Tokens never leak.** They are not logged, not in exception messages, and `ToString()` redacts
+  them. There is a test for this.
+- **`System.Text.Json` with a source-generated context.** No Newtonsoft, and no reflection-based
+  serialization — it would break the trimming and AOT guarantees.
+- **Expression trees are inspected, never compiled.** `Expression.Compile()` emits IL at runtime
+  and would break native AOT. Translation is a pure tree walk.
+- **Danish domain terms keep their e-conomic names** — `vatZone`, `paymentTerms`, `bookedEntries`.
+  Do not invent English improvements; they break the mapping back to the official docs.
+- **Dependencies are close to zero, deliberately.** Adding one needs a reason why no BCL type will
+  do.
+
+## Code generation
+
+The specifications in `specs/` are the source of truth. They are committed so that builds work
+offline and a specification change is reviewable as a diff. Nothing in the build scrapes the
+network, and nothing regenerates during `dotnet build` — regeneration is always a deliberate,
+reviewed step.
+
+The legacy API has no published OpenAPI document, only per-endpoint JSON Schema draft-03 files, so
+`tools/EConomic.SpecConverter` converts them first. That converter reports anomalies rather than
+hiding them and **exits non-zero on anything it cannot resolve** — including a curated type name
+that no longer matches anything, or a path segment it does not recognise. If a specification
+refresh makes it fail, the fix is to teach it the new case, not to loosen the check.
+
+Run the steps **in this order**, from the repository root:
+
+```bash
+dotnet run --project tools/EConomic.SpecConverter -c Release                  # specs -> legacy-openapi + _all.json
+(cd tools/nswag && dotnet nswag run legacy.nswag)                             # -> Rest/Generated/LegacyClients.g.cs
+dotnet run --project tools/EConomic.SpecConverter -c Release -- json-context  # serialization metadata
+dotnet run --project tools/EConomic.SpecConverter -c Release -- filters       # public filter/sort surfaces
+dotnet run --project tools/EConomic.SpecConverter -c Release -- facade        # public models and client properties
+```
+
+Skipping a step leaves generated code referring to names that no longer exist, and the failure
+surfaces much later than the mistake. Two ordering details are easy to get wrong:
+
+- NSwag generates from the **merged** `_all.json`, not the per-resource documents. Generating each
+  separately would emit a copy of every shared type per document, and they would collide.
+- The JSON context is derived from the **generated code**, not from the specifications, so it has
+  to be regenerated after every NSwag run to match what was actually emitted.
+
+Afterwards, confirm the public API baseline did not move. Generated churn should produce **zero**
+diff in `PublicAPI.Unshipped.txt` unless you deliberately changed the facade. That is the whole
+point of the split.
+
+### Adding a resource
+
+New resources are gated by `SchemaRegistry.PublishedEntities`, which the filter, sort and facade
+generators all read. It grows one entity at a time as each facade lands, because every emitted
+surface is public API — ungated, the 38 collection entities would add roughly 5 400 public symbols
+for types nothing can yet be used against.
+
+## Testing
+
+| Project | What it covers |
+| --- | --- |
+| `tests/EConomic.Net.Tests` | Unit tests. No network. Handler pipeline, query translation, paging, error mapping and serialization, against recorded fixtures. |
+| `tests/EConomic.SpecConverter.Tests` | The conversion and generation pipeline. |
+| `tests/EConomic.Net.IntegrationTests` | The live demo agreement. Read-only, opt-in, scheduled in CI. |
+| `tests/EConomic.Net.AotSmokeTest` | Published with `PublishAot` and run in CI, so the trimming claim is tested rather than asserted. |
+
+```bash
+dotnet test tests/EConomic.Net.Tests
+ECONOMIC_RUN_INTEGRATION_TESTS=1 dotnet test tests/EConomic.Net.IntegrationTests
+```
+
+Integration tests are opt-in and run on a schedule rather than on every pull request, because they
+break when e-conomic changes and that must not block unrelated work.
+
+**Assert on results, not just status codes.** More than one bug here survived a green unit test
+suite because the test pinned an assumption the server did not share — filter syntax that parsed
+locally and returned `400` live, and a date format that deserialized in tests but not against real
+responses. A test that asserts a query returned the *right rows* would have caught both.
+
+Every fixed bug gets a regression test. Every new endpoint gets at least a serialization
+round-trip test. Fixtures must be anonymized: never commit real tokens or a real agreement's data.
+The `demo` tokens are the only credentials allowed in this repository.
+
+## Public API surface
+
+The public surface is locked by `Microsoft.CodeAnalysis.PublicApiAnalyzers`. An unintended public
+API change fails the build — this is the guardrail that makes the generated/facade split hold.
+
+After an intentional API change, add the new symbols to `PublicAPI.Unshipped.txt`. The analyzer
+names every undeclared symbol, so the list can be rebuilt from the build output rather than by
+hand:
+
+```bash
+dotnet build EConomic.Net.slnx -c Release --nologo 2>&1 \
+  | grep -o "Symbol '[^']*' is not part" \
+  | sed "s/^Symbol '//; s/' is not part$//" \
+  | LC_ALL=C sort -u >> src/EConomic.Net/PublicAPI.Unshipped.txt
+```
+
+Entries move from `Unshipped` to `Shipped` at release time, not before.
+
+## Style
+
+Warnings are errors, and `nullable` is enabled everywhere. Line endings are LF, enforced by
+`.gitattributes` and `.editorconfig`. CI runs:
+
+```bash
+dotnet format EConomic.Net.slnx --verify-no-changes
+```
+
+Write comments that explain *why*, especially where the code works around API behaviour that
+contradicts the documentation. Several of the stranger-looking decisions in this repository are
+load-bearing, and a comment is what stops the next person from "simplifying" them back into a bug.
+
+## Submitting a change
+
+- Include a test for any behaviour change.
+- Update `CHANGELOG.md` under `## [Unreleased]`, following
+  [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+- Update `PublicAPI.Unshipped.txt` in the same commit as an intentional API change.
+- Keep generated files as generated — if the output is wrong, fix the generator.
+
+## Releasing
+
+Maintainers only. Versioning is [SemVer](https://semver.org/) via MinVer, driven by git tags, and
+the package version is independent of the e-conomic API versions: a service moving from v3 to v4 is
+a mapping change inside the facade, not automatically a major release here.
+
+Pushing a `v*` tag publishes to NuGet, so it is never done casually:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Publishing uses nuget.org trusted publishing over GitHub OIDC — there is no long-lived API key
+stored anywhere. Before tagging, move the accumulated `PublicAPI.Unshipped.txt` entries into
+`PublicAPI.Shipped.txt` and promote the `## [Unreleased]` changelog section.
