@@ -1,7 +1,7 @@
 # EConomic.NET
 
 [![CI](https://github.com/Pogoe/EConomic.NET/actions/workflows/ci.yml/badge.svg)](https://github.com/Pogoe/EConomic.NET/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/EConomic.NET.svg)](https://www.nuget.org/packages/EConomic.NET)
+[![NuGet](https://img.shields.io/nuget/v/Pogoe.EConomic.svg)](https://www.nuget.org/packages/Pogoe.EConomic)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A .NET client for the Visma **e-conomic** accounting APIs, with queries written as C# lambdas that
@@ -27,8 +27,11 @@ await foreach (var customer in client.Customers
 ## Install
 
 ```bash
-dotnet add package EConomic.NET
+dotnet add package Pogoe.EConomic
 ```
+
+The package id is owner-prefixed; the project, assembly and namespaces are all `EConomic`, so
+nothing in your code refers to the prefix.
 
 Targets `net8.0` and `net10.0`. The only dependency is `Microsoft.Extensions.Http`.
 

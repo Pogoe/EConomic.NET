@@ -8,8 +8,13 @@
 
   <PropertyGroup Label="Package">
     <IsPackable>true</IsPackable>
-    <PackageId>EConomic.NET</PackageId>
-    <Title>EConomic.NET</Title>
+    <!--
+      The package id is owner-prefixed because `EConomic.*` is a reserved id prefix on nuget.org
+      owned by someone else, and pushing under it is rejected with a 409. The project, assembly and
+      namespaces keep their own names — only the published id is prefixed.
+    -->
+    <PackageId>Pogoe.EConomic</PackageId>
+    <Title>Pogoe.EConomic</Title>
     <Description>Unofficial .NET client for the Visma e-conomic accounting APIs, covering both the legacy REST API and the newer OpenAPI services. Not affiliated with or endorsed by Visma.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
