@@ -1,0 +1,16 @@
+# Normalize to LF in the repository so the same tree builds identically on Windows and Linux CI.
+* text=auto eol=lf
+
+*.sln    text eol=crlf
+*.slnx   text eol=lf
+*.cmd    text eol=crlf
+*.bat    text eol=crlf
+*.ps1    text eol=crlf
+*.sh     text eol=lf
+
+# Committed OpenAPI specs: keep diffs readable, never treat as binary.
+specs/*.json text eol=lf
+
+*.png    binary
+*.snk    binary
+*.nupkg  binary

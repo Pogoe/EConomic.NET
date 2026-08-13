@@ -1,0 +1,1225 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - suppliers",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/suppliers": {
+      "get": {
+        "operationId": "getSuppliers",
+        "tags": [
+          "suppliers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuppliersCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "suppliers.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-suppliers"
+        }
+      },
+      "post": {
+        "operationId": "postSuppliers",
+        "tags": [
+          "suppliers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuppliersPostResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "suppliers.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuppliersPostResponse"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-suppliers"
+        }
+      }
+    },
+    "/suppliers/{supplierNumber}": {
+      "get": {
+        "operationId": "getSuppliersBysupplierNumber",
+        "tags": [
+          "suppliers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierResource"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "suppliers.supplierNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "supplierNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-suppliers-suppliernumber"
+        }
+      },
+      "put": {
+        "operationId": "putSuppliersBysupplierNumber",
+        "tags": [
+          "suppliers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuppliersPutResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "suppliers.supplierNumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "supplierNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuppliersPutResponse"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-suppliers"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "Supplier": {
+        "title": "Supplier",
+        "type": "object",
+        "description": "A specific supplier.",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "x-filterable": true,
+            "description": "Address for the supplier including street and number."
+          },
+          "attention": {
+            "type": "object",
+            "description": "Optional contact person at the supplier.",
+            "properties": {
+              "supplierContactNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "bankAccount": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "description": "The supplier\u0027s bank account."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "description": "Boolean indication of whether the supplier is barred."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "description": "The supplier\u0027s city."
+          },
+          "contacts": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the supplier contacts collection."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "x-filterable": true,
+            "description": "Company Identification Number. For example CVR in Denmark."
+          },
+          "costAccount": {
+            "type": "object",
+            "description": "Cost account for the supplier.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "readOnly": true,
+                "description": "Unique number identifying the cost account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            }
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "description": "The supplier\u0027s country."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "x-filterable": true,
+            "description": "Default currency used when purchasing from the supplier."
+          },
+          "defaultInvoiceText": {
+            "type": "string",
+            "maxLength": 100,
+            "x-filterable": true,
+            "description": "The default invoice text for the supplier."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "x-filterable": true,
+            "description": "The supplier\u0027s e-mail address. Note: you can specify multiple email addresses in this field, separated by a space."
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this supplier.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "x-filterable": true,
+            "description": "The supplier name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "minimum": 1,
+            "description": "The default payment terms for the supplier.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The supplier\u0027s phone number."
+          },
+          "remittanceAdvice": {
+            "type": "object",
+            "description": "Remittance advice for the supplier.",
+            "properties": {
+              "creditorId": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "Supplier payment details."
+              },
+              "paymentType": {
+                "type": "object",
+                "description": "The default payment type for the supplier.",
+                "properties": {
+                  "paymentTypeNumber": {
+                    "type": "integer",
+                    "description": "Unique number identifying the payment type."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the payment type resource."
+                  }
+                }
+              }
+            }
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this supplier.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the employee resource."
+              }
+            }
+          },
+          "supplierContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at supplier.",
+            "properties": {
+              "supplierContactNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "supplierGroup": {
+            "type": "object",
+            "minimum": 1,
+            "description": "The supplier group of the supplier.",
+            "properties": {
+              "supplierGroupNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "description": "Unique number identifying the supplier group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier group resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "supplierNumber": {
+            "type": "integer",
+            "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
+            "x-filterable": true,
+            "maximum": 999999999,
+            "minimum": 1
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates whether the supplier is located domestically, in Europe or elsewhere abroad",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "Unique identifier of the vat zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the vat zone."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 10,
+            "x-filterable": true,
+            "description": "The suppliers zipcode."
+          },
+          "self": {
+            "type": "string",
+            "description": "A unique self reference of the supplier."
+          }
+        },
+        "required": [
+          "currency",
+          "layout",
+          "paymentTerms",
+          "vatZone"
+        ]
+      },
+      "SupplierResource": {
+        "title": "Supplier resource GET schema",
+        "description": "Schema for retrieval of a supplier resource.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address for the supplier including street and number."
+          },
+          "attention": {
+            "type": "object",
+            "description": "Optional contact person at the supplier.",
+            "properties": {
+              "number": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "bankAccount": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s bank account."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the supplier is barred."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s city."
+          },
+          "contacts": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the supplier contacts collection."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Company Identification Number. For example CVR in Denmark."
+          },
+          "costAccount": {
+            "type": "object",
+            "description": "Cost account for the supplier.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "readOnly": true,
+                "description": "Unique number identifying the cost account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            }
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s country."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "description": "Default currency used when purchasing from the supplier."
+          },
+          "defaultInvoiceText": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The default invoice text for the supplier."
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this supplier.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The supplier\u0027s e-mail address. Note: you can specify multiple email addresses in this field, separated by a space."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "The supplier name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "minimum": 1,
+            "description": "The default payment terms for the supplier.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The supplier\u0027s phone number."
+          },
+          "remittanceAdvice": {
+            "type": "object",
+            "description": "Remittance advice for the supplier.",
+            "properties": {
+              "creditorId": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "Supplier payment details."
+              },
+              "paymentType": {
+                "type": "object",
+                "description": "The default payment type for the supplier.",
+                "properties": {
+                  "paymentTypeNumber": {
+                    "type": "integer",
+                    "description": "Unique number identifying the payment type."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the payment type resource."
+                  }
+                }
+              }
+            }
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this supplier.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the employee resource."
+              }
+            }
+          },
+          "supplierContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at supplier.",
+            "properties": {
+              "number": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "supplierGroup": {
+            "type": "object",
+            "minimum": 1,
+            "description": "The supplier group of the supplier.",
+            "properties": {
+              "supplierGroupNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier group resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "supplierNumber": {
+            "type": "integer",
+            "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
+            "maximum": 999999999,
+            "minimum": 1
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates whether the supplier is located domestically, in Europe or elsewhere abroad",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "Unique identifier of the vat zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the vat zone."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 10,
+            "description": "The suppliers zipcode."
+          },
+          "self": {
+            "type": "string",
+            "description": "A unique self reference of the supplier."
+          }
+        },
+        "required": [
+          "currency",
+          "layout",
+          "paymentTerms",
+          "supplierNumber",
+          "vatZone"
+        ]
+      },
+      "SuppliersCollection": {
+        "title": "Suppliers collection GET schema",
+        "description": "Schema for retrieval of a collection of suppliers.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the products.",
+            "items": {
+              "$ref": "#/components/schemas/Supplier"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the supplier collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "SuppliersPostResponse": {
+        "description": "Schema for creating a supplier resource",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address for the supplier including street and number."
+          },
+          "attention": {
+            "type": "object",
+            "description": "Optional contact person at the supplier.",
+            "properties": {
+              "supplierContactNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "bankAccount": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s bank account."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the supplier is barred."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s city."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Company Identification Number. For example CVR in Denmark."
+          },
+          "costAccount": {
+            "type": "object",
+            "description": "Cost account for the supplier.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the cost account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            }
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s country."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "description": "Default currency used when purchasing from the supplier."
+          },
+          "defaultInvoiceText": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The default invoice text for the supplier."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The supplier\u0027s e-mail address. Note: you can specify multiple email addresses in this field, separated by a space."
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this supplier.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "The supplier name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the supplier.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            }
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The supplier\u0027s phone number."
+          },
+          "remittanceAdvice": {
+            "type": "object",
+            "description": "Remittance advice for the supplier.",
+            "properties": {
+              "creditorId": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "Supplier payment details."
+              },
+              "paymentType": {
+                "type": "object",
+                "description": "The default payment type for the supplier.",
+                "properties": {
+                  "paymentTypeNumber": {
+                    "type": "integer",
+                    "description": "Unique number identifying the payment type."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the payment type resource."
+                  }
+                }
+              }
+            }
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this supplier.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the employee resource."
+              }
+            }
+          },
+          "supplierContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at supplier.",
+            "properties": {
+              "supplierContactNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "supplierGroup": {
+            "type": "object",
+            "description": "The supplier group of the supplier.",
+            "properties": {
+              "supplierGroupNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Unique number identifying the supplier group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier group resource."
+              }
+            }
+          },
+          "supplierNumber": {
+            "type": "integer",
+            "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
+            "maximum": 999999999,
+            "minimum": 1
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates whether the supplier is located domestically, in Europe or elsewhere abroad",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "Unique identifier of the vat zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the vat zone."
+              }
+            }
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 10,
+            "description": "The suppliers zipcode."
+          },
+          "self": {
+            "type": "string",
+            "description": "A unique self reference of the supplier."
+          }
+        },
+        "required": [
+          "currency",
+          "name",
+          "paymentTerms",
+          "supplierGroup",
+          "vatZone"
+        ]
+      },
+      "SuppliersPutResponse": {
+        "description": "Schema for updating a supplier resource.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address for the supplier including street and number."
+          },
+          "attention": {
+            "type": "object",
+            "description": "Optional contact person at the supplier.",
+            "properties": {
+              "supplierContactNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "bankAccount": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s bank account."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the supplier is barred."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s city."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Company Identification Number. For example CVR in Denmark."
+          },
+          "costAccount": {
+            "type": "object",
+            "description": "Cost account for the supplier.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the cost account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            }
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The supplier\u0027s country."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "description": "Default currency used when purchasing from the supplier."
+          },
+          "defaultInvoiceText": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The default invoice text for the supplier."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The supplier\u0027s e-mail address. Note: you can specify multiple email addresses in this field, separated by a space."
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this supplier.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "The supplier name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "minimum": 1,
+            "description": "The default payment terms for the supplier.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            }
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The supplier\u0027s phone number."
+          },
+          "remittanceAdvice": {
+            "type": "object",
+            "description": "Remittance advice for the supplier.",
+            "properties": {
+              "creditorId": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "Supplier payment details."
+              },
+              "paymentType": {
+                "type": "object",
+                "description": "The default payment type for the supplier.",
+                "properties": {
+                  "paymentTypeNumber": {
+                    "type": "integer",
+                    "description": "Unique number identifying the payment type."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the payment type resource."
+                  }
+                }
+              }
+            }
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this supplier.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the employee resource."
+              }
+            }
+          },
+          "supplierContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at supplier.",
+            "properties": {
+              "supplierContactNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier contact resource."
+              }
+            }
+          },
+          "supplierGroup": {
+            "type": "object",
+            "minimum": 1,
+            "description": "The supplier group of the supplier.",
+            "properties": {
+              "supplierGroupNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the supplier group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the supplier group resource."
+              }
+            }
+          },
+          "supplierNumber": {
+            "type": "integer",
+            "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
+            "maximum": 999999999,
+            "minimum": 1
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates whether the supplier is located domestically, in Europe or elsewhere abroad",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "Unique identifier of the vat zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the vat zone."
+              }
+            }
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 10,
+            "description": "The suppliers zipcode."
+          },
+          "self": {
+            "type": "string",
+            "description": "A unique self reference of the supplier."
+          }
+        },
+        "required": [
+          "currency",
+          "name",
+          "paymentTerms",
+          "supplierGroup",
+          "supplierNumber",
+          "vatZone"
+        ]
+      }
+    }
+  }
+}

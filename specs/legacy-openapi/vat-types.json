@@ -1,0 +1,215 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - vat-types",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/vat-types": {
+      "get": {
+        "operationId": "getVatTypes",
+        "tags": [
+          "vat-types"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatTypesCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "vat-types.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-vat-types"
+        }
+      }
+    },
+    "/vat-types/{id}": {
+      "get": {
+        "operationId": "getVatTypesByid",
+        "tags": [
+          "vat-types"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatTypes"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "vat-types.id.get.schema.json",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-vat-types-id"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "VatType": {
+        "title": "vat type",
+        "type": "object",
+        "description": "A specific vat type.",
+        "properties": {
+          "vatTypeNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the vat type."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the vat type."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the vat type item."
+          }
+        },
+        "required": [
+          "vatTypeNumber",
+          "name",
+          "self"
+        ]
+      },
+      "VatTypes": {
+        "title": "vat types GET schema",
+        "description": "A schema for retrieval of a single vat type.",
+        "type": "object",
+        "properties": {
+          "vatTypeNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the vat type."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the vat type."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the vat type item."
+          }
+        },
+        "required": [
+          "vatTypeNumber",
+          "name",
+          "self"
+        ]
+      },
+      "VatTypesCollection": {
+        "title": "Vat types collection GET schema",
+        "description": "A schema for retrieval of a collection of vat types.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the vat types.",
+            "items": {
+              "$ref": "#/components/schemas/VatType"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the vat type collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

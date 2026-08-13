@@ -1,0 +1,468 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - departmental-distributions",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/departmental-distributions": {
+      "get": {
+        "operationId": "getDepartmentalDistributions",
+        "tags": [
+          "departmental-distributions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentalDistributionSummaryCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departmental-distributions.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-departmental-distributions"
+        }
+      }
+    },
+    "/departmental-distributions/departments": {
+      "get": {
+        "operationId": "getDepartmentalDistributionsDepartments",
+        "tags": [
+          "departmental-distributions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentalDistributionCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departmental-distributions.departments.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-departmental-distributions-departments"
+        }
+      }
+    },
+    "/departmental-distributions/departments/{departmentalDistributionNumber}": {
+      "get": {
+        "operationId": "getDepartmentalDistributionsDepartmentsBydepartmentalDistributionNumber",
+        "tags": [
+          "departmental-distributions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentalDistribution"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departmental-distributions.departments.departmentalDistributionNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "departmentalDistributionNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-departmental-distributions-departments-deparmentaldistributionnumber"
+        }
+      }
+    },
+    "/departmental-distributions/distributions": {
+      "get": {
+        "operationId": "getDepartmentalDistributionsDistributions",
+        "tags": [
+          "departmental-distributions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentalDistributionCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departmental-distributions.distributions.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-departmental-distributions-distributions"
+        }
+      }
+    },
+    "/departmental-distributions/distributions/{departmentalDistributionNumber}": {
+      "get": {
+        "operationId": "getDepartmentalDistributionsDistributionsBydepartmentalDistributionNumber",
+        "tags": [
+          "departmental-distributions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentalDistribution"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departmental-distributions.distributions.departmentalDistributionNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "departmentalDistributionNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://restdocs.e-conomic.com/#get-departmental-distributions-distributions-departmentaldistributionnumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "DepartmentalDistributionSummary": {
+        "title": "Departmental Distribution",
+        "type": "object",
+        "description": "Information about a departmental distribution.",
+        "properties": {
+          "departmentalDistributionNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A unique numeric identifier for the departmental distribution."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "A descriptive name of the specific departmental distribution."
+          },
+          "distributionType": {
+            "type": "string",
+            "enum": [
+              "distribution",
+              "department"
+            ],
+            "description": "This property indicates whether the distribution is system generated from a departmentor if it is one created by a user. In order to make it easy to distribute everything to one department, the system generates a distribution for each department."
+          },
+          "distributions": {
+            "type": "array",
+            "description": "A list of departments and their share of the distribution in percentage. The percentages always add up to 100%.",
+            "items": {
+              "$ref": "#/components/schemas/Distribution"
+            }
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the departmental distribution."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DepartmentalDistribution": {
+        "title": "Departmental Distribution",
+        "type": "object",
+        "description": "Information about a departmental distribution.",
+        "properties": {
+          "departmentalDistributionNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A unique numeric identifier for the departmental distribution."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "A descriptive name of the departmental distribution."
+          },
+          "distributionType": {
+            "type": "string",
+            "enum": [
+              "distribution",
+              "department"
+            ],
+            "description": "This property indicates whether the distribution is system generated from a departmentor if it is one created by a user. In order to make it easy to distribute everything to one department, the system generates a distribution for each department."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Property indicating whether the departmental distribution is barred from being used."
+          },
+          "distributions": {
+            "type": "array",
+            "description": "A list of departments and their share of the distribution in percentage. The percentages always add up to 100%.",
+            "items": {
+              "$ref": "#/components/schemas/Distribution"
+            }
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the departmental distribution."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DepartmentalDistributionCollection": {
+        "title": "Departmental Distribution Schema",
+        "description": "A schema for retrieving a departmental distribution.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of departmental distributions.",
+            "items": {
+              "$ref": "#/components/schemas/DepartmentalDistribution"
+            }
+          },
+          "subCollections": {
+            "type": "object",
+            "description": "Links to the sub collections that make up this collection."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the departmental distribution collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DepartmentalDistributionSummaryCollection": {
+        "title": "Departmental Distribution Schema",
+        "description": "A schema for retrieving a collection of departmental distributions.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of departmental distributions.",
+            "items": {
+              "$ref": "#/components/schemas/DepartmentalDistributionSummary"
+            }
+          },
+          "subCollections": {
+            "type": "object",
+            "description": "Links to the sub collections that make up this collection."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the departmental distribution collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "Distribution": {
+        "title": "Distribution",
+        "type": "object",
+        "description": "Description of the distributions that make up a departmental distribution.",
+        "properties": {
+          "percentage": {
+            "type": "number",
+            "maximum": 100,
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "description": "The percentage distributed to this department."
+          },
+          "department": {
+            "type": "object",
+            "description": "A reference to the department.",
+            "properties": {
+              "departmentNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the department."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique self reference of the department."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

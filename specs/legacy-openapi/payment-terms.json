@@ -1,0 +1,659 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - payment-terms",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/payment-terms": {
+      "get": {
+        "operationId": "getPaymentTerms",
+        "tags": [
+          "payment-terms"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTermsCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "payment-terms.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-payment-terms"
+        }
+      },
+      "post": {
+        "operationId": "postPaymentTerms",
+        "tags": [
+          "payment-terms"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTermPOST"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "payment-terms.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentTermPOST"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-payment-terms"
+        }
+      }
+    },
+    "/payment-terms/{paymentTermsNumber}": {
+      "get": {
+        "operationId": "getPaymentTermsBypaymentTermsNumber",
+        "tags": [
+          "payment-terms"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTerm"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "payment-terms.paymentTermsNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "paymentTermsNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-payment-terms-paymenttermsnumber"
+        }
+      },
+      "put": {
+        "operationId": "putPaymentTermsBypaymentTermsNumber",
+        "tags": [
+          "payment-terms"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTermUpdate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "payment-terms.paymentTermsNumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "paymentTermsNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentTermUpdate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-payment-terms-paymenttermsnumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "PaymentTerm": {
+        "title": "Payment term GET schema",
+        "description": "A schema for retrieval of a single payment term.",
+        "type": "object",
+        "properties": {
+          "paymentTermsNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the payment term."
+          },
+          "daysOfCredit": {
+            "type": "integer",
+            "description": "The number of days before payment must be made."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "A description of the payment term."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the payment term."
+          },
+          "paymentTermsType": {
+            "enum": [
+              "net",
+              "invoiceMonth",
+              "paidInCash",
+              "prepaid",
+              "dueDate",
+              "factoring",
+              "invoiceWeekStartingSunday",
+              "invoiceWeekStartingMonday",
+              "creditcard"
+            ],
+            "description": "The type of payment term defines how the payment term behaves."
+          },
+          "contraAccountForPrepaidAmount": {
+            "type": "object",
+            "description": "The contra account for prepaid amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for prepaid amount item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "contraAccountForRemainderAmount": {
+            "type": "object",
+            "description": "The contra account for remainder amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for remainder amount item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "percentageForPrepaidAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be pre paid."
+          },
+          "percentageForRemainderAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be post paid."
+          },
+          "creditCardCompany": {
+            "type": "object",
+            "description": "The credit card company of the payment term.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "description": "The credit card company customer number.",
+                "maximum": 999999999,
+                "minimum": 1
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the payment term item."
+          }
+        },
+        "required": [
+          "paymentTermsType",
+          "self"
+        ]
+      },
+      "PaymentTermPOST": {
+        "title": "Payment term POST schema",
+        "description": "A schema for creating a single payment term.",
+        "type": "object",
+        "properties": {
+          "daysOfCredit": {
+            "type": "integer",
+            "description": "The number of days before payment must be made."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "A description of the payment term."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the payment term."
+          },
+          "paymentTermsType": {
+            "enum": [
+              "net",
+              "invoiceMonth",
+              "paidInCash",
+              "prepaid",
+              "dueDate",
+              "factoring",
+              "invoiceWeekStartingSunday",
+              "invoiceWeekStartingMonday",
+              "creditcard"
+            ],
+            "description": "The type of payment term."
+          },
+          "contraAccountForPrepaidAmount": {
+            "type": "object",
+            "description": "The contra account for prepaid amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for prepaid amount item."
+              }
+            }
+          },
+          "contraAccountForRemainderAmount": {
+            "type": "object",
+            "description": "The contra account for remainder amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for remainder amount item."
+              }
+            }
+          },
+          "percentageForPrepaidAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be pre paid."
+          },
+          "percentageForRemainderAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be post paid."
+          },
+          "creditCardCompany": {
+            "type": "object",
+            "description": "The credit card company of the payment term.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "description": "The credit card company customer number.",
+                "maximum": 999999999,
+                "minimum": 1
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer item."
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "paymentTermsType"
+        ]
+      },
+      "PaymentTermUpdate": {
+        "title": "Payment Term update schema",
+        "description": "A schema for updating a payment term.",
+        "type": "object",
+        "properties": {
+          "daysOfCredit": {
+            "type": "integer",
+            "description": "The number of days before payment must be made."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "A description of the payment term."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the payment term."
+          },
+          "paymentTermsType": {
+            "enum": [
+              "net",
+              "invoiceMonth",
+              "paidInCash",
+              "prepaid",
+              "dueDate",
+              "factoring",
+              "invoiceWeekStartingSunday",
+              "invoiceWeekStartingMonday",
+              "creditcard"
+            ],
+            "description": "The type of payment term."
+          },
+          "contraAccountForPrepaidAmount": {
+            "type": "object",
+            "description": "The contra account for prepaid amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for prepaid amount item."
+              }
+            }
+          },
+          "contraAccountForRemainderAmount": {
+            "type": "object",
+            "description": "The contra account for remainder amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for remainder amount item."
+              }
+            }
+          },
+          "percentageForPrepaidAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be pre paid."
+          },
+          "percentageForRemainderAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be pre paid."
+          },
+          "creditCardCompany": {
+            "type": "object",
+            "description": "The credit card company of the payment term.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "description": "The credit card company customer number.",
+                "maximum": 999999999,
+                "minimum": 1
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer item."
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "paymentTermsType"
+        ]
+      },
+      "PaymentTerms": {
+        "title": "Payment terms",
+        "type": "object",
+        "description": "A specific payment term on the agreement.",
+        "properties": {
+          "paymentTermsNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the payment term."
+          },
+          "daysOfCredit": {
+            "type": "integer",
+            "description": "The number of days before payment must be made."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "A description of the payment term."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the payment term."
+          },
+          "paymentTermsType": {
+            "enum": [
+              "net",
+              "invoiceMonth",
+              "paidInCash",
+              "prepaid",
+              "dueDate",
+              "factoring",
+              "invoiceWeekStartingSunday",
+              "invoiceWeekStartingMonday",
+              "creditcard"
+            ],
+            "description": "The type of payment term."
+          },
+          "contraAccountForPrepaidAmount": {
+            "type": "object",
+            "description": "The contra account for prepaid amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number for the contraAccountForPrepaidAmount."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for prepaid amount item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "contraAccountForRemainderAmount": {
+            "type": "object",
+            "description": "The contra account for remainder amount of the payment term.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number for the contraAccountForRemainderAmount."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account for remainder amount item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "percentageForPrepaidAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be pre paid."
+          },
+          "percentageForRemainderAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The % to be post paid."
+          },
+          "creditCardCompany": {
+            "type": "object",
+            "description": "The credit card company of the payment term.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "description": "The credit card company customer number.",
+                "maximum": 999999999,
+                "minimum": 1
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the credit card company customer item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the payment term item."
+          }
+        },
+        "required": [
+          "paymentTermsType",
+          "self"
+        ]
+      },
+      "PaymentTermsCollection": {
+        "title": "Payment terms collection GET schema",
+        "description": "A schema for retrieval of a collection of payment terms.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the payment terms on the agreement.",
+            "items": {
+              "$ref": "#/components/schemas/PaymentTerms"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the units collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

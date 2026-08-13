@@ -1,0 +1,263 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - app-roles",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/app-roles": {
+      "get": {
+        "operationId": "getAppRoles",
+        "tags": [
+          "app-roles"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppRolesCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "app-roles.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-app-roles"
+        }
+      }
+    },
+    "/app-roles/{roleNumber}": {
+      "get": {
+        "operationId": "getAppRolesByroleNumber",
+        "tags": [
+          "app-roles"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppRoles"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "app-roles.roleNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "roleNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-app-roles-rolenumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "AppRole": {
+        "title": "App role schema",
+        "type": "object",
+        "description": "A schema for information about an app role.",
+        "properties": {
+          "roleNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-default-sorting": "ascending",
+            "description": "A reference number for the app role."
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "SuperUser",
+              "Bookkeeping",
+              "Sales",
+              "ProjectEmployee"
+            ],
+            "description": "API Role name."
+          },
+          "requiredModules": {
+            "title": "Required modules",
+            "type": "array",
+            "description": "An array containing the required modules.",
+            "items": {
+              "type": "object",
+              "description": "An array of the required modules needed.",
+              "properties": {
+                "moduleNumber": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "A reference number for the module."
+                },
+                "self": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "A unique reference to the module resource."
+                }
+              },
+              "required": [
+                "self"
+              ]
+            }
+          }
+        }
+      },
+      "AppRoles": {
+        "title": "App roles schema",
+        "description": "A schema for retrieving an app role.",
+        "type": "object",
+        "properties": {
+          "roleNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-default-sorting": "ascending",
+            "description": "A reference number for the app role."
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "SuperUser",
+              "Bookkeeping",
+              "Sales",
+              "ProjectEmployee"
+            ],
+            "description": "API Role name."
+          },
+          "requiredModules": {
+            "title": "Required modules",
+            "type": "array",
+            "description": "An array containing the required modules.",
+            "items": {
+              "type": "object",
+              "description": "An array of the required modules needed.",
+              "properties": {
+                "moduleNumber": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "A reference number for the module."
+                },
+                "self": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "A unique reference to the module resource."
+                }
+              },
+              "required": [
+                "self"
+              ]
+            }
+          }
+        }
+      },
+      "AppRolesCollection": {
+        "title": "App roles collection schema",
+        "description": "A schema for retrieving the app roles.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of the app roles.",
+            "items": {
+              "$ref": "#/components/schemas/AppRole"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the app role collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

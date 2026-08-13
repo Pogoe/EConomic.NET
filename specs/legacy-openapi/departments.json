@@ -1,0 +1,229 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - departments",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/departments": {
+      "get": {
+        "operationId": "getDepartments",
+        "tags": [
+          "departments"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentsCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departments.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://restdocs.e-conomic.com/#get-departments"
+        }
+      }
+    },
+    "/departments/{departmentNumber}": {
+      "get": {
+        "operationId": "getDepartmentsBydepartmentNumber",
+        "tags": [
+          "departments"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentDetails"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "departments.departmentNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "departmentNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://restdocs.e-conomic.com/#get-departments-departmentnumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "Department": {
+        "title": "Department",
+        "type": "object",
+        "description": "A specific department on the agreement.",
+        "properties": {
+          "departmentNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A unique identifier of the department."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 250,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The name of the department."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "x-sortable": false,
+            "description": "Indicates if the department is barred from usage. Default is false."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the department item."
+          }
+        },
+        "required": [
+          "departmentNumber",
+          "name",
+          "self"
+        ]
+      },
+      "DepartmentDetails": {
+        "title": "Department GET schema",
+        "description": "A schema for retrieval of a single department.",
+        "type": "object",
+        "properties": {
+          "departmentNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the department."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 250,
+            "description": "The name of the department."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Indicates if the department is barred from usage. Default is null which also means false."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the department item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DepartmentsCollection": {
+        "title": "Departments collection GET schema",
+        "description": "A schema for retrieval of a collection of departments.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the departments on the agreement.",
+            "items": {
+              "$ref": "#/components/schemas/Department"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the departments collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

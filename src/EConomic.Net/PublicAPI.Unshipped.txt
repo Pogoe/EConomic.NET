@@ -1,0 +1,92 @@
+#nullable enable
+EConomic.Authentication.EconomicAuthenticationHandler
+EConomic.Authentication.EconomicAuthenticationHandler.EconomicAuthenticationHandler(EConomic.Authentication.EconomicOptions! options) -> void
+EConomic.Authentication.EconomicOptions
+EConomic.Authentication.EconomicOptions.AgreementGrantToken.get -> string!
+EConomic.Authentication.EconomicOptions.AgreementGrantToken.set -> void
+EConomic.Authentication.EconomicOptions.AppSecretToken.get -> string!
+EConomic.Authentication.EconomicOptions.AppSecretToken.set -> void
+EConomic.Authentication.EconomicOptions.EconomicOptions() -> void
+EConomic.Authentication.EconomicOptions.OpenApiBaseAddress.get -> System.Uri!
+EConomic.Authentication.EconomicOptions.OpenApiBaseAddress.set -> void
+EConomic.Authentication.EconomicOptions.RestApiBaseAddress.get -> System.Uri!
+EConomic.Authentication.EconomicOptions.RestApiBaseAddress.set -> void
+EConomic.Authentication.EconomicOptions.SendIdempotencyKeys.get -> bool
+EConomic.Authentication.EconomicOptions.SendIdempotencyKeys.set -> void
+EConomic.Authentication.EconomicOptions.Validate() -> void
+EConomic.Exceptions.EconomicApiException
+EConomic.Exceptions.EconomicApiException.AllowedFilteringFields.get -> System.Collections.Generic.IReadOnlyList<string!>!
+EConomic.Exceptions.EconomicApiException.Detail.get -> string?
+EConomic.Exceptions.EconomicApiException.DeveloperHint.get -> string?
+EConomic.Exceptions.EconomicApiException.EconomicApiException(string! message) -> void
+EConomic.Exceptions.EconomicApiException.EconomicApiException(string! message, System.Exception? innerException) -> void
+EConomic.Exceptions.EconomicApiException.EconomicApiException(string! message, System.Net.HttpStatusCode statusCode, EConomic.Exceptions.EconomicProblemDetails? problemDetails = null, EConomic.Exceptions.EconomicLegacyError? legacyError = null, string? requestId = null, EConomic.Http.RateLimitStatus? rateLimit = null, string? rawBody = null) -> void
+EConomic.Exceptions.EconomicApiException.ErrorCode.get -> string?
+EConomic.Exceptions.EconomicApiException.Errors.get -> System.Collections.Generic.IReadOnlyList<string!>!
+EConomic.Exceptions.EconomicApiException.LegacyError.get -> EConomic.Exceptions.EconomicLegacyError?
+EConomic.Exceptions.EconomicApiException.ProblemDetails.get -> EConomic.Exceptions.EconomicProblemDetails?
+EConomic.Exceptions.EconomicApiException.RateLimit.get -> EConomic.Http.RateLimitStatus?
+EConomic.Exceptions.EconomicApiException.RawBody.get -> string?
+EConomic.Exceptions.EconomicApiException.RequestId.get -> string?
+EConomic.Exceptions.EconomicApiException.StatusCode.get -> System.Net.HttpStatusCode?
+EConomic.Exceptions.EconomicApiException.TraceId.get -> string?
+EConomic.Exceptions.EconomicLegacyError
+EConomic.Exceptions.EconomicLegacyError.AllowedFilteringFields.get -> System.Collections.Generic.IReadOnlyList<string!>?
+EConomic.Exceptions.EconomicLegacyError.AllowedFilteringFields.init -> void
+EConomic.Exceptions.EconomicLegacyError.DeveloperHint.get -> string?
+EConomic.Exceptions.EconomicLegacyError.DeveloperHint.init -> void
+EConomic.Exceptions.EconomicLegacyError.EconomicLegacyError() -> void
+EConomic.Exceptions.EconomicLegacyError.Errors.get -> System.Collections.Generic.IReadOnlyList<string!>?
+EConomic.Exceptions.EconomicLegacyError.Errors.init -> void
+EConomic.Exceptions.EconomicLegacyError.HttpStatusCode.get -> int?
+EConomic.Exceptions.EconomicLegacyError.HttpStatusCode.init -> void
+EConomic.Exceptions.EconomicLegacyError.LogId.get -> string?
+EConomic.Exceptions.EconomicLegacyError.LogId.init -> void
+EConomic.Exceptions.EconomicLegacyError.LogTime.get -> string?
+EConomic.Exceptions.EconomicLegacyError.LogTime.init -> void
+EConomic.Exceptions.EconomicLegacyError.Message.get -> string?
+EConomic.Exceptions.EconomicLegacyError.Message.init -> void
+EConomic.Exceptions.EconomicProblemDetails
+EConomic.Exceptions.EconomicProblemDetails.Detail.get -> string?
+EConomic.Exceptions.EconomicProblemDetails.Detail.init -> void
+EConomic.Exceptions.EconomicProblemDetails.EconomicProblemDetails() -> void
+EConomic.Exceptions.EconomicProblemDetails.ErrorCode.get -> string?
+EConomic.Exceptions.EconomicProblemDetails.ErrorCode.init -> void
+EConomic.Exceptions.EconomicProblemDetails.Status.get -> int?
+EConomic.Exceptions.EconomicProblemDetails.Status.init -> void
+EConomic.Exceptions.EconomicProblemDetails.Title.get -> string?
+EConomic.Exceptions.EconomicProblemDetails.Title.init -> void
+EConomic.Exceptions.EconomicProblemDetails.TraceId.get -> string?
+EConomic.Exceptions.EconomicProblemDetails.TraceId.init -> void
+EConomic.Exceptions.EconomicProblemDetails.TraceTimeUtc.get -> string?
+EConomic.Exceptions.EconomicProblemDetails.TraceTimeUtc.init -> void
+EConomic.Exceptions.EconomicProblemDetails.Type.get -> string?
+EConomic.Exceptions.EconomicProblemDetails.Type.init -> void
+EConomic.Exceptions.EconomicRateLimitException
+EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message) -> void
+EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message, EConomic.Exceptions.EconomicProblemDetails? problemDetails = null, EConomic.Exceptions.EconomicLegacyError? legacyError = null, string? requestId = null, EConomic.Http.RateLimitStatus? rateLimit = null, System.TimeSpan? retryAfter = null, string? rawBody = null) -> void
+EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message, System.Exception? innerException) -> void
+EConomic.Exceptions.EconomicRateLimitException.RetryAfter.get -> System.TimeSpan?
+EConomic.Http.RateLimitStatus
+EConomic.Http.RateLimitStatus.CallCost.get -> int?
+EConomic.Http.RateLimitStatus.Limit.get -> int
+EConomic.Http.RateLimitStatus.Remaining.get -> int
+EConomic.Http.RateLimitStatus.Used.get -> int
+EConomic.Http.RateLimitStatus.UsedFraction.get -> double
+EConomic.Http.RateLimitStatus.Window.get -> System.TimeSpan
+const EConomic.Authentication.EconomicAuthenticationHandler.AgreementGrantTokenHeader = "X-AgreementGrantToken" -> string!
+const EConomic.Authentication.EconomicAuthenticationHandler.AppSecretTokenHeader = "X-AppSecretToken" -> string!
+const EConomic.Authentication.EconomicOptions.DemoToken = "demo" -> string!
+const EConomic.Exceptions.EconomicApiException.RequestIdHeader = "X-RequestId" -> string!
+const EConomic.Http.RateLimitStatus.CallCostHeader = "X-CallCost" -> string!
+const EConomic.Http.RateLimitStatus.RateLimitingHeader = "X-RateLimiting" -> string!
+override EConomic.Authentication.EconomicOptions.ToString() -> string!
+override EConomic.Http.RateLimitStatus.ToString() -> string!
+static EConomic.Authentication.EconomicOptions.Demo() -> EConomic.Authentication.EconomicOptions!
+static EConomic.Exceptions.EconomicApiException.FromResponseAsync(System.Net.Http.HttpResponseMessage! response, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Exceptions.EconomicApiException!>!
+static EConomic.Exceptions.EconomicLegacyError.TryParse(string? json) -> EConomic.Exceptions.EconomicLegacyError?
+static EConomic.Exceptions.EconomicProblemDetails.TryParse(string? json) -> EConomic.Exceptions.EconomicProblemDetails?
+static EConomic.Http.RateLimitStatus.FromResponse(System.Net.Http.HttpResponseMessage! response) -> EConomic.Http.RateLimitStatus?
+static EConomic.Http.RateLimitStatus.TryParse(string? headerValue, out EConomic.Http.RateLimitStatus? status) -> bool
+static readonly EConomic.Authentication.EconomicOptions.DefaultOpenApiBaseAddress -> System.Uri!
+static readonly EConomic.Authentication.EconomicOptions.DefaultRestApiBaseAddress -> System.Uri!

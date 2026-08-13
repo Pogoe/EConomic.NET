@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # MinVer derives the version from tags
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restore
+        run: dotnet restore EConomic.Net.slnx
+
+      - name: Build
+        run: dotnet build EConomic.Net.slnx --configuration Release --no-restore
+
+      - name: Verify formatting
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet format EConomic.Net.slnx --verify-no-changes --no-restore
+
+      # Unit tests only. The integration tests hit the live demo agreement and run on a
+      # schedule instead, so an e-conomic outage cannot block an unrelated pull request.
+      - name: Test
+        run: >
+          dotnet test tests/EConomic.Net.Tests
+          --configuration Release --no-build
+          --logger "trx;LogFileName=test-results.trx"
+
+      - name: Pack
+        if: matrix.os == 'ubuntu-latest'
+        run: dotnet pack src/EConomic.Net --configuration Release --no-build --output ./artifacts
+
+      - name: Upload package
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: ./artifacts/*

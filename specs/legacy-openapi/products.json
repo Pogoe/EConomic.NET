@@ -1,0 +1,1913 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - products",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "operationId": "getProducts",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-products"
+        }
+      },
+      "post": {
+        "operationId": "postProducts",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsCreate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductsCreate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-products"
+        }
+      }
+    },
+    "/products/{productNumber}": {
+      "get": {
+        "operationId": "getProductsByproductNumber",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.productNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-products-productnumber"
+        }
+      },
+      "put": {
+        "operationId": "putProductsByproductNumber",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsUpdate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.productNumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductsUpdate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-products-productnumber"
+        }
+      }
+    },
+    "/products/{productNumber}/pricing/currency-specific-sales-prices": {
+      "get": {
+        "operationId": "getProductsByproductNumberPricingCurrencySpecificSalesPrices",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPriceCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.get.schema.json",
+        "parameters": [
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-products-productnumber-pricing-currency-specific-sales-prices"
+        }
+      },
+      "post": {
+        "operationId": "postProductsByproductNumberPricingCurrencySpecificSalesPrices",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPricesCreate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.post.schema.json",
+        "parameters": [
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductPricesCreate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-products-productnumber-product-prices"
+        }
+      }
+    },
+    "/products/{productNumber}/pricing/currency-specific-sales-prices/{currencyCode}": {
+      "get": {
+        "operationId": "getProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCode",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPrices"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.currencyCode.get.schema.json",
+        "parameters": [
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "currencyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-products-productnumber-product-prices-currencycode"
+        }
+      },
+      "put": {
+        "operationId": "putProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCode",
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPricesUpdate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.currencyCode.put.schema.json",
+        "parameters": [
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "currencyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductPricesUpdate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-products-productnumber-product-prices-currencycode"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "ProductGroupsProduct": {
+        "title": "Product",
+        "type": "object",
+        "description": "A specific product.",
+        "properties": {
+          "productNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 25,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Unique alphanumeric product number."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Free text description of product."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Descriptive name of the product."
+          },
+          "costPrice": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 2,
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+          },
+          "recommendedPrice": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 2,
+            "description": "Recommended retail price of the goods."
+          },
+          "salesPrice": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 2,
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+          },
+          "barCode": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "String representation of a machine readable barcode symbol that represents this product."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "If this value is true, then the product can no longer be sold, and trying to book an invoice with this product will not be possible."
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z",
+            "x-filterable": true,
+            "x-sortable": true,
+            "readOnly": true,
+            "description": "Invoice issue date. The date is formatted according to ISO-8601."
+          },
+          "invoices": {
+            "type": "object",
+            "description": "A collection of convenience links to invoices that contains this product.",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the draft invoices containing this product."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the booked invoices containing this product."
+              }
+            }
+          },
+          "inventory": {
+            "type": "object",
+            "description": "A collection of properties that are only applicable if the inventory module is enabled.",
+            "properties": {
+              "available": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers."
+              },
+              "inStock": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units in stock including any that have been ordered by customers."
+              },
+              "orderedByCustomers": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet."
+              },
+              "orderedFromSuppliers": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet."
+              },
+              "packageVolume": {
+                "type": "number",
+                "x-filterable": true,
+                "x-sortable": true,
+                "x-max-decimals": 2,
+                "description": "The volume the shipped package makes up."
+              },
+              "grossWeight": {
+                "type": "number",
+                "x-filterable": true,
+                "x-sortable": true,
+                "x-max-decimals": 2,
+                "readOnly": true,
+                "description": "The gross weight of the product."
+              },
+              "netWeight": {
+                "type": "number",
+                "x-filterable": true,
+                "x-sortable": true,
+                "x-max-decimals": 2,
+                "readOnly": true,
+                "description": "The net weight of the product."
+              },
+              "inventoryLastUpdated": {
+                "type": "string",
+                "format": "date",
+                "pattern": "\\d{4}-\\d{2}-\\d{2}Td{2}:d{2}:d{2}Z",
+                "readOnly": true,
+                "description": "The last time this product was updated with regards to inventory."
+              },
+              "recommendedCostPrice": {
+                "type": "number",
+                "x-filterable": true,
+                "x-max-decimals": 2,
+                "description": "The recommendedCostPrice of the product."
+              }
+            }
+          },
+          "unit": {
+            "type": "object",
+            "description": "A reference to the unit this product is counted in.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "description": "Unique number identifying the unit."
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "The name of the unit."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "productGroup": {
+            "type": "object",
+            "description": "A reference to the product group this product is contained within.",
+            "properties": {
+              "productGroupNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the product group.",
+                "x-filterable": true
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50,
+                "description": "Descriptive name of the product group."
+              },
+              "salesAccounts": {
+                "type": "string",
+                "format": "uri",
+                "readOnly": true,
+                "description": "A reference to the sales accounts in this product group resource."
+              },
+              "products": {
+                "type": "string",
+                "format": "uri",
+                "readOnly": true,
+                "description": "A reference to the products in this product group resource."
+              },
+              "inventoryEnabled": {
+                "type": "boolean",
+                "readOnly": true,
+                "description": "States if the product group is inventory enabled or not."
+              },
+              "accrual": {
+                "type": "object",
+                "readOnly": true,
+                "description": "A reference to the accrual account this product group is connected to.",
+                "properties": {
+                  "accountNumber": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "description": "Unique number identifying the accruals account."
+                  },
+                  "accountType": {
+                    "enum": [
+                      "profitAndLoss",
+                      "status",
+                      "totalFrom",
+                      "heading",
+                      "headingStart",
+                      "sumInterval",
+                      "sumAlpha"
+                    ],
+                    "default": "profitAndLoss",
+                    "readOnly": true,
+                    "description": "The type of account in the chart of accounts."
+                  },
+                  "balance": {
+                    "type": "number",
+                    "x-max-decimals": 2,
+                    "readOnly": true,
+                    "description": "The current balance of the accruals account."
+                  },
+                  "draftBalance": {
+                    "type": "number",
+                    "x-max-decimals": 2,
+                    "readOnly": true,
+                    "description": "The current balance of the account including draft (not yet booked) entries."
+                  },
+                  "barred": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Shows if the account is barred from being used."
+                  },
+                  "blockDirectEntries": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Determines if the account can be manually updated with entries."
+                  },
+                  "contraAccount": {
+                    "type": "object",
+                    "readOnly": true,
+                    "description": "The default contra account of the account.",
+                    "properties": {
+                      "accountNumber": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "description": "Account number of the contra account."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "description": "The unique self link of the contra account."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "debitCredit": {
+                    "enum": [
+                      "debit",
+                      "credit"
+                    ],
+                    "default": "debit",
+                    "readOnly": true,
+                    "description": "Describes the default update type of the account."
+                  },
+                  "name": {
+                    "type": "string",
+                    "maxLength": 125,
+                    "readOnly": true,
+                    "description": "The name of the account."
+                  },
+                  "vatAccount": {
+                    "type": "object",
+                    "readOnly": true,
+                    "description": "The default VAT code for this account.",
+                    "properties": {
+                      "vatCode": {
+                        "type": "string",
+                        "maxLength": 5,
+                        "readOnly": true,
+                        "description": "The VAT code of the VAT account for this account."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "description": "The unique self link of the VAT code."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "accountsSummed": {
+                    "type": "array",
+                    "readOnly": true,
+                    "description": "An array of the account intervals used for calculating the total for this account.",
+                    "items": {
+                      "type": "object",
+                      "readOnly": true,
+                      "description": "An account interval.",
+                      "properties": {
+                        "fromAccount": {
+                          "type": "object",
+                          "readOnly": true,
+                          "description": "The first account in the interval.",
+                          "properties": {
+                            "accountNumber": {
+                              "type": "integer",
+                              "readOnly": true,
+                              "description": "Account number of the first account in the interval."
+                            },
+                            "self": {
+                              "type": "string",
+                              "format": "uri",
+                              "readOnly": true,
+                              "description": "The unique self link of the first account in the interval."
+                            }
+                          },
+                          "required": [
+                            "self"
+                          ]
+                        },
+                        "toAccount": {
+                          "type": "object",
+                          "readOnly": true,
+                          "description": "The last account in the interval.",
+                          "properties": {
+                            "accountNumber": {
+                              "type": "integer",
+                              "readOnly": true,
+                              "description": "Account number of the last account in the interval."
+                            },
+                            "self": {
+                              "type": "string",
+                              "format": "uri",
+                              "readOnly": true,
+                              "description": "The unique self link of the last account in the interval."
+                            }
+                          },
+                          "required": [
+                            "self"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "totalFromAccount": {
+                    "type": "object",
+                    "readOnly": true,
+                    "description": "The account from which the sum total for this account is calculated.",
+                    "properties": {
+                      "accountNumber": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "description": "Account number of the first account."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "description": "The unique self link of the first account."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "accountingYears": {
+                    "type": "string",
+                    "format": "uri",
+                    "readOnly": true,
+                    "description": "A link to a list of accounting years for which the account is usable."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "readOnly": true,
+                    "description": "A unique reference to the accruals account resource."
+                  }
+                }
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product group resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "departmentalDistribution": {
+            "type": "object",
+            "description": "A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.",
+            "properties": {
+              "departmentalDistributionNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "minimum": 1,
+                "description": "A unique identifier of the departmental distribution."
+              },
+              "distributionType": {
+                "type": "string",
+                "description": "Type of the distribution"
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the departmental distribution resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to this product resource."
+          }
+        },
+        "required": [
+          "productNumber",
+          "name",
+          "productGroup",
+          "self"
+        ]
+      },
+      "ProductPrice": {
+        "title": "Product price",
+        "type": "object",
+        "description": "A specific product price.",
+        "properties": {
+          "price": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The price of the product."
+          },
+          "product": {
+            "type": "object",
+            "description": "A reference to the product this product price belongs to.",
+            "properties": {
+              "productNumber": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 25,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Unique alphanumeric product number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product resource."
+              }
+            },
+            "required": [
+              "productNumber",
+              "self"
+            ]
+          },
+          "currency": {
+            "type": "object",
+            "description": "A reference to the currency this product price is in.",
+            "properties": {
+              "code": {
+                "type": "string",
+                "pattern": "[a-zA-Z]{3}",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The ISO 4217 currency code of the invoice."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the currency resource."
+              }
+            },
+            "required": [
+              "code",
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to this product-prices resource."
+          }
+        },
+        "required": [
+          "price",
+          "self"
+        ]
+      },
+      "ProductPriceCollection": {
+        "title": "Product price collection get schema",
+        "description": "A schema for getting all product price belonging to a product.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the product prices.",
+            "items": {
+              "$ref": "#/components/schemas/ProductPrice"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the product prices collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "ProductPrices": {
+        "title": "Product prices get schema",
+        "description": "A schema for getting a specific product price.",
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The price of the product."
+          },
+          "product": {
+            "type": "object",
+            "description": "A reference to the product this product price belongs to.",
+            "properties": {
+              "productNumber": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 25,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Unique alphanumeric product number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product resource."
+              }
+            },
+            "required": [
+              "productNumber",
+              "self"
+            ]
+          },
+          "currency": {
+            "type": "object",
+            "description": "A reference to the currency this product price is in.",
+            "properties": {
+              "code": {
+                "type": "string",
+                "pattern": "[a-zA-Z]{3}",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The ISO 4217 currency code of the invoice."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the currency resource."
+              }
+            },
+            "required": [
+              "code",
+              "self"
+            ]
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to this product-prices resource."
+          }
+        },
+        "required": [
+          "price",
+          "self"
+        ]
+      },
+      "ProductPricesCreate": {
+        "title": "Product prices create schema",
+        "description": "A schema for creating a specific product price.",
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The price of the product."
+          },
+          "product": {
+            "type": "object",
+            "description": "A reference to the product this product price belongs to.",
+            "properties": {
+              "productNumber": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 25,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Unique alphanumeric product number."
+              },
+              "self": {
+                "type": "string",
+                "description": "A unique reference to the product resource."
+              }
+            }
+          },
+          "currency": {
+            "type": "object",
+            "description": "A reference to the currency this product price is in.",
+            "properties": {
+              "code": {
+                "type": "string",
+                "pattern": "[a-zA-Z]{3}",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The ISO 4217 currency code of the invoice."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the currency resource."
+              }
+            },
+            "required": [
+              "code"
+            ]
+          }
+        },
+        "required": [
+          "price"
+        ]
+      },
+      "ProductPricesUpdate": {
+        "title": "Product prices update schema",
+        "description": "A schema for updating a specific product price.",
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The price of the product."
+          },
+          "product": {
+            "type": "object",
+            "description": "A reference to the product this product price belongs to.",
+            "properties": {
+              "productNumber": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 25,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Unique alphanumeric product number."
+              },
+              "self": {
+                "type": "string",
+                "description": "A unique reference to the product resource."
+              }
+            }
+          },
+          "currency": {
+            "type": "object",
+            "description": "A reference to the currency this product price is in.",
+            "properties": {
+              "code": {
+                "type": "string",
+                "pattern": "[a-zA-Z]{3}",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The ISO 4217 currency code of the invoice."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the currency resource."
+              }
+            },
+            "required": [
+              "code"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to this product-prices resource."
+          }
+        },
+        "required": [
+          "price"
+        ]
+      },
+      "Products": {
+        "title": "Products get schema",
+        "description": "A schema for getting a product.",
+        "type": "object",
+        "properties": {
+          "productNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 25,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Unique alphanumeric product number."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Free text description of product."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Descriptive name of the product."
+          },
+          "costPrice": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 2,
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+          },
+          "recommendedPrice": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 2,
+            "description": "Recommended retail price of the goods."
+          },
+          "salesPrice": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 2,
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+          },
+          "barCode": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "String representation of a machine readable barcode symbol that represents this product."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "If this value is true, then the product can no longer be sold, and trying to book an invoice with this product will not be possible."
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z",
+            "x-filterable": true,
+            "x-sortable": true,
+            "readOnly": true,
+            "description": "The last time the product was updated, either directly or through inventory changed. The date is formatted according to ISO-8601."
+          },
+          "invoices": {
+            "type": "object",
+            "description": "A collection of convenience links to invoices that contains this product.",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the draft invoices containing this product."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the booked invoices containing this product."
+              }
+            }
+          },
+          "inventory": {
+            "type": "object",
+            "description": "A collection of properties that are only applicable if the inventory module is enabled.",
+            "properties": {
+              "available": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers."
+              },
+              "inStock": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units in stock including any that have been ordered by customers."
+              },
+              "orderedByCustomers": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet."
+              },
+              "orderedFromSuppliers": {
+                "type": "number",
+                "readOnly": true,
+                "x-max-decimals": 2,
+                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet."
+              },
+              "packageVolume": {
+                "type": "number",
+                "x-filterable": true,
+                "x-sortable": true,
+                "x-max-decimals": 2,
+                "description": "The volume the shipped package makes up."
+              },
+              "grossWeight": {
+                "type": "number",
+                "x-filterable": true,
+                "x-sortable": true,
+                "x-max-decimals": 2,
+                "description": "The gross weight of the product."
+              },
+              "netWeight": {
+                "type": "number",
+                "x-filterable": true,
+                "x-sortable": true,
+                "x-max-decimals": 2,
+                "description": "The net weight of the product."
+              },
+              "recommendedCostPrice": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled, but the validation cannot throw errors since it would cause issues for people already using the Inventory module. If no value is provided it is set to 0.0."
+              }
+            }
+          },
+          "unit": {
+            "type": "object",
+            "description": "A reference to the unit this product is counted in.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the unit."
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "The name of the unit."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "productGroup": {
+            "type": "object",
+            "description": "A reference to the product group this product is contained within.",
+            "properties": {
+              "productGroupNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the product group."
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50,
+                "description": "Descriptive name of the product group."
+              },
+              "salesAccounts": {
+                "type": "string",
+                "format": "uri",
+                "readOnly": true,
+                "description": "A reference to the sales accounts in this product group resource."
+              },
+              "products": {
+                "type": "string",
+                "format": "uri",
+                "readOnly": true,
+                "description": "A reference to the products in this product group resource."
+              },
+              "inventoryEnabled": {
+                "type": "boolean",
+                "readOnly": true,
+                "description": "States if the product group is inventory enabled or not."
+              },
+              "accrual": {
+                "type": "object",
+                "readOnly": true,
+                "description": "A reference to the accrual account this product group is connected to.",
+                "properties": {
+                  "accountNumber": {
+                    "type": "integer",
+                    "readOnly": true,
+                    "description": "Unique number identifying the accruals account."
+                  },
+                  "accountType": {
+                    "enum": [
+                      "profitAndLoss",
+                      "status",
+                      "totalFrom",
+                      "heading",
+                      "headingStart",
+                      "sumInterval",
+                      "sumAlpha"
+                    ],
+                    "readOnly": true,
+                    "default": "profitAndLoss",
+                    "description": "The type of account in the chart of accounts."
+                  },
+                  "balance": {
+                    "type": "number",
+                    "x-max-decimals": 2,
+                    "readOnly": true,
+                    "description": "The current balance of the accruals account."
+                  },
+                  "draftBalance": {
+                    "type": "number",
+                    "x-max-decimals": 2,
+                    "readOnly": true,
+                    "description": "The current balance of the account including draft (not yet booked) entries."
+                  },
+                  "barred": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Shows if the account is barred from being used."
+                  },
+                  "blockDirectEntries": {
+                    "type": "boolean",
+                    "readOnly": true,
+                    "description": "Determines if the account can be manually updated with entries."
+                  },
+                  "contraAccount": {
+                    "type": "object",
+                    "readOnly": true,
+                    "description": "The default contra account of the account.",
+                    "properties": {
+                      "accountNumber": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "description": "Account number of the contra account."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "description": "The unique self link of the contra account."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "debitCredit": {
+                    "enum": [
+                      "debit",
+                      "credit"
+                    ],
+                    "default": "debit",
+                    "readOnly": true,
+                    "description": "Describes the default update type of the account."
+                  },
+                  "name": {
+                    "type": "string",
+                    "maxLength": 125,
+                    "readOnly": true,
+                    "description": "The name of the account."
+                  },
+                  "vatAccount": {
+                    "type": "object",
+                    "readOnly": true,
+                    "description": "The default VAT code for this account.",
+                    "properties": {
+                      "vatCode": {
+                        "type": "string",
+                        "maxLength": 5,
+                        "readOnly": true,
+                        "description": "The VAT code of the VAT account for this account."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "description": "The unique self link of the VAT code."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "accountsSummed": {
+                    "type": "array",
+                    "readOnly": true,
+                    "description": "An array of the account intervals used for calculating the total for this account.",
+                    "items": {
+                      "type": "object",
+                      "readOnly": true,
+                      "description": "An account interval.",
+                      "properties": {
+                        "fromAccount": {
+                          "type": "object",
+                          "readOnly": true,
+                          "description": "The first account in the interval.",
+                          "properties": {
+                            "accountNumber": {
+                              "type": "integer",
+                              "readOnly": true,
+                              "description": "Account number of the first account in the interval."
+                            },
+                            "self": {
+                              "type": "string",
+                              "format": "uri",
+                              "readOnly": true,
+                              "description": "The unique self link of the first account in the interval."
+                            }
+                          },
+                          "required": [
+                            "self"
+                          ]
+                        },
+                        "toAccount": {
+                          "type": "object",
+                          "readOnly": true,
+                          "description": "The last account in the interval.",
+                          "properties": {
+                            "accountNumber": {
+                              "type": "integer",
+                              "readOnly": true,
+                              "description": "Account number of the last account in the interval."
+                            },
+                            "self": {
+                              "type": "string",
+                              "format": "uri",
+                              "readOnly": true,
+                              "description": "The unique self link of the last account in the interval."
+                            }
+                          },
+                          "required": [
+                            "self"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "totalFromAccount": {
+                    "type": "object",
+                    "readOnly": true,
+                    "description": "The account from which the sum total for this account is calculated.",
+                    "properties": {
+                      "accountNumber": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "description": "Account number of the first account."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "readOnly": true,
+                        "description": "The unique self link of the first account."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "accountingYears": {
+                    "type": "string",
+                    "format": "uri",
+                    "readOnly": true,
+                    "description": "A link to a list of accounting years for which the account is usable."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "readOnly": true,
+                    "description": "A unique reference to the accruals account resource."
+                  }
+                }
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product group resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "departmentalDistribution": {
+            "type": "object",
+            "description": "A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.",
+            "properties": {
+              "departmentalDistributionNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the departmental distribution."
+              },
+              "distributionType": {
+                "type": "string",
+                "description": "Type of the distribution"
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the departmental distribution resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to this product resource."
+          }
+        },
+        "required": [
+          "productNumber",
+          "name",
+          "productGroup",
+          "self"
+        ]
+      },
+      "ProductCollection": {
+        "title": "Products collection GET schema",
+        "description": "A schema for retrieval of a collection of products belonging to a product group.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the products.",
+            "items": {
+              "$ref": "#/components/schemas/ProductGroupsProduct"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the product groups product collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "ProductsCreate": {
+        "title": "Products create schema",
+        "description": "A schema for creating a new product.",
+        "type": "object",
+        "properties": {
+          "productNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 25,
+            "description": "Unique alphanumeric product number."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "description": "Descriptive name of the product."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Free text description of product."
+          },
+          "costPrice": {
+            "type": "number",
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+          },
+          "recommendedPrice": {
+            "type": "number",
+            "description": "Recommended retail price of the goods."
+          },
+          "salesPrice": {
+            "type": "number",
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+          },
+          "barCode": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "String representation of a machine readable barcode symbol that represents this product."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "If this value is true, then the product can no longer be sold, and trying to book an invoice with this product will not be possible."
+          },
+          "inventory": {
+            "type": "object",
+            "description": "A collection of properties that are only applicable if the inventory module is enabled.",
+            "properties": {
+              "available": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers."
+              },
+              "inStock": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units in stock including any that have been ordered by customers."
+              },
+              "orderedByCustomers": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet."
+              },
+              "orderedFromSuppliers": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet."
+              },
+              "packageVolume": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "description": "The volume the shipped package makes up."
+              },
+              "grossWeight": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "readOnly": true,
+                "description": "The gross weight of the product."
+              },
+              "netWeight": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "readOnly": true,
+                "description": "The net weight of the product."
+              },
+              "recommendedCostPrice": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled."
+              }
+            }
+          },
+          "unit": {
+            "type": "object",
+            "description": "A reference to the unit this product is counted in.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the unit."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            }
+          },
+          "productGroup": {
+            "type": "object",
+            "description": "A reference to the product group this product is contained within.",
+            "properties": {
+              "productGroupNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the product group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product group resource."
+              }
+            }
+          },
+          "departmentalDistribution": {
+            "type": "object",
+            "description": "A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.",
+            "properties": {
+              "departmentalDistributionNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the departmental distribution."
+              },
+              "distributionType": {
+                "type": "string",
+                "description": "Type of the distribution"
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the departmental distribution resource."
+              }
+            }
+          }
+        },
+        "required": [
+          "productNumber",
+          "name",
+          "productGroup"
+        ]
+      },
+      "ProductsUpdate": {
+        "title": "Products update schema",
+        "description": "A schema for updating an existing product.",
+        "type": "object",
+        "properties": {
+          "productNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 25,
+            "description": "Unique alphanumeric product number."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "description": "Descriptive name of the product."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Free text description of product."
+          },
+          "costPrice": {
+            "type": "number",
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+          },
+          "recommendedPrice": {
+            "type": "number",
+            "description": "Recommended retail price of the goods."
+          },
+          "salesPrice": {
+            "type": "number",
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+          },
+          "barCode": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "String representation of a machine readable barcode symbol that represents this product."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "If this value is true, then the product can no longer be sold, and trying to book an invoice with this product will not be possible."
+          },
+          "inventory": {
+            "type": "object",
+            "description": "A collection of properties that are only applicable if the inventory module is enabled.",
+            "properties": {
+              "available": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers."
+              },
+              "inStock": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units in stock including any that have been ordered by customers."
+              },
+              "orderedByCustomers": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet."
+              },
+              "orderedFromSuppliers": {
+                "type": "number",
+                "readOnly": true,
+                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet."
+              },
+              "packageVolume": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "description": "The volume the shipped package makes up."
+              },
+              "grossWeight": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "readOnly": true,
+                "description": "The gross weight of the product."
+              },
+              "netWeight": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "readOnly": true,
+                "description": "The net weight of the product."
+              },
+              "recommendedCostPrice": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled."
+              }
+            }
+          },
+          "unit": {
+            "type": "object",
+            "description": "A reference to the unit this product is counted in.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the unit."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            }
+          },
+          "productGroup": {
+            "type": "object",
+            "description": "A reference to the product group this product is contained within.",
+            "properties": {
+              "productGroupNumber": {
+                "type": "integer",
+                "description": "Unique number identifying the product group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product group resource."
+              }
+            }
+          },
+          "departmentalDistribution": {
+            "type": "object",
+            "description": "A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.",
+            "properties": {
+              "departmentalDistributionNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the departmental distribution."
+              },
+              "distributionType": {
+                "type": "string",
+                "description": "Type of the distribution"
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the departmental distribution resource."
+              }
+            }
+          }
+        },
+        "required": [
+          "productNumber",
+          "name",
+          "productGroup"
+        ]
+      }
+    }
+  }
+}

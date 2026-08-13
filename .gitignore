@@ -1,0 +1,49 @@
+# Claude Code / AI assistant files - deliberately not part of the public repo
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+.claude/
+.mcp.json
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+artifacts/
+[Dd]ebug/
+[Rr]elease/
+*.binlog
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Test / coverage
+[Tt]est[Rr]esult*/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.trx
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!packages/build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets - never commit real tokens. Only the `demo` tokens belong in this repo.
+*.secrets.json
+.env
+.env.*

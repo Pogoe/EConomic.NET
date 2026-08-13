@@ -1,0 +1,4366 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - customers",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/customers": {
+      "get": {
+        "operationId": "getCustomers",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers"
+        }
+      },
+      "post": {
+        "operationId": "postCustomers",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerPOST"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerPOST"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-customers"
+        }
+      }
+    },
+    "/customers/{customerNo}": {
+      "put": {
+        "operationId": "putCustomersBycustomerNo",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNo.put.schema.json",
+        "parameters": [
+          {
+            "name": "customerNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-customers-customernumber"
+        }
+      }
+    },
+    "/customers/{customerNumber}": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumber",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDetails"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber"
+        }
+      }
+    },
+    "/customers/{customerNumber}/contacts": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberContacts",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomersCustomerContact"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.contacts.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-contacts"
+        }
+      },
+      "post": {
+        "operationId": "postCustomersBycustomerNumberContacts",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactPOST"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.contacts.post.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerContactPOST"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-customers-customernumber-contacts"
+        }
+      }
+    },
+    "/customers/{customerNumber}/contacts/{contactNumber}": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberContactsBycontactNumber",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactDetails"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.contacts.contactNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "contactNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-contacts-contactnumber"
+        }
+      },
+      "put": {
+        "operationId": "putCustomersBycustomerNumberContactsBycontactNumber",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.contacts.contactNumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "contactNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerContactPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-customers-customernumber-contacts/:contactNumber"
+        }
+      }
+    },
+    "/customers/{customerNumber}/delivery-locations": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberDeliveryLocations",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.delivery-locations.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-delivery-locations"
+        }
+      },
+      "post": {
+        "operationId": "postCustomersBycustomerNumberDeliveryLocations",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.delivery-locations.post.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryLocationPOST"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-customers-customernumber-delivery-locations"
+        }
+      }
+    },
+    "/customers/{customerNumber}/delivery-locations/{deliveryLocationNumber}": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberDeliveryLocationsBydeliveryLocationNumber",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocation"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.delivery-locations.deliveryLocationNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "deliveryLocationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-delivery-locations-deliverylocationnumber"
+        }
+      },
+      "put": {
+        "operationId": "putCustomersBycustomerNumberDeliveryLocationsBydeliveryLocationNumber",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.delivery-locations.deliveryLocationNumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "deliveryLocationNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryLocationPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-customers-customernumber-delivery-locations-deliverylocationnumber"
+        }
+      }
+    },
+    "/customers/{customerNumber}/invoices": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberInvoices",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerInvoices"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.invoices.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-invoices"
+        }
+      }
+    },
+    "/customers/{customerNumber}/invoices/booked": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberInvoicesBooked",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBookedInvoicesCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.invoices.booked.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-invoices-booked"
+        }
+      }
+    },
+    "/customers/{customerNumber}/invoices/drafts": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberInvoicesDrafts",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDraftInvoicesCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.invoices.drafts.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-invoices-drafts"
+        }
+      }
+    },
+    "/customers/{customerNumber}/templates": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberTemplates",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerTemplates"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.templates.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-templates"
+        }
+      }
+    },
+    "/customers/{customerNumber}/templates/invoice": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberTemplatesInvoice",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftInvoiceTemplate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.templates.invoice.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-templates-invoice"
+        }
+      }
+    },
+    "/customers/{customerNumber}/templates/invoiceline": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberTemplatesInvoiceline",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftInvoiceLineTemplatesCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.templates.invoiceline.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-templates-invoiceline"
+        }
+      }
+    },
+    "/customers/{customerNumber}/templates/invoiceline/{productNumber}": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberTemplatesInvoicelineByproductNumber",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomersDraftInvoiceLineTemplate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.templates.invoiceline.productNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "productNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-templates-invoiceline-productnumber"
+        }
+      }
+    },
+    "/customers/{customerNumber}/totals": {
+      "get": {
+        "operationId": "getCustomersBycustomerNumberTotals",
+        "tags": [
+          "customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerTotals"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customers.customerNumber.totals.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-totals"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "CustomerBookedInvoice": {
+        "title": "Booked invoice",
+        "type": "object",
+        "properties": {
+          "bookedInvoiceNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A reference number for the booked invoice document."
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Invoice issue date. Format according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "[a-zA-Z]{3}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The ISO 4217 currency code of the invoice."
+          },
+          "netAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "netAmountInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "grossAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "vatAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount"
+          },
+          "roundingAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total rounding error, if any, on the invoice in base currency."
+          },
+          "remainder": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "readOnly": true,
+            "description": "Remaining amount to be paid."
+          },
+          "remainderInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "readOnly": true,
+            "description": "Remaining amount to be paid in base currency."
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The date the invoice is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type \u0027duedate\u0027."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The terms of payment for the invoice.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 0,
+                "exclusiveMinimum": true,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "A unique identifier of the payment term."
+              },
+              "daysOfCredit": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "The number of days of credit on the invoice. This field is only valid if terms of payment is not of type \u0027duedate"
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "The name of the payment terms."
+              },
+              "paymentTermsType": {
+                "enum": [
+                  "net",
+                  "invoiceMonth",
+                  "paidInCash",
+                  "prepaid",
+                  "dueDate",
+                  "factoring",
+                  "invoiceWeekStartingSunday",
+                  "invoiceWeekStartingMonday",
+                  "creditcard"
+                ],
+                "description": "The type of payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer being invoiced.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "x-sortable": true,
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "recipient": {
+            "type": "object",
+            "description": "The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The name of the actual recipient."
+              },
+              "address": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The street address of the actual recipient."
+              },
+              "zip": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The zip code of the actual recipient."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The city of the actual recipient."
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The country of the actual recipient."
+              },
+              "ean": {
+                "type": "string",
+                "maxLength": 13,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The \u0027European Article Number\u0027 of the actual recipient."
+              },
+              "publicEntryNumber": {
+                "type": "string",
+                "maxLength": 40,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The public entry number of the actual recipient."
+              },
+              "attention": {
+                "type": "object",
+                "description": "The person to whom this invoice is addressed.",
+                "properties": {
+                  "customerContactNumber": {
+                    "type": "integer",
+                    "description": "Unique identifier of the customer employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the customer employee."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "vatZone": {
+                "type": "object",
+                "description": "Recipient vat zone.",
+                "properties": {
+                  "vatZoneNumber": {
+                    "type": "integer",
+                    "description": "Unique identifier of the vat zone."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the vat zone."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "cvr": {
+                "type": "string",
+                "description": "The Corporate Identification Number of the recipient for example CVR in Denmark.",
+                "maxLength": 40
+              }
+            }
+          },
+          "deliveryLocation": {
+            "type": "object",
+            "description": "A reference to the place of delivery for the goods on the invoice",
+            "properties": {
+              "deliveryLocationNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "A unique identifier for the delivery location."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the delivery location resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "delivery": {
+            "type": "object",
+            "description": "The actual place of delivery for the goods on the invoice. This is usually the same place as the one referenced in the deliveryLocation property, but may be edited as required.",
+            "properties": {
+              "address": {
+                "type": "string",
+                "maxLength": 255,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Street address where the goods must be delivered to the customer."
+              },
+              "zip": {
+                "type": "string",
+                "maxLength": 30,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The zip code of the place of delivery."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The city of the place of delivery"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The country of the place of delivery"
+              },
+              "deliveryTerms": {
+                "type": "string",
+                "maxLength": 100,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Details about the terms of delivery."
+              },
+              "deliveryDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "\\d{4}-\\d{2}-\\d{2}",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The date of delivery."
+              }
+            }
+          },
+          "notes": {
+            "type": "object",
+            "description": "Notes on the invoice.",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The invoice heading. Usually displayed at the top of the invoice."
+              },
+              "textLine1": {
+                "type": "string",
+                "maxLength": 1000,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The first line of supplementary text on the invoice. This is usually displayed right under the heading in a smaller font."
+              },
+              "textLine2": {
+                "type": "string",
+                "maxLength": 1000,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The second line of supplementary text in the notes on the invoice. This is usually displayed as a footer on the invoice."
+              }
+            }
+          },
+          "references": {
+            "type": "object",
+            "description": "Customer and company references related to this invoice.",
+            "properties": {
+              "customerContact": {
+                "type": "object",
+                "description": "The customer contact is a reference to the employee at the customer to contact regarding the invoice.",
+                "properties": {
+                  "customerContactNumber": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "description": "Unique identifier of the customer contact."
+                  },
+                  "customer": {
+                    "type": "object",
+                    "description": "The customer this contact belongs to.",
+                    "properties": {
+                      "customerNumber": {
+                        "type": "integer",
+                        "x-filterable": true,
+                        "x-sortable": true,
+                        "maximum": 999999999,
+                        "minimum": 1,
+                        "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "A unique reference to the customer resource."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the customer contact resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "salesPerson": {
+                "type": "object",
+                "description": "The sales person is a reference to the employee who sold the goods on the invoice. This is also the person who is credited with this sale in reports.",
+                "properties": {
+                  "employeeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "x-filterable": true,
+                    "x-sortable": true,
+                    "description": "Unique identifier of the employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the employee resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "vendorReference": {
+                "type": "object",
+                "description": "A reference to any second employee involved in the sale.",
+                "properties": {
+                  "employeeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "x-filterable": true,
+                    "x-sortable": true,
+                    "description": "Unique identifier of the employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the employee resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "other": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "A text field that can be used to save any custom reference on the invoice."
+              }
+            }
+          },
+          "pdf": {
+            "type": "object",
+            "description": "References a pdf representation of this invoice.",
+            "properties": {
+              "download": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference of the pdf representation for this booked invoice."
+              }
+            },
+            "required": [
+              "download"
+            ]
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for this invoice.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "project": {
+            "type": "object",
+            "description": "A reference to any project this entry might be related to. This requires the projects module to be enabled.",
+            "properties": {
+              "projectNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the project."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the project resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the booked invoice."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "Customer": {
+        "title": "Customer",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 510,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Address for the customer including street and number."
+          },
+          "balance": {
+            "type": "number",
+            "readOnly": true,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The outstanding amount for this customer."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "description": "Boolean indication of whether the customer is barred from invoicing."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s city."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Corporate Identification Number. For example CVR in Denmark."
+          },
+          "pNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "description": "Extension of corporate identification number (CVR). Identifying separate production unit (p-nummer)."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s country."
+          },
+          "creditLimit": {
+            "type": "number",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Default payment currency."
+          },
+          "customerNumber": {
+            "type": "integer",
+            "maximum": 999999999,
+            "minimum": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+          },
+          "dueAmount": {
+            "type": "number",
+            "readOnly": true,
+            "x-sortable": false,
+            "x-filterable": false,
+            "description": "Due amount that the customer needs to pay."
+          },
+          "ean": {
+            "type": "string",
+            "maxLength": 13,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "European Article Number. EAN is used for invoicing the Danish public sector."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Customer e-mail address where e-conomic invoices should be emailed. Note: you can specify multiple email addresses in this field, separated by a space. If you need to send a copy of the invoice or write to other e-mail addresses, you can also create one or more customer contacts."
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The date this customer was last updated. The date is formatted according to ISO-8601."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer name."
+          },
+          "publicEntryNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The public entry number is used for electronic invoicing, to define the account invoices will be registered on at the customer."
+          },
+          "telephoneAndFaxNumber": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s telephone and/or fax number."
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s mobile phone number."
+          },
+          "eInvoicingDisabledByDefault": {
+            "type": "boolean",
+            "readOnly": false,
+            "description": "Boolean indication of whether the default sending method should be email instead of e-invoice. This property is updatable only by using PATCH to /customers/:customerNumber"
+          },
+          "vatNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s value added tax identification number. This field is only available to agreements in Sweden, UK, Germany, Poland and Finland. Not to be mistaken for the danish CVR number, which is defined on the corporateIdentificationNumber property."
+          },
+          "website": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Customer website, if applicable."
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 30,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s postcode."
+          },
+          "contacts": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the customer contacts items."
+          },
+          "deliveryLocations": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the customer delivery locations items."
+          },
+          "defaultDeliveryLocation": {
+            "type": "object",
+            "description": "Customers default delivery location.",
+            "properties": {
+              "deliveryLocationNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the delivery location."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the delivery location."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "attention": {
+            "type": "object",
+            "description": "The customer\u0027s person of attention.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer employee item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at customer.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer contact item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerGroup": {
+            "type": "object",
+            "description": "Reference to the customer group this customer is attached to.",
+            "properties": {
+              "customerGroupNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "description": "The unique identifier of the customer group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer group item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this customer.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the customer.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the payment terms."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the payment terms item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this customer.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates in which VAT-zone the customer is located (e.g.: domestically, in Europe or elsewhere abroad).",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the VAT-zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the VAT-zone item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "templates": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "invoice": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the invoice template."
+              },
+              "invoiceLine": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the invoiceLine template."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the templates resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "totals": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the draft invoice totals for this customer."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the booked invoice totals for this customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the totals resource for this customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "invoices": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the draft invoices for this customer."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the booked invoices for this customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the invoices resource for this customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer resource."
+          }
+        },
+        "required": [
+          "currency",
+          "name",
+          "customerGroup",
+          "paymentTerms",
+          "vatZone",
+          "self"
+        ]
+      },
+      "CustomerDetails": {
+        "title": "Customer GET schema",
+        "description": "A schema for fetching a customer, aka. Debtor.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 510,
+            "description": "Address for the customer including street and number."
+          },
+          "balance": {
+            "type": "number",
+            "readOnly": true,
+            "description": "The outstanding amount for this customer."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the customer is barred from invoicing."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s city."
+          },
+          "contacts": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the customer contacts items."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Corporate Identification Number. For example CVR in Denmark."
+          },
+          "pNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "description": "Extension of corporate identification number (CVR). Identifying separate production unit (p-nummer)."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s country."
+          },
+          "creditLimit": {
+            "type": "number",
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "description": "Default payment currency."
+          },
+          "customerNumber": {
+            "type": "integer",
+            "maximum": 999999999,
+            "minimum": 1,
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+          },
+          "deliveryLocations": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the customer delivery locations items."
+          },
+          "defaultDeliveryLocation": {
+            "type": "object",
+            "description": "Customer\u0027s default delivery location.",
+            "properties": {
+              "deliveryLocationNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the delivery location."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the delivery location."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "dueAmount": {
+            "type": "number",
+            "readOnly": true,
+            "description": "Due amount that the customer needs to pay."
+          },
+          "ean": {
+            "type": "string",
+            "maxLength": 13,
+            "description": "European Article Number. EAN is used for invoicing the Danish public sector."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer e-mail address where e-conomic invoices should be emailed. Note: you can specify multiple email addresses in this field, separated by a space. If you need to send a copy of the invoice or write to other e-mail addresses, you can also create one or more customer contacts."
+          },
+          "invoices": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the draft invoices for this customer."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the booked invoices for this customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the invoices resource for this customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z",
+            "description": "The date this customer was last updated. The date is formatted according to ISO-8601."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "The customer name."
+          },
+          "publicEntryNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The public entry number is used for electronic invoicing, to define the account invoices will be registered on at the customer."
+          },
+          "telephoneAndFaxNumber": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "The customer\u0027s telephone and/or fax number."
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s mobile phone number."
+          },
+          "eInvoicingDisabledByDefault": {
+            "type": "boolean",
+            "readOnly": false,
+            "description": "Boolean indication of whether the default sending method should be email instead of e-invoice. This property is updatable only by using PATCH to /customers/:customerNumber"
+          },
+          "templates": {
+            "type": "object",
+            "description": "Templates available for the given customer",
+            "properties": {
+              "invoice": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the invoice template for the given customer."
+              },
+              "invoiceLine": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the invoice line template for the given customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer template item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "totals": {
+            "type": "object",
+            "description": "Templates available for the given customer",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the draft invoice totals for this customer."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the booked invoice totals for this customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the totals resource for this customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "vatNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The customer\u0027s value added tax identification number. This field is only available to agreements in Sweden, UK, Germany, Poland and Finland. Not to be mistaken for the danish CVR number, which is defined on the corporateIdentificationNumber property."
+          },
+          "website": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer website, if applicable."
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 30,
+            "description": "The customer\u0027s postcode."
+          },
+          "attention": {
+            "type": "object",
+            "description": "The customer\u0027s person of attention.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer employee item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at customer.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer contact item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerGroup": {
+            "type": "object",
+            "description": "Reference to the customer group this customer is attached to.",
+            "properties": {
+              "customerGroupNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer group item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this customer.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the customer.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the payment terms."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the payment terms item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this customer.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates in which VAT-zone the customer is located (e.g.: domestically, in Europe or elsewhere abroad).",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the VAT-zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the VAT-zone item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer resource."
+          }
+        },
+        "required": [
+          "currency",
+          "name",
+          "customerGroup",
+          "paymentTerms",
+          "vatZone",
+          "self"
+        ]
+      },
+      "CustomerBookedInvoicesCollection": {
+        "title": "Customer booked invoices collection GET schema",
+        "description": "A schema for fetching a collection of booked invoices for a customer.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of booked invoices.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerBookedInvoice"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the booked customer invoice collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerCollection": {
+        "title": "Customer collection GET schema",
+        "description": "A schema for fetching a collection of customer, aka. Debtor.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of customers.",
+            "items": {
+              "$ref": "#/components/schemas/Customer"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer collection resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerContact": {
+        "title": "customer contact schema",
+        "type": "object",
+        "description": "A schema for information about a customer contact.",
+        "properties": {
+          "customerContactNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Unique numerical identifier of the customer contact."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Customer contact e-mail address. This is where copies of sales documents are sent."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Customer contact name."
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Customer contact phone number."
+          },
+          "eInvoiceId": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Electronic invoicing Id. This will appear on EAN invoices in the field \u003Ccbc:ID\u003E. Note this is not available on UK agreements."
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Any notes you need to keep on a contact person."
+          },
+          "emailNotifications": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "invoices",
+                "orders",
+                "quotations",
+                "reminders"
+              ]
+            },
+            "uniqueItems": true,
+            "description": "This array specifies what events the contact person should recieve email notifications on. Note that limited plans only have access to invoice notifications."
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "Flag indicating if the contact person is deleted."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this contact belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "sortKey": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The customer contact number displayed in the e-conomic web interface.",
+            "minimum": 1
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer contact resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerContactDetails": {
+        "title": "Customer Contact Schema",
+        "description": "A schema for retrieval of customer contacts.",
+        "type": "object",
+        "properties": {
+          "customerContactNumber": {
+            "type": "number",
+            "description": "Unique numerical identifier of the customer contact."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer contact e-mail address. This is where copies of sales documents are sent."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer contact name."
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Customer contact phone number."
+          },
+          "eInvoiceId": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Electronic invoicing Id. This will appear on EAN invoices in the field \u003Ccbc:ID\u003E. Note this is not available on UK agreements."
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Any notes you need to keep on a contact person."
+          },
+          "emailNotifications": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "invoices",
+                "orders",
+                "quotations",
+                "reminders"
+              ]
+            },
+            "uniqueItems": true,
+            "description": "This array specifies what events the contact person should recieve email notifications on. Note that limited plans only have access to invoice notifications."
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "Flag indicating if the contact person is deleted."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this contact belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "sortKey": {
+            "type": "integer",
+            "description": "Sort key shows a per agreement index in the UI.",
+            "minimum": 1
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer contact resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerContactPOST": {
+        "title": "Customer Contact POST Schema",
+        "description": "A schema for creating a customer contact.",
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer contact e-mail address. This is where copies of sales documents are sent."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer contact name."
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Customer contact phone number."
+          },
+          "eInvoiceId": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Electronic invoicing Id. This will appear on EAN invoices in the field \u003Ccbc:ID\u003E. Note this is not available on UK agreements."
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Any notes you need to keep on a contact person."
+          },
+          "emailNotifications": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "invoices",
+                "orders",
+                "quotations",
+                "reminders"
+              ]
+            },
+            "uniqueItems": true,
+            "description": "This array specifies what events the contact person should recieve email notifications on. Note that limited plans only have access to invoice notifications."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this contact belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CustomerContactPUT": {
+        "title": "Customer Contact PUT Schema",
+        "description": "A schema for updating a customer contact.",
+        "type": "object",
+        "properties": {
+          "customerContactNumber": {
+            "type": "integer",
+            "description": "Customer contact number."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer contact e-mail address. This is where copies of sales documents are sent."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer contact name."
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Customer contact phone number."
+          },
+          "eInvoiceId": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Electronic invoicing Id. This will appear on EAN invoices in the field \u003Ccbc:ID\u003E."
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Any notes you need to keep on a contact person."
+          },
+          "emailNotifications": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "invoices",
+                "orders",
+                "quotations",
+                "reminders"
+              ]
+            },
+            "uniqueItems": true,
+            "description": "This array specifies what events the contact person should recieve email notifications on. Note that limited plans only have access to invoice notifications."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this contact belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            }
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer contact."
+          }
+        },
+        "required": [
+          "customerContactNumber",
+          "name"
+        ]
+      },
+      "CustomerDraftInvoicesCollection": {
+        "title": "Customer draft invoices collection GET schema",
+        "description": "A schema for fetching a collection of draft invoices for a customer.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of draft invoices.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerDraftInvoice"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer draft invoice collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerInvoices": {
+        "title": "Customer invoices GET Schema",
+        "description": "A schema for retrieval of invoices for a specific customer.",
+        "type": "object",
+        "properties": {
+          "drafts": {
+            "type": "string",
+            "format": "uri",
+            "description": "The GET link to draft invoices for a specific customer."
+          },
+          "booked": {
+            "type": "string",
+            "format": "uri",
+            "description": "The GET link to booked invoices for a specific customer."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The self reference of the customer invoices resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerPOST": {
+        "title": "Customer POST schema",
+        "description": "A schema for creating a customer, aka. Debtor.",
+        "type": "object",
+        "properties": {
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the customer is barred from invoicing."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 510,
+            "description": "Address for the customer including street and number."
+          },
+          "balance": {
+            "type": "number",
+            "readOnly": true,
+            "description": "The outstanding amount for this customer."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Corporate Identification Number. For example CVR in Denmark."
+          },
+          "pNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "description": "Extension of corporate identification number (CVR). Identifying separate production unit (p-nummer)."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s city."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s country."
+          },
+          "creditLimit": {
+            "type": "number",
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "description": "Default payment currency."
+          },
+          "customerGroup": {
+            "type": "object",
+            "description": "In order to set up a new customer, it is necessary to specify a customer group. It is useful to group a company\u2019s customers (e.g., \u2018domestic\u2019 and \u2018foreign\u2019 customers) and to link the group members to the same account when generating reports.",
+            "properties": {
+              "customerGroupNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer group item."
+              }
+            }
+          },
+          "customerNumber": {
+            "type": "integer",
+            "maximum": 999999999,
+            "minimum": 1,
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. If no customer number is specified a number will be supplied by the system."
+          },
+          "ean": {
+            "type": "string",
+            "maxLength": 13,
+            "description": "European Article Number. EAN is used for invoicing the Danish public sector."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer e-mail address where e-conomic invoices should be emailed. Note: you can specify multiple email addresses in this field, separated by a space. If you need to send a copy of the invoice or write to other e-mail addresses, you can also create one or more customer contacts."
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates in which VAT-zone the customer is located (e.g.: domestically, in Europe or elsewhere abroad).",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the VAT-zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the VAT-zone item."
+              }
+            }
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this customer.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "The customer name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the customer.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the payment terms."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the payment terms item."
+              }
+            }
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 30,
+            "description": "The customer\u0027s postcode."
+          },
+          "publicEntryNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The public entry number is used for electronic invoicing, to define the account invoices will be registered on at the customer."
+          },
+          "telephoneAndFaxNumber": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "The customer\u0027s telephone and/or fax number."
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s mobile phone number."
+          },
+          "eInvoicingDisabledByDefault": {
+            "type": "boolean",
+            "readOnly": false,
+            "description": "Boolean indication of whether the default sending method should be email instead of e-invoice. This property is updatable only by using PATCH to /customers/:customerNumber"
+          },
+          "vatNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The customer\u0027s value added tax identification number. This field is only available to agreements in Sweden, UK, Germany, Poland and Finland. Not to be mistaken for the danish CVR number, which is defined on the corporateIdentificationNumber property."
+          },
+          "website": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer website, if applicable."
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this customer.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee resource."
+              }
+            }
+          },
+          "priceGroup": {
+            "properties": {
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the price-group resource."
+              }
+            }
+          }
+        },
+        "required": [
+          "currency",
+          "customerGroup",
+          "vatZone",
+          "name",
+          "paymentTerms"
+        ]
+      },
+      "CustomerPUT": {
+        "title": "Customer PUT schema",
+        "description": "A schema for updating a customer, aka. Debtor.",
+        "type": "object",
+        "properties": {
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the customer is barred from invoicing."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 510,
+            "description": "Address for the customer including street and number."
+          },
+          "balance": {
+            "type": "number",
+            "readOnly": true,
+            "description": "The outstanding amount for this customer."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Corporate Identification Number. For example CVR in Denmark."
+          },
+          "pNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "description": "Extension of corporate identification number (CVR). Identifying separate production unit (p-nummer)."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s city."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s country."
+          },
+          "creditLimit": {
+            "type": "number",
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "description": "Default payment currency."
+          },
+          "customerGroup": {
+            "type": "object",
+            "description": "In order to update a customer, it is necessary to specify a customer group. It is useful to group a company\u2019s customers (e.g., \u2018domestic\u2019 and \u2018foreign\u2019 customers) and to link the group members to the same account when generating reports.",
+            "properties": {
+              "customerGroupNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer group item."
+              }
+            }
+          },
+          "customerNumber": {
+            "type": "integer",
+            "maximum": 999999999,
+            "minimum": 1,
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+          },
+          "defaultDeliveryLocation": {
+            "type": "object",
+            "description": "Customer\u2019s default delivery location.",
+            "properties": {
+              "deliveryLocationNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the delivery location."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the delivery location."
+              }
+            }
+          },
+          "ean": {
+            "type": "string",
+            "maxLength": 13,
+            "description": "European Article Number. EAN is used for invoicing the Danish public sector."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer e-mail address where e-conomic invoices should be emailed. Note: you can specify multiple email addresses in this field, separated by a space. If you need to send a copy of the invoice or write to other e-mail addresses, you can also create one or more customer contacts."
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates in which VAT-zone the customer is located (e.g.: domestically, in Europe or elsewhere abroad).",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the VAT-zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the VAT-zone item."
+              }
+            }
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this customer.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "The customer name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the customer.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the payment terms."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the payment terms item."
+              }
+            }
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 30,
+            "description": "The customer\u0027s postcode."
+          },
+          "publicEntryNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The public entry number is used for electronic invoicing, to define the account invoices will be registered on at the customer."
+          },
+          "telephoneAndFaxNumber": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "The customer\u0027s telephone and/or fax number."
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The customer\u0027s mobile phone number."
+          },
+          "eInvoicingDisabledByDefault": {
+            "type": "boolean",
+            "readOnly": false,
+            "description": "Boolean indication of whether the default sending method should be email instead of e-invoice. This property is updatable only by using PATCH to /customers/:customerNumber"
+          },
+          "vatNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The customer\u0027s value added tax identification number. This field is only available to agreements in Sweden, UK, Germany, Poland and Finland. Not to be mistaken for the danish CVR number, which is defined on the corporateIdentificationNumber property."
+          },
+          "website": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Customer website, if applicable."
+          },
+          "attention": {
+            "type": "object",
+            "description": "The customer\u0027s person of attention.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer employee item."
+              }
+            }
+          },
+          "customerContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at customer.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer contact item."
+              }
+            }
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this customer.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee resource."
+              }
+            }
+          },
+          "priceGroup": {
+            "properties": {
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the price-group resource."
+              }
+            }
+          }
+        },
+        "required": [
+          "currency",
+          "customerGroup",
+          "vatZone",
+          "name",
+          "paymentTerms"
+        ]
+      },
+      "CustomerTemplates": {
+        "title": "Customer templates Schema",
+        "description": "A schema for retrieval of templates available for a customer.",
+        "type": "object",
+        "properties": {
+          "invoice": {
+            "type": "string",
+            "format": "uri",
+            "description": "The GET link to a draft invoice template."
+          },
+          "invoiceline": {
+            "type": "string",
+            "format": "uri",
+            "description": "The GET link to a draft invoice line template."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The self reference of the customer templates."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerTotals": {
+        "title": "Customer totals GET schema",
+        "description": "A schema for fetching a customers totals.",
+        "type": "object",
+        "properties": {
+          "drafts": {
+            "type": "string",
+            "format": "uri",
+            "description": "A reference of the customer draft invoices totals resource."
+          },
+          "booked": {
+            "type": "string",
+            "format": "uri",
+            "description": "A reference of the customer booked invoices totals resource."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer totals resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomersCustomerContact": {
+        "title": "Customer Contact Schema",
+        "description": "A schema for retrieval of customer contacts.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "Array containing all the contacts on a customer.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerContact"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer contact collection resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DeliveryLocationPOST": {
+        "title": "Delivery location GET schema",
+        "description": "A schema for fetching a specific delivery location.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address for the delivery location including street and number."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The delivery location city."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The delivery location country."
+          },
+          "deliveryLocationNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "readOnly": true,
+            "description": "The delivery location number is a unique numerical identifier. This identifier will be created for you."
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 15,
+            "description": "The delivery location postcode."
+          },
+          "sortKey": {
+            "type": "integer",
+            "description": "The delivery location number displayed in the e-conomic web interface. If not supplied this key will be created for you.",
+            "minimum": 1
+          },
+          "termsOfDelivery": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Special delivery terms that apply to."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "x-sortable": false,
+            "description": "Indicates if the delivery location is barred from usage. Default is false."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this delivery location belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. This value will be picked up from the url."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            }
+          }
+        }
+      },
+      "CustomersDraftInvoiceLineTemplate": {
+        "title": "Draft invoice line template schema",
+        "description": "A schema for retrieving a draft invoice line template.",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2500,
+            "description": "A description of the product or service sold."
+          },
+          "unit": {
+            "type": "object",
+            "description": "The unit of measure applied to the invoice line.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the unit.",
+                "minimum": 0,
+                "exclusiveMinimum": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "product": {
+            "type": "object",
+            "description": "The product or service offered on the invoice line.",
+            "properties": {
+              "productNumber": {
+                "type": "string",
+                "maxLength": 25,
+                "description": "The unique product number. This can be a stock keeping unit identifier (SKU)."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "quantity": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The number of units of goods on the invoice line. By default value is set to 1, which can be modified using parameter query string."
+          },
+          "unitNetPrice": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The price of 1 unit of the goods or services on the invoice line in the invoice currency."
+          },
+          "discountPercentage": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "A line discount expressed as a percentage."
+          },
+          "unitCostPrice": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The cost price of 1 unit of the goods or services in the invoice currency."
+          },
+          "marginInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The difference between the net price and the cost price on the invoice line in base currency."
+          },
+          "marginPercentage": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The margin on the invoice line expressed as a percentage."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the draft invoice line template resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DeliveryLocation": {
+        "title": "Delivery location",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Address for the delivery location including street and number."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The delivery location city."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The delivery location country."
+          },
+          "deliveryLocationNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The delivery location number is a unique numerical identifier."
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 15,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The delivery location postcode."
+          },
+          "sortKey": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The delivery location number displayed in the e-conomic web interface.",
+            "minimum": 1
+          },
+          "termsOfDelivery": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Special delivery terms that apply to."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "x-sortable": false,
+            "description": "Indicates if the delivery location is barred from usage. Default is false."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this delivery location belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the delivery location resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DeliveryLocationCollection": {
+        "title": "Delivery location collection GET schema",
+        "description": "A schema for fetching a collection of delivery locations.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of delivery locations.",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryLocation"
+            },
+            "properties": {
+              "metaData": {
+                "type": "object",
+                "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+              },
+              "pagination": {
+                "type": "object",
+                "description": "Information about the pagination."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique self reference of the delivery location collection resource."
+              }
+            }
+          }
+        }
+      },
+      "DeliveryLocationPUT": {
+        "title": "Delivery location PUT schema",
+        "description": "A schema for updating a specific delivery location.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Address for the delivery location including street and number."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The delivery location city."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The delivery location country."
+          },
+          "deliveryLocationNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "readOnly": true,
+            "description": "The delivery location number is a unique numerical identifier."
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 15,
+            "description": "The delivery location postcode."
+          },
+          "sortKey": {
+            "type": "integer",
+            "description": "The delivery location number displayed in the e-conomic web interface. If not supplied this key will be created for you.",
+            "minimum": 1
+          },
+          "termsOfDelivery": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Special delivery terms that apply to."
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "x-sortable": false,
+            "description": "Indicates if the delivery location is barred from usage. Default is false."
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer this delivery location belongs to.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. This value will be picked up from the url."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            }
+          }
+        }
+      },
+      "CustomerDraftInvoice": {
+        "title": "Draft invoice",
+        "type": "object",
+        "properties": {
+          "draftInvoiceNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999999999,
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-default-sorting": "ascending",
+            "description": "A reference number for the draft invoice document. This is not the final invoice number. The final invoice number can\u0027t be determined until the invoice is booked."
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Invoice issue date. Format according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "[a-zA-Z]{3}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The ISO 4217 currency code of the invoice."
+          },
+          "exchangeRate": {
+            "type": "number",
+            "x-filterable": true,
+            "x-sortable": true,
+            "x-max-decimals": 6,
+            "description": "The exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency."
+          },
+          "netAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "netAmountInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "grossAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "grossAmountInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative."
+          },
+          "marginInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative."
+          },
+          "marginPercentage": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative."
+          },
+          "vatAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount"
+          },
+          "roundingAmount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total rounding error, if any, on the invoice in base currency."
+          },
+          "costPriceInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total cost of the items on the invoice in the base currency of the agreement."
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The date the invoice is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type \u0027duedate\u0027."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The terms of payment for the invoice.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "A unique identifier of the payment term."
+              },
+              "daysOfCredit": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "The number of days of credit on the invoice. This field is only valid if terms of payment is not of type \u0027duedate"
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "The name of the payment terms."
+              },
+              "paymentTermsType": {
+                "enum": [
+                  "net",
+                  "invoiceMonth",
+                  "paidInCash",
+                  "prepaid",
+                  "dueDate",
+                  "factoring",
+                  "invoiceWeekStartingSunday",
+                  "invoiceWeekStartingMonday",
+                  "creditcard"
+                ],
+                "description": "The type of payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer being invoiced.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "recipient": {
+            "type": "object",
+            "description": "The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The name of the actual recipient."
+              },
+              "address": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The street address of the actual recipient."
+              },
+              "zip": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The zip code of the actual recipient."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The city of the actual recipient."
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The country of the actual recipient."
+              },
+              "ean": {
+                "type": "string",
+                "maxLength": 13,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The \u0027European Article Number\u0027 of the actual recipient."
+              },
+              "publicEntryNumber": {
+                "type": "string",
+                "maxLength": 40,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The public entry number of the actual recipient."
+              },
+              "attention": {
+                "type": "object",
+                "description": "The person to whom this invoice is addressed.",
+                "properties": {
+                  "customerContactNumber": {
+                    "type": "integer",
+                    "description": "Unique identifier of the customer employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the customer employee."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "vatZone": {
+                "type": "object",
+                "description": "Recipient vat zone.",
+                "properties": {
+                  "vatZoneNumber": {
+                    "type": "integer",
+                    "description": "Unique identifier of the vat zone."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the vat zone."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "cvr": {
+                "type": "string",
+                "description": "The Corporate Identification Number of the recipient for example CVR in Denmark.",
+                "maxLength": 40
+              }
+            }
+          },
+          "deliveryLocation": {
+            "type": "object",
+            "description": "A reference to the place of delivery for the goods on the invoice",
+            "properties": {
+              "deliveryLocationNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "A unique identifier for the delivery location."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the delivery location resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "delivery": {
+            "type": "object",
+            "description": "The actual place of delivery for the goods on the invoice. This is usually the same place as the one referenced in the deliveryLocation property, but may be edited as required.",
+            "properties": {
+              "address": {
+                "type": "string",
+                "maxLength": 255,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Street address where the goods must be delivered to the customer."
+              },
+              "zip": {
+                "type": "string",
+                "maxLength": 30,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The zip code of the place of delivery."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The city of the place of delivery"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The country of the place of delivery"
+              },
+              "deliveryTerms": {
+                "type": "string",
+                "maxLength": 100,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "Details about the terms of delivery."
+              },
+              "deliveryDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "\\d{4}-\\d{2}-\\d{2}",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The date of delivery."
+              }
+            }
+          },
+          "notes": {
+            "type": "object",
+            "description": "Notes on the invoice.",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The invoice heading. Usually displayed at the top of the invoice."
+              },
+              "textLine1": {
+                "type": "string",
+                "maxLength": 1000,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The first line of supplementary text on the invoice. This is usually displayed right under the heading in a smaller font."
+              },
+              "textLine2": {
+                "type": "string",
+                "maxLength": 1000,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The second line of supplementary text in the notes on the invoice. This is usually displayed as a footer on the invoice."
+              }
+            }
+          },
+          "references": {
+            "type": "object",
+            "description": "Customer and company references related to this invoice.",
+            "properties": {
+              "customerContact": {
+                "type": "object",
+                "description": "The customer contact is a reference to the employee at the customer to contact regarding the invoice.",
+                "properties": {
+                  "customerContactNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Unique identifier of the customer contact."
+                  },
+                  "customer": {
+                    "type": "object",
+                    "description": "The customer this contact belongs to.",
+                    "properties": {
+                      "customerNumber": {
+                        "type": "integer",
+                        "maximum": 999999999,
+                        "minimum": 1,
+                        "x-filterable": true,
+                        "x-sortable": true,
+                        "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+                      },
+                      "self": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "A unique reference to the customer resource."
+                      }
+                    },
+                    "required": [
+                      "self"
+                    ]
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the customer contact resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "salesPerson": {
+                "type": "object",
+                "description": "The sales person is a reference to the employee who sold the goods on the invoice. This is also the person who is credited with this sale in reports.",
+                "properties": {
+                  "employeeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "x-filterable": true,
+                    "x-sortable": true,
+                    "description": "Unique identifier of the employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the employee resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "vendorReference": {
+                "type": "object",
+                "description": "A reference to any second employee involved in the sale.",
+                "properties": {
+                  "employeeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "x-filterable": true,
+                    "x-sortable": true,
+                    "description": "Unique identifier of the employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the employee resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "other": {
+                "type": "string",
+                "maxLength": 250,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "A text field that can be used to save any custom reference on the invoice."
+              }
+            }
+          },
+          "pdf": {
+            "type": "object",
+            "description": "References to a pdf representation of this invoice.",
+            "readOnly": true,
+            "properties": {
+              "download": {
+                "type": "string",
+                "format": "uri",
+                "description": "References a pdf representation of this invoice."
+              }
+            },
+            "required": [
+              "download"
+            ]
+          },
+          "templates": {
+            "type": "object",
+            "description": "References to all templates on this draft invoice.",
+            "readOnly": true,
+            "properties": {
+              "bookingInstructions": {
+                "type": "string",
+                "format": "uri",
+                "description": "The self reference to the document to POST to /invoices/booked to book the invoice draft."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "The self reference to the draft invoice templates resource."
+              }
+            },
+            "required": [
+              "bookingInstructions",
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the specific draft invoice."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DraftInvoiceLineTemplate": {
+        "title": "Draft invoice line template",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2500,
+            "x-filterable": true,
+            "description": "A description of the product or service sold."
+          },
+          "product": {
+            "type": "object",
+            "description": "The product or service offered on the invoice line.",
+            "properties": {
+              "productNumber": {
+                "type": "string",
+                "maxLength": 25,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The unique product number. This can be a stock keeping unit identifier (SKU)."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the product resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the draft invoice line template resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DraftInvoiceLineTemplatesCollection": {
+        "title": "Draft invoice line templates collection schema",
+        "description": "A schema for retrieving a collection of draft invoices line templates.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of draft invoice line templates.",
+            "items": {
+              "$ref": "#/components/schemas/DraftInvoiceLineTemplate"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the draft invoice line templates collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "DraftInvoiceTemplate": {
+        "title": "Draft invoice template Schema",
+        "description": "A schema for retrieval of a draft invoice template based on a customer.",
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "Invoice issue date. Format according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "[a-zA-Z]{3}",
+            "description": "The ISO 4217 currency code of the invoice. This represents the trading currency."
+          },
+          "exchangeRate": {
+            "type": "number",
+            "x-max-decimals": 6,
+            "description": "The exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency."
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The date the invoice is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type \u0027duedate\u0027."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The terms of payment for the invoice.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "minimum": 0,
+                "exclusiveMinimum": true,
+                "description": "A unique identifier of the payment term."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the payment term resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer being invoiced.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "maximum": 999999999,
+                "minimum": 1,
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the customer resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "recipient": {
+            "type": "object",
+            "description": "The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 250,
+                "description": "The name of the actual recipient."
+              },
+              "address": {
+                "type": "string",
+                "maxLength": 250,
+                "description": "The street address of the actual recipient."
+              },
+              "zip": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "The zip code of the actual recipient."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 250,
+                "description": "The city of the actual recipient."
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "The country of the actual recipient."
+              },
+              "ean": {
+                "type": "string",
+                "maxLength": 13,
+                "description": "The \u0027European Article Number\u0027 of the actual recipient."
+              },
+              "publicEntryNumber": {
+                "type": "string",
+                "maxLength": 40,
+                "description": "The public entry number of the actual recipient."
+              },
+              "attention": {
+                "type": "object",
+                "description": "The person to whom this invoice is addressed.",
+                "properties": {
+                  "customerContactNumber": {
+                    "type": "integer",
+                    "description": "Unique identifier of the customer employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the customer employee."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "vatZone": {
+                "type": "object",
+                "description": "Recipient vat zone.",
+                "properties": {
+                  "vatZoneNumber": {
+                    "type": "integer",
+                    "description": "Unique identifier of the vat zone."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the vat zone."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              }
+            }
+          },
+          "deliveryLocation": {
+            "type": "object",
+            "description": "A reference to the place of delivery for the goods on the invoice",
+            "properties": {
+              "deliveryLocationNumber": {
+                "type": "integer",
+                "description": "A unique identifier for the delivery location."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the delivery location resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "delivery": {
+            "type": "object",
+            "description": "The actual place of delivery for the goods on the invoice. This is usually the same place as the one referenced in the deliveryLocation property, but may be edited as required.",
+            "properties": {
+              "address": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "Street address where the goods must be delivered to the customer."
+              },
+              "zip": {
+                "type": "string",
+                "maxLength": 30,
+                "description": "The zip code of the place of delivery."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "The city of the place of delivery"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "description": "The country of the place of delivery"
+              },
+              "deliveryTerms": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Details about the terms of delivery."
+              },
+              "deliveryDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "\\d{4}-\\d{2}-\\d{2}",
+                "description": "The date of delivery."
+              }
+            }
+          },
+          "references": {
+            "type": "object",
+            "description": "Customer and company references related to this invoice.",
+            "properties": {
+              "customerContact": {
+                "type": "object",
+                "description": "The customer contact is a reference to the employee at the customer to contact regarding the invoice.",
+                "properties": {
+                  "customerContactNumber": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "description": "Unique identifier of the customer contact."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the customer contact resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "salesPerson": {
+                "type": "object",
+                "description": "The sales person is a reference to the employee who sold the goods on the invoice. This is also the person who is credited with this sale in reports.",
+                "properties": {
+                  "employeeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Unique identifier of the employee."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique reference to the employee resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

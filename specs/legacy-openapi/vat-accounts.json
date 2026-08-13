@@ -1,0 +1,259 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - vat-accounts",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/vat-accounts": {
+      "get": {
+        "operationId": "getVatAccounts",
+        "tags": [
+          "vat-accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatAccountsCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "vat-accounts.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-vat-accounts"
+        }
+      }
+    },
+    "/vat-accounts/{id}": {
+      "get": {
+        "operationId": "getVatAccountsByid",
+        "tags": [
+          "vat-accounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatAccount"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "vat-accounts.id.get.schema.json",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-vat-accounts-id"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "VatAccount": {
+        "title": "vat account",
+        "type": "object",
+        "description": "A specific vat account.",
+        "properties": {
+          "account": {
+            "type": "object",
+            "description": "The account for this vat account.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "A unique identifier of the account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the account item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "contraAccount": {
+            "type": "object",
+            "description": "The contra account for this vat account.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "A unique identifier of the contra account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the contra account item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "vatType": {
+            "type": "object",
+            "description": "The vat type for this vat account.",
+            "properties": {
+              "vatTypeNumber": {
+                "type": "integer",
+                "description": "A unique identifier of the vat type."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the vat type."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the vat type item."
+              }
+            },
+            "required": [
+              "vatTypeNumber",
+              "name",
+              "self"
+            ]
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "If true this vat account has been barred from further use."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "The name of the vat account."
+          },
+          "ratePercentage": {
+            "type": "number",
+            "x-max-decimals": 8,
+            "description": "The tax rate for this vat account."
+          },
+          "vatCode": {
+            "type": "string",
+            "maxLength": 5,
+            "description": "The alphanumerical code for the vat account."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the vat account item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "VatAccountsCollection": {
+        "title": "Vat Accounts collection GET schema",
+        "description": "A schema for retrieval of a collection of vat accounts.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the vat accounts.",
+            "items": {
+              "$ref": "#/components/schemas/VatAccount"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the vat accounts collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

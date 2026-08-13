@@ -1,0 +1,849 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - customer-groups",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/customer-groups": {
+      "get": {
+        "operationId": "getCustomerGroups",
+        "tags": [
+          "customer-groups"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroupCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customer-groups.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customer-groups"
+        }
+      },
+      "post": {
+        "operationId": "postCustomerGroups",
+        "tags": [
+          "customer-groups"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroupPOST"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customer-groups.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerGroupPOST"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-customer-groups"
+        }
+      }
+    },
+    "/customer-groups/{customerGroupNumber}": {
+      "get": {
+        "operationId": "getCustomerGroupsBycustomerGroupNumber",
+        "tags": [
+          "customer-groups"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroup"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customer-groups.customerGroupNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerGroupNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customer-groups-customergroupnumber"
+        }
+      }
+    },
+    "/customer-groups/{customerGroupNumber}/customers": {
+      "get": {
+        "operationId": "getCustomerGroupsBycustomerGroupNumberCustomers",
+        "tags": [
+          "customer-groups"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroupCustomerCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customer-groups.customerGroupNumber.customers.get.schema.json",
+        "parameters": [
+          {
+            "name": "customerGroupNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-customer-groups-customergroupnumber-customers"
+        }
+      }
+    },
+    "/customer-groups/{customergroupnumber}": {
+      "put": {
+        "operationId": "putCustomerGroupsBycustomergroupnumber",
+        "tags": [
+          "customer-groups"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroupPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "customer-groups.customergroupnumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "customergroupnumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerGroupPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-customer-groups-customergroupnumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "CustomerGroup": {
+        "title": "Customer group",
+        "type": "object",
+        "description": "A schema for information about a customer group.",
+        "properties": {
+          "customerGroupNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The customer group number."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The name of the customer group."
+          },
+          "account": {
+            "type": "object",
+            "description": "The account used by the accruals.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The account number."
+              },
+              "accountType": {
+                "enum": [
+                  "profitAndLoss",
+                  "status",
+                  "totalFrom",
+                  "heading",
+                  "headingStart",
+                  "sumInterval",
+                  "sumAlpha"
+                ],
+                "default": "profitAndLoss",
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The type of account in the chart of accounts."
+              },
+              "balance": {
+                "type": "number",
+                "x-max-decimals": 2,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The current balance of the account."
+              },
+              "blockDirectEntries": {
+                "type": "boolean",
+                "x-sortable": true,
+                "x-filterable": true,
+                "description": "Determines if the account can be manually updated with entries."
+              },
+              "debitCredit": {
+                "enum": [
+                  "debit",
+                  "credit"
+                ],
+                "default": "debit",
+                "x-sortable": true,
+                "x-filterable": true,
+                "description": "Describes the default update type of the account."
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 125,
+                "x-sortable": true,
+                "x-filterable": true,
+                "description": "The name of the account."
+              },
+              "accountingYears": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the accounting years for this account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customers": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customers belonging to this customer group."
+          },
+          "layout": {
+            "type": "object",
+            "description": "The default layout used by the customer group.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The layout number."
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "The name of the layout."
+              },
+              "deleted": {
+                "type": "boolean",
+                "description": "If true this indicates that the layout is deleted and can\u0027t be used anymore."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the layout resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer group."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerGroupPOST": {
+        "title": "Customer group POST Schema",
+        "description": "A schema for creating a customer group.",
+        "type": "object",
+        "properties": {
+          "customerGroupNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The customer group number."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the customer group."
+          },
+          "account": {
+            "type": "object",
+            "description": "The account used by the accruals.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "The account number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            },
+            "required": [
+              "accountNumber"
+            ]
+          },
+          "layout": {
+            "type": "object",
+            "description": "The default layout used by the customer group.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The layout number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the layout resource."
+              }
+            }
+          }
+        },
+        "required": [
+          "customerGroupNumber"
+        ]
+      },
+      "CustomerGroupPUT": {
+        "title": "Customer group PUT Schema",
+        "description": "A schema for updating a customer group.",
+        "type": "object",
+        "properties": {
+          "customerGroupNumber": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "The customer group number."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the customer group."
+          },
+          "account": {
+            "type": "object",
+            "description": "The account used by the accruals.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            }
+          },
+          "layout": {
+            "type": "object",
+            "description": "The default layout used by the customer group.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The layout number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the layout resource."
+              }
+            }
+          }
+        }
+      },
+      "CustomerGroupCollection": {
+        "title": "Customer groups collection Schema",
+        "description": "A schema for retrieving a collection of customer groups.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of the customer groups.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerGroup"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the accounts collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerGroupCustomerCollection": {
+        "title": "Customer groups collection Schema",
+        "description": "A schema for retrieving a collection of customer groups.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of the customer groups.",
+            "items": {
+              "$ref": "#/components/schemas/CustomerGroupsCustomer"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the accounts collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "CustomerGroupsCustomer": {
+        "title": "Customer",
+        "type": "object",
+        "description": "A schema for information about a customer group.",
+        "properties": {
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the customer is barred from invoicing."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 510,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Address for the customer including street and number."
+          },
+          "balance": {
+            "type": "number",
+            "readOnly": true,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The outstanding amount for this customer."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Company Identification Number. For example CVR in Denmark."
+          },
+          "pNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "description": "Extension of corporate identification number (CVR). Identifying separate production unit (p-nummer)."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s city."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s country."
+          },
+          "creditLimit": {
+            "type": "number",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Default payment currency."
+          },
+          "customerGroup": {
+            "type": "object",
+            "description": "In order to set up a new customer, it is necessary to specify a customer group. It is useful to group a company\u2019s customers (e.g., \u2018domestic\u2019 and \u2018foreign\u2019 customers) and to link the group members to the same account when generating reports.",
+            "properties": {
+              "customerGroupNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer group item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerNumber": {
+            "type": "integer",
+            "maximum": 999999999,
+            "minimum": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+          },
+          "ean": {
+            "type": "string",
+            "maxLength": 13,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "European Article Number. EAN is used for invoicing the Danish public sector."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Customer e-mail address where e-conomic invoices should be emailed. Note: you can specify multiple email addresses in this field, separated by a space. If you need to send a copy of the invoice or write to other e-mail addresses, you can also create one or more customer contacts."
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates in which VAT-zone the customer is located (e.g.: domestically, in Europe or elsewhere abroad).",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the VAT-zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the VAT-zone item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this customer.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer name."
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the customer.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the payment terms."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the payment terms item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 30,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s postcode."
+          },
+          "publicEntryNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The public entry number is used for electronic invoicing, to define the account invoices will be registered on at the customer."
+          },
+          "telephoneAndFaxNumber": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s telephone and/or fax number."
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s mobile phone number."
+          },
+          "vatNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s value added tax identification number. This field is only available to agreements in Sweden, UK, Germany, Poland and Finland. Not to be mistaken for the danish CVR number, which is defined on the ciNucorporateIdentificationNumber property."
+          },
+          "website": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Customer website, if applicable."
+          },
+          "attention": {
+            "type": "object",
+            "description": "The customer\u0027s person of attention.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer employee item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at customer.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer contact item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this customer.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer resource."
+          }
+        },
+        "required": [
+          "currency",
+          "customerGroup",
+          "vatZone",
+          "name",
+          "paymentTerms",
+          "self"
+        ]
+      }
+    }
+  }
+}

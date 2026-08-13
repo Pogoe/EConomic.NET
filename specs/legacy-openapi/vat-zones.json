@@ -1,0 +1,197 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - vat-zones",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/vat-zones": {
+      "get": {
+        "operationId": "getVatZones",
+        "tags": [
+          "vat-zones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VatZoneCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "vat-zones.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-vat-zones"
+        }
+      }
+    },
+    "/vat-zones/{vatZoneNumber}": {
+      "get": {
+        "operationId": "getVatZonesByvatZoneNumber",
+        "tags": [
+          "vat-zones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductGroupsVatZone"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "vat-zones.vatZoneNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "vatZoneNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-vat-zones-vatzonenumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "ProductGroupsVatZone": {
+        "title": "Vat zone",
+        "type": "object",
+        "description": "A specific vat zone.",
+        "properties": {
+          "vatZoneNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the vat zone."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The name of the vat zone."
+          },
+          "enabledForCustomer": {
+            "type": "boolean",
+            "description": "If this value is true, then the vat zone can be used for a customer."
+          },
+          "enabledForSupplier": {
+            "type": "boolean",
+            "description": "If this value is true, then the vat zone can be used for a supplier."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the vat zone item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "VatZoneCollection": {
+        "title": "Vat zone collection GET schema",
+        "description": "A schema for retrieval of a collection of vat zones.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the vat zones.",
+            "items": {
+              "$ref": "#/components/schemas/ProductGroupsVatZone"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the vat zones collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

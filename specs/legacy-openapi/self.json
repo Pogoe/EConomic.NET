@@ -1,0 +1,642 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - self",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/self": {
+      "get": {
+        "operationId": "getSelf",
+        "tags": [
+          "self"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Self"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "self.get.schema.json",
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-self"
+        }
+      }
+    },
+    "/self/company": {
+      "put": {
+        "operationId": "putSelfCompany",
+        "tags": [
+          "self"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "self.company.put.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-self-company"
+        }
+      }
+    },
+    "/self/company/bankinformation": {
+      "put": {
+        "operationId": "putSelfCompanyBankinformation",
+        "tags": [
+          "self"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyBankInformationPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "self.company.bankinformation.put.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyBankInformationPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-self-company-bankinformation"
+        }
+      }
+    },
+    "/self/user": {
+      "put": {
+        "operationId": "putSelfUser",
+        "tags": [
+          "self"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPUT"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "self.user.put.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPUT"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-self-user"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "CompanyBankInformationPUT": {
+        "title": "Company bank information PUT schema",
+        "description": "A schema for updating company bank information under self.",
+        "type": "object",
+        "properties": {
+          "bankName": {
+            "type": "string",
+            "description": "The name of the bank."
+          },
+          "bankSortCode": {
+            "type": "string",
+            "description": "The registration number of the bank account."
+          },
+          "bankAccountNumber": {
+            "type": "string",
+            "description": "The account number in the company\u0027s bank."
+          },
+          "pbsCustomerGroupNumber": {
+            "type": "string",
+            "pattern": "^(\\d\u002B)$",
+            "description": "Number used when registering an invoice to betalingsservice. Only used in Denmark."
+          },
+          "pbsFiSupplierNumber": {
+            "type": "string",
+            "description": "Number used when registering an invoice to betalingsservice. Only used in Denmark."
+          },
+          "bankGiroNumber": {
+            "type": "string",
+            "description": "The company\u0027s bankgiro number. Only used in Sweden and Norway."
+          },
+          "swiftCode": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The company\u0027s SWIFT code."
+          },
+          "ibanNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The company\u0027s IBAN number."
+          },
+          "pbsNumber": {
+            "type": "string",
+            "pattern": "^(\\s*|\\d\u002B)$",
+            "maxLength": 8,
+            "description": "The company\u0027s PBS number."
+          },
+          "eanLocationNumber": {
+            "type": "string",
+            "pattern": "^(\\s*|\\d\u002B)$",
+            "minLength": 13,
+            "maxLength": 13,
+            "description": "The company\u0027s EAN number."
+          },
+          "giro": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "The company\u0027s Giro number. Only used in Denmark."
+          },
+          "plusGiroNumber": {
+            "type": "string",
+            "description": "The company\u0027s Giro plus number."
+          },
+          "bankgirotCustomerNumber": {
+            "type": "string",
+            "pattern": "^(\\s*|\\d\u002B)$",
+            "description": "The company\u0027s bank Giro number. Only used in Sweden."
+          }
+        },
+        "required": [
+          "pbsCustomerGroupNumber"
+        ]
+      },
+      "CompanyPUT": {
+        "title": "Company PUT schema",
+        "description": "A schema for updating company information under self.",
+        "type": "object",
+        "properties": {
+          "addressLine1": {
+            "type": "string",
+            "description": "The company\u0027s address."
+          },
+          "addressLine2": {
+            "type": "string",
+            "description": "The company\u0027s address."
+          },
+          "zip": {
+            "type": "string",
+            "description": "The company\u0027s postcode."
+          },
+          "city": {
+            "type": "string",
+            "description": "The company\u0027s city."
+          },
+          "name": {
+            "type": "string",
+            "description": "The company\u0027s name."
+          },
+          "country": {
+            "type": "string",
+            "description": "The company\u0027s country."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The company\u0027s phone number."
+          },
+          "attention": {
+            "type": "string",
+            "description": "The company\u0027s primary contact person."
+          },
+          "website": {
+            "type": "string",
+            "description": "The company\u0027s web site url."
+          },
+          "email": {
+            "type": "string",
+            "description": "The company\u0027s email."
+          },
+          "companyIdentificationNumber": {
+            "type": "string",
+            "description": "The company\u0027s identification number. For example CVR in Denmark."
+          },
+          "vatNumber": {
+            "type": "string",
+            "description": "The company\u0027s value added tax identification number. This field is only available to agreements in Sweden. Not to be mistaken for the danish CVR number, which is defined on the \u0027companyIdentificationNumber\u0027 property."
+          }
+        },
+        "required": [
+          "addressLine1",
+          "zip",
+          "city",
+          "name",
+          "phoneNumber",
+          "attention",
+          "email"
+        ]
+      },
+      "Self": {
+        "title": "Self GET schema",
+        "description": "A schema for retrieval of the self object.",
+        "type": "object",
+        "properties": {
+          "agreementNumber": {
+            "type": "integer",
+            "description": "The unique identifier of your e-conomic agreement."
+          },
+          "agreementType": {
+            "type": "object",
+            "description": "The type of agreement this is. It can either be denmark, sweden or norway",
+            "properties": {
+              "agreementTypeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of your agreement type."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the agreement type."
+              }
+            }
+          },
+          "userName": {
+            "type": "string",
+            "description": "The name of the the currently logged in user."
+          },
+          "signupDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The date the currently logged in user signed up. Format: YYYY-MM-DD."
+          },
+          "user": {
+            "type": "object",
+            "description": "The currently logged in user.",
+            "properties": {
+              "loginId": {
+                "type": "string",
+                "description": "The unique identifier of the user."
+              },
+              "email": {
+                "type": "string",
+                "description": "The email of the user."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the user."
+              },
+              "agreementNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the account of the currently logged user."
+              },
+              "language": {
+                "type": "object",
+                "description": "The currently logged in user\u0027s language.",
+                "properties": {
+                  "languageNumber": {
+                    "type": "integer",
+                    "description": "The unique identifier of the language."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "The name of the language."
+                  },
+                  "culture": {
+                    "type": "string",
+                    "description": "The IETF language tag."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique link reference to the language resource."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              }
+            }
+          },
+          "company": {
+            "type": "object",
+            "description": "The currently logged in user\u0027s company.",
+            "properties": {
+              "addressLine1": {
+                "type": "string",
+                "description": "The company\u0027s address."
+              },
+              "addressLine2": {
+                "type": "string",
+                "description": "The company\u0027s address."
+              },
+              "zip": {
+                "type": "string",
+                "description": "The company\u0027s postcode."
+              },
+              "city": {
+                "type": "string",
+                "description": "The company\u0027s city."
+              },
+              "name": {
+                "type": "string",
+                "description": "The company\u0027s name."
+              },
+              "country": {
+                "type": "string",
+                "description": "The company\u0027s country."
+              },
+              "phoneNumber": {
+                "type": "string",
+                "description": "The company\u0027s phone number."
+              },
+              "attention": {
+                "type": "string",
+                "description": "The company\u0027s primary contact person."
+              },
+              "website": {
+                "type": "string",
+                "description": "The company\u0027s web site url."
+              },
+              "email": {
+                "type": "string",
+                "description": "The company\u0027s email."
+              },
+              "companyIdentificationNumber": {
+                "type": "string",
+                "description": "The company\u0027s company identification number. For example CVR in Denmark."
+              },
+              "vatNumber": {
+                "type": "string",
+                "description": "The company\u0027s value added tax identification number. This field is only available to agreements in Sweden. Not to be mistaken for the danish CVR number, which is defined on the \u0027companyIdentificationNumber\u0027 property."
+              }
+            }
+          },
+          "bankInformation": {
+            "type": "object",
+            "description": "The company\u0027s bank settings.",
+            "properties": {
+              "bankName": {
+                "type": "string",
+                "description": "The name of the bank."
+              },
+              "bankSortCode": {
+                "type": "string",
+                "description": "The registration number of the bank account."
+              },
+              "bankAccountNumber": {
+                "type": "string",
+                "description": "The account number in the company\u0027s bank."
+              },
+              "pbsCustomerGroupNumber": {
+                "type": "string",
+                "description": "Number used when registering an invoice to betalingsservice. Only used in Denmark."
+              },
+              "pbsFiSupplierNumber": {
+                "type": "string",
+                "description": "Number used when registering an invoice to betalingsservice. Only used in Denmark."
+              },
+              "bankGiroNumber": {
+                "type": "string",
+                "description": "The company\u0027s bankgiro number. Only used in Sweden and Norway."
+              }
+            }
+          },
+          "application": {
+            "type": "object",
+            "description": "The company\u0027s bank settings.",
+            "properties": {
+              "appNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the application."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the application."
+              },
+              "appPublicToken": {
+                "type": "string",
+                "description": "The public token of the application used for other e-conomic customers to use the application."
+              },
+              "created": {
+                "type": "string",
+                "format": "date",
+                "pattern": "\\d{4}-\\d{2}-\\d{2}",
+                "description": "The date the application was created. Format: YYYY-MM-DD."
+              },
+              "requiredRoles": {
+                "type": "array",
+                "description": "The roles required to use this application.",
+                "items": {
+                  "type": "object",
+                  "description": "An item in the roles array.",
+                  "properties": {
+                    "roleNumber": {
+                      "type": "integer",
+                      "description": "The unique identifier of the role."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the role."
+                    },
+                    "self": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "A unique link reference to the role resource."
+                    }
+                  }
+                }
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the application resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "settings": {
+            "type": "object",
+            "description": "Other settings.",
+            "properties": {
+              "baseCurrency": {
+                "type": "string",
+                "maxLength": 3,
+                "description": "The ISO 4217 code of the company\u0027s base currency."
+              },
+              "defaultPaymentTerm": {
+                "type": "string",
+                "description": "The default payment term for the customers of the company."
+              },
+              "internationalLedger": {
+                "type": "string",
+                "description": "If this value is \u0027true\u0027 then the international ledger is used."
+              }
+            }
+          },
+          "companyAffiliation": {
+            "type": "string",
+            "description": "The affiliation of the agreement. This can be \u0027E-conomic\u0027 or \u0027Developer\u0027."
+          },
+          "canSendElectronicInvoice": {
+            "type": "boolean",
+            "description": "A boolean indicating if the company is setup to send electronic invoices. See http://wiki2.e-conomic.dk/salg/ean-faktura (Danish) for more information."
+          },
+          "modules": {
+            "type": "array",
+            "description": "The modules the company have active.",
+            "items": {
+              "type": "object",
+              "description": "An item in the modules array.",
+              "properties": {
+                "moduleNumber": {
+                  "type": "integer",
+                  "description": "The unique identifier of the module."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of the module."
+                },
+                "self": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "A unique link reference to the module resource."
+                }
+              },
+              "required": [
+                "self"
+              ]
+            }
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the self resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "UserPUT": {
+        "title": "User PUT schema",
+        "description": "A schema for updating user information under self.",
+        "type": "object",
+        "properties": {
+          "loginId": {
+            "type": "string",
+            "description": "The unique identifier of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the user."
+          },
+          "agreementNumber": {
+            "type": "integer",
+            "description": "The unique identifier of the account of the currently logged user."
+          },
+          "language": {
+            "type": "object",
+            "description": "The currently logged in user\u0027s language.",
+            "properties": {
+              "languageNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the language."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the language."
+              },
+              "culture": {
+                "type": "string",
+                "description": "The IETF language tag."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the language resource."
+              }
+            },
+            "required": [
+              "languageNumber",
+              "name",
+              "culture"
+            ]
+          }
+        },
+        "required": [
+          "loginId",
+          "email",
+          "name",
+          "agreementNumber",
+          "language"
+        ]
+      }
+    }
+  }
+}

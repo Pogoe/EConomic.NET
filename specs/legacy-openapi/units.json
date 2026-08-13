@@ -1,0 +1,322 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - units",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/units": {
+      "get": {
+        "operationId": "getUnits",
+        "tags": [
+          "units"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitsCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "units.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-units"
+        }
+      },
+      "post": {
+        "operationId": "postUnits",
+        "tags": [
+          "units"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitsCreate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "units.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnitsCreate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-units"
+        }
+      }
+    },
+    "/units/{unitNumber}": {
+      "get": {
+        "operationId": "getUnitsByunitNumber",
+        "tags": [
+          "units"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitDetails"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "units.unitNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "unitNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-units-unitnumber"
+        }
+      },
+      "put": {
+        "operationId": "putUnitsByunitNumber",
+        "tags": [
+          "units"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitUpdate"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "units.unitNumber.put.schema.json",
+        "parameters": [
+          {
+            "name": "unitNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnitUpdate"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#put-units-unitnumber"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "Unit": {
+        "title": "Unit",
+        "type": "object",
+        "description": "A specific unit on the agreement.",
+        "properties": {
+          "unitNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the unit."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The name of the unit."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the unit item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "UnitDetails": {
+        "title": "Unit GET schema",
+        "description": "A schema for retrieval of a single unit.",
+        "type": "object",
+        "properties": {
+          "unitNumber": {
+            "type": "integer",
+            "description": "A unique identifier of the unit."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The name of the unit."
+          },
+          "products": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the products that reference this unit."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the unit item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "UnitUpdate": {
+        "title": "Unit update schema",
+        "description": "A schema for updating a unit.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The new name of the unit."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UnitsCollection": {
+        "title": "Units collection GET schema",
+        "description": "A schema for retrieval of a collection of units.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the units on the agreement.",
+            "items": {
+              "$ref": "#/components/schemas/Unit"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the units collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "UnitsCreate": {
+        "title": "Units create schema",
+        "description": "A schema for creating a new unit.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "The name of the unit."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    }
+  }
+}

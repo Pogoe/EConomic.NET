@@ -1,0 +1,57 @@
+name: Release
+
+# Publishing is triggered by pushing a version tag, e.g. `git tag v0.1.0 && git push origin v0.1.0`.
+# MinVer turns that tag into the package version.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  publish:
+    name: Pack and publish to NuGet
+    runs-on: ubuntu-latest
+    environment: nuget # requires the NUGET_API_KEY secret; add an approval gate here if you want one
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restore
+        run: dotnet restore EConomic.Net.slnx
+
+      - name: Build
+        run: dotnet build EConomic.Net.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test tests/EConomic.Net.Tests --configuration Release --no-build
+
+      - name: Pack
+        run: dotnet pack src/EConomic.Net --configuration Release --no-build --output ./artifacts
+
+      - name: Publish to NuGet
+        run: >
+          dotnet nuget push "./artifacts/*.nupkg"
+          --api-key "${{ secrets.NUGET_API_KEY }}"
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./artifacts/*
+          generate_release_notes: true

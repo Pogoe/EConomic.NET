@@ -1,0 +1,800 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - employees",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/employees": {
+      "get": {
+        "operationId": "getEmployees",
+        "tags": [
+          "employees"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "employees.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-employees"
+        }
+      }
+    },
+    "/employees/{employeeNumber}": {
+      "get": {
+        "operationId": "getEmployeesByemployeeNumber",
+        "tags": [
+          "employees"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetails"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "employees.employeeNumber.get.schema.json",
+        "parameters": [
+          {
+            "name": "employeeNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-employees-employeeid"
+        }
+      }
+    },
+    "/employees/{employeeNumber}/customers": {
+      "get": {
+        "operationId": "getEmployeesByemployeeNumberCustomers",
+        "tags": [
+          "employees"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeesCustomersCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "employees.employeeNumber.customers.get.schema.json",
+        "parameters": [
+          {
+            "name": "employeeNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-employees-employeeid-customers"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "Employee": {
+        "title": "Employee",
+        "type": "object",
+        "description": "A specific employee.",
+        "properties": {
+          "employeeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The employee number is a unique numerical identifier with a maximum of 9 digits."
+          },
+          "employeeGroup": {
+            "type": "object",
+            "description": "The group to which the employee belongs.",
+            "properties": {
+              "employeeGroupNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The unique identifier of the employee group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee group item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The name of the employee"
+          },
+          "customers": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of customers which has the employee as a reference."
+          },
+          "draftInvoices": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of draft invoices which has the employee as a reference."
+          },
+          "bookedInvoices": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of booked invoices which has the employee as a reference."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The email address of the employee"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The phone number of the employee"
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "description": "Shows if the employee is barred from being used."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the employee item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "EmployeeCollection": {
+        "title": "Employees schema",
+        "description": "A schema for retrieval of employees.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the employees on the agreement.",
+            "items": {
+              "$ref": "#/components/schemas/Employee"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the employees collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "EmployeeDetails": {
+        "title": "Employees schema",
+        "description": "A schema for retrieval of employees.",
+        "type": "object",
+        "properties": {
+          "employeeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The employee number is a unique numerical identifier with a maximum of 9 digits."
+          },
+          "employeeGroup": {
+            "type": "object",
+            "description": "The group to which the employee belongs.",
+            "properties": {
+              "employeeGroupNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true,
+                "description": "The unique identifier of the employee group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee group item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The name of the employee"
+          },
+          "customers": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of customers which has the employee as a reference."
+          },
+          "draftInvoices": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of draft invoices which has the employee as a reference."
+          },
+          "bookedInvoices": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of booked invoices which has the employee as a reference."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "description": "The email address of the employee"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 250,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The phone number of the employee"
+          },
+          "barred": {
+            "type": "boolean",
+            "x-filterable": true,
+            "description": "Shows if the employee is barred from being used."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the employee item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "EmployeesCustomer": {
+        "title": "Customer",
+        "type": "object",
+        "description": "A specific customer.",
+        "properties": {
+          "address": {
+            "type": "string",
+            "maxLength": 510,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Address for the customer including street and number."
+          },
+          "balance": {
+            "type": "number",
+            "readOnly": true,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The outstanding amount for this customer."
+          },
+          "barred": {
+            "type": "boolean",
+            "description": "Boolean indication of whether the customer is barred from invoicing."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s city."
+          },
+          "corporateIdentificationNumber": {
+            "type": "string",
+            "maxLength": 40,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Corporate Identification Number. For example CVR in Denmark."
+          },
+          "pNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 10,
+            "description": "Extension of corporate identification number (CVR). Identifying separate production unit (p-nummer)."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s country."
+          },
+          "creditLimit": {
+            "type": "number",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+          },
+          "currency": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Default payment currency."
+          },
+          "customerNumber": {
+            "type": "integer",
+            "maximum": 999999999,
+            "minimum": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+          },
+          "ean": {
+            "type": "string",
+            "maxLength": 13,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "European Article Number. EAN is used for invoicing the Danish public sector."
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Customer e-mail address where e-conomic invoices should be emailed. Note: you can specify multiple email addresses in this field, separated by a space. If you need to send a copy of the invoice or write to other e-mail addresses, you can also create one or more customer contacts."
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The date this customer was last updated. The date is formatted according to ISO-8601."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer name."
+          },
+          "publicEntryNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The public entry number is used for electronic invoicing, to define the account invoices will be registered on at the customer."
+          },
+          "telephoneAndFaxNumber": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s telephone and/or fax number."
+          },
+          "mobilePhone": {
+            "type": "string",
+            "maxLength": 50,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s mobile phone number."
+          },
+          "vatNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s value added tax identification number. This field is only available to agreements in Sweden, UK, Germany, Poland and Finland. Not to be mistaken for the danish CVR number, which is defined on the corporateIdentificationNumber property."
+          },
+          "website": {
+            "type": "string",
+            "maxLength": 255,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "Customer website, if applicable."
+          },
+          "zip": {
+            "type": "string",
+            "maxLength": 30,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The customer\u0027s postcode."
+          },
+          "contacts": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the customer contacts items."
+          },
+          "deliveryLocations": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the customer delivery locations items."
+          },
+          "attention": {
+            "type": "object",
+            "description": "The customer\u0027s person of attention.",
+            "properties": {
+              "customerContactNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer employee item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerContact": {
+            "type": "object",
+            "description": "Reference to main contact employee at customer.",
+            "properties": {
+              "customerContactnumber": {
+                "type": "integer",
+                "description": "The unique identifier of the customer contact."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer contact item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customerGroup": {
+            "type": "object",
+            "description": "Reference to the customer group this customer is attached to.",
+            "properties": {
+              "customerGroupNumber": {
+                "type": "integer",
+                "x-filterable": true,
+                "description": "The unique identifier of the customer group."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer group item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "layout": {
+            "type": "object",
+            "description": "Layout to be applied for invoices and other documents for this customer.",
+            "properties": {
+              "layoutNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the layout."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the layout item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "paymentTerms": {
+            "type": "object",
+            "description": "The default payment terms for the customer.",
+            "properties": {
+              "paymentTermsNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the payment terms."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the payment terms item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "salesPerson": {
+            "type": "object",
+            "description": "Reference to the employee responsible for contact with this customer.",
+            "properties": {
+              "employeeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the employee."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the employee resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "vatZone": {
+            "type": "object",
+            "description": "Indicates in which VAT-zone the customer is located (e.g.: domestically, in Europe or elsewhere abroad).",
+            "properties": {
+              "vatZoneNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the VAT-zone."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the VAT-zone item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "templates": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "invoice": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the invoice template."
+              },
+              "invoiceLine": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the invoiceLine template."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the templates resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "totals": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the draft invoice totals for this customer."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the booked invoice totals for this customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the totals resource for this customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "invoices": {
+            "type": "object",
+            "description": "",
+            "properties": {
+              "drafts": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the draft invoices for this customer."
+              },
+              "booked": {
+                "type": "string",
+                "format": "uri",
+                "description": "The unique reference to the booked invoices for this customer."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the invoices resource for this customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customer resource."
+          }
+        },
+        "required": [
+          "currency",
+          "name",
+          "customerGroup",
+          "paymentTerms",
+          "vatZone",
+          "self"
+        ]
+      },
+      "EmployeesCustomersCollection": {
+        "title": "Employees customers collection GET schema",
+        "description": "A schema for retrieval of an employees collection of customers.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the customers.",
+            "items": {
+              "$ref": "#/components/schemas/EmployeesCustomer"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the customers collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}

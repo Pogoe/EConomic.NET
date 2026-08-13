@@ -1,0 +1,1934 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "e-conomic legacy REST API - accounting-years",
+    "version": "1.0.0",
+    "description": "Generated from e-conomic\u0027s published JSON Schema draft-03 files by tools/EConomic.SpecConverter. Do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://restapi.e-conomic.com"
+    }
+  ],
+  "security": [
+    {
+      "AppSecretToken": [],
+      "AgreementGrantToken": []
+    }
+  ],
+  "paths": {
+    "/accounting-years": {
+      "get": {
+        "operationId": "getAccountingYears",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearsCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.get.schema.json",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years"
+        }
+      },
+      "post": {
+        "operationId": "postAccountingYears",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearsPOST"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.post.schema.json",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountingYearsPOST"
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#post-accounting-years"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYear",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYear"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}/entries": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYearEntries",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.entries.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-entries"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}/periods": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYearPeriods",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearPeriodsCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.periods.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}/periods/{accountingYearPeriod}": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYearPeriodsByaccountingYearPeriod",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearPeriod"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.periods.accountingYearPeriod.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountingYearPeriod",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods-accountingyearperiod"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYearPeriodsByaccountingYearPeriodEntries",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearsEntriesCollection"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.periods.accountingYearPeriod.entries.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountingYearPeriod",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods-accountingyearperiod-entries"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/totals": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYearPeriodsByaccountingYearPeriodTotals",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearPeriodTotals"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.periods.accountingYearPeriod.totals.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountingYearPeriod",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods-accountingyearperiod-totals"
+        }
+      }
+    },
+    "/accounting-years/{accountingYear}/totals": {
+      "get": {
+        "operationId": "getAccountingYearsByaccountingYearTotals",
+        "tags": [
+          "accounting-years"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYearTotals"
+                }
+              }
+            }
+          }
+        },
+        "x-economic-source": "accounting-years.accountingYear.totals.get.schema.json",
+        "parameters": [
+          {
+            "name": "accountingYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Filter expression, e.g. \u0060name$eq:Joe$and:city$like:*port\u0060. Values must escape \u0060$\u0060 \u0060(\u0060 \u0060)\u0060 \u0060*\u0060 \u0060[\u0060 \u0060]\u0060 \u0060,\u0060 by prefixing them with \u0060$\u0060.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Sort field; prefix with \u0060-\u0060 for descending, \u0060~\u0060 to sort numerics alphabetically.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skippages",
+            "in": "query",
+            "required": false,
+            "description": "Zero-indexed page offset.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "required": false,
+            "description": "Items per page. Defaults to 20, maximum 1000.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-totals"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AppSecretToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AppSecretToken",
+        "description": "Identifies the integration."
+      },
+      "AgreementGrantToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-AgreementGrantToken",
+        "description": "Identifies the customer agreement."
+      }
+    },
+    "schemas": {
+      "AccountingYear": {
+        "title": "Accounting year",
+        "type": "object",
+        "description": "A specific accounting year on the agreement.",
+        "properties": {
+          "fromDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-sortable": true,
+            "x-filterable": true,
+            "x-default-sorting": "ascending",
+            "description": "The first date in the accounting year in the format YYYY-MM-DD. Except for the first accounting year on an agreement, it must be the date immediately following the previous accounting year, and thus must be the first day of a month. The first accounting year on an agreement can begin on any day of the month."
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The last date in the accounting year in the format YYYY-MM-DD. It must be the last date in the last month of the accounting year. An accounting year can at most have a duration of 18 months."
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "Determines if the accounting year is closed for further transactions."
+          },
+          "year": {
+            "type": "string",
+            "pattern": "^(19|20)\\d{2}([a-j])?|^(19|20)\\d{2}(/(19|20)\\d{2})?",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The calendar year or years spanned by the accounting year in the format YYYY or YYYY/YYYY."
+          },
+          "periods": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the collection of accounting year periods on an agreement."
+          },
+          "entries": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to a collection of all entries booked in the accounting year."
+          },
+          "totals": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the chart of accounts with the years total in base currency."
+          },
+          "vouchers": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to a collection of vouchers created in the accounting year."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the accounting year item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearPeriod": {
+        "title": "Accounting Year Period schema",
+        "description": "A schema for retrieving a period of an accounting year.",
+        "type": "object",
+        "properties": {
+          "periodNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "A unique identifier of the period."
+          },
+          "accountingYear": {
+            "type": "object",
+            "description": "The accounting year the period is part of.",
+            "properties": {
+              "year": {
+                "type": "string",
+                "maxLength": 4,
+                "description": "A unique identifier of the accounting year."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the accounting year resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "fromDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-default-sorting": "ascending",
+            "description": "The first date in the period formatted according to ISO-8601(YYYY-MM-DD)."
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The last date in the period formatted according to ISO-8601(YYYY-MM-DD)."
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "If true this indicates that the accounting period is closed for further transactions."
+          },
+          "entries": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to a collection of all entries booked in the period."
+          },
+          "totals": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the chart of accounts with the periods total in base currency."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the period item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearPeriodTotals": {
+        "title": "Accounting Year period totals schema",
+        "description": "A schema for retrieving account totals for a specific accounting year period.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of the totals.",
+            "items": {
+              "$ref": "#/components/schemas/AccountTotalsEntry"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the accounting year periods totals resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearPeriodsCollection": {
+        "title": "Accounting Year Periods collection schema",
+        "description": "A schema for retrieving the periods of an accounting year.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of the periods.",
+            "items": {
+              "$ref": "#/components/schemas/Period"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the accounting year periods resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearTotals": {
+        "title": "Accounting Year totals schema",
+        "description": "A schema for retrieving account totals for a specific accounting year.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of the totals.",
+            "items": {
+              "$ref": "#/components/schemas/AccountTotalsEntry"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the accounting year totals resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearsCollection": {
+        "title": "Accounting years collection GET schema",
+        "description": "A schema for retrieval of a collection of accounting years.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "The array containing all the accounting years on the agreement.",
+            "items": {
+              "$ref": "#/components/schemas/AccountingYear"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "The unique self reference of the accounting years collection."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearsEntriesCollection": {
+        "title": "Entries collection schema",
+        "description": "A schema for retrieving the entries for a specific accounting year period. This requires that international ledger is enabled.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of entries.",
+            "items": {
+              "$ref": "#/components/schemas/AccountingYearsEntry"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the accounting year entries resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearsEntry": {
+        "title": "Entry",
+        "type": "object",
+        "description": "A specific entry in the accounting year period.",
+        "properties": {
+          "account": {
+            "type": "object",
+            "description": "The account the entry is connected to.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The total entry amount."
+          },
+          "supplierInvoiceNumber": {
+            "type": "string",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A unique identifier of the supplier invoice."
+          },
+          "amountInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The total entry amount in base currency."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "[a-zA-Z]{3}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The ISO 4217 currency code of the entry."
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Entry issue date. The date is formatted according to ISO-8601(YYYY-MM-DD)."
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The date the invoice is due for payment. Format according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "departmentalDistribution": {
+            "type": "object",
+            "description": "A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.",
+            "properties": {
+              "departmentalDistributionNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the departmental distribution."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the departmental distribution resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "project": {
+            "type": "object",
+            "description": "A reference to any project this entry might be related to. This requires the projects module to be enabled.",
+            "properties": {
+              "projectNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "x-filterable": true,
+                "description": "A unique identifier of the project."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the project resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "costType": {
+            "type": "object",
+            "description": "The cost type for this entity.",
+            "properties": {
+              "costTypeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of cost type.",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the cost type."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "entryNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The unique identifier of the entry line."
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 255,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A short description about the entry."
+          },
+          "entryType": {
+            "enum": [
+              "customerInvoice",
+              "customerPayment",
+              "supplierInvoice",
+              "supplierPayment",
+              "financeVoucher",
+              "reminder",
+              "openingEntry",
+              "transferredOpeningEntry",
+              "systemEntry",
+              "manualDebtorInvoice"
+            ],
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The type of entry."
+          },
+          "vatAccount": {
+            "type": "object",
+            "description": "The account for VAT.",
+            "properties": {
+              "vatCode": {
+                "type": "string",
+                "maxLength": 5,
+                "description": "The unique identifier of the vat account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the vatAccount item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer for this entity.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "description": "The unique identifier of customer.",
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "supplier": {
+            "type": "object",
+            "description": "The supplier for this entity.",
+            "properties": {
+              "supplierNumber": {
+                "type": "integer",
+                "description": "The unique identifier of supplier.",
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the supplier."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "unit1": {
+            "type": "object",
+            "description": "The first unit of measure applied to the entry. Requires dimension module.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the unit.",
+                "x-filterable": true,
+                "x-sortable": true,
+                "minimum": 0
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            }
+          },
+          "unit2": {
+            "type": "object",
+            "description": "The second unit of measure applied to the entry. Requires dimension module.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the unit.",
+                "x-filterable": true,
+                "x-sortable": true,
+                "minimum": 0
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            }
+          },
+          "quantity1": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Requires dimension module."
+          },
+          "quantity2": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Requires dimension module."
+          },
+          "voucherNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The identifier of the voucher this entry belongs to."
+          },
+          "bookedInvoice": {
+            "type": "object",
+            "description": "A refernce to any booked Invoice this entry might be related to.",
+            "properties": {
+              "bookedInvoiceNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the booked invoice."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the booked invoice resource."
+              }
+            }
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "description": "Unique identifier for reminders and invoices."
+          },
+          "remainder": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The remainder on the entry."
+          },
+          "remainderInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The remainder in base currency on the entry."
+          },
+          "paymentDetails": {
+            "type": "object",
+            "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
+            "properties": {
+              "paymentType": {
+                "type": "object",
+                "description": "A specific payment type on the entry.",
+                "oneOf": [
+                  {
+                    "properties": {
+                      "fiSupplierNo": {
+                        "type": "string"
+                      },
+                      "ocrLine": {
+                        "type": "string",
+                        "minLength": 15,
+                        "maxLength": 15
+                      }
+                    },
+                    "required": [
+                      "fiSupplierNo",
+                      "ocrLine"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "fiSupplierNo": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "fiSupplierNo",
+                      "message"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "giroAccount": {
+                        "type": "string"
+                      },
+                      "ocrLine": {
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 16
+                      }
+                    },
+                    "required": [
+                      "giroAccount",
+                      "ocrLine"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "accountNo": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "accountNo",
+                      "message"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "ibanSwift": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "ibanSwift",
+                      "message"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "fiSupplierNo": {
+                        "type": "string"
+                      },
+                      "ocrLineMessage": {
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 157
+                      }
+                    },
+                    "required": [
+                      "fiSupplierNo",
+                      "ocrLineMessage"
+                    ]
+                  }
+                ],
+                "properties": {
+                  "paymentTypeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "The payment type number is a positive unique numerical identifier."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique link reference to the payment type item."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              }
+            }
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the entry resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountingYearsPOST": {
+        "title": "Accounting years POST schema",
+        "description": "A schema for creating an accounting year.",
+        "type": "object",
+        "properties": {
+          "fromDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The first date in the accounting year in the format YYYY-MM-DD. Except for the first accounting year on an agreement, it must be the date immediately following the previous accounting year, and thus must be the first day of a month. The first accounting year on an agreement can begin on any day of the month."
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The last date in the accounting year in the format YYYY-MM-DD. It must be the last date in the last month of the accounting year. An accounting year can at most have a duration of 18 months."
+          }
+        },
+        "required": [
+          "fromDate",
+          "toDate"
+        ]
+      },
+      "EntryCollection": {
+        "title": "Entries collection schema",
+        "description": "A schema for retrieving the entries for a specific accounting years.",
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "array",
+            "description": "A collection of entries.",
+            "items": {
+              "$ref": "#/components/schemas/Entry"
+            }
+          },
+          "metaData": {
+            "type": "object",
+            "description": "Information about possible actions, endpoints and resource paths related to the endpoint."
+          },
+          "pagination": {
+            "type": "object",
+            "description": "Information about the pagination."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the accounting year entries resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "Entry": {
+        "title": "Entry",
+        "type": "object",
+        "description": "A specific entry in the accounting year.",
+        "properties": {
+          "account": {
+            "type": "object",
+            "description": "The account the entry is connected to.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The total entry amount."
+          },
+          "supplierInvoiceNumber": {
+            "type": "string",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A unique identifier of the supplier invoice."
+          },
+          "amountInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The total entry amount in base currency."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "[a-zA-Z]{3}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The ISO 4217 currency code of the entry."
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Entry issue date. The date is formatted according to ISO-8601(YYYY-MM-DD)."
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The date the invoice is due for payment. Format according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "departmentalDistribution": {
+            "type": "object",
+            "description": "A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.",
+            "properties": {
+              "departmentalDistributionNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the departmental distribution."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the departmental distribution resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "project": {
+            "type": "object",
+            "description": "A reference to any project this entry might be related to. This requires the projects module to be enabled.",
+            "properties": {
+              "projectNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "x-filterable": true,
+                "description": "A unique identifier of the project."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the project resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "costType": {
+            "type": "object",
+            "description": "The cost type for this entity.",
+            "properties": {
+              "costTypeNumber": {
+                "type": "integer",
+                "description": "The unique identifier of cost type.",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the cost type."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "entryNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The unique identifier of the entry line."
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 255,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "A short description about the entry."
+          },
+          "entryType": {
+            "enum": [
+              "customerInvoice",
+              "customerPayment",
+              "supplierInvoice",
+              "supplierPayment",
+              "financeVoucher",
+              "reminder",
+              "openingEntry",
+              "transferredOpeningEntry",
+              "systemEntry",
+              "manualDebtorInvoice"
+            ],
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The type of entry."
+          },
+          "vatAccount": {
+            "type": "object",
+            "description": "The account for VAT.",
+            "properties": {
+              "vatCode": {
+                "type": "string",
+                "maxLength": 5,
+                "description": "The unique identifier of the vat account."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the vatAccount item."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "customer": {
+            "type": "object",
+            "description": "The customer for this entity.",
+            "properties": {
+              "customerNumber": {
+                "type": "integer",
+                "description": "The unique identifier of customer.",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the customer."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "supplier": {
+            "type": "object",
+            "description": "The supplier for this entity.",
+            "properties": {
+              "supplierNumber": {
+                "type": "integer",
+                "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
+                "maximum": 999999999,
+                "minimum": 1,
+                "x-filterable": true,
+                "x-sortable": true
+              },
+              "supplierGroup": {
+                "type": "object",
+                "description": "The supplier group for this supplier.",
+                "properties": {
+                  "supplierGroupNumber": {
+                    "type": "integer",
+                    "description": "The supplier group number is a positive unique numerical identifier with a maximum of 9 digits.",
+                    "maximum": 999999999,
+                    "minimum": 1,
+                    "x-filterable": true
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique link reference to the supplier group."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique link reference to the supplier."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "unit1": {
+            "type": "object",
+            "description": "The first unit of measure applied to the entry. Requires dimension module.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the unit.",
+                "x-filterable": true,
+                "x-sortable": true,
+                "minimum": 0
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            }
+          },
+          "unit2": {
+            "type": "object",
+            "description": "The second unit of measure applied to the entry. Requires dimension module.",
+            "properties": {
+              "unitNumber": {
+                "type": "integer",
+                "description": "The unique identifier of the unit.",
+                "x-filterable": true,
+                "x-sortable": true,
+                "minimum": 0
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the unit resource."
+              }
+            }
+          },
+          "quantity1": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Requires dimension module."
+          },
+          "quantity2": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "Requires dimension module."
+          },
+          "voucherNumber": {
+            "type": "integer",
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The identifier of the voucher this entry belongs to."
+          },
+          "bookedInvoice": {
+            "type": "object",
+            "description": "A refernce to any booked Invoice this entry might be related to.",
+            "properties": {
+              "bookedInvoiceNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "A unique identifier of the booked invoice."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the booked invoice resource."
+              }
+            }
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "description": "Unique identifier for reminders and invoices."
+          },
+          "remainder": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The remainder on the entry."
+          },
+          "remainderInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "x-filterable": true,
+            "x-sortable": true,
+            "description": "The remainder in base currency on the entry."
+          },
+          "paymentDetails": {
+            "type": "object",
+            "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
+            "properties": {
+              "paymentType": {
+                "type": "object",
+                "description": "A specific payment type on the entry.",
+                "oneOf": [
+                  {
+                    "properties": {
+                      "fiSupplierNo": {
+                        "type": "string"
+                      },
+                      "ocrLine": {
+                        "type": "string",
+                        "minLength": 15,
+                        "maxLength": 15
+                      }
+                    },
+                    "required": [
+                      "fiSupplierNo",
+                      "ocrLine"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "fiSupplierNo": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "fiSupplierNo",
+                      "message"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "giroAccount": {
+                        "type": "string"
+                      },
+                      "ocrLine": {
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 16
+                      }
+                    },
+                    "required": [
+                      "giroAccount",
+                      "ocrLine"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "accountNo": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "accountNo",
+                      "message"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "ibanSwift": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 5,
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "ibanSwift",
+                      "message"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "fiSupplierNo": {
+                        "type": "string"
+                      },
+                      "ocrLineMessage": {
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 157
+                      }
+                    },
+                    "required": [
+                      "fiSupplierNo",
+                      "ocrLineMessage"
+                    ]
+                  }
+                ],
+                "properties": {
+                  "paymentTypeNumber": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "The payment type number is a positive unique numerical identifier."
+                  },
+                  "self": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "A unique link reference to the payment type item."
+                  }
+                },
+                "required": [
+                  "self"
+                ]
+              }
+            }
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the entry resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "AccountTotalsEntry": {
+        "title": "Entry",
+        "type": "object",
+        "description": "A specific total for an account in the accounting year period.",
+        "properties": {
+          "totalInBaseCurrency": {
+            "type": "number",
+            "x-max-decimals": 2,
+            "description": "The total entry amount in base currency for the accounting year period."
+          },
+          "account": {
+            "type": "object",
+            "description": "A reference to the account totaled.",
+            "properties": {
+              "accountNumber": {
+                "type": "integer",
+                "description": "The account number."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the account resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "fromDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-default-sorting": "ascending",
+            "description": "The first date in the period formatted according to ISO-8601(YYYY-MM-DD)."
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "description": "The last date in the period formatted according to ISO-8601(YYYY-MM-DD)."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique reference to the totals resource."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      },
+      "Period": {
+        "title": "Period",
+        "type": "object",
+        "description": "A specific period in the accounting year.",
+        "properties": {
+          "periodNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "A unique identifier of the period."
+          },
+          "accountingYear": {
+            "type": "object",
+            "description": "The accounting year the period is part of.",
+            "properties": {
+              "year": {
+                "type": "string",
+                "maxLength": 10,
+                "description": "A unique identifier of the accounting year."
+              },
+              "self": {
+                "type": "string",
+                "format": "uri",
+                "description": "A unique reference to the accounting year resource."
+              }
+            },
+            "required": [
+              "self"
+            ]
+          },
+          "fromDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-sortable": true,
+            "x-filterable": true,
+            "x-default-sorting": "ascending",
+            "description": "The first date in the period formated according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}",
+            "x-sortable": true,
+            "x-filterable": true,
+            "description": "The last date in the period formated according to ISO-8601 (YYYY-MM-DD)."
+          },
+          "closed": {
+            "type": "boolean",
+            "description": "If true this indicates that the accounting period is closed for further transactions."
+          },
+          "entries": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to a collection of all entries booked in the period."
+          },
+          "totals": {
+            "type": "string",
+            "format": "uri",
+            "description": "A link to the chart of accounts with the periods total in base currency."
+          },
+          "self": {
+            "type": "string",
+            "format": "uri",
+            "description": "A unique link reference to the period item."
+          }
+        },
+        "required": [
+          "self"
+        ]
+      }
+    }
+  }
+}
