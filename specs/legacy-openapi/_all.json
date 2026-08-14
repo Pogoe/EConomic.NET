@@ -1881,7 +1881,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPOST"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -1891,7 +1891,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPOST"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -1975,7 +1975,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPUT"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -1985,7 +1985,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPUT"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -2105,7 +2105,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -2115,7 +2115,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -2199,7 +2199,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -2209,7 +2209,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -3249,7 +3249,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -3259,7 +3259,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -3293,7 +3293,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvoicesForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -3303,7 +3303,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvoicesForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -3441,7 +3441,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoicePost"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -3451,7 +3451,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoicePost"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -3517,7 +3517,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoiceUpdate"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -3527,7 +3527,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoiceUpdate"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -4903,7 +4903,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JournalVoucherPost"
+                  "$ref": "#/components/schemas/VoucherEntry"
                 }
               }
             }
@@ -4913,7 +4913,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JournalVoucherPost"
+                  "$ref": "#/components/schemas/VoucherEntry"
                 }
               }
             }
@@ -5333,7 +5333,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPost"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -5343,7 +5343,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPost"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -5409,7 +5409,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPUT"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -5419,7 +5419,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPUT"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -6373,7 +6373,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductPricesCreate"
+                  "$ref": "#/components/schemas/ProductPrice"
                 }
               }
             }
@@ -6383,7 +6383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductPricesCreate"
+                  "$ref": "#/components/schemas/ProductPrice"
                 }
               }
             }
@@ -6467,7 +6467,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductPricesUpdate"
+                  "$ref": "#/components/schemas/ProductPrice"
                 }
               }
             }
@@ -6477,7 +6477,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductPricesUpdate"
+                  "$ref": "#/components/schemas/ProductPrice"
                 }
               }
             }
@@ -6709,7 +6709,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftQuotePost"
+                  "$ref": "#/components/schemas/DraftQuote"
                 }
               }
             }
@@ -6719,7 +6719,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftQuotePost"
+                  "$ref": "#/components/schemas/DraftQuote"
                 }
               }
             }
@@ -6785,7 +6785,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftQuotePUT"
+                  "$ref": "#/components/schemas/DraftQuote"
                 }
               }
             }
@@ -6795,7 +6795,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftQuotePUT"
+                  "$ref": "#/components/schemas/DraftQuote"
                 }
               }
             }
@@ -13431,7 +13431,8 @@
             "type": "integer",
             "minimum": 1,
             "readOnly": true,
-            "description": "The delivery location number is a unique numerical identifier. This identifier will be created for you."
+            "description": "The delivery location number is a unique numerical identifier. This identifier will be created for you.",
+            "nullable": true
           },
           "postalCode": {
             "type": "string",
@@ -13441,7 +13442,8 @@
           "sortKey": {
             "type": "integer",
             "description": "The delivery location number displayed in the e-conomic web interface. If not supplied this key will be created for you.",
-            "minimum": 1
+            "minimum": 1,
+            "nullable": true
           },
           "termsOfDelivery": {
             "type": "string",
@@ -13704,7 +13706,8 @@
             "type": "integer",
             "minimum": 1,
             "readOnly": true,
-            "description": "The delivery location number is a unique numerical identifier."
+            "description": "The delivery location number is a unique numerical identifier.",
+            "nullable": true
           },
           "postalCode": {
             "type": "string",
@@ -13714,7 +13717,8 @@
           "sortKey": {
             "type": "integer",
             "description": "The delivery location number displayed in the e-conomic web interface. If not supplied this key will be created for you.",
-            "minimum": 1
+            "minimum": 1,
+            "nullable": true
           },
           "termsOfDelivery": {
             "type": "string",
@@ -16078,7 +16082,7 @@
             "type": "array",
             "description": "A collection of booked invoices.",
             "items": {
-              "$ref": "#/components/schemas/InvoicesBookedInvoice"
+              "$ref": "#/components/schemas/BookedInvoiceSummary"
             }
           },
           "metaData": {
@@ -16976,7 +16980,7 @@
             "type": "array",
             "description": "A collection of draft invoices.",
             "items": {
-              "$ref": "#/components/schemas/InvoicesDraftInvoice"
+              "$ref": "#/components/schemas/DraftInvoiceSummary"
             }
           },
           "metaData": {
@@ -17148,7 +17152,8 @@
             "type": "number",
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The desired exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency. If no exchange rate is supplied, the system will get the current daily rate, unless the invoice currency is the same as the base currency, in which case it will be set to 100."
+            "description": "The desired exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency. If no exchange rate is supplied, the system will get the current daily rate, unless the invoice currency is the same as the base currency, in which case it will be set to 100.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -17160,43 +17165,50 @@
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative."
+            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total rounding error, if any, on the invoice in base currency."
+            "description": "The total rounding error, if any, on the invoice in base currency.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "layout": {
             "type": "object",
@@ -17977,7 +17989,8 @@
             "maximum": 999999999,
             "x-filterable": true,
             "x-sortable": true,
-            "description": "A reference number for the draft invoice document. This is not the final invoice number. The final invoice number can\u0027t be determined until the invoice is booked."
+            "description": "A reference number for the draft invoice document. This is not the final invoice number. The final invoice number can\u0027t be determined until the invoice is booked.",
+            "nullable": true
           },
           "date": {
             "description": "Invoice issue date. Format according to ISO-8601 (YYYY-MM-DD).",
@@ -18000,61 +18013,71 @@
             "x-sortable": true,
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency."
+            "description": "The exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "netAmountInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative."
+            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total rounding error, if any, on the invoice in base currency."
+            "description": "The total rounding error, if any, on the invoice in base currency.",
+            "nullable": true
           },
           "costPriceInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total cost of the items on the invoice in the base currency of the agreement."
+            "description": "The total cost of the items on the invoice in the base currency of the agreement.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -18581,7 +18604,8 @@
           },
           "bookWithNumber": {
             "type": "integer",
-            "description": "The number for the invoice to be booked with. Optional."
+            "description": "The number for the invoice to be booked with. Optional.",
+            "nullable": true
           },
           "sendBy": {
             "type": "string",
@@ -19004,7 +19028,7 @@
           "self"
         ]
       },
-      "InvoicesBookedInvoice": {
+      "BookedInvoiceSummary": {
         "title": "Booked invoice",
         "type": "object",
         "properties": {
@@ -19587,7 +19611,7 @@
           }
         }
       },
-      "InvoicesDraftInvoice": {
+      "DraftInvoiceSummary": {
         "title": "Draft invoice",
         "type": "object",
         "properties": {
@@ -20240,7 +20264,8 @@
           },
           "bookWithNumber": {
             "type": "integer",
-            "description": "The number for the invoice to be booked with. Optional."
+            "description": "The number for the invoice to be booked with. Optional.",
+            "nullable": true
           }
         }
       },
@@ -24784,7 +24809,8 @@
             "type": "number",
             "minimum": 1,
             "maximum": 999999999,
-            "description": "Journal voucher number must be between 1-999999999. Together with the accountingYear it is a unique identifier for the voucher."
+            "description": "Journal voucher number must be between 1-999999999. Together with the accountingYear it is a unique identifier for the voucher.",
+            "nullable": true
           },
           "accountingYear": {
             "type": "object",
@@ -29680,7 +29706,8 @@
             "maximum": 999999999,
             "x-filterable": true,
             "x-sortable": true,
-            "description": "A reference number for the order document."
+            "description": "A reference number for the order document.",
+            "nullable": true
           },
           "date": {
             "type": "string",
@@ -29702,52 +29729,62 @@
             "x-filterable": true,
             "x-sortable": true,
             "x-max-decimals": 6,
-            "description": "The exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency."
+            "description": "The exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the order currency before all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "netAmountInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the base currency of the agreement before all taxes and discounts have been applied."
+            "description": "The total order amount in the base currency of the agreement before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the order currency after all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the base currency of the agreement after all taxes and discounts have been applied."
+            "description": "The total order amount in the base currency of the agreement after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency."
+            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total rounding error, if any, on the order in base currency."
+            "description": "The total rounding error, if any, on the order in base currency.",
+            "nullable": true
           },
           "costPriceInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total cost of the items on the order in the base currency of the agreement."
+            "description": "The total cost of the items on the order in the base currency of the agreement.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -30349,7 +30386,8 @@
             "type": "number",
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The desired exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency. If no exchange rate is supplied, the system will get the current daily rate, unless the order currency is the same as the base currency, in which case it will be set to 100."
+            "description": "The desired exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency. If no exchange rate is supplied, the system will get the current daily rate, unless the order currency is the same as the base currency, in which case it will be set to 100.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -30361,37 +30399,43 @@
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total order amount in the order currency after all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency."
+            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total order amount in the order currency before all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total rounding error, if any, on the order in base currency."
+            "description": "The total rounding error, if any, on the order in base currency.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "layout": {
             "type": "object",
@@ -37361,7 +37405,8 @@
             "maximum": 999999999,
             "x-filterable": true,
             "x-sortable": true,
-            "description": "A reference number for the quote document."
+            "description": "A reference number for the quote document.",
+            "nullable": true
           },
           "date": {
             "type": "string",
@@ -37383,52 +37428,62 @@
             "x-filterable": true,
             "x-sortable": true,
             "x-max-decimals": 6,
-            "description": "The exchange rate between the quote currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the quote currency."
+            "description": "The exchange rate between the quote currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the quote currency.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total quote amount in the quote currency before all taxes and discounts have been applied."
+            "description": "The total quote amount in the quote currency before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "netAmountInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total quote amount in the base currency of the agreement before all taxes and discounts have been applied."
+            "description": "The total quote amount in the base currency of the agreement before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total quote amount in the quote currency after all taxes and discounts have been applied."
+            "description": "The total quote amount in the quote currency after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total quote amount in the base currency of the agreement after all taxes and discounts have been applied."
+            "description": "The total quote amount in the base currency of the agreement after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The difference between the cost price of the items on the quote and the sales net quote amount in base currency."
+            "description": "The difference between the cost price of the items on the quote and the sales net quote amount in base currency.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The margin expressed as a percentage. If the net quote amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net quote amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total amount of VAT on the quote in the quote currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the quote in the quote currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total rounding error, if any, on the quote in base currency."
+            "description": "The total rounding error, if any, on the quote in base currency.",
+            "nullable": true
           },
           "costPriceInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total cost of the items on the quote in the base currency of the agreement."
+            "description": "The total cost of the items on the quote in the base currency of the agreement.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -38030,7 +38085,8 @@
             "type": "number",
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The desired exchange rate between the quote currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the quote currency. If no exchange rate is supplied, the system will get the current daily rate, unless the quote currency is the same as the base currency, in which case it will be set to 100."
+            "description": "The desired exchange rate between the quote currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the quote currency. If no exchange rate is supplied, the system will get the current daily rate, unless the quote currency is the same as the base currency, in which case it will be set to 100.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -38042,37 +38098,43 @@
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total quote amount in the quote currency after all taxes and discounts have been applied."
+            "description": "The total quote amount in the quote currency after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The difference between the cost price of the items on the quote and the sales net quote amount in base currency."
+            "description": "The difference between the cost price of the items on the quote and the sales net quote amount in base currency.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The margin expressed as a percentage. If the net quote amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net quote amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total quote amount in the quote currency before all taxes and discounts have been applied."
+            "description": "The total quote amount in the quote currency before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total rounding error, if any, on the quote in base currency."
+            "description": "The total rounding error, if any, on the quote in base currency.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total amount of VAT on the quote in the quote currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the quote in the quote currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "layout": {
             "type": "object",

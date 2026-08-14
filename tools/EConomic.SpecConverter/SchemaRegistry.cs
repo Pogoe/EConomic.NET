@@ -91,6 +91,12 @@ public sealed class SchemaRegistry
         ["DepartmentalDistribution2"] = "DepartmentalDistribution",
         ["DepartmentalDistribution3"] = "DepartmentalDistributionCollection",
         ["DepartmentalDistributionReference"] = "DepartmentalDistributionSummaryCollection",
+
+        // The collection item and the single-resource GET are different shapes, and here the plain
+        // name is already taken by the richer one. Naming the listing a summary follows what
+        // DepartmentalDistributionSummary already does.
+        ["InvoicesDraftInvoice"] = "DraftInvoiceSummary",
+        ["InvoicesBookedInvoice"] = "BookedInvoiceSummary",
     };
 
     /// <summary>
@@ -103,6 +109,16 @@ public sealed class SchemaRegistry
         "Department", "DepartmentalDistributionSummary", "Employee", "Journal", "Layout",
         "PaymentTerms", "PaymentType", "Product", "ProductGroup", "Supplier", "Unit",
         "VatAccount", "VatType", "VatZone",
+
+        // Nested collections, reached through their parent rather than off the client.
+        "CustomerContact", "DeliveryLocation",
+
+        // The invoice, order and quote families. Each is a collection in its own right under a
+        // namespace segment — /invoices/drafts, /orders/sent — rather than a nested collection.
+        "DraftInvoiceSummary", "BookedInvoiceSummary", "SentInvoice", "PaidInvoice", "UnpaidInvoice",
+        "OverdueInvoice", "NotDueInvoice",
+        "DraftOrder", "SentOrder", "ArchivedOrder",
+        "DraftQuote", "SentQuote", "ArchivedQuote",
     };
 
     /// <summary>
@@ -136,6 +152,10 @@ public sealed class SchemaRegistry
     public static readonly IReadOnlySet<string> DeletableEntities = new HashSet<string>(StringComparer.Ordinal)
     {
         "Customer", "CustomerGroup", "PaymentTerms", "Product", "Supplier", "Unit",
+
+        // Nested: DELETE /customers/:customerNumber/contacts/:contactNumber and
+        // .../delivery-locations/:deliveryLocationNumber are both documented.
+        "CustomerContact", "DeliveryLocation",
     };
 
     private readonly Dictionary<string, string> _namesByStructure = new(StringComparer.Ordinal);

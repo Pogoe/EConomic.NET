@@ -113,7 +113,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -123,7 +123,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -157,7 +157,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvoicesForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -167,7 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvoicesForBookingAnInvoice"
+                  "$ref": "#/components/schemas/BookedInvoiceSummary"
                 }
               }
             }
@@ -305,7 +305,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoicePost"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -315,7 +315,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoicePost"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -381,7 +381,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoiceUpdate"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -391,7 +391,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftInvoiceUpdate"
+                  "$ref": "#/components/schemas/DraftInvoiceSummary"
                 }
               }
             }
@@ -2055,7 +2055,7 @@
             "type": "array",
             "description": "A collection of booked invoices.",
             "items": {
-              "$ref": "#/components/schemas/InvoicesBookedInvoice"
+              "$ref": "#/components/schemas/BookedInvoiceSummary"
             }
           },
           "metaData": {
@@ -2953,7 +2953,7 @@
             "type": "array",
             "description": "A collection of draft invoices.",
             "items": {
-              "$ref": "#/components/schemas/InvoicesDraftInvoice"
+              "$ref": "#/components/schemas/DraftInvoiceSummary"
             }
           },
           "metaData": {
@@ -3125,7 +3125,8 @@
             "type": "number",
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The desired exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency. If no exchange rate is supplied, the system will get the current daily rate, unless the invoice currency is the same as the base currency, in which case it will be set to 100."
+            "description": "The desired exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency. If no exchange rate is supplied, the system will get the current daily rate, unless the invoice currency is the same as the base currency, in which case it will be set to 100.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -3137,43 +3138,50 @@
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative."
+            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total rounding error, if any, on the invoice in base currency."
+            "description": "The total rounding error, if any, on the invoice in base currency.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "layout": {
             "type": "object",
@@ -3954,7 +3962,8 @@
             "maximum": 999999999,
             "x-filterable": true,
             "x-sortable": true,
-            "description": "A reference number for the draft invoice document. This is not the final invoice number. The final invoice number can\u0027t be determined until the invoice is booked."
+            "description": "A reference number for the draft invoice document. This is not the final invoice number. The final invoice number can\u0027t be determined until the invoice is booked.",
+            "nullable": true
           },
           "date": {
             "description": "Invoice issue date. Format according to ISO-8601 (YYYY-MM-DD).",
@@ -3977,61 +3986,71 @@
             "x-sortable": true,
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency."
+            "description": "The exchange rate between the invoice currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the invoice currency.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "netAmountInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative."
+            "description": "The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative."
+            "description": "The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total rounding error, if any, on the invoice in base currency."
+            "description": "The total rounding error, if any, on the invoice in base currency.",
+            "nullable": true
           },
           "costPriceInBaseCurrency": {
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total cost of the items on the invoice in the base currency of the agreement."
+            "description": "The total cost of the items on the invoice in the base currency of the agreement.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -4558,7 +4577,8 @@
           },
           "bookWithNumber": {
             "type": "integer",
-            "description": "The number for the invoice to be booked with. Optional."
+            "description": "The number for the invoice to be booked with. Optional.",
+            "nullable": true
           },
           "sendBy": {
             "type": "string",
@@ -4981,7 +5001,7 @@
           "self"
         ]
       },
-      "InvoicesBookedInvoice": {
+      "BookedInvoiceSummary": {
         "title": "Booked invoice",
         "type": "object",
         "properties": {
@@ -5564,7 +5584,7 @@
           }
         }
       },
-      "InvoicesDraftInvoice": {
+      "DraftInvoiceSummary": {
         "title": "Draft invoice",
         "type": "object",
         "properties": {
@@ -6217,7 +6237,8 @@
           },
           "bookWithNumber": {
             "type": "integer",
-            "description": "The number for the invoice to be booked with. Optional."
+            "description": "The number for the invoice to be booked with. Optional.",
+            "nullable": true
           }
         }
       },

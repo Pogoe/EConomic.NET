@@ -443,7 +443,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JournalVoucherPost"
+                  "$ref": "#/components/schemas/VoucherEntry"
                 }
               }
             }
@@ -453,7 +453,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JournalVoucherPost"
+                  "$ref": "#/components/schemas/VoucherEntry"
                 }
               }
             }
@@ -2847,7 +2847,8 @@
             "type": "number",
             "minimum": 1,
             "maximum": 999999999,
-            "description": "Journal voucher number must be between 1-999999999. Together with the accountingYear it is a unique identifier for the voucher."
+            "description": "Journal voucher number must be between 1-999999999. Together with the accountingYear it is a unique identifier for the voucher.",
+            "nullable": true
           },
           "accountingYear": {
             "type": "object",

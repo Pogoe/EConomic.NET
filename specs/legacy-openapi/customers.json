@@ -289,7 +289,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPOST"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -299,7 +299,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPOST"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -383,7 +383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPUT"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -393,7 +393,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerContactPUT"
+                  "$ref": "#/components/schemas/CustomerContact"
                 }
               }
             }
@@ -513,7 +513,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -523,7 +523,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -607,7 +607,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -617,7 +617,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                  "$ref": "#/components/schemas/DeliveryLocation"
                 }
               }
             }
@@ -3308,7 +3308,8 @@
             "type": "integer",
             "minimum": 1,
             "readOnly": true,
-            "description": "The delivery location number is a unique numerical identifier. This identifier will be created for you."
+            "description": "The delivery location number is a unique numerical identifier. This identifier will be created for you.",
+            "nullable": true
           },
           "postalCode": {
             "type": "string",
@@ -3318,7 +3319,8 @@
           "sortKey": {
             "type": "integer",
             "description": "The delivery location number displayed in the e-conomic web interface. If not supplied this key will be created for you.",
-            "minimum": 1
+            "minimum": 1,
+            "nullable": true
           },
           "termsOfDelivery": {
             "type": "string",
@@ -3581,7 +3583,8 @@
             "type": "integer",
             "minimum": 1,
             "readOnly": true,
-            "description": "The delivery location number is a unique numerical identifier."
+            "description": "The delivery location number is a unique numerical identifier.",
+            "nullable": true
           },
           "postalCode": {
             "type": "string",
@@ -3591,7 +3594,8 @@
           "sortKey": {
             "type": "integer",
             "description": "The delivery location number displayed in the e-conomic web interface. If not supplied this key will be created for you.",
-            "minimum": 1
+            "minimum": 1,
+            "nullable": true
           },
           "termsOfDelivery": {
             "type": "string",

@@ -57,6 +57,16 @@ is a mapping change inside the facade, not automatically a major release here.
 - `{Entity}Create` and `{Entity}Update` write models, carrying only the properties e-conomic
   accepts. Server-maintained values such as `balance` are absent, and references to other resources
   are flattened to their numbers.
+- The invoice, order and quote families as queryable collections: `DraftInvoices`,
+  `BookedInvoices`, `SentInvoices`, `PaidInvoices`, `UnpaidInvoices`, `OverdueInvoices`,
+  `NotDueInvoices`, `DraftOrders`, `SentOrders`, `ArchivedOrders`, `DraftQuotes`, `SentQuotes` and
+  `ArchivedQuotes`. These sit one segment below a namespace — `/invoices/drafts` rather than
+  `/invoices` — and were invisible to a discovery pass that only considered single-segment paths.
+  Thirty-three resources in total, up from twenty.
+- Nested collections: a customer's contacts and delivery locations, reached through the parent
+  because they cannot be addressed without its identifier —
+  `client.Customers.Contacts(customerNumber).CreateAsync(...)`. Each supports the same querying,
+  paging and writes as a top-level resource.
 - `AsQuery()` on each resource, for obtaining an unfiltered query.
 - `DELETE` support, from the 21 endpoints described in the published documentation. e-conomic
   publishes no schema for `DELETE` — it has neither request nor response body — so these are issued

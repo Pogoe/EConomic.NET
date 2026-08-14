@@ -314,6 +314,68 @@ public class WriteRoundTripTests
         }
     }
 
+    [Fact]
+    public async Task A_customers_contacts_and_delivery_locations_round_trip()
+    {
+        SkipUnlessOptedIn();
+
+        var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
+        Customer? customer = null;
+
+        try
+        {
+            customer = await client.Customers.CreateAsync(
+                new CustomerCreate
+                {
+                    Name = "ZZ Probe Nested Host",
+                    Currency = "DKK",
+                    CustomerGroupNumber = 1,
+                    PaymentTermsNumber = 1,
+                    VatZoneNumber = 1,
+                },
+                token);
+
+            // A nested collection is reached through its parent rather than off the client, because
+            // it cannot be addressed without the parent's identifier.
+            var contacts = client.Customers.Contacts(customer.CustomerNumber);
+
+            var contact = await contacts.CreateAsync(
+                new CustomerContactCreate { Name = "ZZ Probe Contact", Email = "contact@example.com" },
+                token);
+
+            Assert.True(contact.CustomerContactNumber > 0);
+            Assert.Equal("ZZ Probe Contact", contact.Name);
+
+            var renamed = await contacts.UpdateAsync(
+                contact.CustomerContactNumber,
+                new CustomerContactUpdate { Name = "ZZ Probe Contact (updated)" },
+                token);
+
+            Assert.Equal("ZZ Probe Contact (updated)", renamed.Name);
+
+            var page = await contacts.GetPageAsync(0, token);
+            Assert.Contains(page.Items, c => c.CustomerContactNumber == contact.CustomerContactNumber);
+
+            await contacts.DeleteAsync(contact.CustomerContactNumber, token);
+
+            var locations = client.Customers.DeliveryLocations(customer.CustomerNumber);
+            var location = await locations.CreateAsync(
+                new DeliveryLocationCreate { Address = "Odinsparken 4", City = "Ringsted", PostalCode = "4100" },
+                token);
+
+            Assert.True(location.DeliveryLocationNumber > 0);
+            await locations.DeleteAsync(location.DeliveryLocationNumber, token);
+        }
+        finally
+        {
+            if (customer is not null)
+            {
+                await client.Customers.DeleteAsync(customer.CustomerNumber, token);
+            }
+        }
+    }
+
     private static EconomicClient CreateClient()
     {
         var options = new EconomicOptions

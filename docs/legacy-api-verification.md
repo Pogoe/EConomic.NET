@@ -67,6 +67,9 @@ these should be re-checked on at least one other resource before being treated a
 | **enum casing is strict** | `"paymentTermsType": "Net"` is rejected; the value must be `"net"` exactly |
 | `paymentTermsType` | **required** on create, so a payment term cannot be created without it |
 | customer-group account | must be a non-barred Profit & Loss or Balance Sheet account |
+| **DELETE status varies** | `204 No Content` for customers, units and products; **`200 OK`** with a status-message body for draft invoices |
+| draft invoice requirements | `date`, `currency`, `layout`, `paymentTerms`, `customer`, `recipient`; an invoice line needs a `product` before `quantity` or `unitNetPrice` is accepted |
+| collection listings omit lines | `/invoices/drafts` items carry no `lines` array — those appear only on the single-invoice GET and the create payload |
 
 Two of these change the design:
 

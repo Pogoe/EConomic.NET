@@ -179,23 +179,29 @@ public static class WriteResponseCorrector
             return direct;
         }
 
+        // One identifier below a collection addresses an item of it, at either nesting level:
+        // /customers/{n} is a customer, /customers/{n}/contacts/{k} is a contact.
         var segments = path.Trim('/').Split('/');
-        if (segments.Length != 2 || !segments[1].StartsWith('{'))
+        if (segments.Length < 2 || !segments[^1].StartsWith('{'))
         {
             return null;
         }
 
-        return entityByCollection.TryGetValue("/" + segments[0], out var owner) ? owner : null;
+        var parent = "/" + string.Join('/', segments[..^1]);
+        return entityByCollection.TryGetValue(parent, out var owner) ? owner : null;
     }
 
+    /// <summary>
+    /// Every path whose <c>GET</c> returns a collection envelope, keyed by path. Nested collections
+    /// are included: a customer's contacts return contacts, not customers.
+    /// </summary>
     private static Dictionary<string, string> CollectionEntities(JsonObject paths, JsonObject schemas)
     {
         var entities = new Dictionary<string, string>(StringComparer.Ordinal);
 
         foreach (var (path, item) in paths)
         {
-            if (path.Contains('{', StringComparison.Ordinal)
-                || path.Count(c => c == '/') != 1
+            if (path.TrimEnd('/').EndsWith('}')
                 || item?["get"] is not JsonObject get
                 || Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } envelope
                 || schemas[envelope] is not JsonObject envelopeSchema

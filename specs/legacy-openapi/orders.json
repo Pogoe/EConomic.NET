@@ -209,7 +209,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPost"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -219,7 +219,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPost"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -285,7 +285,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPUT"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -295,7 +295,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DraftOrderPUT"
+                  "$ref": "#/components/schemas/DraftOrder"
                 }
               }
             }
@@ -1543,7 +1543,8 @@
             "maximum": 999999999,
             "x-filterable": true,
             "x-sortable": true,
-            "description": "A reference number for the order document."
+            "description": "A reference number for the order document.",
+            "nullable": true
           },
           "date": {
             "type": "string",
@@ -1565,52 +1566,62 @@
             "x-filterable": true,
             "x-sortable": true,
             "x-max-decimals": 6,
-            "description": "The exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency."
+            "description": "The exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the order currency before all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "netAmountInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the base currency of the agreement before all taxes and discounts have been applied."
+            "description": "The total order amount in the base currency of the agreement before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the order currency after all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "grossAmountInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total order amount in the base currency of the agreement after all taxes and discounts have been applied."
+            "description": "The total order amount in the base currency of the agreement after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency."
+            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total rounding error, if any, on the order in base currency."
+            "description": "The total rounding error, if any, on the order in base currency.",
+            "nullable": true
           },
           "costPriceInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The total cost of the items on the order in the base currency of the agreement."
+            "description": "The total cost of the items on the order in the base currency of the agreement.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -2212,7 +2223,8 @@
             "type": "number",
             "x-max-decimals": 6,
             "maximum": 999999999999,
-            "description": "The desired exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency. If no exchange rate is supplied, the system will get the current daily rate, unless the order currency is the same as the base currency, in which case it will be set to 100."
+            "description": "The desired exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency. If no exchange rate is supplied, the system will get the current daily rate, unless the order currency is the same as the base currency, in which case it will be set to 100.",
+            "nullable": true
           },
           "dueDate": {
             "type": "string",
@@ -2224,37 +2236,43 @@
             "type": "number",
             "readOnly": true,
             "x-max-decimals": 2,
-            "description": "The total order amount in the order currency after all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency after all taxes and discounts have been applied.",
+            "nullable": true
           },
           "marginInBaseCurrency": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency."
+            "description": "The difference between the cost price of the items on the order and the sales net order amount in base currency.",
+            "nullable": true
           },
           "marginPercentage": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative."
+            "description": "The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative.",
+            "nullable": true
           },
           "netAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total order amount in the order currency before all taxes and discounts have been applied."
+            "description": "The total order amount in the order currency before all taxes and discounts have been applied.",
+            "nullable": true
           },
           "roundingAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total rounding error, if any, on the order in base currency."
+            "description": "The total rounding error, if any, on the order in base currency.",
+            "nullable": true
           },
           "vatAmount": {
             "type": "number",
             "x-max-decimals": 2,
             "readOnly": true,
-            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount"
+            "description": "The total amount of VAT on the order in the order currency. This will have the same sign as net amount",
+            "nullable": true
           },
           "layout": {
             "type": "object",

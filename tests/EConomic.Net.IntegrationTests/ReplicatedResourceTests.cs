@@ -81,6 +81,44 @@ public class ReplicatedResourceTests
         Assert.NotEmpty(currencies);
     }
 
+    [Fact]
+    public async Task Invoices_orders_and_quotes_are_fetched_and_mapped()
+    {
+        SkipUnlessOptedIn();
+
+        // These live one segment below a namespace — /invoices/drafts rather than /invoices — so
+        // they were invisible to a discovery pass that only looked at single-segment collections.
+        var client = CreateClient();
+
+        var drafts = await FirstPageAsync(client.DraftInvoices);
+        Assert.NotEmpty(drafts);
+        Assert.All(drafts, i => Assert.True(i.DraftInvoiceNumber > 0));
+        Assert.All(drafts, i => Assert.NotNull(i.Date));
+
+        var booked = await FirstPageAsync(client.BookedInvoices);
+        Assert.NotEmpty(booked);
+        Assert.All(booked, i => Assert.True(i.BookedInvoiceNumber > 0));
+
+        var orders = await FirstPageAsync(client.DraftOrders);
+        Assert.All(orders, o => Assert.True(o.OrderNumber > 0));
+
+        var quotes = await FirstPageAsync(client.DraftQuotes);
+        Assert.All(quotes, q => Assert.True(q.QuoteNumber > 0));
+    }
+
+    [Fact]
+    public async Task Invoice_amounts_carry_their_decimals()
+    {
+        SkipUnlessOptedIn();
+
+        // netAmount comes back as 200.000000 and grossAmount as 250.00 — the schema types both as
+        // a bare "number", so they land in decimal rather than double on the public model.
+        var page = await CreateClient().BookedInvoices.WithPageSize(5).GetPageAsync(0, TestContext.Current.CancellationToken);
+
+        Assert.NotEmpty(page.Items);
+        Assert.Contains(page.Items, i => i.GrossAmount != 0m);
+    }
+
     private static async Task<IReadOnlyList<T>> FirstPageAsync<T, TFilter, TSort>(
         Querying.EconomicQuery<T, TFilter, TSort> query)
     {

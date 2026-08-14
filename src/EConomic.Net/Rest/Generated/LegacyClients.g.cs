@@ -3842,7 +3842,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerContactPOST> PostCustomersBycustomerNumberContactsAsync(int customerNumber, CustomerContactPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CustomerContact> PostCustomersBycustomerNumberContactsAsync(int customerNumber, CustomerContactPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customerNumber == null)
                 throw new System.ArgumentNullException("customerNumber");
@@ -3895,7 +3895,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContact>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -3905,7 +3905,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContact>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4015,7 +4015,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerContactPUT> PutCustomersBycustomerNumberContactsBycontactNumberAsync(int customerNumber, int contactNumber, CustomerContactPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CustomerContact> PutCustomersBycustomerNumberContactsBycontactNumberAsync(int customerNumber, int contactNumber, CustomerContactPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customerNumber == null)
                 throw new System.ArgumentNullException("customerNumber");
@@ -4072,7 +4072,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContact>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4082,7 +4082,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContact>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4210,7 +4210,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeliveryLocationPOST> PostCustomersBycustomerNumberDeliveryLocationsAsync(int customerNumber, DeliveryLocationPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DeliveryLocation> PostCustomersBycustomerNumberDeliveryLocationsAsync(int customerNumber, DeliveryLocationPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customerNumber == null)
                 throw new System.ArgumentNullException("customerNumber");
@@ -4263,7 +4263,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocation>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4273,7 +4273,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocation>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4383,7 +4383,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeliveryLocationPUT> PutCustomersBycustomerNumberDeliveryLocationsBydeliveryLocationNumberAsync(int customerNumber, int deliveryLocationNumber, DeliveryLocationPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DeliveryLocation> PutCustomersBycustomerNumberDeliveryLocationsBydeliveryLocationNumberAsync(int customerNumber, int deliveryLocationNumber, DeliveryLocationPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customerNumber == null)
                 throw new System.ArgumentNullException("customerNumber");
@@ -4440,7 +4440,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocation>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4450,7 +4450,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocation>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -6829,7 +6829,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ForBookingAnInvoice> PostInvoicesBookedAsync(ForBookingAnInvoice body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<BookedInvoiceSummary> PostInvoicesBookedAsync(ForBookingAnInvoice body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -6877,7 +6877,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<BookedInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -6887,7 +6887,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<BookedInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -6917,7 +6917,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<InvoicesForBookingAnInvoice> PutInvoicesBookedBybookWithNumberAsync(int bookWithNumber, InvoicesForBookingAnInvoice body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<BookedInvoiceSummary> PutInvoicesBookedBybookWithNumberAsync(int bookWithNumber, InvoicesForBookingAnInvoice body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (bookWithNumber == null)
                 throw new System.ArgumentNullException("bookWithNumber");
@@ -6969,7 +6969,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<InvoicesForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<BookedInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -6979,7 +6979,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<InvoicesForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<BookedInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -7177,7 +7177,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DraftInvoicePost> PostInvoicesDraftsAsync(DraftInvoicePost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DraftInvoiceSummary> PostInvoicesDraftsAsync(DraftInvoicePost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -7225,7 +7225,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoicePost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -7235,7 +7235,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoicePost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -7340,7 +7340,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DraftInvoiceUpdate> PutInvoicesDraftsBydraftInvoiceNumberAsync(int draftInvoiceNumber, DraftInvoiceUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DraftInvoiceSummary> PutInvoicesDraftsBydraftInvoiceNumberAsync(int draftInvoiceNumber, DraftInvoiceUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (draftInvoiceNumber == null)
                 throw new System.ArgumentNullException("draftInvoiceNumber");
@@ -7392,7 +7392,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -7402,7 +7402,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceSummary>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -10181,7 +10181,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<JournalVoucherPost> PostJournalsByjournalNumberVouchersAsync(int journalNumber, JournalVoucherPost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<VoucherEntry> PostJournalsByjournalNumberVouchersAsync(int journalNumber, JournalVoucherPost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (journalNumber == null)
                 throw new System.ArgumentNullException("journalNumber");
@@ -10234,7 +10234,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<JournalVoucherPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<VoucherEntry>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -10244,7 +10244,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<JournalVoucherPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<VoucherEntry>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -11267,7 +11267,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DraftOrderPost> PostOrdersDraftsAsync(DraftOrderPost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DraftOrder> PostOrdersDraftsAsync(DraftOrderPost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -11315,7 +11315,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrder>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -11325,7 +11325,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrder>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -11430,7 +11430,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DraftOrderPUT> PutOrdersDraftsByorderNumberAsync(int orderNumber, DraftOrderPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DraftOrder> PutOrdersDraftsByorderNumberAsync(int orderNumber, DraftOrderPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (orderNumber == null)
                 throw new System.ArgumentNullException("orderNumber");
@@ -11482,7 +11482,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrder>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -11492,7 +11492,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrder>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13736,7 +13736,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductPricesCreate> PostProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(string productNumber, ProductPricesCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<ProductPrice> PostProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(string productNumber, ProductPricesCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13789,7 +13789,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductPricesCreate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductPrice>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13799,7 +13799,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductPricesCreate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductPrice>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13909,7 +13909,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductPricesUpdate> PutProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(string productNumber, string currencyCode, ProductPricesUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<ProductPrice> PutProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(string productNumber, string currencyCode, ProductPricesUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13966,7 +13966,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductPricesUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductPrice>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13976,7 +13976,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductPricesUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductPrice>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -14499,7 +14499,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DraftQuotePost> PostQuotesDraftsAsync(DraftQuotePost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DraftQuote> PostQuotesDraftsAsync(DraftQuotePost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -14547,7 +14547,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuote>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -14557,7 +14557,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuote>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -14662,7 +14662,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DraftQuotePUT> PutQuotesDraftsByquoteNumberAsync(int quoteNumber, DraftQuotePUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<DraftQuote> PutQuotesDraftsByquoteNumberAsync(int quoteNumber, DraftQuotePUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (quoteNumber == null)
                 throw new System.ArgumentNullException("quoteNumber");
@@ -14714,7 +14714,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuote>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -14724,7 +14724,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuote>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -21758,7 +21758,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// The delivery location postcode.
@@ -21772,7 +21772,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// Special delivery terms that apply to.
@@ -22024,7 +22024,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// The delivery location postcode.
@@ -22038,7 +22038,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// Special delivery terms that apply to.
@@ -23472,7 +23472,7 @@ namespace EConomic.Rest.Generated
         /// A collection of booked invoices.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("collection")]
-        public System.Collections.Generic.IReadOnlyList<InvoicesBookedInvoice> Collection { get; set; } = default!;
+        public System.Collections.Generic.IReadOnlyList<BookedInvoiceSummary> Collection { get; set; } = default!;
 
         /// <summary>
         /// Information about possible actions, endpoints and resource paths related to the endpoint.
@@ -23935,7 +23935,7 @@ namespace EConomic.Rest.Generated
         /// A collection of draft invoices.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("collection")]
-        public System.Collections.Generic.IReadOnlyList<InvoicesDraftInvoice> Collection { get; set; } = default!;
+        public System.Collections.Generic.IReadOnlyList<DraftInvoiceSummary> Collection { get; set; } = default!;
 
         /// <summary>
         /// Information about possible actions, endpoints and resource paths related to the endpoint.
@@ -24020,7 +24020,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
         [System.ComponentModel.DataAnnotations.Range(double.MinValue, 999999999999D)]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// The date the invoice is due for payment. Only used if the terms of payment is of type 'duedate', in which case it is mandatory. Format according to ISO-8601 (YYYY-MM-DD).
@@ -24033,43 +24033,43 @@ namespace EConomic.Rest.Generated
         /// The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmount")]
-        public double GrossAmount { get; set; } = default!;
+        public double? GrossAmount { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmountInBaseCurrency")]
-        public double GrossAmountInBaseCurrency { get; set; } = default!;
+        public double? GrossAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmount")]
-        public double NetAmount { get; set; } = default!;
+        public double? NetAmount { get; set; } = default!;
 
         /// <summary>
         /// The total rounding error, if any, on the invoice in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roundingAmount")]
-        public double RoundingAmount { get; set; } = default!;
+        public double? RoundingAmount { get; set; } = default!;
 
         /// <summary>
         /// The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The layout used by the invoice.
@@ -24575,7 +24575,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("draftInvoiceNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int DraftInvoiceNumber { get; set; } = default!;
+        public int? DraftInvoiceNumber { get; set; } = default!;
 
         /// <summary>
         /// Invoice issue date. Format according to ISO-8601 (YYYY-MM-DD).
@@ -24596,61 +24596,61 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
         [System.ComponentModel.DataAnnotations.Range(double.MinValue, 999999999999D)]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the invoice currency before all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmount")]
-        public double NetAmount { get; set; } = default!;
+        public double? NetAmount { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the base currency of the agreement before all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmountInBaseCurrency")]
-        public double NetAmountInBaseCurrency { get; set; } = default!;
+        public double? NetAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmount")]
-        public double GrossAmount { get; set; } = default!;
+        public double? GrossAmount { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the base currency of the agreement after all taxes and discounts have been applied. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmountInBaseCurrency")]
-        public double GrossAmountInBaseCurrency { get; set; } = default!;
+        public double? GrossAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The difference between the cost price of the items on the invoice and the sales net invoice amount in base currency. For a credit note this amount will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin expressed as a percentage. If the net invoice amount is less than the cost price this number will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// The total amount of VAT on the invoice in the invoice currency. This will have the same sign as net amount
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The total rounding error, if any, on the invoice in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roundingAmount")]
-        public double RoundingAmount { get; set; } = default!;
+        public double? RoundingAmount { get; set; } = default!;
 
         /// <summary>
         /// The total cost of the items on the invoice in the base currency of the agreement.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costPriceInBaseCurrency")]
-        public double CostPriceInBaseCurrency { get; set; } = default!;
+        public double? CostPriceInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The date the invoice is due for payment. Only used if the terms of payment is of type 'duedate', in which case it is mandatory. Format according to ISO-8601 (YYYY-MM-DD).
@@ -24754,7 +24754,7 @@ namespace EConomic.Rest.Generated
         /// The number for the invoice to be booked with. Optional.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("bookWithNumber")]
-        public int BookWithNumber { get; set; } = default!;
+        public int? BookWithNumber { get; set; } = default!;
 
         /// <summary>
         /// Optional. Sets whether invoice should be sent via e-invoicing when booking.
@@ -24891,7 +24891,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class InvoicesBookedInvoice
+    internal partial class BookedInvoiceSummary
     {
 
         /// <summary>
@@ -25160,7 +25160,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class InvoicesDraftInvoice
+    internal partial class DraftInvoiceSummary
     {
 
         /// <summary>
@@ -25471,7 +25471,7 @@ namespace EConomic.Rest.Generated
         /// The number for the invoice to be booked with. Optional.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("bookWithNumber")]
-        public int BookWithNumber { get; set; } = default!;
+        public int? BookWithNumber { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -26959,7 +26959,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, 999999999D)]
-        public double VoucherNumber { get; set; } = default!;
+        public double? VoucherNumber { get; set; } = default!;
 
         /// <summary>
         /// The accounting year the voucher belongs to. Together with the voucherNumber it is a unique identifier for the voucher.
@@ -28103,7 +28103,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("orderNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int OrderNumber { get; set; } = default!;
+        public int? OrderNumber { get; set; } = default!;
 
         /// <summary>
         /// Order issue date. Format according to ISO-8601 (YYYY-MM-DD).
@@ -28123,61 +28123,61 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the order currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the order currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// The total order amount in the order currency before all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmount")]
-        public double NetAmount { get; set; } = default!;
+        public double? NetAmount { get; set; } = default!;
 
         /// <summary>
         /// The total order amount in the base currency of the agreement before all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmountInBaseCurrency")]
-        public double NetAmountInBaseCurrency { get; set; } = default!;
+        public double? NetAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The total order amount in the order currency after all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmount")]
-        public double GrossAmount { get; set; } = default!;
+        public double? GrossAmount { get; set; } = default!;
 
         /// <summary>
         /// The total order amount in the base currency of the agreement after all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmountInBaseCurrency")]
-        public double GrossAmountInBaseCurrency { get; set; } = default!;
+        public double? GrossAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The difference between the cost price of the items on the order and the sales net order amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// The total amount of VAT on the order in the order currency. This will have the same sign as net amount
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The total rounding error, if any, on the order in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roundingAmount")]
-        public double RoundingAmount { get; set; } = default!;
+        public double? RoundingAmount { get; set; } = default!;
 
         /// <summary>
         /// The total cost of the items on the order in the base currency of the agreement.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costPriceInBaseCurrency")]
-        public double CostPriceInBaseCurrency { get; set; } = default!;
+        public double? CostPriceInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The date the order, is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type 'duedate'.
@@ -28347,7 +28347,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
         [System.ComponentModel.DataAnnotations.Range(double.MinValue, 999999999999D)]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// The date the order is due for payment. This property is only used if the terms of payment is of type 'duedate', in which case it is a mandatory property. Format according to ISO-8601 (YYYY-MM-DD).
@@ -28360,37 +28360,37 @@ namespace EConomic.Rest.Generated
         /// The total order amount in the order currency after all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmount")]
-        public double GrossAmount { get; set; } = default!;
+        public double? GrossAmount { get; set; } = default!;
 
         /// <summary>
         /// The difference between the cost price of the items on the order and the sales net order amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin expressed as a percentage. If the net order amount is less than the cost price this number will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// The total order amount in the order currency before all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmount")]
-        public double NetAmount { get; set; } = default!;
+        public double? NetAmount { get; set; } = default!;
 
         /// <summary>
         /// The total rounding error, if any, on the order in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roundingAmount")]
-        public double RoundingAmount { get; set; } = default!;
+        public double? RoundingAmount { get; set; } = default!;
 
         /// <summary>
         /// The total amount of VAT on the order in the order currency. This will have the same sign as net amount
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The layout used by the order.
@@ -31299,7 +31299,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quoteNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int QuoteNumber { get; set; } = default!;
+        public int? QuoteNumber { get; set; } = default!;
 
         /// <summary>
         /// quote issue date. Format according to ISO-8601 (YYYY-MM-DD).
@@ -31319,61 +31319,61 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the quote currency and the base currency of the agreement. The exchange rate expresses how much it will cost in base currency to buy 100 units of the quote currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// The total quote amount in the quote currency before all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmount")]
-        public double NetAmount { get; set; } = default!;
+        public double? NetAmount { get; set; } = default!;
 
         /// <summary>
         /// The total quote amount in the base currency of the agreement before all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmountInBaseCurrency")]
-        public double NetAmountInBaseCurrency { get; set; } = default!;
+        public double? NetAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The total quote amount in the quote currency after all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmount")]
-        public double GrossAmount { get; set; } = default!;
+        public double? GrossAmount { get; set; } = default!;
 
         /// <summary>
         /// The total quote amount in the base currency of the agreement after all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmountInBaseCurrency")]
-        public double GrossAmountInBaseCurrency { get; set; } = default!;
+        public double? GrossAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The difference between the cost price of the items on the quote and the sales net quote amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin expressed as a percentage. If the net quote amount is less than the cost price this number will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// The total amount of VAT on the quote in the quote currency. This will have the same sign as net amount
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The total rounding error, if any, on the quote in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roundingAmount")]
-        public double RoundingAmount { get; set; } = default!;
+        public double? RoundingAmount { get; set; } = default!;
 
         /// <summary>
         /// The total cost of the items on the quote in the base currency of the agreement.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costPriceInBaseCurrency")]
-        public double CostPriceInBaseCurrency { get; set; } = default!;
+        public double? CostPriceInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The date the quote, is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type 'duedate'.
@@ -31543,7 +31543,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
         [System.ComponentModel.DataAnnotations.Range(double.MinValue, 999999999999D)]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// The date the quote is due for payment. This property is only used if the terms of payment is of type 'duedate', in which case it is a mandatory property. Format according to ISO-8601 (YYYY-MM-DD).
@@ -31556,37 +31556,37 @@ namespace EConomic.Rest.Generated
         /// The total quote amount in the quote currency after all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossAmount")]
-        public double GrossAmount { get; set; } = default!;
+        public double? GrossAmount { get; set; } = default!;
 
         /// <summary>
         /// The difference between the cost price of the items on the quote and the sales net quote amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin expressed as a percentage. If the net quote amount is less than the cost price this number will be negative.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// The total quote amount in the quote currency before all taxes and discounts have been applied.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netAmount")]
-        public double NetAmount { get; set; } = default!;
+        public double? NetAmount { get; set; } = default!;
 
         /// <summary>
         /// The total rounding error, if any, on the quote in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roundingAmount")]
-        public double RoundingAmount { get; set; } = default!;
+        public double? RoundingAmount { get; set; } = default!;
 
         /// <summary>
         /// The total amount of VAT on the quote in the quote currency. This will have the same sign as net amount
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The layout used by the quote.

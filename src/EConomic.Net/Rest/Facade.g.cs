@@ -1091,6 +1091,18 @@ public sealed class CustomerResource
         return target;
     }
 
+    /// <summary>The <c>contacts</c> belonging to one customer.</summary>
+    /// <param name="customerNumber">The owning customer.</param>
+    /// <returns>The nested collection, scoped to that customer.</returns>
+    public CustomerContactResource Contacts(int customerNumber) =>
+        new(_httpClient, customerNumber);
+
+    /// <summary>The <c>delivery-locations</c> belonging to one customer.</summary>
+    /// <param name="customerNumber">The owning customer.</param>
+    /// <returns>The nested collection, scoped to that customer.</returns>
+    public DeliveryLocationResource DeliveryLocations(int customerNumber) =>
+        new(_httpClient, customerNumber);
+
     private static Customer FromGenerated(Generated.Customer source) => new()
     {
         Address = source.Address,
@@ -1313,6 +1325,710 @@ internal sealed class EmployeePageSource(Generated.EmployeesClient client)
 }
 
 /// <summary>
+/// A resource from <c>/invoices/booked</c>.
+/// </summary>
+public sealed record BookedInvoiceSummary
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>sent</c> field.</summary>
+    public System.Uri? Sent { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/booked</c> and maps them to <see cref="BookedInvoiceSummary"/>.</summary>
+internal sealed class BookedInvoiceSummaryPageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<BookedInvoiceSummary>
+{
+    public async Task<EconomicPage<BookedInvoiceSummary>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesBookedAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/booked").ConfigureAwait(false);
+
+        var items = new List<BookedInvoiceSummary>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<BookedInvoiceSummary>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static BookedInvoiceSummary Map(Generated.BookedInvoiceSummary source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Sent = source.Sent,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/invoices/drafts</c>.
+/// </summary>
+public sealed record DraftInvoiceSummary
+{
+    /// <summary>The <c>draftInvoiceNumber</c> field.</summary>
+    public int DraftInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/drafts</c> and maps them to <see cref="DraftInvoiceSummary"/>.</summary>
+internal sealed class DraftInvoiceSummaryPageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<DraftInvoiceSummary>
+{
+    public async Task<EconomicPage<DraftInvoiceSummary>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesDraftsAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/drafts").ConfigureAwait(false);
+
+        var items = new List<DraftInvoiceSummary>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<DraftInvoiceSummary>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static DraftInvoiceSummary Map(Generated.DraftInvoiceSummary source) => new()
+    {
+        DraftInvoiceNumber = source.DraftInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/invoices/not-due</c>.
+/// </summary>
+public sealed record NotDueInvoice
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>sent</c> field.</summary>
+    public System.Uri? Sent { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/not-due</c> and maps them to <see cref="NotDueInvoice"/>.</summary>
+internal sealed class NotDueInvoicePageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<NotDueInvoice>
+{
+    public async Task<EconomicPage<NotDueInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesNotDueAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/not-due").ConfigureAwait(false);
+
+        var items = new List<NotDueInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<NotDueInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static NotDueInvoice Map(Generated.NotDueInvoice source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Sent = source.Sent,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/invoices/overdue</c>.
+/// </summary>
+public sealed record OverdueInvoice
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>sent</c> field.</summary>
+    public System.Uri? Sent { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/overdue</c> and maps them to <see cref="OverdueInvoice"/>.</summary>
+internal sealed class OverdueInvoicePageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<OverdueInvoice>
+{
+    public async Task<EconomicPage<OverdueInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesOverdueAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/overdue").ConfigureAwait(false);
+
+        var items = new List<OverdueInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<OverdueInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static OverdueInvoice Map(Generated.OverdueInvoice source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Sent = source.Sent,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/invoices/paid</c>.
+/// </summary>
+public sealed record PaidInvoice
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>sent</c> field.</summary>
+    public System.Uri? Sent { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/paid</c> and maps them to <see cref="PaidInvoice"/>.</summary>
+internal sealed class PaidInvoicePageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<PaidInvoice>
+{
+    public async Task<EconomicPage<PaidInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesPaidAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/paid").ConfigureAwait(false);
+
+        var items = new List<PaidInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<PaidInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static PaidInvoice Map(Generated.PaidInvoice source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Sent = source.Sent,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/invoices/sent</c>.
+/// </summary>
+public sealed record SentInvoice
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+
+    /// <summary>The <c>invoice</c> field.</summary>
+    public EconomicReference? Invoice { get; init; }
+
+    /// <summary>The <c>status</c> field.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>The <c>sendBy</c> field.</summary>
+    public string? SendBy { get; init; }
+
+    /// <summary>The <c>creationDate</c> field.</summary>
+    public DateOnly? CreationDate { get; init; }
+
+    /// <summary>The <c>createdBy</c> field.</summary>
+    public string? CreatedBy { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/sent</c> and maps them to <see cref="SentInvoice"/>.</summary>
+internal sealed class SentInvoicePageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<SentInvoice>
+{
+    public async Task<EconomicPage<SentInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesSentAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/sent").ConfigureAwait(false);
+
+        var items = new List<SentInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<SentInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static SentInvoice Map(Generated.SentInvoice source) => new()
+    {
+        Id = source.Id,
+        Invoice = Reference(source.Invoice?.BookedInvoiceNumber, source.Invoice?.Self),
+        Status = source.Status,
+        SendBy = source.SendBy.ToString(),
+        CreationDate = source.CreationDate == default ? null : source.CreationDate,
+        CreatedBy = source.CreatedBy,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/invoices/unpaid</c>.
+/// </summary>
+public sealed record UnpaidInvoice
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>sent</c> field.</summary>
+    public System.Uri? Sent { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/invoices/unpaid</c> and maps them to <see cref="UnpaidInvoice"/>.</summary>
+internal sealed class UnpaidInvoicePageSource(Generated.InvoicesClient client)
+    : IEconomicPageSource<UnpaidInvoice>
+{
+    public async Task<EconomicPage<UnpaidInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetInvoicesUnpaidAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /invoices/unpaid").ConfigureAwait(false);
+
+        var items = new List<UnpaidInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<UnpaidInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static UnpaidInvoice Map(Generated.UnpaidInvoice source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Sent = source.Sent,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
 /// A resource from <c>/journals</c>.
 /// </summary>
 public sealed record Journal
@@ -1413,6 +2129,338 @@ internal sealed class LayoutPageSource(Generated.LayoutsClient client)
         LayoutNumber = source.LayoutNumber,
         Name = source.Name,
         Deleted = source.Deleted,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/orders/archived</c>.
+/// </summary>
+public sealed record ArchivedOrder
+{
+    /// <summary>The <c>orderNumber</c> field.</summary>
+    public int OrderNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/orders/archived</c> and maps them to <see cref="ArchivedOrder"/>.</summary>
+internal sealed class ArchivedOrderPageSource(Generated.OrdersClient client)
+    : IEconomicPageSource<ArchivedOrder>
+{
+    public async Task<EconomicPage<ArchivedOrder>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetOrdersArchivedAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /orders/archived").ConfigureAwait(false);
+
+        var items = new List<ArchivedOrder>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<ArchivedOrder>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static ArchivedOrder Map(Generated.ArchivedOrder source) => new()
+    {
+        OrderNumber = source.OrderNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/orders/drafts</c>.
+/// </summary>
+public sealed record DraftOrder
+{
+    /// <summary>The <c>orderNumber</c> field.</summary>
+    public int OrderNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/orders/drafts</c> and maps them to <see cref="DraftOrder"/>.</summary>
+internal sealed class DraftOrderPageSource(Generated.OrdersClient client)
+    : IEconomicPageSource<DraftOrder>
+{
+    public async Task<EconomicPage<DraftOrder>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetOrdersDraftsAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /orders/drafts").ConfigureAwait(false);
+
+        var items = new List<DraftOrder>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<DraftOrder>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static DraftOrder Map(Generated.DraftOrder source) => new()
+    {
+        OrderNumber = source.OrderNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/orders/sent</c>.
+/// </summary>
+public sealed record SentOrder
+{
+    /// <summary>The <c>orderNumber</c> field.</summary>
+    public int OrderNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/orders/sent</c> and maps them to <see cref="SentOrder"/>.</summary>
+internal sealed class SentOrderPageSource(Generated.OrdersClient client)
+    : IEconomicPageSource<SentOrder>
+{
+    public async Task<EconomicPage<SentOrder>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetOrdersSentAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /orders/sent").ConfigureAwait(false);
+
+        var items = new List<SentOrder>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<SentOrder>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static SentOrder Map(Generated.SentOrder source) => new()
+    {
+        OrderNumber = source.OrderNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
         Self = source.Self,
     };
 
@@ -2286,6 +3334,338 @@ public sealed class ProductResource
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
+/// A resource from <c>/quotes/archived</c>.
+/// </summary>
+public sealed record ArchivedQuote
+{
+    /// <summary>The <c>quoteNumber</c> field.</summary>
+    public int QuoteNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/quotes/archived</c> and maps them to <see cref="ArchivedQuote"/>.</summary>
+internal sealed class ArchivedQuotePageSource(Generated.QuotesClient client)
+    : IEconomicPageSource<ArchivedQuote>
+{
+    public async Task<EconomicPage<ArchivedQuote>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetQuotesArchivedAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /quotes/archived").ConfigureAwait(false);
+
+        var items = new List<ArchivedQuote>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<ArchivedQuote>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static ArchivedQuote Map(Generated.ArchivedQuote source) => new()
+    {
+        QuoteNumber = source.QuoteNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/quotes/drafts</c>.
+/// </summary>
+public sealed record DraftQuote
+{
+    /// <summary>The <c>quoteNumber</c> field.</summary>
+    public int QuoteNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/quotes/drafts</c> and maps them to <see cref="DraftQuote"/>.</summary>
+internal sealed class DraftQuotePageSource(Generated.QuotesClient client)
+    : IEconomicPageSource<DraftQuote>
+{
+    public async Task<EconomicPage<DraftQuote>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetQuotesDraftsAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /quotes/drafts").ConfigureAwait(false);
+
+        var items = new List<DraftQuote>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<DraftQuote>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static DraftQuote Map(Generated.DraftQuote source) => new()
+    {
+        QuoteNumber = source.QuoteNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A resource from <c>/quotes/sent</c>.
+/// </summary>
+public sealed record SentQuote
+{
+    /// <summary>The <c>quoteNumber</c> field.</summary>
+    public int QuoteNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/quotes/sent</c> and maps them to <see cref="SentQuote"/>.</summary>
+internal sealed class SentQuotePageSource(Generated.QuotesClient client)
+    : IEconomicPageSource<SentQuote>
+{
+    public async Task<EconomicPage<SentQuote>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetQuotesSentAsync(
+                request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /quotes/sent").ConfigureAwait(false);
+
+        var items = new List<SentQuote>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<SentQuote>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static SentQuote Map(Generated.SentQuote source) => new()
+    {
+        QuoteNumber = source.QuoteNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
 }
 
 /// <summary>
@@ -3204,6 +4584,576 @@ internal sealed class VatZonePageSource(Generated.VatZonesClient client)
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
 }
+
+/// <summary>
+/// A resource from <c>/customers/{customerNumber}/contacts</c>.
+/// </summary>
+public sealed record CustomerContact
+{
+    /// <summary>The <c>customerContactNumber</c> field.</summary>
+    public int CustomerContactNumber { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>phone</c> field.</summary>
+    public string? Phone { get; init; }
+
+    /// <summary>The <c>eInvoiceId</c> field.</summary>
+    public string? EInvoiceId { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public string? Notes { get; init; }
+
+    /// <summary>The <c>deleted</c> field.</summary>
+    public bool Deleted { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/customers/{customerNumber}/contacts</c> and maps them to <see cref="CustomerContact"/>.</summary>
+internal sealed class CustomerContactPageSource(Generated.CustomersClient client, int customerNumber)
+    : IEconomicPageSource<CustomerContact>
+{
+    public async Task<EconomicPage<CustomerContact>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetCustomersBycustomerNumberContactsAsync(
+                customerNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /customers/{customerNumber}/contacts").ConfigureAwait(false);
+
+        var items = new List<CustomerContact>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<CustomerContact>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static CustomerContact Map(Generated.CustomerContact source) => new()
+    {
+        CustomerContactNumber = source.CustomerContactNumber,
+        Email = source.Email,
+        Name = source.Name,
+        Phone = source.Phone,
+        EInvoiceId = source.EInvoiceId,
+        Notes = source.Notes,
+        Deleted = source.Deleted,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        SortKey = source.SortKey,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>CustomerContact</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record CustomerContactCreate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>eInvoiceId</c> field.</summary>
+    public string? EInvoiceId { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public string? Notes { get; init; }
+
+    /// <summary>The <c>phone</c> field.</summary>
+    public string? Phone { get; init; }
+}
+
+/// <summary>
+/// The <c>CustomerContact</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record CustomerContactUpdate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>eInvoiceId</c> field.</summary>
+    public string? EInvoiceId { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public string? Notes { get; init; }
+
+    /// <summary>The <c>phone</c> field.</summary>
+    public string? Phone { get; init; }
+}
+
+/// <summary>
+/// The <c>/customers/{customerNumber}/contacts</c> collection, scoped to one customer.
+/// </summary>
+public sealed class CustomerContactResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomersClient _client;
+    private readonly int _customerNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="customerNumber">The owning customer.</param>
+    public CustomerContactResource(System.Net.Http.HttpClient httpClient, int customerNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomersClient(httpClient);
+        _customerNumber = customerNumber;
+    }
+
+    private EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> Query => new(new CustomerContactPageSource(_client, _customerNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerContactFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<CustomerContact> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<CustomerContact>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a customerContact.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<CustomerContact> CreateAsync(CustomerContactCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostCustomersBycustomerNumberContactsAsync(_customerNumber, ToGenerated(item), cancellationToken),
+            "POST /customers/{customerNumber}/contacts").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing customerContact.</summary>
+    /// <param name="customerContactNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>This replaces rather than patches: a property left unset is cleared.</remarks>
+    public async System.Threading.Tasks.Task<CustomerContact> UpdateAsync(int customerContactNumber, CustomerContactUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutCustomersBycustomerNumberContactsBycontactNumberAsync(_customerNumber, customerContactNumber, ToGenerated(item, customerContactNumber), cancellationToken),
+            "PUT /customers/{customerNumber}/contacts/{customerContactNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a customerContact.</summary>
+    /// <param name="customerContactNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    public System.Threading.Tasks.Task DeleteAsync(int customerContactNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"customers/{_customerNumber}/contacts/{customerContactNumber}"),
+            cancellationToken);
+
+    private static Generated.CustomerContactPOST ToGenerated(CustomerContactCreate source)
+    {
+        var target = new Generated.CustomerContactPOST
+        {
+            Email = source.Email!,
+            Name = source.Name,
+            Phone = source.Phone!,
+            EInvoiceId = source.EInvoiceId!,
+            Notes = source.Notes!,
+        };
+
+        if (source.CustomerNumber is { } customerNumber)
+        {
+            target.Customer = new() { CustomerNumber = customerNumber };
+        }
+
+        return target;
+    }
+
+    private static Generated.CustomerContactPUT ToGenerated(CustomerContactUpdate source, int customerContactNumber)
+    {
+        var target = new Generated.CustomerContactPUT
+        {
+            CustomerContactNumber = customerContactNumber,
+            Email = source.Email!,
+            Name = source.Name,
+            Phone = source.Phone!,
+            EInvoiceId = source.EInvoiceId!,
+            Notes = source.Notes!,
+        };
+
+        if (source.CustomerNumber is { } customerNumber)
+        {
+            target.Customer = new() { CustomerNumber = customerNumber };
+        }
+
+        return target;
+    }
+
+    private static CustomerContact FromGenerated(Generated.CustomerContact source) => new()
+    {
+        CustomerContactNumber = source.CustomerContactNumber,
+        Email = source.Email,
+        Name = source.Name,
+        Phone = source.Phone,
+        EInvoiceId = source.EInvoiceId,
+        Notes = source.Notes,
+        Deleted = source.Deleted,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        SortKey = source.SortKey,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
+/// A resource from <c>/customers/{customerNumber}/delivery-locations</c>.
+/// </summary>
+public sealed record DeliveryLocation
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryLocationNumber</c> field.</summary>
+    public int DeliveryLocationNumber { get; init; }
+
+    /// <summary>The <c>postalCode</c> field.</summary>
+    public string? PostalCode { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>termsOfDelivery</c> field.</summary>
+    public string? TermsOfDelivery { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/customers/{customerNumber}/delivery-locations</c> and maps them to <see cref="DeliveryLocation"/>.</summary>
+internal sealed class DeliveryLocationPageSource(Generated.CustomersClient client, int customerNumber)
+    : IEconomicPageSource<DeliveryLocation>
+{
+    public async Task<EconomicPage<DeliveryLocation>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetCustomersBycustomerNumberDeliveryLocationsAsync(
+                customerNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /customers/{customerNumber}/delivery-locations").ConfigureAwait(false);
+
+        var items = new List<DeliveryLocation>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<DeliveryLocation>(items, request.PageIndex, request.PageSize);
+    }
+
+    private static DeliveryLocation Map(Generated.DeliveryLocation source) => new()
+    {
+        Address = source.Address,
+        City = source.City,
+        Country = source.Country,
+        DeliveryLocationNumber = source.DeliveryLocationNumber,
+        PostalCode = source.PostalCode,
+        SortKey = source.SortKey,
+        TermsOfDelivery = source.TermsOfDelivery,
+        Barred = source.Barred,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>DeliveryLocation</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record DeliveryLocationCreate
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>postalCode</c> field.</summary>
+    public string? PostalCode { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int? SortKey { get; init; }
+
+    /// <summary>The <c>termsOfDelivery</c> field.</summary>
+    public string? TermsOfDelivery { get; init; }
+}
+
+/// <summary>
+/// The <c>DeliveryLocation</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record DeliveryLocationUpdate
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>postalCode</c> field.</summary>
+    public string? PostalCode { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int? SortKey { get; init; }
+
+    /// <summary>The <c>termsOfDelivery</c> field.</summary>
+    public string? TermsOfDelivery { get; init; }
+}
+
+/// <summary>
+/// The <c>/customers/{customerNumber}/delivery-locations</c> collection, scoped to one customer.
+/// </summary>
+public sealed class DeliveryLocationResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomersClient _client;
+    private readonly int _customerNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="customerNumber">The owning customer.</param>
+    public DeliveryLocationResource(System.Net.Http.HttpClient httpClient, int customerNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomersClient(httpClient);
+        _customerNumber = customerNumber;
+    }
+
+    private EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> Query => new(new DeliveryLocationPageSource(_client, _customerNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> Where(System.Linq.Expressions.Expression<System.Func<DeliveryLocationFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<DeliveryLocation> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<DeliveryLocation>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a deliveryLocation.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<DeliveryLocation> CreateAsync(DeliveryLocationCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostCustomersBycustomerNumberDeliveryLocationsAsync(_customerNumber, ToGenerated(item), cancellationToken),
+            "POST /customers/{customerNumber}/delivery-locations").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing deliveryLocation.</summary>
+    /// <param name="deliveryLocationNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>This replaces rather than patches: a property left unset is cleared.</remarks>
+    public async System.Threading.Tasks.Task<DeliveryLocation> UpdateAsync(int deliveryLocationNumber, DeliveryLocationUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutCustomersBycustomerNumberDeliveryLocationsBydeliveryLocationNumberAsync(_customerNumber, deliveryLocationNumber, ToGenerated(item, deliveryLocationNumber), cancellationToken),
+            "PUT /customers/{customerNumber}/delivery-locations/{deliveryLocationNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a deliveryLocation.</summary>
+    /// <param name="deliveryLocationNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    public System.Threading.Tasks.Task DeleteAsync(int deliveryLocationNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"customers/{_customerNumber}/delivery-locations/{deliveryLocationNumber}"),
+            cancellationToken);
+
+    private static Generated.DeliveryLocationPOST ToGenerated(DeliveryLocationCreate source)
+    {
+        var target = new Generated.DeliveryLocationPOST
+        {
+            Address = source.Address!,
+            City = source.City!,
+            Country = source.Country!,
+            PostalCode = source.PostalCode!,
+            TermsOfDelivery = source.TermsOfDelivery!,
+            Barred = source.Barred,
+        };
+
+        if (source.SortKey is { } sortKey)
+        {
+            target.SortKey = sortKey;
+        }
+
+        if (source.CustomerNumber is { } customerNumber)
+        {
+            target.Customer = new() { CustomerNumber = customerNumber };
+        }
+
+        return target;
+    }
+
+    private static Generated.DeliveryLocationPUT ToGenerated(DeliveryLocationUpdate source, int deliveryLocationNumber)
+    {
+        var target = new Generated.DeliveryLocationPUT
+        {
+            DeliveryLocationNumber = deliveryLocationNumber,
+            Address = source.Address!,
+            City = source.City!,
+            Country = source.Country!,
+            PostalCode = source.PostalCode!,
+            TermsOfDelivery = source.TermsOfDelivery!,
+            Barred = source.Barred,
+        };
+
+        if (source.SortKey is { } sortKey)
+        {
+            target.SortKey = sortKey;
+        }
+
+        if (source.CustomerNumber is { } customerNumber)
+        {
+            target.Customer = new() { CustomerNumber = customerNumber };
+        }
+
+        return target;
+    }
+
+    private static DeliveryLocation FromGenerated(Generated.DeliveryLocation source) => new()
+    {
+        Address = source.Address,
+        City = source.City,
+        Country = source.Country,
+        DeliveryLocationNumber = source.DeliveryLocationNumber,
+        PostalCode = source.PostalCode,
+        SortKey = source.SortKey,
+        TermsOfDelivery = source.TermsOfDelivery,
+        Barred = source.Barred,
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
 }
 
 namespace EConomic
@@ -3248,6 +5198,34 @@ namespace EConomic
         public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> Employees =>
             new(new EmployeePageSource(new Generated.EmployeesClient(HttpClient)));
 
+        /// <summary><c>/invoices/booked</c>, as a composable query.</summary>
+        public EconomicQuery<BookedInvoiceSummary, BookedInvoiceSummaryFilter, BookedInvoiceSummarySort> BookedInvoices =>
+            new(new BookedInvoiceSummaryPageSource(new Generated.InvoicesClient(HttpClient)));
+
+        /// <summary><c>/invoices/drafts</c>, as a composable query.</summary>
+        public EconomicQuery<DraftInvoiceSummary, DraftInvoiceSummaryFilter, DraftInvoiceSummarySort> DraftInvoices =>
+            new(new DraftInvoiceSummaryPageSource(new Generated.InvoicesClient(HttpClient)));
+
+        /// <summary><c>/invoices/not-due</c>, as a composable query.</summary>
+        public EconomicQuery<NotDueInvoice, NotDueInvoiceFilter, NotDueInvoiceSort> NotDueInvoices =>
+            new(new NotDueInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+
+        /// <summary><c>/invoices/overdue</c>, as a composable query.</summary>
+        public EconomicQuery<OverdueInvoice, OverdueInvoiceFilter, OverdueInvoiceSort> OverdueInvoices =>
+            new(new OverdueInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+
+        /// <summary><c>/invoices/paid</c>, as a composable query.</summary>
+        public EconomicQuery<PaidInvoice, PaidInvoiceFilter, PaidInvoiceSort> PaidInvoices =>
+            new(new PaidInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+
+        /// <summary><c>/invoices/sent</c>, as a composable query.</summary>
+        public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> SentInvoices =>
+            new(new SentInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+
+        /// <summary><c>/invoices/unpaid</c>, as a composable query.</summary>
+        public EconomicQuery<UnpaidInvoice, UnpaidInvoiceFilter, UnpaidInvoiceSort> UnpaidInvoices =>
+            new(new UnpaidInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+
         /// <summary><c>/journals</c>, as a composable query.</summary>
         public EconomicQuery<Journal, JournalFilter, JournalSort> Journals =>
             new(new JournalPageSource(new Generated.JournalsClient(HttpClient)));
@@ -3255,6 +5233,18 @@ namespace EConomic
         /// <summary><c>/layouts</c>, as a composable query.</summary>
         public EconomicQuery<Layout, LayoutFilter, LayoutSort> Layouts =>
             new(new LayoutPageSource(new Generated.LayoutsClient(HttpClient)));
+
+        /// <summary><c>/orders/archived</c>, as a composable query.</summary>
+        public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> ArchivedOrders =>
+            new(new ArchivedOrderPageSource(new Generated.OrdersClient(HttpClient)));
+
+        /// <summary><c>/orders/drafts</c>, as a composable query.</summary>
+        public EconomicQuery<DraftOrder, DraftOrderFilter, DraftOrderSort> DraftOrders =>
+            new(new DraftOrderPageSource(new Generated.OrdersClient(HttpClient)));
+
+        /// <summary><c>/orders/sent</c>, as a composable query.</summary>
+        public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> SentOrders =>
+            new(new SentOrderPageSource(new Generated.OrdersClient(HttpClient)));
 
         /// <summary><c>/payment-terms</c>, as a queryable and writable resource.</summary>
         public PaymentTermsResource PaymentTerms =>
@@ -3271,6 +5261,18 @@ namespace EConomic
         /// <summary><c>/products</c>, as a queryable and writable resource.</summary>
         public ProductResource Products =>
             new(HttpClient);
+
+        /// <summary><c>/quotes/archived</c>, as a composable query.</summary>
+        public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> ArchivedQuotes =>
+            new(new ArchivedQuotePageSource(new Generated.QuotesClient(HttpClient)));
+
+        /// <summary><c>/quotes/drafts</c>, as a composable query.</summary>
+        public EconomicQuery<DraftQuote, DraftQuoteFilter, DraftQuoteSort> DraftQuotes =>
+            new(new DraftQuotePageSource(new Generated.QuotesClient(HttpClient)));
+
+        /// <summary><c>/quotes/sent</c>, as a composable query.</summary>
+        public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> SentQuotes =>
+            new(new SentQuotePageSource(new Generated.QuotesClient(HttpClient)));
 
         /// <summary><c>/suppliers</c>, as a queryable and writable resource.</summary>
         public SupplierResource Suppliers =>
