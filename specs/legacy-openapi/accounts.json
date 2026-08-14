@@ -74,6 +74,23 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "accountNumber",
+          "accountType",
+          "balance",
+          "barred",
+          "blockDirectEntries",
+          "debitCredit",
+          "name"
+        ],
+        "x-sortable-fields": [
+          "accountNumber",
+          "accountType",
+          "balance",
+          "blockDirectEntries",
+          "debitCredit",
+          "name"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounts"
         }
@@ -177,6 +194,18 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "fromDate",
+          "toDate",
+          "closed",
+          "year"
+        ],
+        "x-sortable-fields": [
+          "fromDate",
+          "toDate",
+          "closed",
+          "year"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounts-accountnumber-accounting-years"
@@ -298,6 +327,48 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
+        "x-sortable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounts-accountnumber-accounting-years-accountingyear-entries"
         }
@@ -375,6 +446,16 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "fromDate",
+          "toDate",
+          "closed"
+        ],
+        "x-sortable-fields": [
+          "fromDate",
+          "toDate",
+          "closed"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounts-accountnumber-accounting-years-accountingyear-periods"
@@ -511,6 +592,48 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
+        "x-sortable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounts-accountnumber-accounting-years-accountingyear-periods-accountingyearperiod-entries"

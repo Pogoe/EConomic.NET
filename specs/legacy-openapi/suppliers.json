@@ -74,6 +74,22 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "address",
+          "bankAccount",
+          "barred",
+          "city",
+          "corporateIdentificationNumber",
+          "country",
+          "currency",
+          "defaultInvoiceText",
+          "email",
+          "name",
+          "supplierGroup.supplierGroupNumber",
+          "supplierNumber",
+          "zip"
+        ],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-suppliers"
         }

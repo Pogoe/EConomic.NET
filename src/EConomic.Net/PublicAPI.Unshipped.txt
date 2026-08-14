@@ -328,7 +328,6 @@ EConomic.Rest.AccountingYearCreate.ToDate.get -> System.DateOnly
 EConomic.Rest.AccountingYearCreate.ToDate.init -> void
 EConomic.Rest.AccountingYearFilter
 EConomic.Rest.AccountingYearFilter.AccountingYearFilter() -> void
-EConomic.Rest.AccountingYearFilter.Closed.get -> EConomic.Querying.BooleanField!
 EConomic.Rest.AccountingYearFilter.FromDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
 EConomic.Rest.AccountingYearFilter.ToDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
 EConomic.Rest.AccountingYearFilter.Year.get -> EConomic.Querying.TextField!
@@ -345,7 +344,6 @@ EConomic.Rest.AccountingYearResource.WhereRaw(string! filter) -> EConomic.Queryi
 EConomic.Rest.AccountingYearResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
 EConomic.Rest.AccountingYearSort
 EConomic.Rest.AccountingYearSort.AccountingYearSort() -> void
-EConomic.Rest.AccountingYearSort.Closed.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountingYearSort.FromDate.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountingYearSort.ToDate.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountingYearSort.Year.get -> EConomic.Querying.EconomicSortField!
@@ -560,7 +558,6 @@ EConomic.Rest.ArchivedOrderSort.NotesHeading.get -> EConomic.Querying.EconomicSo
 EConomic.Rest.ArchivedOrderSort.NotesTextLine1.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedOrderSort.NotesTextLine2.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedOrderSort.OrderNumber.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.ArchivedOrderSort.PaymentTermsNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedOrderSort.RecipientAddress.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedOrderSort.RecipientCity.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedOrderSort.RecipientCountry.get -> EConomic.Querying.EconomicSortField!
@@ -767,7 +764,6 @@ EConomic.Rest.ArchivedQuoteSort.ExchangeRate.get -> EConomic.Querying.EconomicSo
 EConomic.Rest.ArchivedQuoteSort.NotesHeading.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedQuoteSort.NotesTextLine1.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedQuoteSort.NotesTextLine2.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.ArchivedQuoteSort.PaymentTermsNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedQuoteSort.QuoteNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedQuoteSort.RecipientAddress.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ArchivedQuoteSort.RecipientCity.get -> EConomic.Querying.EconomicSortField!
@@ -877,7 +873,6 @@ EConomic.Rest.BookedInvoiceFilter.RecipientName.get -> EConomic.Querying.TextFie
 EConomic.Rest.BookedInvoiceFilter.RecipientPublicEntryNumber.get -> EConomic.Querying.TextField!
 EConomic.Rest.BookedInvoiceFilter.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.BookedInvoiceFilter.RecipientZip.get -> EConomic.Querying.TextField!
-EConomic.Rest.BookedInvoiceFilter.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.BookedInvoiceFilter.ReferencesOther.get -> EConomic.Querying.TextField!
 EConomic.Rest.BookedInvoiceFilter.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.BookedInvoiceFilter.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
@@ -973,7 +968,6 @@ EConomic.Rest.BookedInvoiceSort.RecipientName.get -> EConomic.Querying.EconomicS
 EConomic.Rest.BookedInvoiceSort.RecipientPublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.BookedInvoiceSort.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.BookedInvoiceSort.RecipientZip.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.BookedInvoiceSort.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.BookedInvoiceSort.ReferencesOther.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.BookedInvoiceSort.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.BookedInvoiceSort.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
@@ -1281,12 +1275,6 @@ EConomic.Rest.CustomerGroupCreate.LayoutNumber.init -> void
 EConomic.Rest.CustomerGroupCreate.Name.get -> string?
 EConomic.Rest.CustomerGroupCreate.Name.init -> void
 EConomic.Rest.CustomerGroupFilter
-EConomic.Rest.CustomerGroupFilter.AccountBalance.get -> EConomic.Querying.NumericField<decimal>!
-EConomic.Rest.CustomerGroupFilter.AccountBlockDirectEntries.get -> EConomic.Querying.BooleanField!
-EConomic.Rest.CustomerGroupFilter.AccountDebitCredit.get -> EConomic.Querying.TextField!
-EConomic.Rest.CustomerGroupFilter.AccountName.get -> EConomic.Querying.TextField!
-EConomic.Rest.CustomerGroupFilter.AccountNumber.get -> EConomic.Querying.NumericField<int>!
-EConomic.Rest.CustomerGroupFilter.AccountType.get -> EConomic.Querying.TextField!
 EConomic.Rest.CustomerGroupFilter.CustomerGroupFilter() -> void
 EConomic.Rest.CustomerGroupFilter.CustomerGroupNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.CustomerGroupFilter.Name.get -> EConomic.Querying.TextField!
@@ -1316,12 +1304,6 @@ EConomic.Rest.CustomerGroupResource.Where(System.Linq.Expressions.Expression<Sys
 EConomic.Rest.CustomerGroupResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroup!, EConomic.Rest.CustomerGroupFilter!, EConomic.Rest.CustomerGroupSort!>!
 EConomic.Rest.CustomerGroupResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroup!, EConomic.Rest.CustomerGroupFilter!, EConomic.Rest.CustomerGroupSort!>!
 EConomic.Rest.CustomerGroupSort
-EConomic.Rest.CustomerGroupSort.AccountBalance.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.CustomerGroupSort.AccountBlockDirectEntries.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.CustomerGroupSort.AccountDebitCredit.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.CustomerGroupSort.AccountName.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.CustomerGroupSort.AccountNumber.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.CustomerGroupSort.AccountType.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerGroupSort.CustomerGroupNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerGroupSort.CustomerGroupSort() -> void
 EConomic.Rest.CustomerGroupSort.Name.get -> EConomic.Querying.EconomicSortField!
@@ -1505,7 +1487,6 @@ EConomic.Rest.DeliveryLocationFilter.Address.get -> EConomic.Querying.TextField!
 EConomic.Rest.DeliveryLocationFilter.Barred.get -> EConomic.Querying.BooleanField!
 EConomic.Rest.DeliveryLocationFilter.City.get -> EConomic.Querying.TextField!
 EConomic.Rest.DeliveryLocationFilter.Country.get -> EConomic.Querying.TextField!
-EConomic.Rest.DeliveryLocationFilter.CustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.DeliveryLocationFilter.DeliveryLocationFilter() -> void
 EConomic.Rest.DeliveryLocationFilter.DeliveryLocationNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.DeliveryLocationFilter.PostalCode.get -> EConomic.Querying.TextField!
@@ -1523,7 +1504,6 @@ EConomic.Rest.DeliveryLocationSort
 EConomic.Rest.DeliveryLocationSort.Address.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DeliveryLocationSort.City.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DeliveryLocationSort.Country.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.DeliveryLocationSort.CustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DeliveryLocationSort.DeliveryLocationNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DeliveryLocationSort.DeliveryLocationSort() -> void
 EConomic.Rest.DeliveryLocationSort.PostalCode.get -> EConomic.Querying.EconomicSortField!
@@ -1848,7 +1828,6 @@ EConomic.Rest.DraftInvoiceFilter.RecipientEan.get -> EConomic.Querying.TextField
 EConomic.Rest.DraftInvoiceFilter.RecipientName.get -> EConomic.Querying.TextField!
 EConomic.Rest.DraftInvoiceFilter.RecipientPublicEntryNumber.get -> EConomic.Querying.TextField!
 EConomic.Rest.DraftInvoiceFilter.RecipientZip.get -> EConomic.Querying.TextField!
-EConomic.Rest.DraftInvoiceFilter.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.DraftInvoiceFilter.ReferencesOther.get -> EConomic.Querying.TextField!
 EConomic.Rest.DraftInvoiceFilter.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.DraftInvoiceFilter.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
@@ -1974,7 +1953,6 @@ EConomic.Rest.DraftInvoiceSort.RecipientEan.get -> EConomic.Querying.EconomicSor
 EConomic.Rest.DraftInvoiceSort.RecipientName.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftInvoiceSort.RecipientPublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftInvoiceSort.RecipientZip.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.DraftInvoiceSort.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftInvoiceSort.ReferencesOther.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftInvoiceSort.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftInvoiceSort.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
@@ -2484,7 +2462,6 @@ EConomic.Rest.DraftOrderSort.NotesHeading.get -> EConomic.Querying.EconomicSortF
 EConomic.Rest.DraftOrderSort.NotesTextLine1.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftOrderSort.NotesTextLine2.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftOrderSort.OrderNumber.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.DraftOrderSort.PaymentTermsNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftOrderSort.RecipientAddress.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftOrderSort.RecipientCity.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftOrderSort.RecipientCountry.get -> EConomic.Querying.EconomicSortField!
@@ -3043,7 +3020,6 @@ EConomic.Rest.DraftQuoteSort.ExchangeRate.get -> EConomic.Querying.EconomicSortF
 EConomic.Rest.DraftQuoteSort.NotesHeading.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftQuoteSort.NotesTextLine1.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftQuoteSort.NotesTextLine2.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.DraftQuoteSort.PaymentTermsNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftQuoteSort.QuoteNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftQuoteSort.RecipientAddress.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DraftQuoteSort.RecipientCity.get -> EConomic.Querying.EconomicSortField!
@@ -3284,19 +3260,13 @@ EConomic.Rest.Employee.Self.get -> System.Uri!
 EConomic.Rest.Employee.Self.init -> void
 EConomic.Rest.EmployeeFilter
 EConomic.Rest.EmployeeFilter.Barred.get -> EConomic.Querying.BooleanField!
-EConomic.Rest.EmployeeFilter.Email.get -> EConomic.Querying.TextField!
 EConomic.Rest.EmployeeFilter.EmployeeFilter() -> void
-EConomic.Rest.EmployeeFilter.EmployeeGroupNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.EmployeeFilter.EmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.EmployeeFilter.Name.get -> EConomic.Querying.TextField!
-EConomic.Rest.EmployeeFilter.Phone.get -> EConomic.Querying.TextField!
 EConomic.Rest.EmployeeSort
-EConomic.Rest.EmployeeSort.Email.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.EmployeeSort.EmployeeGroupNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.EmployeeSort.EmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.EmployeeSort.EmployeeSort() -> void
 EConomic.Rest.EmployeeSort.Name.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.EmployeeSort.Phone.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.Journal
 EConomic.Rest.Journal.<Clone>$() -> EConomic.Rest.Journal!
 EConomic.Rest.Journal.Entries.get -> System.Uri?
@@ -4494,7 +4464,6 @@ EConomic.Rest.NotDueInvoiceFilter.RecipientName.get -> EConomic.Querying.TextFie
 EConomic.Rest.NotDueInvoiceFilter.RecipientPublicEntryNumber.get -> EConomic.Querying.TextField!
 EConomic.Rest.NotDueInvoiceFilter.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.NotDueInvoiceFilter.RecipientZip.get -> EConomic.Querying.TextField!
-EConomic.Rest.NotDueInvoiceFilter.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.NotDueInvoiceFilter.ReferencesOther.get -> EConomic.Querying.TextField!
 EConomic.Rest.NotDueInvoiceFilter.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.NotDueInvoiceFilter.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
@@ -4589,7 +4558,6 @@ EConomic.Rest.NotDueInvoiceSort.RecipientName.get -> EConomic.Querying.EconomicS
 EConomic.Rest.NotDueInvoiceSort.RecipientPublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.NotDueInvoiceSort.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.NotDueInvoiceSort.RecipientZip.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.NotDueInvoiceSort.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.NotDueInvoiceSort.ReferencesOther.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.NotDueInvoiceSort.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.NotDueInvoiceSort.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
@@ -4684,7 +4652,6 @@ EConomic.Rest.OverdueInvoiceFilter.RecipientName.get -> EConomic.Querying.TextFi
 EConomic.Rest.OverdueInvoiceFilter.RecipientPublicEntryNumber.get -> EConomic.Querying.TextField!
 EConomic.Rest.OverdueInvoiceFilter.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.OverdueInvoiceFilter.RecipientZip.get -> EConomic.Querying.TextField!
-EConomic.Rest.OverdueInvoiceFilter.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.OverdueInvoiceFilter.ReferencesOther.get -> EConomic.Querying.TextField!
 EConomic.Rest.OverdueInvoiceFilter.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.OverdueInvoiceFilter.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
@@ -4779,7 +4746,6 @@ EConomic.Rest.OverdueInvoiceSort.RecipientName.get -> EConomic.Querying.Economic
 EConomic.Rest.OverdueInvoiceSort.RecipientPublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.OverdueInvoiceSort.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.OverdueInvoiceSort.RecipientZip.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.OverdueInvoiceSort.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.OverdueInvoiceSort.ReferencesOther.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.OverdueInvoiceSort.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.OverdueInvoiceSort.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
@@ -4874,7 +4840,6 @@ EConomic.Rest.PaidInvoiceFilter.RecipientName.get -> EConomic.Querying.TextField
 EConomic.Rest.PaidInvoiceFilter.RecipientPublicEntryNumber.get -> EConomic.Querying.TextField!
 EConomic.Rest.PaidInvoiceFilter.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.PaidInvoiceFilter.RecipientZip.get -> EConomic.Querying.TextField!
-EConomic.Rest.PaidInvoiceFilter.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.PaidInvoiceFilter.ReferencesOther.get -> EConomic.Querying.TextField!
 EConomic.Rest.PaidInvoiceFilter.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.PaidInvoiceFilter.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
@@ -4969,7 +4934,6 @@ EConomic.Rest.PaidInvoiceSort.RecipientName.get -> EConomic.Querying.EconomicSor
 EConomic.Rest.PaidInvoiceSort.RecipientPublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.PaidInvoiceSort.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.PaidInvoiceSort.RecipientZip.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.PaidInvoiceSort.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.PaidInvoiceSort.ReferencesOther.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.PaidInvoiceSort.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.PaidInvoiceSort.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
@@ -5150,10 +5114,6 @@ EConomic.Rest.ProductFilter.Barred.get -> EConomic.Querying.BooleanField!
 EConomic.Rest.ProductFilter.CostPrice.get -> EConomic.Querying.NumericField<decimal>!
 EConomic.Rest.ProductFilter.DepartmentalDistributionNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.ProductFilter.Description.get -> EConomic.Querying.TextField!
-EConomic.Rest.ProductFilter.InventoryGrossWeight.get -> EConomic.Querying.NumericField<decimal>!
-EConomic.Rest.ProductFilter.InventoryNetWeight.get -> EConomic.Querying.NumericField<decimal>!
-EConomic.Rest.ProductFilter.InventoryPackageVolume.get -> EConomic.Querying.NumericField<decimal>!
-EConomic.Rest.ProductFilter.InventoryRecommendedCostPrice.get -> EConomic.Querying.NumericField<decimal>!
 EConomic.Rest.ProductFilter.LastUpdated.get -> EConomic.Querying.ComparableField<System.DateTimeOffset>!
 EConomic.Rest.ProductFilter.Name.get -> EConomic.Querying.TextField!
 EConomic.Rest.ProductFilter.ProductFilter() -> void
@@ -5343,12 +5303,8 @@ EConomic.Rest.ProductResource.WhereRaw(string! filter) -> EConomic.Querying.Econ
 EConomic.Rest.ProductResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Product!, EConomic.Rest.ProductFilter!, EConomic.Rest.ProductSort!>!
 EConomic.Rest.ProductSort
 EConomic.Rest.ProductSort.BarCode.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.ProductSort.Barred.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ProductSort.CostPrice.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ProductSort.Description.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.ProductSort.InventoryGrossWeight.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.ProductSort.InventoryNetWeight.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.ProductSort.InventoryPackageVolume.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ProductSort.LastUpdated.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ProductSort.Name.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.ProductSort.ProductNumber.get -> EConomic.Querying.EconomicSortField!
@@ -5622,7 +5578,6 @@ EConomic.Rest.SentOrderSort.NotesHeading.get -> EConomic.Querying.EconomicSortFi
 EConomic.Rest.SentOrderSort.NotesTextLine1.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentOrderSort.NotesTextLine2.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentOrderSort.OrderNumber.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.SentOrderSort.PaymentTermsNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentOrderSort.RecipientAddress.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentOrderSort.RecipientCity.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentOrderSort.RecipientCountry.get -> EConomic.Querying.EconomicSortField!
@@ -5842,7 +5797,6 @@ EConomic.Rest.SentQuoteSort.ExchangeRate.get -> EConomic.Querying.EconomicSortFi
 EConomic.Rest.SentQuoteSort.NotesHeading.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentQuoteSort.NotesTextLine1.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentQuoteSort.NotesTextLine2.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.SentQuoteSort.PaymentTermsNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentQuoteSort.QuoteNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentQuoteSort.RecipientAddress.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.SentQuoteSort.RecipientCity.get -> EConomic.Querying.EconomicSortField!
@@ -6194,7 +6148,6 @@ EConomic.Rest.UnpaidInvoiceFilter.RecipientName.get -> EConomic.Querying.TextFie
 EConomic.Rest.UnpaidInvoiceFilter.RecipientPublicEntryNumber.get -> EConomic.Querying.TextField!
 EConomic.Rest.UnpaidInvoiceFilter.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.UnpaidInvoiceFilter.RecipientZip.get -> EConomic.Querying.TextField!
-EConomic.Rest.UnpaidInvoiceFilter.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.UnpaidInvoiceFilter.ReferencesOther.get -> EConomic.Querying.TextField!
 EConomic.Rest.UnpaidInvoiceFilter.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.UnpaidInvoiceFilter.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.NumericField<int>!
@@ -6289,7 +6242,6 @@ EConomic.Rest.UnpaidInvoiceSort.RecipientName.get -> EConomic.Querying.EconomicS
 EConomic.Rest.UnpaidInvoiceSort.RecipientPublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.UnpaidInvoiceSort.RecipientVatZoneVatZoneNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.UnpaidInvoiceSort.RecipientZip.get -> EConomic.Querying.EconomicSortField!
-EConomic.Rest.UnpaidInvoiceSort.ReferencesCustomerContactCustomerCustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.UnpaidInvoiceSort.ReferencesOther.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.UnpaidInvoiceSort.ReferencesSalesPersonEmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.UnpaidInvoiceSort.ReferencesVendorReferenceEmployeeNumber.get -> EConomic.Querying.EconomicSortField!

@@ -74,6 +74,38 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "productNumber",
+          "description",
+          "name",
+          "costPrice",
+          "recommendedPrice",
+          "salesPrice",
+          "barCode",
+          "barred",
+          "lastUpdated",
+          "inventory.packageVolume",
+          "inventory.grossWeight",
+          "inventory.netWeight",
+          "inventory.recommendedCostPrice",
+          "unit.unitNumber",
+          "productGroup.productGroupNumber",
+          "departmentalDistribution.departmentalDistributionNumber"
+        ],
+        "x-sortable-fields": [
+          "productNumber",
+          "description",
+          "name",
+          "costPrice",
+          "recommendedPrice",
+          "salesPrice",
+          "barCode",
+          "barred",
+          "lastUpdated",
+          "inventory.packageVolume",
+          "inventory.grossWeight",
+          "inventory.netWeight"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-products"
         }
@@ -271,6 +303,16 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "price",
+          "product.productNumber",
+          "currency.code"
+        ],
+        "x-sortable-fields": [
+          "price",
+          "product.productNumber",
+          "currency.code"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-products-productnumber-pricing-currency-specific-sales-prices"

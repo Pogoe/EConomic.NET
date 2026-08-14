@@ -74,6 +74,14 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "name",
+          "journalNumber"
+        ],
+        "x-sortable-fields": [
+          "name",
+          "journalNumber"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-journals"
         }
@@ -177,6 +185,42 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "account.accountNumber",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "text",
+          "amount",
+          "contraAccount.accountNumber",
+          "contraVatAccount.vatCode",
+          "contraVatAmount",
+          "currency.code",
+          "date",
+          "employee.employeeNumber",
+          "exchangeRate",
+          "entryType",
+          "voucher.voucherNumber",
+          "amountDefaultCurrency",
+          "journalEntryNumber"
+        ],
+        "x-sortable-fields": [
+          "account.accountNumber",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "text",
+          "amount",
+          "contraAccount.accountNumber",
+          "contraVatAccount.vatCode",
+          "contraVatAmount",
+          "currency.code",
+          "date",
+          "employee.employeeNumber",
+          "exchangeRate",
+          "entryType",
+          "voucher.voucherNumber",
+          "amountDefaultCurrency",
+          "journalEntryNumber"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-journals-journalnumber-entries"
@@ -358,6 +402,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-journals-journalnumber-templates-manualcustomerinvoice"
         }
@@ -428,6 +474,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-journals-journalnumber-vouchers"
         }
@@ -3044,7 +3092,8 @@
                       "enum": [
                         "financeVoucher"
                       ],
-                      "description": "Type of the journal entry. This is automatically set to financeVoucher."
+                      "description": "Type of the journal entry. This is automatically set to financeVoucher.",
+                      "nullable": true
                     },
                     "voucher": {
                       "type": "object",
@@ -3348,7 +3397,8 @@
                       "enum": [
                         "customerPayment"
                       ],
-                      "description": "Type of the journal entry. This is automatically set to customerPayment."
+                      "description": "Type of the journal entry. This is automatically set to customerPayment.",
+                      "nullable": true
                     },
                     "voucher": {
                       "type": "object",
@@ -3583,7 +3633,8 @@
                       "enum": [
                         "supplierInvoice"
                       ],
-                      "description": "Type of the journal entry. This is automatically set to supplierInvoice."
+                      "description": "Type of the journal entry. This is automatically set to supplierInvoice.",
+                      "nullable": true
                     },
                     "voucher": {
                       "type": "object",
@@ -3783,7 +3834,8 @@
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD)."
+                      "description": "The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).",
+                      "nullable": true
                     },
                     "project": {
                       "type": "object",
@@ -3991,7 +4043,8 @@
                       "enum": [
                         "supplierPayment"
                       ],
-                      "description": "Type of the journal entry. This is automatically set to supplierPayment."
+                      "description": "Type of the journal entry. This is automatically set to supplierPayment.",
+                      "nullable": true
                     },
                     "voucher": {
                       "type": "object",
@@ -4209,7 +4262,8 @@
                       "enum": [
                         "manualCustomerInvoice"
                       ],
-                      "description": "Type of the journal entry. This is automatically set to manualCustomerInvoice."
+                      "description": "Type of the journal entry. This is automatically set to manualCustomerInvoice.",
+                      "nullable": true
                     },
                     "voucher": {
                       "type": "object",
@@ -4290,7 +4344,8 @@
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD)."
+                      "description": "The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).",
+                      "nullable": true
                     }
                   },
                   "required": [

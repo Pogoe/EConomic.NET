@@ -160,6 +160,42 @@ leaves three records behind permanently. The scheduled workflow deliberately doe
 Set the tokens through the environment rather than on the command line, or they end up in shell
 history. For CI they are repository secrets of the same names.
 
+Three tests are structural rather than per-resource. Each enumerates the client by reflection rather
+than from a list, so a resource added later is covered without anyone remembering to add it, and
+each carries a guard asserting it found something — reflection that matches nothing otherwise
+reports a pass while testing nothing.
+
+| Test | What it pins |
+| --- | --- |
+| `EveryResourceTests` (integration) | Fetches a page from every resource. An empty page passes: the claim is that the call round-trips and maps. |
+| `FacadeMappingTests` (unit) | Fills a generated response in property by property and asserts every property the public record declares comes out populated. This is the only cover the resources with no live data have — sent and archived orders and quotes cannot be created through this API at all, since e-conomic publishes no endpoint that promotes a draft into them. |
+| `WriteRequestTests` (unit) | Sends every write and asserts nothing appears in the body that the caller did not put there. |
+| `FilterSurfaceTests` (integration) | Checks every filterable and sortable property against the server. A filter naming a field e-conomic does not accept comes back with `allowedFilteringFields`, its own list for that resource, so one bad filter per resource checks a whole surface. Sorting has no such list, so the entire sort surface goes into one request and a rejection is bisected to name the field. |
+
+That last one earns its keep. A live test can only report that e-conomic accepted the request, not
+what was in it, and unset value types kept leaking their defaults into requests: first numbers as
+`0`, then dates as `0001-01-01`, then enums as their first member. Each was rejected by the server
+in some configuration, and each was invisible to a green test suite.
+
+**The specifications are wrong in both directions, and only one of them is safe.** They
+under-report filterability — `pNumber` on customers is filterable and unannotated, which is what
+`WhereRaw` is for. They also over-report it, which is not safe: a property that compiles and then
+returns `400` defeats the entire purpose of the filter surface. Those are listed in
+`FilterSurfaceGenerator.UnfilterableFields` and `UnsortableFields`, every entry read from a live
+agreement. Follow the same discipline the curated type names do: an entry that stops matching
+anything fails the generator rather than quietly describing a field that has since changed.
+
+**Filterability belongs to an endpoint, not to a type.** Two endpoints can return the same shape
+and accept different filters, so the flags are recorded per endpoint as `x-filterable-fields` on
+the path rather than read back off the deduplicated component — which carries the union of every
+endpoint that happens to share it.
+
+**Assert on what a value type does when nobody sets it.** In C# it has a value regardless, and
+`System.Text.Json` writes it. Nullability on the generated payload is what makes "unset" and
+"explicitly zero" different things on the wire, and the corrector in the spec converter is what
+applies it — including inside nested objects and array items, which is where two of the three
+escaped.
+
 **Assert on results, not just status codes.** More than one bug here survived a green unit test
 suite because the test pinned an assumption the server did not share — filter syntax that parsed
 locally and returned `400` live, and a date format that deserialized in tests but not against real

@@ -214,6 +214,19 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
             operation["parameters"] = parameters;
         }
 
+        // Recorded per endpoint, from this endpoint's own schema, before the schema is deduplicated
+        // against structurally identical ones elsewhere. Filterability belongs to the endpoint, not
+        // to the type: `/accounts/{n}/accounting-years` filters on `closed` and `/accounting-years`
+        // does not, and the two share a type. Reading it back off the merged component gave the
+        // union of every endpoint that happened to have the same shape, so the generated surface
+        // offered properties the server rejects — verified against a live agreement.
+        if (endpoint.Method == "get" && IsCollection(converted.Schema))
+        {
+            var (filterable, sortable) = EndpointFields(converted.Schema);
+            operation["x-filterable-fields"] = filterable;
+            operation["x-sortable-fields"] = sortable;
+        }
+
         if (endpoint.Method is "post" or "put")
         {
             // The legacy files publish one schema per endpoint without distinguishing request from
@@ -235,6 +248,67 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
         }
 
         return operation;
+    }
+
+    /// <summary>
+    /// The property paths this endpoint publishes as filterable and sortable, e.g.
+    /// <c>customerGroup.customerGroupNumber</c>.
+    /// </summary>
+    /// <param name="schema">The collection endpoint's own converted schema.</param>
+    /// <returns>The two lists, in the order the schema declares them.</returns>
+    /// <remarks>
+    /// The legacy schemas contain no <c>$ref</c>, so everything nested is still inline here and the
+    /// walk needs no resolution. That is the point: once the nested objects have been extracted into
+    /// shared components, a nested <c>account</c> is the same component as the <c>Account</c> entity
+    /// and carries the flags of <c>/accounts</c>, which a customer group cannot be filtered on.
+    /// </remarks>
+    private static (JsonArray Filterable, JsonArray Sortable) EndpointFields(JsonObject schema)
+    {
+        var filterable = new JsonArray();
+        var sortable = new JsonArray();
+
+        CollectFields(schema["properties"]?["collection"]?["items"] as JsonObject, string.Empty, filterable, sortable, 0);
+
+        return (filterable, sortable);
+    }
+
+    private static void CollectFields(
+        JsonObject? schema,
+        string prefix,
+        JsonArray filterable,
+        JsonArray sortable,
+        int depth)
+    {
+        // e-conomic nests at most one level in practice; the guard stops a malformed spec looping.
+        if (depth > 3 || schema?["properties"] is not JsonObject properties)
+        {
+            return;
+        }
+
+        foreach (var (name, node) in properties)
+        {
+            if (node is not JsonObject property)
+            {
+                continue;
+            }
+
+            var path = prefix.Length == 0 ? name : $"{prefix}.{name}";
+
+            if (property["x-filterable"]?.GetValue<bool>() == true)
+            {
+                filterable.Add(path);
+            }
+
+            if (property["x-sortable"]?.GetValue<bool>() == true)
+            {
+                sortable.Add(path);
+            }
+
+            if (property["type"]?.GetValue<string>() == "object")
+            {
+                CollectFields(property, path, filterable, sortable, depth + 1);
+            }
+        }
     }
 
     private static bool IsCollection(JsonObject schema) =>

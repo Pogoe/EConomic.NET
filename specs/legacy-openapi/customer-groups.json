@@ -74,6 +74,26 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "customerGroupNumber",
+          "name",
+          "account.accountNumber",
+          "account.accountType",
+          "account.balance",
+          "account.blockDirectEntries",
+          "account.debitCredit",
+          "account.name"
+        ],
+        "x-sortable-fields": [
+          "customerGroupNumber",
+          "name",
+          "account.accountNumber",
+          "account.accountType",
+          "account.balance",
+          "account.blockDirectEntries",
+          "account.debitCredit",
+          "account.name"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customer-groups"
         }
@@ -219,6 +239,44 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "address",
+          "balance",
+          "corporateIdentificationNumber",
+          "city",
+          "country",
+          "creditLimit",
+          "currency",
+          "customerNumber",
+          "ean",
+          "email",
+          "name",
+          "zip",
+          "publicEntryNumber",
+          "telephoneAndFaxNumber",
+          "mobilePhone",
+          "vatNumber",
+          "website"
+        ],
+        "x-sortable-fields": [
+          "address",
+          "balance",
+          "corporateIdentificationNumber",
+          "city",
+          "country",
+          "creditLimit",
+          "currency",
+          "customerNumber",
+          "ean",
+          "email",
+          "name",
+          "zip",
+          "publicEntryNumber",
+          "telephoneAndFaxNumber",
+          "mobilePhone",
+          "vatNumber",
+          "website"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customer-groups-customergroupnumber-customers"

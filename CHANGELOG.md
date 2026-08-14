@@ -117,6 +117,27 @@ is a mapping change inside the facade, not automatically a major release here.
 - Unset optional numbers were serialized as `0`, which e-conomic rejects for identifiers —
   `customerNumber` declares a minimum of 1. They are nullable on the write payloads now, so an
   unset value is omitted while an explicit zero is still sent.
+- Unset optional dates were serialized as `0001-01-01`, so every draft invoice, order and quote
+  carried a `dueDate` the caller never set — along with any delivery date and invoice-line accrual
+  date. It normally passed unnoticed because e-conomic derives the due date from the payment terms
+  and ignores what it is sent; with terms of type `dueDate`, which do not, the request was rejected
+  as "may not be set to an earlier date than property `date`" instead of the actionable "dueDate is
+  missing a value". Dates are nullable on the write payloads now, like numbers.
+- Unset optional enums were serialized as their first member, so a draft invoice, order or quote
+  sent `paymentTermsType: "net"` whatever the caller intended. Against payment terms of any other
+  type e-conomic rejected the request with "Payment terms type does not match the type on the
+  payment terms specified" — for a request that was correct. They are nullable now too. The schemas
+  declare no `type` for an enum, only its values, which is why the earlier fix passed over them.
+- The generated filter and sort surfaces offered 19 properties e-conomic will not filter on and 25
+  it will not sort on, turning the compile-time guarantee they exist for into a runtime `400`. Two
+  causes, both now closed. Filterability belongs to an endpoint, but it was read back off the
+  deduplicated component, which carries the union across every endpoint of the same shape: a
+  customer group's nested `account` took the flags of `/accounts`, and an accounting year took
+  `closed` from `/accounts/{n}/accounting-years`. It is recorded per endpoint now. The rest is
+  e-conomic's own metadata over-reporting — its schema marks a customer group's
+  `account.accountNumber` filterable while the server allows only `name` and `customerGroupNumber` —
+  which nothing offline can detect, so those are a curated list, every entry read from a live
+  agreement and kept honest by an integration test in both directions.
 - Update payload types were missing from the serialization metadata. The root scanner only matched
   a request body in first position, so anything taking an identifier first — every `PUT` — was
   skipped, and would have failed at run time once writes stopped doubling as their own response.

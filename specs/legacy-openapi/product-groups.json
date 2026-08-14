@@ -74,6 +74,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-product-groups"
         }
@@ -178,6 +180,37 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "productNumber",
+          "description",
+          "name",
+          "costPrice",
+          "recommendedPrice",
+          "salesPrice",
+          "barCode",
+          "barred",
+          "lastUpdated",
+          "inventory.packageVolume",
+          "inventory.grossWeight",
+          "inventory.netWeight",
+          "inventory.recommendedCostPrice",
+          "unit.unitNumber",
+          "departmentalDistribution.departmentalDistributionNumber"
+        ],
+        "x-sortable-fields": [
+          "productNumber",
+          "description",
+          "name",
+          "costPrice",
+          "recommendedPrice",
+          "salesPrice",
+          "barCode",
+          "barred",
+          "lastUpdated",
+          "inventory.packageVolume",
+          "inventory.grossWeight",
+          "inventory.netWeight"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-product-groups-productgroupnumber-products"
         }
@@ -247,6 +280,23 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "salesAccount.accountNumber",
+          "salesAccount.accountType",
+          "salesAccount.balance",
+          "salesAccount.barred",
+          "salesAccount.blockDirectEntries",
+          "salesAccount.debitCredit",
+          "salesAccount.name"
+        ],
+        "x-sortable-fields": [
+          "salesAccount.accountNumber",
+          "salesAccount.accountType",
+          "salesAccount.balance",
+          "salesAccount.blockDirectEntries",
+          "salesAccount.debitCredit",
+          "salesAccount.name"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-product-groups-productgroupnumber-sales-accounts"

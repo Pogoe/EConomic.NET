@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Http;
 using EConomic.Authentication;
 using EConomic.Exceptions;
@@ -15,8 +16,9 @@ namespace EConomic.IntegrationTests;
 /// leave a record behind — which is why the whole suite wants a throwaway agreement.
 /// </para>
 /// <para>
-/// The one exception is booking, which cannot be undone and so needs its own opt-in. Everything
-/// else in this class cleans up after itself.
+/// Two cannot be undone and share an opt-in of their own — booking a draft invoice, and creating
+/// an accounting year, neither of which e-conomic lets you delete. Everything else in this class
+/// cleans up after itself.
 /// </para>
 /// </remarks>
 public class WriteRoundTripTests
@@ -139,6 +141,14 @@ public class WriteRoundTripTests
             Assert.True(created.UnitNumber > 0);
             Assert.NotNull(created.Self);
             Assert.Equal("ZZ Probe Unit", created.Name);
+
+            var renamed = await client.Units.UpdateAsync(
+                created.UnitNumber,
+                new UnitUpdate { Name = "ZZ Probe Unit (updated)" },
+                token);
+
+            Assert.Equal(created.UnitNumber, renamed.UnitNumber);
+            Assert.Equal("ZZ Probe Unit (updated)", renamed.Name);
         }
         finally
         {
@@ -226,6 +236,36 @@ public class WriteRoundTripTests
             Assert.True(created.PaymentTermsNumber > 0);
             Assert.Equal("ZZ Probe Terms", created.Name);
             Assert.Equal("net", created.PaymentTermsType, ignoreCase: true);
+
+            // The update carries the enum too, so this is the second place the string has to
+            // survive conversion — in the opposite direction from the create's response. Both it
+            // and daysOfCredit have to be sent back unchanged: the payload accepts them, but the
+            // server rejects the whole request with E06151 if either differs from what it stored.
+            var updated = await client.PaymentTerms.UpdateAsync(
+                created.PaymentTermsNumber,
+                new PaymentTermsUpdate
+                {
+                    Name = "ZZ Probe Terms (updated)",
+                    PaymentTermsType = "net",
+                    DaysOfCredit = 14,
+                },
+                token);
+
+            Assert.Equal("ZZ Probe Terms (updated)", updated.Name);
+            Assert.Equal(14, updated.DaysOfCredit);
+
+            var rejected = await Assert.ThrowsAsync<EconomicApiException>(
+                () => client.PaymentTerms.UpdateAsync(
+                    created.PaymentTermsNumber,
+                    new PaymentTermsUpdate
+                    {
+                        Name = "ZZ Probe Terms",
+                        PaymentTermsType = "net",
+                        DaysOfCredit = 30,
+                    },
+                    token));
+
+            Assert.Equal("E06151", rejected.ErrorCode);
         }
         finally
         {
@@ -255,6 +295,14 @@ public class WriteRoundTripTests
         {
             Assert.Equal(number, created.CustomerGroupNumber);
             Assert.Equal("ZZ Probe Group", created.Name);
+
+            var updated = await client.CustomerGroups.UpdateAsync(
+                number,
+                new CustomerGroupUpdate { Name = "ZZ Probe Group (updated)", AccountNumber = 5600 },
+                token);
+
+            Assert.Equal(number, updated.CustomerGroupNumber);
+            Assert.Equal("ZZ Probe Group (updated)", updated.Name);
         }
         finally
         {
@@ -361,6 +409,15 @@ public class WriteRoundTripTests
                 token);
 
             Assert.True(location.DeliveryLocationNumber > 0);
+
+            var moved = await locations.UpdateAsync(
+                location.DeliveryLocationNumber,
+                new DeliveryLocationUpdate { Address = "Odinsparken 5", City = "Ringsted", PostalCode = "4100" },
+                token);
+
+            Assert.Equal(location.DeliveryLocationNumber, moved.DeliveryLocationNumber);
+            Assert.Equal("Odinsparken 5", moved.Address);
+
             await locations.DeleteAsync(location.DeliveryLocationNumber, token);
         }
         finally
@@ -698,6 +755,10 @@ public class WriteRoundTripTests
         Assert.True(voucher.VoucherNumber > 0);
         Assert.NotNull(voucher.Entries);
 
+        // Reading vouchers back, which is a different generated method from the create.
+        var listed = await client.Journals.Vouchers(journal.JournalNumber).GetPageAsync(0, token);
+        Assert.Contains(listed.Items, v => v.VoucherNumber == voucher.VoucherNumber);
+
         var posted = Assert.Single(voucher.Entries!.FinanceVouchers);
         Assert.Equal(100m, posted.Amount);
         Assert.Equal("ZZ Probe voucher", posted.Text);
@@ -724,6 +785,41 @@ public class WriteRoundTripTests
 
         var remaining = await entries.GetPageAsync(0, token);
         Assert.DoesNotContain(remaining.Items, e => e.JournalEntryNumber == entry.JournalEntryNumber);
+    }
+
+    [Fact]
+    public async Task An_accounting_year_can_be_created()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        // Like booking, this cannot be undone: e-conomic publishes no delete for an accounting
+        // year, so a run of this leaves one behind permanently. It shares the same opt-in.
+        Assert.SkipWhen(
+            Environment.GetEnvironmentVariable(BookingOptInVariable) is not "1",
+            $"Set {BookingOptInVariable}=1 to create an accounting year, which cannot be undone.");
+
+        var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
+
+        var existing = (await client.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
+            .Select(y => y.Year)
+            .ToHashSet(StringComparer.Ordinal);
+
+        var year = Enumerable.Range(2030, 20).First(y => !existing.Contains(y.ToString(CultureInfo.InvariantCulture)));
+
+        var created = await client.AccountingYears.CreateAsync(
+            new AccountingYearCreate
+            {
+                FromDate = new DateOnly(year, 1, 1),
+                ToDate = new DateOnly(year, 12, 31),
+            },
+            token);
+
+        // The payload carries two dates and no identifier; the server answers with the year it
+        // assigned, as a string.
+        Assert.Equal(year.ToString(CultureInfo.InvariantCulture), created.Year);
+        Assert.NotNull(created.Self);
+        Assert.False(created.Closed);
     }
 
     [Fact]
@@ -760,10 +856,13 @@ public class WriteRoundTripTests
                 },
                 token);
 
+            // Unique per run, and it has to be: a product on a booked invoice cannot be deleted, so
+            // a fixed number makes this test pass exactly once per agreement and fail with "already
+            // exists" forever after. Everything else here is numbered by the server.
             product = await client.Products.CreateAsync(
                 new ProductCreate
                 {
-                    ProductNumber = "ZZ-PROBE-BOOK",
+                    ProductNumber = "ZZ-BOOK-" + DateTime.UtcNow.ToString("yyMMddHHmmss", CultureInfo.InvariantCulture),
                     Name = "ZZ Probe booking product",
                     ProductGroupNumber = 1,
                 },
@@ -809,6 +908,37 @@ public class WriteRoundTripTests
                 .GetPageAsync(0, token);
 
             Assert.Empty(remaining.Items);
+
+            // Booking is the only way this library can put anything into the derived views, and
+            // this is the only test that reaches them with data. They are separate endpoints with
+            // separate models, so an empty page from each says nothing about whether they map.
+            var booking = await client.BookedInvoices
+                .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
+                .GetPageAsync(0, token);
+
+            Assert.Equal(50m, Assert.Single(booking.Items).NetAmount);
+
+            var unpaid = await client.UnpaidInvoices
+                .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
+                .GetPageAsync(0, token);
+
+            // An invoice nobody has paid is outstanding for its full gross amount, and the view
+            // reports what is left rather than what it was worth.
+            var outstanding = Assert.Single(unpaid.Items);
+            Assert.Equal(customer.CustomerNumber, outstanding.Customer?.Number);
+            Assert.Equal(outstanding.GrossAmount, outstanding.Remainder);
+
+            // Which of not-due and overdue it lands in depends on the due date against today, so
+            // the assertion is that it is in exactly one of them, whichever that is.
+            var notDue = await client.NotDueInvoices
+                .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
+                .GetPageAsync(0, token);
+
+            var overdue = await client.OverdueInvoices
+                .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
+                .GetPageAsync(0, token);
+
+            Assert.Equal(1, notDue.Items.Count + overdue.Items.Count);
         }
         finally
         {
@@ -830,6 +960,89 @@ public class WriteRoundTripTests
                 {
                     await client.Customers.DeleteAsync(customer.CustomerNumber, token);
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// A date the caller never set must not be sent.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Optional numbers on the write payloads were made nullable so an unset one would be left out
+    /// rather than sent as <c>0</c>. Dates are value types too and were missed, so every draft
+    /// invoice, order and quote carried <c>dueDate: 0001-01-01</c> unless the caller supplied one.
+    /// </para>
+    /// <para>
+    /// It went unnoticed because e-conomic normally derives the due date from the payment terms and
+    /// ignores what it was sent. Payment terms of type <c>dueDate</c> are the exception: there the
+    /// invoice carries its own due date, and the difference becomes visible. Sending year one was
+    /// rejected as "may not be set to an earlier date than date"; omitting it is rejected as
+    /// "missing a value", which is the error the caller can act on.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public async Task An_unset_due_date_is_omitted_rather_than_sent_as_year_one()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
+
+        await using var seed = new AgreementSeed(client, token);
+        var customer = await seed.CustomerAsync("ZZ Probe Due Date");
+        var layouts = await client.Layouts.GetPageAsync(0, token);
+
+        PaymentTerms? terms = null;
+        DraftInvoice? created = null;
+
+        try
+        {
+            terms = await client.PaymentTerms.CreateAsync(
+                new PaymentTermsCreate { Name = "ZZ Probe Due Date Terms", PaymentTermsType = "dueDate" },
+                token);
+
+            DraftInvoiceCreate Draft(DateOnly? dueDate) => new()
+            {
+                Date = new DateOnly(2026, 8, 14),
+                DueDate = dueDate,
+                Currency = "DKK",
+                LayoutNumber = layouts.Items[0].LayoutNumber,
+                CustomerNumber = customer.CustomerNumber,
+                PaymentTerms = new DraftInvoiceCreatePaymentTerms { PaymentTermsNumber = terms.PaymentTermsNumber },
+                Recipient = new DraftInvoiceCreateRecipient
+                {
+                    Name = "ZZ Probe Recipient",
+                    VatZoneNumber = customer.VatZone!.Number,
+                },
+            };
+
+            var rejected = await Assert.ThrowsAsync<EconomicApiException>(
+                () => client.DraftInvoices.CreateAsync(Draft(dueDate: null), token));
+
+            // E04042 is "dueDate is missing a value", which is only reachable if the property was
+            // left out of the request. The year-one value produced E04760 instead — a complaint
+            // about a date the caller never chose.
+            Assert.NotNull(rejected.RawBody);
+            Assert.Contains("E04042", rejected.RawBody, StringComparison.Ordinal);
+            Assert.DoesNotContain("0001-01-01", rejected.RawBody, StringComparison.Ordinal);
+
+            // And a date that was supplied still arrives, so nothing was lost making it optional.
+            var due = new DateOnly(2026, 12, 24);
+            created = await client.DraftInvoices.CreateAsync(Draft(due), token);
+
+            Assert.Equal(due, created.DueDate);
+        }
+        finally
+        {
+            if (created is not null)
+            {
+                await client.DraftInvoices.DeleteAsync(created.DraftInvoiceNumber, token);
+            }
+
+            if (terms is not null)
+            {
+                await client.PaymentTerms.DeleteAsync(terms.PaymentTermsNumber, token);
             }
         }
     }

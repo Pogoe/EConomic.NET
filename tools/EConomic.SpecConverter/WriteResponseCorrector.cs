@@ -93,7 +93,7 @@ public static class WriteResponseCorrector
     }
 
     /// <summary>
-    /// Marks optional numeric properties on write payloads as nullable.
+    /// Marks optional value-typed properties on write payloads as nullable.
     /// </summary>
     /// <param name="document">An OpenAPI document, modified in place.</param>
     /// <returns>The number of properties marked.</returns>
@@ -104,6 +104,19 @@ public static class WriteResponseCorrector
     /// of 1". Making the property nullable lets an unset value be omitted while an explicit zero is
     /// still sent, which is the distinction the API actually requires.
     /// <para>
+    /// Dates have the same problem and a worse symptom. A non-nullable <c>DateOnly</c> defaults to
+    /// year one, so an unset <c>dueDate</c> was sent as <c>0001-01-01</c> — a value the caller never
+    /// supplied, on a property that decides when an invoice is overdue. It normally went unnoticed
+    /// because e-conomic derives the due date from the payment terms and ignores what it was sent;
+    /// with terms of type <c>dueDate</c>, which do not, the request was rejected outright.
+    /// </para>
+    /// <para>
+    /// Enums are the third of the same kind, and the plainest. A C# enum defaults to its first
+    /// member, so an unset <c>paymentTermsType</c> was sent as <c>"net"</c>, and e-conomic answered
+    /// "Payment terms type does not match the type on the payment terms specified" for any terms
+    /// that were not net — a value the caller never chose, failing a request that was correct.
+    /// </para>
+    /// <para>
     /// Only components used solely as request bodies are touched, so the read models keep their
     /// non-nullable numbers.
     /// </para>
@@ -111,10 +124,11 @@ public static class WriteResponseCorrector
     /// Nested objects and array items are marked too. They have to be: an invoice line's
     /// <c>lineNumber</c> and <c>sortKey</c> both declare <c>minimum: 1</c>, so a draft invoice with
     /// a line the caller did not number was rejected outright — the same failure as
-    /// <c>customerNumber</c>, one level further down.
+    /// <c>customerNumber</c>, one level further down. The dates repeat the pattern exactly: a line's
+    /// <c>accrual</c> carries two of them.
     /// </para>
     /// </remarks>
-    public static int MarkOptionalNumbersNullable(JsonObject document)
+    public static int MarkOptionalValuesNullable(JsonObject document)
     {
         ArgumentNullException.ThrowIfNull(document);
 
@@ -197,18 +211,19 @@ public static class WriteResponseCorrector
 
             switch (definition["type"]?.GetValue<string>())
             {
-                case "integer" or "number"
-                    when !required.Contains(property) && definition["nullable"] is null:
-                    definition["nullable"] = true;
-                    marked++;
-                    break;
-
                 case "object":
                     marked += MarkObject(definition);
                     break;
 
                 case "array" when definition["items"] is JsonObject item:
                     marked += MarkObject(item);
+                    break;
+
+                case var type when IsValueType(definition, type)
+                    && !required.Contains(property)
+                    && definition["nullable"] is null:
+                    definition["nullable"] = true;
+                    marked++;
                     break;
 
                 default:
@@ -218,6 +233,28 @@ public static class WriteResponseCorrector
 
         return marked;
     }
+
+    /// <summary>
+    /// Whether this property becomes a C# value type, and so carries a default the caller never
+    /// chose unless it is nullable.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// An enum is recognised by its values rather than by its type, because e-conomic's own schemas
+    /// declare no type for one — <c>paymentTermsType</c> is an <c>enum</c> with a <c>description</c>
+    /// and nothing else. Matching on <c>"type": "string"</c> silently skipped every one of them.
+    /// </para>
+    /// <para>
+    /// Booleans are deliberately left out, though they leak a <see langword="false"/> the same way.
+    /// A <c>PUT</c> that omits <c>barred</c> clears it, so the two requests mean the same thing to
+    /// e-conomic — verified against a live agreement — and making them nullable would only ask
+    /// callers to distinguish an unset flag from a false one to no effect.
+    /// </para>
+    /// </remarks>
+    private static bool IsValueType(JsonObject definition, string? type) =>
+        type is "integer" or "number"
+        || definition["enum"] is not null
+        || (type is "string" && definition["format"]?.GetValue<string>() is "date" or "date-time");
 
     /// <summary>
     /// The entity a write path belongs to: either the collection itself, or one identifier below

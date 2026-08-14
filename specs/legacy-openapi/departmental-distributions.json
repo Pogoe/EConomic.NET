@@ -74,6 +74,14 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "departmentalDistributionNumber",
+          "name"
+        ],
+        "x-sortable-fields": [
+          "departmentalDistributionNumber",
+          "name"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-departmental-distributions"
         }
@@ -135,6 +143,14 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "departmentalDistributionNumber",
+          "name"
+        ],
+        "x-sortable-fields": [
+          "departmentalDistributionNumber",
+          "name"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-departmental-distributions-departments"
@@ -231,6 +247,14 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "departmentalDistributionNumber",
+          "name"
+        ],
+        "x-sortable-fields": [
+          "departmentalDistributionNumber",
+          "name"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-departmental-distributions-distributions"

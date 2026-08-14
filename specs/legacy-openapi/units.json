@@ -74,6 +74,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-units"
         }

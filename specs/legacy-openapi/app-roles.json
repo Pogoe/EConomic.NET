@@ -74,6 +74,12 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "roleNumber"
+        ],
+        "x-sortable-fields": [
+          "roleNumber"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-app-roles"
         }

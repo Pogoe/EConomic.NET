@@ -282,7 +282,7 @@ foreach (var (resource, document) in documents)
     // Must run after the components are embedded: it rewrites a response to reference the read
     // entity, which has to already be present in the document for the reference to resolve.
     correctedResponses += WriteResponseCorrector.Apply(document);
-    WriteResponseCorrector.MarkOptionalNumbersNullable(document);
+    WriteResponseCorrector.MarkOptionalValuesNullable(document);
 
     foreach (var applied in ApplyNameOverrides(document, resource, overrideConflicts))
     {

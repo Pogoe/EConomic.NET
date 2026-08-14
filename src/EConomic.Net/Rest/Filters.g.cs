@@ -99,10 +99,6 @@ public sealed class AccountingYearFilter
     [EconomicField("toDate")]
     public ComparableField<System.DateOnly> ToDate { get; } = null!;
 
-    /// <summary>Maps to <c>closed</c>.</summary>
-    [EconomicField("closed")]
-    public BooleanField Closed { get; } = null!;
-
     /// <summary>Maps to <c>year</c>.</summary>
     [EconomicField("year")]
     public TextField Year { get; } = null!;
@@ -120,10 +116,6 @@ public sealed class AccountingYearSort
     /// <summary>Maps to <c>toDate</c>.</summary>
     [EconomicField("toDate")]
     public EconomicSortField ToDate { get; } = null!;
-
-    /// <summary>Maps to <c>closed</c>.</summary>
-    [EconomicField("closed")]
-    public EconomicSortField Closed { get; } = null!;
 
     /// <summary>Maps to <c>year</c>.</summary>
     [EconomicField("year")]
@@ -302,10 +294,6 @@ public sealed class ArchivedOrderSort
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public EconomicSortField ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public EconomicSortField PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -546,10 +534,6 @@ public sealed class ArchivedQuoteSort
     [EconomicField("exchangeRate")]
     public EconomicSortField ExchangeRate { get; } = null!;
 
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public EconomicSortField PaymentTermsNumber { get; } = null!;
-
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
     public EconomicSortField CustomerNumber { get; } = null!;
@@ -751,10 +735,6 @@ public sealed class BookedInvoiceFilter
     [EconomicField("notes.textLine2")]
     public TextField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public NumericField<int> ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -868,10 +848,6 @@ public sealed class BookedInvoiceSort
     /// <summary>Maps to <c>notes.textLine2</c>.</summary>
     [EconomicField("notes.textLine2")]
     public EconomicSortField NotesTextLine2 { get; } = null!;
-
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public EconomicSortField ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
 
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
@@ -1172,30 +1148,6 @@ public sealed class CustomerGroupFilter
     /// <summary>Maps to <c>name</c>.</summary>
     [EconomicField("name")]
     public TextField Name { get; } = null!;
-
-    /// <summary>Maps to <c>account.accountNumber</c>.</summary>
-    [EconomicField("account.accountNumber")]
-    public NumericField<int> AccountNumber { get; } = null!;
-
-    /// <summary>Maps to <c>account.accountType</c>.</summary>
-    [EconomicField("account.accountType")]
-    public TextField AccountType { get; } = null!;
-
-    /// <summary>Maps to <c>account.balance</c>.</summary>
-    [EconomicField("account.balance")]
-    public NumericField<decimal> AccountBalance { get; } = null!;
-
-    /// <summary>Maps to <c>account.blockDirectEntries</c>.</summary>
-    [EconomicField("account.blockDirectEntries")]
-    public BooleanField AccountBlockDirectEntries { get; } = null!;
-
-    /// <summary>Maps to <c>account.debitCredit</c>.</summary>
-    [EconomicField("account.debitCredit")]
-    public TextField AccountDebitCredit { get; } = null!;
-
-    /// <summary>Maps to <c>account.name</c>.</summary>
-    [EconomicField("account.name")]
-    public TextField AccountName { get; } = null!;
 }
 
 /// <summary>
@@ -1210,30 +1162,6 @@ public sealed class CustomerGroupSort
     /// <summary>Maps to <c>name</c>.</summary>
     [EconomicField("name")]
     public EconomicSortField Name { get; } = null!;
-
-    /// <summary>Maps to <c>account.accountNumber</c>.</summary>
-    [EconomicField("account.accountNumber")]
-    public EconomicSortField AccountNumber { get; } = null!;
-
-    /// <summary>Maps to <c>account.accountType</c>.</summary>
-    [EconomicField("account.accountType")]
-    public EconomicSortField AccountType { get; } = null!;
-
-    /// <summary>Maps to <c>account.balance</c>.</summary>
-    [EconomicField("account.balance")]
-    public EconomicSortField AccountBalance { get; } = null!;
-
-    /// <summary>Maps to <c>account.blockDirectEntries</c>.</summary>
-    [EconomicField("account.blockDirectEntries")]
-    public EconomicSortField AccountBlockDirectEntries { get; } = null!;
-
-    /// <summary>Maps to <c>account.debitCredit</c>.</summary>
-    [EconomicField("account.debitCredit")]
-    public EconomicSortField AccountDebitCredit { get; } = null!;
-
-    /// <summary>Maps to <c>account.name</c>.</summary>
-    [EconomicField("account.name")]
-    public EconomicSortField AccountName { get; } = null!;
 }
 
 /// <summary>
@@ -1275,10 +1203,6 @@ public sealed class DeliveryLocationFilter
     /// <summary>Maps to <c>barred</c>.</summary>
     [EconomicField("barred")]
     public BooleanField Barred { get; } = null!;
-
-    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
-    [EconomicField("customer.customerNumber")]
-    public NumericField<int> CustomerNumber { get; } = null!;
 }
 
 /// <summary>
@@ -1309,10 +1233,6 @@ public sealed class DeliveryLocationSort
     /// <summary>Maps to <c>sortKey</c>.</summary>
     [EconomicField("sortKey")]
     public EconomicSortField SortKey { get; } = null!;
-
-    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
-    [EconomicField("customer.customerNumber")]
-    public EconomicSortField CustomerNumber { get; } = null!;
 }
 
 /// <summary>
@@ -1493,10 +1413,6 @@ public sealed class DraftInvoiceFilter
     [EconomicField("notes.textLine2")]
     public TextField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public NumericField<int> ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -1614,10 +1530,6 @@ public sealed class DraftInvoiceSort
     /// <summary>Maps to <c>notes.textLine2</c>.</summary>
     [EconomicField("notes.textLine2")]
     public EconomicSortField NotesTextLine2 { get; } = null!;
-
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public EconomicSortField ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
 
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
@@ -1785,10 +1697,6 @@ public sealed class DraftOrderSort
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public EconomicSortField ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public EconomicSortField PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -2033,10 +1941,6 @@ public sealed class DraftQuoteSort
     [EconomicField("exchangeRate")]
     public EconomicSortField ExchangeRate { get; } = null!;
 
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public EconomicSortField PaymentTermsNumber { get; } = null!;
-
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
     public EconomicSortField CustomerNumber { get; } = null!;
@@ -2146,21 +2050,9 @@ public sealed class EmployeeFilter
     [EconomicField("employeeNumber")]
     public NumericField<int> EmployeeNumber { get; } = null!;
 
-    /// <summary>Maps to <c>employeeGroup.employeeGroupNumber</c>.</summary>
-    [EconomicField("employeeGroup.employeeGroupNumber")]
-    public NumericField<int> EmployeeGroupNumber { get; } = null!;
-
     /// <summary>Maps to <c>name</c>.</summary>
     [EconomicField("name")]
     public TextField Name { get; } = null!;
-
-    /// <summary>Maps to <c>email</c>.</summary>
-    [EconomicField("email")]
-    public TextField Email { get; } = null!;
-
-    /// <summary>Maps to <c>phone</c>.</summary>
-    [EconomicField("phone")]
-    public TextField Phone { get; } = null!;
 
     /// <summary>Maps to <c>barred</c>.</summary>
     [EconomicField("barred")]
@@ -2176,21 +2068,9 @@ public sealed class EmployeeSort
     [EconomicField("employeeNumber")]
     public EconomicSortField EmployeeNumber { get; } = null!;
 
-    /// <summary>Maps to <c>employeeGroup.employeeGroupNumber</c>.</summary>
-    [EconomicField("employeeGroup.employeeGroupNumber")]
-    public EconomicSortField EmployeeGroupNumber { get; } = null!;
-
     /// <summary>Maps to <c>name</c>.</summary>
     [EconomicField("name")]
     public EconomicSortField Name { get; } = null!;
-
-    /// <summary>Maps to <c>email</c>.</summary>
-    [EconomicField("email")]
-    public EconomicSortField Email { get; } = null!;
-
-    /// <summary>Maps to <c>phone</c>.</summary>
-    [EconomicField("phone")]
-    public EconomicSortField Phone { get; } = null!;
 }
 
 /// <summary>
@@ -2500,10 +2380,6 @@ public sealed class NotDueInvoiceFilter
     [EconomicField("notes.textLine2")]
     public TextField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public NumericField<int> ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -2613,10 +2489,6 @@ public sealed class NotDueInvoiceSort
     /// <summary>Maps to <c>notes.textLine2</c>.</summary>
     [EconomicField("notes.textLine2")]
     public EconomicSortField NotesTextLine2 { get; } = null!;
-
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public EconomicSortField ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
 
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
@@ -2735,10 +2607,6 @@ public sealed class OverdueInvoiceFilter
     [EconomicField("notes.textLine2")]
     public TextField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public NumericField<int> ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -2848,10 +2716,6 @@ public sealed class OverdueInvoiceSort
     /// <summary>Maps to <c>notes.textLine2</c>.</summary>
     [EconomicField("notes.textLine2")]
     public EconomicSortField NotesTextLine2 { get; } = null!;
-
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public EconomicSortField ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
 
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
@@ -2970,10 +2834,6 @@ public sealed class PaidInvoiceFilter
     [EconomicField("notes.textLine2")]
     public TextField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public NumericField<int> ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -3084,10 +2944,6 @@ public sealed class PaidInvoiceSort
     [EconomicField("notes.textLine2")]
     public EconomicSortField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public EconomicSortField ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public EconomicSortField ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -3191,22 +3047,6 @@ public sealed class ProductFilter
     [EconomicField("lastUpdated")]
     public ComparableField<System.DateTimeOffset> LastUpdated { get; } = null!;
 
-    /// <summary>Maps to <c>inventory.packageVolume</c>.</summary>
-    [EconomicField("inventory.packageVolume")]
-    public NumericField<decimal> InventoryPackageVolume { get; } = null!;
-
-    /// <summary>Maps to <c>inventory.grossWeight</c>.</summary>
-    [EconomicField("inventory.grossWeight")]
-    public NumericField<decimal> InventoryGrossWeight { get; } = null!;
-
-    /// <summary>Maps to <c>inventory.netWeight</c>.</summary>
-    [EconomicField("inventory.netWeight")]
-    public NumericField<decimal> InventoryNetWeight { get; } = null!;
-
-    /// <summary>Maps to <c>inventory.recommendedCostPrice</c>.</summary>
-    [EconomicField("inventory.recommendedCostPrice")]
-    public NumericField<decimal> InventoryRecommendedCostPrice { get; } = null!;
-
     /// <summary>Maps to <c>unit.unitNumber</c>.</summary>
     [EconomicField("unit.unitNumber")]
     public NumericField<int> UnitNumber { get; } = null!;
@@ -3253,25 +3093,9 @@ public sealed class ProductSort
     [EconomicField("barCode")]
     public EconomicSortField BarCode { get; } = null!;
 
-    /// <summary>Maps to <c>barred</c>.</summary>
-    [EconomicField("barred")]
-    public EconomicSortField Barred { get; } = null!;
-
     /// <summary>Maps to <c>lastUpdated</c>.</summary>
     [EconomicField("lastUpdated")]
     public EconomicSortField LastUpdated { get; } = null!;
-
-    /// <summary>Maps to <c>inventory.packageVolume</c>.</summary>
-    [EconomicField("inventory.packageVolume")]
-    public EconomicSortField InventoryPackageVolume { get; } = null!;
-
-    /// <summary>Maps to <c>inventory.grossWeight</c>.</summary>
-    [EconomicField("inventory.grossWeight")]
-    public EconomicSortField InventoryGrossWeight { get; } = null!;
-
-    /// <summary>Maps to <c>inventory.netWeight</c>.</summary>
-    [EconomicField("inventory.netWeight")]
-    public EconomicSortField InventoryNetWeight { get; } = null!;
 }
 
 /// <summary>
@@ -3465,10 +3289,6 @@ public sealed class SentOrderSort
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public EconomicSortField ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public EconomicSortField PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -3712,10 +3532,6 @@ public sealed class SentQuoteSort
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public EconomicSortField ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public EconomicSortField PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -4007,10 +3823,6 @@ public sealed class UnpaidInvoiceFilter
     [EconomicField("notes.textLine2")]
     public TextField NotesTextLine2 { get; } = null!;
 
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public NumericField<int> ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
-
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]
     public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
@@ -4120,10 +3932,6 @@ public sealed class UnpaidInvoiceSort
     /// <summary>Maps to <c>notes.textLine2</c>.</summary>
     [EconomicField("notes.textLine2")]
     public EconomicSortField NotesTextLine2 { get; } = null!;
-
-    /// <summary>Maps to <c>references.customerContact.customer.customerNumber</c>.</summary>
-    [EconomicField("references.customerContact.customer.customerNumber")]
-    public EconomicSortField ReferencesCustomerContactCustomerCustomerNumber { get; } = null!;
 
     /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
     [EconomicField("references.salesPerson.employeeNumber")]

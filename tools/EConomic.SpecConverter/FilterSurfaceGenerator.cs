@@ -38,6 +38,101 @@ public static class FilterSurfaceGenerator
     /// </summary>
     public static IReadOnlySet<string> PublishedEntities => SchemaRegistry.PublishedEntities;
 
+    /// <summary>
+    /// Fields the specifications mark filterable that the server refuses, keyed by the published
+    /// entity name.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The specifications were known to under-report — they omit <c>pNumber</c> on customers, which
+    /// is what <c>WhereRaw</c> is for. They also over-report, which is worse: an over-reported field
+    /// compiles and then fails at run time, which is precisely what the filter surface exists to
+    /// prevent. e-conomic's own schema marks a customer group's <c>account.accountNumber</c>
+    /// filterable; the server's list for that resource is <c>name</c> and <c>customerGroupNumber</c>.
+    /// </para>
+    /// <para>
+    /// Nothing offline can find these, because the specification is the only offline authority and
+    /// it is the thing that is wrong. Every entry below was read from a live agreement's
+    /// <c>allowedFilteringFields</c> by <c>FilterSurfaceTests</c>, which is what keeps the list
+    /// honest: an entry that becomes unnecessary makes this generator fail, and a field that starts
+    /// being over-reported fails that test.
+    /// </para>
+    /// </remarks>
+    public static IReadOnlySet<string> UnfilterableFields { get; } = new HashSet<string>(StringComparer.Ordinal)
+    {
+        // A nested account is filterable in its own right at /accounts, and not here.
+        "CustomerGroup.account.accountNumber",
+        "CustomerGroup.account.accountType",
+        "CustomerGroup.account.balance",
+        "CustomerGroup.account.blockDirectEntries",
+        "CustomerGroup.account.debitCredit",
+        "CustomerGroup.account.name",
+
+        // The server filters invoices on customer.customerNumber, but not on the same number
+        // reached through the customer contact.
+        "BookedInvoice.references.customerContact.customer.customerNumber",
+        "DraftInvoice.references.customerContact.customer.customerNumber",
+        "NotDueInvoice.references.customerContact.customer.customerNumber",
+        "OverdueInvoice.references.customerContact.customer.customerNumber",
+        "PaidInvoice.references.customerContact.customer.customerNumber",
+        "UnpaidInvoice.references.customerContact.customer.customerNumber",
+
+        // The server's list for employees is employeeNumber, name and barred, and no more.
+        "Employee.email",
+        "Employee.phone",
+        "Employee.employeeGroup.employeeGroupNumber",
+
+        // Product filtering stops at the top level; the inventory block is not part of it.
+        "Product.inventory.grossWeight",
+        "Product.inventory.netWeight",
+        "Product.inventory.packageVolume",
+        "Product.inventory.recommendedCostPrice",
+    };
+
+    /// <summary>
+    /// Fields the specifications mark sortable that the server refuses.
+    /// </summary>
+    /// <remarks>
+    /// Sortability is published and wrong independently of filterability, so this is a separate
+    /// list rather than the same one. An unsortable field is answered with "Could not parse query
+    /// string sort parameter" and no list of alternatives, so these were found by sorting on each
+    /// field in turn against a live agreement.
+    /// </remarks>
+    public static IReadOnlySet<string> UnsortableFields { get; } = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "CustomerGroup.account.accountNumber",
+        "CustomerGroup.account.accountType",
+        "CustomerGroup.account.balance",
+        "CustomerGroup.account.blockDirectEntries",
+        "CustomerGroup.account.debitCredit",
+        "CustomerGroup.account.name",
+
+        "BookedInvoice.references.customerContact.customer.customerNumber",
+        "DraftInvoice.references.customerContact.customer.customerNumber",
+        "NotDueInvoice.references.customerContact.customer.customerNumber",
+        "OverdueInvoice.references.customerContact.customer.customerNumber",
+        "PaidInvoice.references.customerContact.customer.customerNumber",
+        "UnpaidInvoice.references.customerContact.customer.customerNumber",
+
+        "Employee.email",
+        "Employee.phone",
+        "Employee.employeeGroup.employeeGroupNumber",
+
+        // Filterable but not sortable, which is the pairing that makes these two separate flags.
+        "Product.barred",
+        "Product.inventory.grossWeight",
+        "Product.inventory.netWeight",
+        "Product.inventory.packageVolume",
+
+        // Orders and quotes sort on their own columns, not on the payment terms they reference.
+        "ArchivedOrder.paymentTerms.paymentTermsNumber",
+        "DraftOrder.paymentTerms.paymentTermsNumber",
+        "SentOrder.paymentTerms.paymentTermsNumber",
+        "ArchivedQuote.paymentTerms.paymentTermsNumber",
+        "DraftQuote.paymentTerms.paymentTermsNumber",
+        "SentQuote.paymentTerms.paymentTermsNumber",
+    };
+
     /// <summary>Generates the surfaces for every collection entity in a merged document.</summary>
     /// <param name="document">The merged OpenAPI document.</param>
     /// <param name="namespaceName">Namespace to emit into.</param>
@@ -49,6 +144,9 @@ public static class FilterSurfaceGenerator
 
         var schemas = document["components"]!["schemas"]!.AsObject();
         var entities = CollectionEntities(document);
+        var published = EndpointFields(document, schemas);
+        var used = new HashSet<string>(StringComparer.Ordinal);
+        var emitted = new HashSet<string>(StringComparer.Ordinal);
 
         var builder = new StringBuilder();
         builder.AppendLine("// <auto-generated>");
@@ -74,16 +172,48 @@ public static class FilterSurfaceGenerator
                 continue;
             }
 
+            var allowed = published.GetValueOrDefault(entity)
+                ?? new EndpointSurface(new(StringComparer.Ordinal), new(StringComparer.Ordinal));
             var filterable = new List<SurfaceField>();
             var sortable = new List<SurfaceField>();
-            Collect(schema, schemas, prefix: string.Empty, csharpPrefix: string.Empty, filterable, sortable, depth: 0);
+            Collect(
+                schema,
+                schemas,
+                prefix: string.Empty,
+                csharpPrefix: string.Empty,
+                allowed,
+                filterable,
+                sortable,
+                depth: 0);
+
+            var name = SchemaRegistry.PublicName(entity);
+            emitted.Add(name);
+
+            filterable.RemoveAll(f => Refused(UnfilterableFields, name, f, used));
+            sortable.RemoveAll(f => Refused(UnsortableFields, name, f, used));
 
             // Both surfaces are emitted even when empty. An empty filter surface is not a gap in
             // the generator, it is the accurate statement that e-conomic will not filter this
             // resource on anything — and the facade needs the type to exist either way.
-            var published = SchemaRegistry.PublicName(entity);
-            AppendSurface(builder, $"{published}Filter", entity, filterable, isFilter: true);
-            AppendSurface(builder, $"{published}Sort", entity, sortable, isFilter: false);
+            AppendSurface(builder, $"{name}Filter", entity, filterable, isFilter: true);
+            AppendSurface(builder, $"{name}Sort", entity, sortable, isFilter: false);
+        }
+
+        // The same discipline the curated names follow: an entry that no longer matches anything
+        // fails the run rather than sitting there describing a field that has since changed. Only
+        // entities that were actually emitted count, since the rest are gated out deliberately.
+        var stale = UnfilterableFields.Concat(UnsortableFields)
+            .Where(e => !used.Contains(e) && emitted.Contains(e[..e.IndexOf('.', StringComparison.Ordinal)]))
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(e => e, StringComparer.Ordinal)
+            .ToList();
+
+        if (stale.Count > 0)
+        {
+            throw new InvalidOperationException(
+                "These fields are listed as refused by the server, but the surface no longer offers "
+                + $"them: {string.Join(", ", stale)}. Remove them, or the list is describing a field "
+                + "that has since changed.");
         }
 
         return builder.ToString();
@@ -117,6 +247,7 @@ public static class FilterSurfaceGenerator
         JsonObject schemas,
         string prefix,
         string csharpPrefix,
+        EndpointSurface allowed,
         List<SurfaceField> filterable,
         List<SurfaceField> sortable,
         int depth)
@@ -138,22 +269,99 @@ public static class FilterSurfaceGenerator
             var path = prefix.Length == 0 ? name : $"{prefix}.{name}";
             var propertyName = Combine(csharpPrefix, name);
 
-            if (resolved["x-filterable"]?.GetValue<bool>() == true)
+            // What the endpoint published, not what the component carries: the component's flags are
+            // the union across every endpoint sharing its shape.
+            if (allowed.Filterable.Contains(path))
             {
                 filterable.Add(new SurfaceField(path, propertyName, FieldTypeFor(resolved)));
             }
 
-            if (resolved["x-sortable"]?.GetValue<bool>() == true)
+            if (allowed.Sortable.Contains(path))
             {
                 sortable.Add(new SurfaceField(path, propertyName, "EconomicSortField"));
             }
 
             if (resolved["type"]?.GetValue<string>() == "object")
             {
-                Collect(resolved, schemas, path, propertyName, filterable, sortable, depth + 1);
+                Collect(resolved, schemas, path, propertyName, allowed, filterable, sortable, depth + 1);
             }
         }
     }
+
+    /// <summary>Whether the server refuses this field, recording that the entry was needed.</summary>
+    private static bool Refused(IReadOnlySet<string> refused, string entity, SurfaceField field, HashSet<string> used)
+    {
+        var key = $"{entity}.{field.Path}";
+
+        if (!refused.Contains(key))
+        {
+            return false;
+        }
+
+        used.Add(key);
+        return true;
+    }
+
+    /// <summary>What one endpoint publishes as filterable and sortable.</summary>
+    private sealed record EndpointSurface(HashSet<string> Filterable, HashSet<string> Sortable);
+
+    /// <summary>
+    /// The fields each entity's own collection endpoint publishes, keyed by entity.
+    /// </summary>
+    /// <remarks>
+    /// An entity can be the item of more than one collection — an accounting year is listed both at
+    /// <c>/accounting-years</c> and under an account — and the two do not accept the same filters.
+    /// Only one surface exists per entity, so it takes the endpoint the facade exposes: the
+    /// top-level one, preferred here by having no path parameters and then by being the shortest.
+    /// </remarks>
+    private static Dictionary<string, EndpointSurface> EndpointFields(JsonObject document, JsonObject schemas)
+    {
+        var surfaces = new Dictionary<string, EndpointSurface>(StringComparer.Ordinal);
+        var chosen = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        foreach (var (path, item) in document["paths"]?.AsObject() ?? [])
+        {
+            if (item?["get"] is not JsonObject get
+                || Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } envelope
+                || schemas[envelope] is not JsonObject envelopeSchema
+                || Reference(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
+            {
+                continue;
+            }
+
+            if (chosen.TryGetValue(entity, out var incumbent) && !Closer(path, incumbent))
+            {
+                continue;
+            }
+
+            chosen[entity] = path;
+            surfaces[entity] = new EndpointSurface(Fields(get["x-filterable-fields"]), Fields(get["x-sortable-fields"]));
+        }
+
+        return surfaces;
+    }
+
+    /// <summary>Whether the first path is the more likely one for the facade to expose.</summary>
+    private static bool Closer(string candidate, string incumbent)
+    {
+        var candidateDepth = candidate.Count(c => c == '{');
+        var incumbentDepth = incumbent.Count(c => c == '{');
+
+        return candidateDepth != incumbentDepth
+            ? candidateDepth < incumbentDepth
+            : candidate.Length < incumbent.Length;
+    }
+
+    private static HashSet<string> Fields(JsonNode? node) =>
+        node is JsonArray array
+            ? new HashSet<string>(array.Select(f => f?.GetValue<string>()).OfType<string>(), StringComparer.Ordinal)
+            : new HashSet<string>(StringComparer.Ordinal);
+
+    private static string? Reference(JsonNode? node) =>
+        node?["$ref"]?.GetValue<string>() is { } reference
+        && reference.StartsWith(RefPrefix, StringComparison.Ordinal)
+            ? reference[RefPrefix.Length..]
+            : null;
 
     private static JsonObject Resolve(JsonObject schema, JsonObject schemas)
     {

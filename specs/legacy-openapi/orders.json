@@ -98,6 +98,66 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "orderNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "soap.orderHandle.id"
+        ],
+        "x-sortable-fields": [
+          "orderNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "soap.orderHandle.id"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-orders-archived"
         }
@@ -193,6 +253,67 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "orderNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "lastUpdated",
+          "soap.orderHandle.id"
+        ],
+        "x-sortable-fields": [
+          "orderNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "soap.orderHandle.id"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-orders-drafts"
@@ -417,6 +538,67 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "orderNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "lastUpdated",
+          "soap.orderHandle.id"
+        ],
+        "x-sortable-fields": [
+          "orderNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "soap.orderHandle.id"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-orders-sent"
@@ -1552,7 +1734,8 @@
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
             "x-filterable": true,
             "x-sortable": true,
-            "description": "Order issue date. Format according to ISO-8601 (YYYY-MM-DD)."
+            "description": "Order issue date. Format according to ISO-8601 (YYYY-MM-DD).",
+            "nullable": true
           },
           "currency": {
             "type": "string",
@@ -1627,7 +1810,8 @@
             "type": "string",
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
-            "description": "The date the order, is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type \u0027duedate\u0027."
+            "description": "The date the order, is due for payment. Format according to ISO-8601 (YYYY-MM-DD). This is only used if the terms of payment is of type \u0027duedate\u0027.",
+            "nullable": true
           },
           "paymentTerms": {
             "type": "object",
@@ -1665,7 +1849,8 @@
                   "invoiceWeekStartingMonday",
                   "creditcard"
                 ],
-                "description": "The type of payment term."
+                "description": "The type of payment term.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1787,7 +1972,8 @@
                   "peppol",
                   null
                 ],
-                "description": "Chosen NemHandel type used for e-invoicing."
+                "description": "Chosen NemHandel type used for e-invoicing.",
+                "nullable": true
               }
             }
           },
@@ -1854,7 +2040,8 @@
                 "pattern": "\\d{4}-\\d{2}-\\d{2}",
                 "x-filterable": true,
                 "x-sortable": true,
-                "description": "The date of delivery."
+                "description": "The date of delivery.",
+                "nullable": true
               }
             }
           },
@@ -2073,13 +2260,15 @@
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The start date for the accrual. Format: YYYY-MM-DD."
+                      "description": "The start date for the accrual. Format: YYYY-MM-DD.",
+                      "nullable": true
                     },
                     "endDate": {
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The end date for the accrual. Format: YYYY-MM-DD."
+                      "description": "The end date for the accrual. Format: YYYY-MM-DD.",
+                      "nullable": true
                     }
                   }
                 },
@@ -2252,7 +2441,8 @@
             "type": "string",
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
-            "description": "The date the order is due for payment. This property is only used if the terms of payment is of type \u0027duedate\u0027, in which case it is a mandatory property. Format according to ISO-8601 (YYYY-MM-DD)."
+            "description": "The date the order is due for payment. This property is only used if the terms of payment is of type \u0027duedate\u0027, in which case it is a mandatory property. Format according to ISO-8601 (YYYY-MM-DD).",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
@@ -2361,7 +2551,8 @@
                   "avtaleGiro"
                 ],
                 "readOnly": true,
-                "description": "The type the payment term."
+                "description": "The type the payment term.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2471,7 +2662,8 @@
                   "peppol",
                   null
                 ],
-                "description": "Chosen NemHandel type used for e-invoicing."
+                "description": "Chosen NemHandel type used for e-invoicing.",
+                "nullable": true
               }
             },
             "required": [
@@ -2529,7 +2721,8 @@
                 "type": "string",
                 "format": "date",
                 "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                "description": "The date of delivery."
+                "description": "The date of delivery.",
+                "nullable": true
               }
             }
           },
@@ -2661,13 +2854,15 @@
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The start date for the accrual. Format: YYYY-MM-DD."
+                      "description": "The start date for the accrual. Format: YYYY-MM-DD.",
+                      "nullable": true
                     },
                     "endDate": {
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The end date for the accrual. Format: YYYY-MM-DD."
+                      "description": "The end date for the accrual. Format: YYYY-MM-DD.",
+                      "nullable": true
                     }
                   }
                 },

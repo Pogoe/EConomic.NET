@@ -98,6 +98,66 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-booked"
         }
@@ -289,6 +349,67 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "draftInvoiceNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "lastUpdated",
+          "soap.currentInvoiceHandle.id"
+        ],
+        "x-sortable-fields": [
+          "draftInvoiceNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other",
+          "soap.currentInvoiceHandle.id"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-drafts"
@@ -602,6 +723,64 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-not-due"
         }
@@ -663,6 +842,64 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-overdue"
@@ -726,6 +963,64 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-paid"
         }
@@ -788,6 +1083,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-sent"
         }
@@ -1335,6 +1632,64 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "recipient.vatZone.vatZoneNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-invoices-unpaid"
@@ -3132,7 +3487,8 @@
             "type": "string",
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
-            "description": "The date the invoice is due for payment. Only used if the terms of payment is of type \u0027duedate\u0027, in which case it is mandatory. Format according to ISO-8601 (YYYY-MM-DD)."
+            "description": "The date the invoice is due for payment. Only used if the terms of payment is of type \u0027duedate\u0027, in which case it is mandatory. Format according to ISO-8601 (YYYY-MM-DD).",
+            "nullable": true
           },
           "grossAmount": {
             "type": "number",
@@ -3248,7 +3604,8 @@
                   "avtaleGiro"
                 ],
                 "readOnly": true,
-                "description": "The type the payment term."
+                "description": "The type the payment term.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3358,7 +3715,8 @@
                   "peppol",
                   null
                 ],
-                "description": "Chosen NemHandel type used for e-invoicing."
+                "description": "Chosen NemHandel type used for e-invoicing.",
+                "nullable": true
               }
             },
             "required": [
@@ -3416,7 +3774,8 @@
                 "type": "string",
                 "format": "date",
                 "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                "description": "The date of delivery."
+                "description": "The date of delivery.",
+                "nullable": true
               }
             }
           },
@@ -3548,13 +3907,15 @@
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The start date for the accrual. Must be within an existing accounting year. Format: YYYY-MM-DD."
+                      "description": "The start date for the accrual. Must be within an existing accounting year. Format: YYYY-MM-DD.",
+                      "nullable": true
                     },
                     "endDate": {
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The end date for the accrual. Format: YYYY-MM-DD."
+                      "description": "The end date for the accrual. Format: YYYY-MM-DD.",
+                      "nullable": true
                     }
                   }
                 },
@@ -3992,7 +4353,8 @@
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
             "x-sortable": true,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "currency": {
             "type": "string",
@@ -4077,7 +4439,8 @@
             "type": "string",
             "format": "date",
             "pattern": "\\d{4}-\\d{2}-\\d{2}",
-            "description": "The date the invoice is due for payment. Only used if the terms of payment is of type \u0027duedate\u0027, in which case it is mandatory. Format according to ISO-8601 (YYYY-MM-DD)."
+            "description": "The date the invoice is due for payment. Only used if the terms of payment is of type \u0027duedate\u0027, in which case it is mandatory. Format according to ISO-8601 (YYYY-MM-DD).",
+            "nullable": true
           },
           "paymentTerms": {
             "type": "object",
@@ -4119,7 +4482,8 @@
                   "avtaleGiro"
                 ],
                 "readOnly": true,
-                "description": "The type the payment term."
+                "description": "The type the payment term.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -4241,7 +4605,8 @@
                   "peppol",
                   null
                 ],
-                "description": "Chosen NemHandel type used for e-invoicing."
+                "description": "Chosen NemHandel type used for e-invoicing.",
+                "nullable": true
               }
             },
             "required": [
@@ -4309,7 +4674,8 @@
                 "pattern": "\\d{4}-\\d{2}-\\d{2}",
                 "x-filterable": true,
                 "x-sortable": true,
-                "description": "The date of delivery."
+                "description": "The date of delivery.",
+                "nullable": true
               }
             }
           },
@@ -4473,13 +4839,15 @@
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The start date for the accrual. Must be within an existing accounting year. Format: YYYY-MM-DD."
+                      "description": "The start date for the accrual. Must be within an existing accounting year. Format: YYYY-MM-DD.",
+                      "nullable": true
                     },
                     "endDate": {
                       "type": "string",
                       "format": "date",
                       "pattern": "\\d{4}-\\d{2}-\\d{2}",
-                      "description": "The end date for the accrual. Format: YYYY-MM-DD."
+                      "description": "The end date for the accrual. Format: YYYY-MM-DD.",
+                      "nullable": true
                     }
                   }
                 },
@@ -4629,7 +4997,8 @@
               "EAN",
               "Email"
             ],
-            "description": "Optional. Sets whether invoice should be sent via e-invoicing when booking."
+            "description": "Optional. Sets whether invoice should be sent via e-invoicing when booking.",
+            "nullable": true
           }
         }
       },

@@ -24027,7 +24027,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The total invoice amount in the invoice currency after all taxes and discounts have been applied. For a credit note this amount will be negative.
@@ -24582,7 +24582,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("date")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly Date { get; set; } = default!;
+        public System.DateOnly? Date { get; set; } = default!;
 
         /// <summary>
         /// The ISO 4217 currency code of the invoice.
@@ -24657,7 +24657,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The terms of payment for the invoice.
@@ -24761,7 +24761,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sendBy")]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<ForBookingAnInvoiceSendBy>))]
-        public ForBookingAnInvoiceSendBy SendBy { get; set; } = default!;
+        public ForBookingAnInvoiceSendBy? SendBy { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -28110,7 +28110,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("date")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly Date { get; set; } = default!;
+        public System.DateOnly? Date { get; set; } = default!;
 
         /// <summary>
         /// The ISO 4217 currency code of the order.
@@ -28184,7 +28184,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The terms of payment for the order.
@@ -28354,7 +28354,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The total order amount in the order currency after all taxes and discounts have been applied.
@@ -31306,7 +31306,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("date")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly Date { get; set; } = default!;
+        public System.DateOnly? Date { get; set; } = default!;
 
         /// <summary>
         /// The ISO 4217 currency code of the quote.
@@ -31380,7 +31380,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The terms of payment for the quote.
@@ -31550,7 +31550,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The total quote amount in the quote currency after all taxes and discounts have been applied.
@@ -40304,7 +40304,7 @@ namespace EConomic.Rest.Generated
         /// The type the payment term.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsType")]
-        public PaymentTerms13PaymentTermsType PaymentTermsType { get; set; } = default!;
+        public PaymentTerms13PaymentTermsType? PaymentTermsType { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -40513,7 +40513,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DeliveryDate { get; set; } = default!;
+        public System.DateOnly? DeliveryDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -40807,7 +40807,7 @@ namespace EConomic.Rest.Generated
         /// The type the payment term.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsType")]
-        public PaymentTerms14PaymentTermsType PaymentTermsType { get; set; } = default!;
+        public PaymentTerms14PaymentTermsType? PaymentTermsType { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -41008,7 +41008,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DeliveryDate { get; set; } = default!;
+        public System.DateOnly? DeliveryDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -46336,7 +46336,7 @@ namespace EConomic.Rest.Generated
         /// The type of payment term.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsType")]
-        public PaymentTerms23PaymentTermsType PaymentTermsType { get; set; } = default!;
+        public PaymentTerms23PaymentTermsType? PaymentTermsType { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -46536,7 +46536,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DeliveryDate { get; set; } = default!;
+        public System.DateOnly? DeliveryDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -46899,7 +46899,7 @@ namespace EConomic.Rest.Generated
         /// The type the payment term.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsType")]
-        public PaymentTerms24PaymentTermsType PaymentTermsType { get; set; } = default!;
+        public PaymentTerms24PaymentTermsType? PaymentTermsType { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -47108,7 +47108,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DeliveryDate { get; set; } = default!;
+        public System.DateOnly? DeliveryDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -51981,7 +51981,7 @@ namespace EConomic.Rest.Generated
         /// The type of payment term.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsType")]
-        public PaymentTerms31PaymentTermsType PaymentTermsType { get; set; } = default!;
+        public PaymentTerms31PaymentTermsType? PaymentTermsType { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -52181,7 +52181,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DeliveryDate { get; set; } = default!;
+        public System.DateOnly? DeliveryDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -52544,7 +52544,7 @@ namespace EConomic.Rest.Generated
         /// The type the payment term.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsType")]
-        public PaymentTerms32PaymentTermsType PaymentTermsType { get; set; } = default!;
+        public PaymentTerms32PaymentTermsType? PaymentTermsType { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -52753,7 +52753,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DeliveryDate { get; set; } = default!;
+        public System.DateOnly? DeliveryDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -58099,14 +58099,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("startDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly StartDate { get; set; } = default!;
+        public System.DateOnly? StartDate { get; set; } = default!;
 
         /// <summary>
         /// The end date for the accrual. Format: YYYY-MM-DD.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("endDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly EndDate { get; set; } = default!;
+        public System.DateOnly? EndDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -58410,14 +58410,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("startDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly StartDate { get; set; } = default!;
+        public System.DateOnly? StartDate { get; set; } = default!;
 
         /// <summary>
         /// The end date for the accrual. Format: YYYY-MM-DD.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("endDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly EndDate { get; set; } = default!;
+        public System.DateOnly? EndDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -60851,7 +60851,7 @@ namespace EConomic.Rest.Generated
         /// Type of the journal entry. This is automatically set to financeVoucher.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("entryType")]
-        public FinanceVouchers2EntryType EntryType { get; set; } = default!;
+        public FinanceVouchers2EntryType? EntryType { get; set; } = default!;
 
         /// <summary>
         /// Voucher that the entry belongs to.
@@ -61028,7 +61028,7 @@ namespace EConomic.Rest.Generated
         /// Type of the journal entry. This is automatically set to customerPayment.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("entryType")]
-        public CustomerPayments2EntryType EntryType { get; set; } = default!;
+        public CustomerPayments2EntryType? EntryType { get; set; } = default!;
 
         /// <summary>
         /// Voucher that the entry belongs to.
@@ -61167,7 +61167,7 @@ namespace EConomic.Rest.Generated
         /// Type of the journal entry. This is automatically set to supplierInvoice.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("entryType")]
-        public SupplierInvoices2EntryType EntryType { get; set; } = default!;
+        public SupplierInvoices2EntryType? EntryType { get; set; } = default!;
 
         /// <summary>
         /// Voucher that the entry belongs to.
@@ -61229,7 +61229,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         /// <summary>
         /// The project the entry is connected to.
@@ -61343,7 +61343,7 @@ namespace EConomic.Rest.Generated
         /// Type of the journal entry. This is automatically set to supplierPayment.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("entryType")]
-        public SupplierPayments2EntryType EntryType { get; set; } = default!;
+        public SupplierPayments2EntryType? EntryType { get; set; } = default!;
 
         /// <summary>
         /// Voucher that the entry belongs to.
@@ -61476,7 +61476,7 @@ namespace EConomic.Rest.Generated
         /// Type of the journal entry. This is automatically set to manualCustomerInvoice.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("entryType")]
-        public ManualCustomerInvoices2EntryType EntryType { get; set; } = default!;
+        public ManualCustomerInvoices2EntryType? EntryType { get; set; } = default!;
 
         /// <summary>
         /// Voucher that the entry belongs to.
@@ -61532,7 +61532,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
+        public System.DateOnly? DueDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -63074,14 +63074,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("startDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly StartDate { get; set; } = default!;
+        public System.DateOnly? StartDate { get; set; } = default!;
 
         /// <summary>
         /// The end date for the accrual. Format: YYYY-MM-DD.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("endDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly EndDate { get; set; } = default!;
+        public System.DateOnly? EndDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -63393,14 +63393,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("startDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly StartDate { get; set; } = default!;
+        public System.DateOnly? StartDate { get; set; } = default!;
 
         /// <summary>
         /// The end date for the accrual. Format: YYYY-MM-DD.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("endDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly EndDate { get; set; } = default!;
+        public System.DateOnly? EndDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -65918,14 +65918,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("startDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly StartDate { get; set; } = default!;
+        public System.DateOnly? StartDate { get; set; } = default!;
 
         /// <summary>
         /// The end date for the accrual. Format: YYYY-MM-DD.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("endDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly EndDate { get; set; } = default!;
+        public System.DateOnly? EndDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -66237,14 +66237,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("startDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly StartDate { get; set; } = default!;
+        public System.DateOnly? StartDate { get; set; } = default!;
 
         /// <summary>
         /// The end date for the accrual. Format: YYYY-MM-DD.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("endDate")]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly EndDate { get; set; } = default!;
+        public System.DateOnly? EndDate { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 

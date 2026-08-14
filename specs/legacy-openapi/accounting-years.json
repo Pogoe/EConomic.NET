@@ -74,6 +74,16 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "fromDate",
+          "toDate",
+          "year"
+        ],
+        "x-sortable-fields": [
+          "fromDate",
+          "toDate",
+          "year"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounting-years"
         }
@@ -220,6 +230,50 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "project.projectNumber",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "supplier.supplierGroup.supplierGroupNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
+        "x-sortable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-entries"
         }
@@ -289,6 +343,16 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "periodNumber",
+          "fromDate",
+          "toDate"
+        ],
+        "x-sortable-fields": [
+          "periodNumber",
+          "fromDate",
+          "toDate"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods"
@@ -410,6 +474,49 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "project.projectNumber",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
+        "x-sortable-fields": [
+          "amount",
+          "supplierInvoiceNumber",
+          "amountInBaseCurrency",
+          "currency",
+          "date",
+          "dueDate",
+          "costType.costTypeNumber",
+          "entryNumber",
+          "text",
+          "entryType",
+          "customer.customerNumber",
+          "supplier.supplierNumber",
+          "unit1.unitNumber",
+          "unit2.unitNumber",
+          "quantity1",
+          "quantity2",
+          "voucherNumber",
+          "remainder",
+          "remainderInBaseCurrency"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods-accountingyearperiod-entries"
         }
@@ -488,6 +595,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-periods-accountingyearperiod-totals"
         }
@@ -558,6 +667,8 @@
             }
           }
         ],
+        "x-filterable-fields": [],
+        "x-sortable-fields": [],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-accounting-years-accountingyear-totals"
         }

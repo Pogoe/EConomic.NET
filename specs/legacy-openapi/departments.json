@@ -74,6 +74,15 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "departmentNumber",
+          "name",
+          "barred"
+        ],
+        "x-sortable-fields": [
+          "departmentNumber",
+          "name"
+        ],
         "externalDocs": {
           "url": "https://restdocs.e-conomic.com/#get-departments"
         }

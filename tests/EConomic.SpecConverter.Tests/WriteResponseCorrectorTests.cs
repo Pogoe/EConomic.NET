@@ -31,11 +31,16 @@ public class WriteResponseCorrectorTests
             "schemas": {
               "ThingPost": {
                 "type": "object",
-                "required": ["name", "keptNumber"],
+                "required": ["name", "keptNumber", "keptDate"],
                 "properties": {
                   "name": { "type": "string" },
                   "keptNumber": { "type": "integer" },
+                  "keptDate": { "type": "string", "format": "date" },
                   "optionalNumber": { "type": "integer" },
+                  "date": { "type": "string", "format": "date" },
+                  "lastUpdated": { "type": "string", "format": "date-time" },
+                  "note": { "type": "string" },
+                  "kind": { "enum": ["net", "dueDate"], "description": "No type, as e-conomic writes them." },
                   "customer": {
                     "type": "object",
                     "properties": { "customerNumber": { "type": "integer" } }
@@ -47,7 +52,11 @@ public class WriteResponseCorrectorTests
                       "required": ["quantity"],
                       "properties": {
                         "lineNumber": { "type": "integer" },
-                        "quantity": { "type": "number" }
+                        "quantity": { "type": "number" },
+                        "accrual": {
+                          "type": "object",
+                          "properties": { "startDate": { "type": "string", "format": "date" } }
+                        }
                       }
                     }
                   }
@@ -67,7 +76,7 @@ public class WriteResponseCorrectorTests
     {
         var document = WritePayloadDocument();
 
-        WriteResponseCorrector.MarkOptionalNumbersNullable(document);
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
 
         var properties = document["components"]!["schemas"]!["ThingPost"]!["properties"]!;
 
@@ -78,11 +87,61 @@ public class WriteResponseCorrectorTests
     }
 
     [Fact]
+    public void Optional_dates_on_a_write_payload_become_nullable()
+    {
+        var document = WritePayloadDocument();
+
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
+
+        var properties = document["components"]!["schemas"]!["ThingPost"]!["properties"]!;
+
+        // A date is a value type too, so an untouched one is serialized as 0001-01-01. e-conomic
+        // accepts that rather than rejecting it, which makes it the more dangerous of the two: an
+        // unset dueDate silently became a date in year one instead of failing the request.
+        Assert.True(properties["date"]!["nullable"]!.GetValue<bool>());
+        Assert.True(properties["lastUpdated"]!["nullable"]!.GetValue<bool>());
+
+        // A required date is supplied by the caller, and a plain string is already absent when unset.
+        Assert.Null(properties["keptDate"]!["nullable"]);
+        Assert.Null(properties["note"]!["nullable"]);
+    }
+
+    [Fact]
+    public void Optional_enums_on_a_write_payload_become_nullable()
+    {
+        var document = WritePayloadDocument();
+
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
+
+        // A C# enum defaults to its first member, so an unset one is sent as that member: e-conomic
+        // rejected an invoice whose paymentTermsType said "net" while the payment terms it named
+        // said otherwise. Note the schema declares no type for it — e-conomic writes enums with
+        // nothing but their values — so matching on "type": "string" missed every one.
+        var properties = document["components"]!["schemas"]!["ThingPost"]!["properties"]!;
+
+        Assert.True(properties["kind"]!["nullable"]!.GetValue<bool>());
+    }
+
+    [Fact]
+    public void Optional_dates_inside_array_items_become_nullable()
+    {
+        var document = WritePayloadDocument();
+
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
+
+        // Where the leak actually was: an invoice line's accrual dates, two levels down.
+        var accrual = document["components"]!["schemas"]!["ThingPost"]!["properties"]!["lines"]!["items"]!
+            ["properties"]!["accrual"]!;
+
+        Assert.True(accrual["properties"]!["startDate"]!["nullable"]!.GetValue<bool>());
+    }
+
+    [Fact]
     public void Optional_numbers_nested_inside_an_object_become_nullable()
     {
         var document = WritePayloadDocument();
 
-        WriteResponseCorrector.MarkOptionalNumbersNullable(document);
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
 
         var customer = document["components"]!["schemas"]!["ThingPost"]!["properties"]!["customer"]!;
 
@@ -94,7 +153,7 @@ public class WriteResponseCorrectorTests
     {
         var document = WritePayloadDocument();
 
-        WriteResponseCorrector.MarkOptionalNumbersNullable(document);
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
 
         // The case that reached the server: a draft invoice line the caller did not number was
         // rejected with "Integer 0 is less than minimum value of 1" for both lineNumber and sortKey.
@@ -109,7 +168,7 @@ public class WriteResponseCorrectorTests
     {
         var document = WritePayloadDocument();
 
-        WriteResponseCorrector.MarkOptionalNumbersNullable(document);
+        WriteResponseCorrector.MarkOptionalValuesNullable(document);
 
         // Only components used solely as request bodies are touched: a read model reporting a
         // number the server always sends should not become nullable.

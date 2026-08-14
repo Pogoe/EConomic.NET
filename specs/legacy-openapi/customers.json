@@ -74,6 +74,48 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "address",
+          "balance",
+          "barred",
+          "city",
+          "corporateIdentificationNumber",
+          "country",
+          "creditLimit",
+          "currency",
+          "customerNumber",
+          "ean",
+          "email",
+          "lastUpdated",
+          "name",
+          "publicEntryNumber",
+          "telephoneAndFaxNumber",
+          "mobilePhone",
+          "vatNumber",
+          "website",
+          "zip",
+          "customerGroup.customerGroupNumber"
+        ],
+        "x-sortable-fields": [
+          "address",
+          "balance",
+          "city",
+          "corporateIdentificationNumber",
+          "country",
+          "creditLimit",
+          "currency",
+          "customerNumber",
+          "ean",
+          "email",
+          "lastUpdated",
+          "name",
+          "publicEntryNumber",
+          "telephoneAndFaxNumber",
+          "mobilePhone",
+          "vatNumber",
+          "website",
+          "zip"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customers"
         }
@@ -273,6 +315,24 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "customerContactNumber",
+          "email",
+          "name",
+          "phone",
+          "eInvoiceId",
+          "customer.customerNumber",
+          "sortKey"
+        ],
+        "x-sortable-fields": [
+          "customerContactNumber",
+          "email",
+          "name",
+          "phone",
+          "eInvoiceId",
+          "customer.customerNumber",
+          "sortKey"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-contacts"
@@ -497,6 +557,23 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "address",
+          "city",
+          "country",
+          "deliveryLocationNumber",
+          "postalCode",
+          "sortKey",
+          "barred"
+        ],
+        "x-sortable-fields": [
+          "address",
+          "city",
+          "country",
+          "deliveryLocationNumber",
+          "postalCode",
+          "sortKey"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-delivery-locations"
@@ -756,6 +833,62 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "bookedInvoiceNumber",
+          "date",
+          "currency",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-invoices-booked"
         }
@@ -825,6 +958,64 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "draftInvoiceNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
+        ],
+        "x-sortable-fields": [
+          "draftInvoiceNumber",
+          "date",
+          "currency",
+          "exchangeRate",
+          "paymentTerms.paymentTermsNumber",
+          "customer.customerNumber",
+          "recipient.name",
+          "recipient.address",
+          "recipient.zip",
+          "recipient.city",
+          "recipient.country",
+          "recipient.ean",
+          "recipient.publicEntryNumber",
+          "deliveryLocation.deliveryLocationNumber",
+          "delivery.address",
+          "delivery.zip",
+          "delivery.city",
+          "delivery.country",
+          "delivery.deliveryTerms",
+          "delivery.deliveryDate",
+          "notes.heading",
+          "notes.textLine1",
+          "notes.textLine2",
+          "references.customerContact.customer.customerNumber",
+          "references.salesPerson.employeeNumber",
+          "references.vendorReference.employeeNumber",
+          "references.other"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-invoices-drafts"
@@ -963,6 +1154,13 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "description",
+          "product.productNumber"
+        ],
+        "x-sortable-fields": [
+          "product.productNumber"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-customers-customernumber-templates-invoiceline"

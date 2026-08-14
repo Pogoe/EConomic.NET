@@ -74,6 +74,21 @@
             }
           }
         ],
+        "x-filterable-fields": [
+          "employeeNumber",
+          "employeeGroup.employeeGroupNumber",
+          "name",
+          "email",
+          "phone",
+          "barred"
+        ],
+        "x-sortable-fields": [
+          "employeeNumber",
+          "employeeGroup.employeeGroupNumber",
+          "name",
+          "email",
+          "phone"
+        ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-employees"
         }
@@ -177,6 +192,47 @@
               "type": "integer"
             }
           }
+        ],
+        "x-filterable-fields": [
+          "address",
+          "balance",
+          "city",
+          "corporateIdentificationNumber",
+          "country",
+          "creditLimit",
+          "currency",
+          "customerNumber",
+          "ean",
+          "email",
+          "lastUpdated",
+          "name",
+          "publicEntryNumber",
+          "telephoneAndFaxNumber",
+          "mobilePhone",
+          "vatNumber",
+          "website",
+          "zip",
+          "customerGroup.customerGroupNumber"
+        ],
+        "x-sortable-fields": [
+          "address",
+          "balance",
+          "city",
+          "corporateIdentificationNumber",
+          "country",
+          "creditLimit",
+          "currency",
+          "customerNumber",
+          "ean",
+          "email",
+          "lastUpdated",
+          "name",
+          "publicEntryNumber",
+          "telephoneAndFaxNumber",
+          "mobilePhone",
+          "vatNumber",
+          "website",
+          "zip"
         ],
         "externalDocs": {
           "url": "http://restdocs.e-conomic.com/#get-employees-employeeid-customers"
