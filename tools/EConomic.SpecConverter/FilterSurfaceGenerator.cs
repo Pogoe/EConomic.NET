@@ -81,8 +81,9 @@ public static class FilterSurfaceGenerator
             // Both surfaces are emitted even when empty. An empty filter surface is not a gap in
             // the generator, it is the accurate statement that e-conomic will not filter this
             // resource on anything — and the facade needs the type to exist either way.
-            AppendSurface(builder, $"{entity}Filter", entity, filterable, isFilter: true);
-            AppendSurface(builder, $"{entity}Sort", entity, sortable, isFilter: false);
+            var published = SchemaRegistry.PublicName(entity);
+            AppendSurface(builder, $"{published}Filter", entity, filterable, isFilter: true);
+            AppendSurface(builder, $"{published}Sort", entity, sortable, isFilter: false);
         }
 
         return builder.ToString();

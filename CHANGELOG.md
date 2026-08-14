@@ -50,10 +50,11 @@ is a mapping change inside the facade, not automatically a major release here.
 - Native AOT smoke test, published and executed in CI, so the `IsTrimmable` and `IsAotCompatible`
   claims are tested rather than asserted.
 
-- Write support for customers, customer groups, payment terms, suppliers and units. Each is now a
-  `{Entity}Resource` exposing the writes e-conomic supports alongside the query methods, which
+- Write support for customers, customer groups, payment terms, products, suppliers, units, a
+  customer's contacts and delivery locations, and the invoice, order and quote drafts. Each is now
+  a `{Entity}Resource` exposing the writes e-conomic supports alongside the query methods, which
   continue to return a query, so existing read code is unaffected apart from the property's type.
-  Three creates, five updates and five deletes in total.
+  Eleven resources, each with a create, an update and a delete.
 - `{Entity}Create` and `{Entity}Update` write models, carrying only the properties e-conomic
   accepts. Server-maintained values such as `balance` are absent, and references to other resources
   are flattened to their numbers.
@@ -62,11 +63,28 @@ is a mapping change inside the facade, not automatically a major release here.
   `NotDueInvoices`, `DraftOrders`, `SentOrders`, `ArchivedOrders`, `DraftQuotes`, `SentQuotes` and
   `ArchivedQuotes`. These sit one segment below a namespace — `/invoices/drafts` rather than
   `/invoices` — and were invisible to a discovery pass that only considered single-segment paths.
-  Thirty-three resources in total, up from twenty.
+  Thirty-three resources in total, up from twenty. The two whose generated component name is shaped
+  by what else the specifications contain are published under the name that describes the type:
+  `DraftInvoice` and `BookedInvoice`, rather than `…Summary`.
 - Nested collections: a customer's contacts and delivery locations, reached through the parent
   because they cannot be addressed without its identifier —
   `client.Customers.Contacts(customerNumber).CreateAsync(...)`. Each supports the same querying,
   paging and writes as a top-level resource.
+- Composite properties on the read models. An entity's nested objects and arrays each get their own
+  public record — an invoice's `Recipient`, `Delivery`, `Notes` and `References`, a departmental
+  distribution's `Distributions`, a product's `ProductGroup`. These were previously absent from the
+  public models altogether, which is the worst kind of gap: nothing failed, the data simply was not
+  there. The count of properties the facade could not express went from 117 to 13, and every one
+  that remains is a server-assigned link.
+- Write support for draft invoices, orders and quotes, including their lines:
+  `client.DraftInvoices.CreateAsync(new DraftInvoiceCreate { … Lines = [new DraftInvoiceCreateLine { … }] })`.
+  Composite write models are generated the same way as the read ones, so a nested object is a
+  record and an array of them is a list. Verified end to end against a live agreement: the server
+  prices the invoice from the lines it is sent.
+- `DraftInvoices.BookAsync` — books a draft invoice and returns the booked one. e-conomic models
+  this as a `POST` to `/invoices/booked` carrying a reference to the draft, which is an action on a
+  draft rather than the creation of a booked invoice, so it is hand-written rather than generated.
+  Booking is not reversible, and the documentation says so.
 - `AsQuery()` on each resource, for obtaining an unfiltered query.
 - `DELETE` support, from the 21 endpoints described in the published documentation. e-conomic
   publishes no schema for `DELETE` — it has neither request nor response body — so these are issued
@@ -103,5 +121,9 @@ is a mapping change inside the facade, not automatically a major release here.
   `System.Text.Json` defaults to numbers. The generated context now applies a string enum converter.
 - `$null:` is a value rather than an operator, so an absent property is filtered with
   `field$eq:$null:`. The previously generated `field$null:` was a syntax error the server rejected.
+- Unset optional numbers were only made nullable at the top level of a write payload, so one nested
+  inside an object or an array item was still serialized as `0`. A draft invoice whose line did not
+  set `lineNumber` and `sortKey` — neither of which a caller has any reason to set — was rejected
+  outright, both declaring a minimum of 1.
 
 [Unreleased]: https://github.com/Pogoe/EConomic.NET/commits/main

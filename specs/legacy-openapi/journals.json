@@ -2872,7 +2872,8 @@
               "journalNumber": {
                 "type": "number",
                 "description": "Journal number that must be at least 1.",
-                "minimum": 1
+                "minimum": 1,
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2904,7 +2905,8 @@
                         "journalNumber": {
                           "type": "number",
                           "description": "Journal number that must be at least 1.",
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -2924,7 +2926,8 @@
                         "accountNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "The account number."
+                          "description": "The account number.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -2955,7 +2958,8 @@
                       "properties": {
                         "costTypeNumber": {
                           "type": "integer",
-                          "description": "The unique identifier of the cost type."
+                          "description": "The unique identifier of the cost type.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -2993,7 +2997,8 @@
                         "departmentalDistributionNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the departmental distribution."
+                          "description": "A unique identifier of the departmental distribution.",
+                          "nullable": true
                         },
                         "distributionType": {
                           "type": "string",
@@ -3013,7 +3018,8 @@
                         "employeeNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique numerical identifier with a maximum of 9 digits."
+                          "description": "A unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3025,7 +3031,8 @@
                     "exchangeRate": {
                       "type": "number",
                       "x-max-decimals": 6,
-                      "description": "The exchange rate between the base currency and the invoice currency."
+                      "description": "The exchange rate between the base currency and the invoice currency.",
+                      "nullable": true
                     },
                     "entryType": {
                       "enum": [
@@ -3041,7 +3048,8 @@
                           "type": "number",
                           "minimum": 1,
                           "maximum": 999999999,
-                          "description": "Journal voucher number must be between 1-999999999."
+                          "description": "Journal voucher number must be between 1-999999999.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3053,29 +3061,34 @@
                     "contraVatAmount": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account."
+                      "description": "The amount of VAT on the entry on the contra account.",
+                      "nullable": true
                     },
                     "contraVatAmountInBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account in base currency."
+                      "description": "The amount of VAT on the entry on the contra account in base currency.",
+                      "nullable": true
                     },
                     "amountBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount in base currency."
+                      "description": "The amount in base currency.",
+                      "nullable": true
                     },
                     "remainder": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid."
+                      "description": "Remaining amount to be paid.",
+                      "nullable": true
                     },
                     "remainderInDefaultCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid in default currency."
+                      "description": "Remaining amount to be paid in default currency.",
+                      "nullable": true
                     },
                     "account": {
                       "type": "object",
@@ -3084,7 +3097,8 @@
                         "accountNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "The account number."
+                          "description": "The account number.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3100,7 +3114,8 @@
                         "projectNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the project."
+                          "description": "A unique identifier of the project.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3128,22 +3143,26 @@
                     "vatAmount": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry. Used if the entry has a VAT account."
+                      "description": "The amount of VAT on the entry. Used if the entry has a VAT account.",
+                      "nullable": true
                     },
                     "vatAmountBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the voucher in base currency."
+                      "description": "The amount of VAT on the voucher in base currency.",
+                      "nullable": true
                     },
                     "quantity1": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "Requires dimension module."
+                      "description": "Requires dimension module.",
+                      "nullable": true
                     },
                     "quantity2": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "Requires dimension module."
+                      "description": "Requires dimension module.",
+                      "nullable": true
                     },
                     "unit1": {
                       "type": "object",
@@ -3152,7 +3171,8 @@
                         "unitNumber": {
                           "type": "integer",
                           "description": "The unique identifier of the unit.",
-                          "minimum": 0
+                          "minimum": 0,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3168,7 +3188,8 @@
                         "unitNumber": {
                           "type": "integer",
                           "description": "The unique identifier of the unit.",
-                          "minimum": 0
+                          "minimum": 0,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3203,7 +3224,8 @@
                         "journalNumber": {
                           "type": "number",
                           "description": "Journal number that must be at least 1.",
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3224,7 +3246,8 @@
                         "accountNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "The account number."
+                          "description": "The account number.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3278,7 +3301,8 @@
                         "departmentalDistributionNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the departmental distribution."
+                          "description": "A unique identifier of the departmental distribution.",
+                          "nullable": true
                         },
                         "distributionType": {
                           "type": "string",
@@ -3298,7 +3322,8 @@
                         "employeeNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique numerical identifier with a maximum of 9 digits."
+                          "description": "A unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3310,7 +3335,8 @@
                     "exchangeRate": {
                       "type": "number",
                       "x-max-decimals": 6,
-                      "description": "The exchange rate between the base currency and the invoice currency."
+                      "description": "The exchange rate between the base currency and the invoice currency.",
+                      "nullable": true
                     },
                     "entryType": {
                       "enum": [
@@ -3326,7 +3352,8 @@
                           "type": "number",
                           "minimum": 1,
                           "maximum": 999999999,
-                          "description": "Journal voucher number must be between 1-999999999."
+                          "description": "Journal voucher number must be between 1-999999999.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3338,29 +3365,34 @@
                     "contraVatAmount": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account."
+                      "description": "The amount of VAT on the entry on the contra account.",
+                      "nullable": true
                     },
                     "contraVatAmountInBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account in base currency."
+                      "description": "The amount of VAT on the entry on the contra account in base currency.",
+                      "nullable": true
                     },
                     "amountBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount in base currency."
+                      "description": "The amount in base currency.",
+                      "nullable": true
                     },
                     "remainder": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid."
+                      "description": "Remaining amount to be paid.",
+                      "nullable": true
                     },
                     "remainderInDefaultCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid in default currency."
+                      "description": "Remaining amount to be paid in default currency.",
+                      "nullable": true
                     },
                     "customer": {
                       "type": "object",
@@ -3370,7 +3402,8 @@
                           "type": "integer",
                           "maximum": 999999999,
                           "minimum": 1,
-                          "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+                          "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3382,7 +3415,8 @@
                     "customerInvoice": {
                       "type": "integer",
                       "minimum": 1,
-                      "description": "Customer invoice number."
+                      "description": "Customer invoice number.",
+                      "nullable": true
                     }
                   },
                   "required": [
@@ -3410,7 +3444,8 @@
                         "journalNumber": {
                           "type": "number",
                           "description": "Journal number that must be at least 1.",
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3430,7 +3465,8 @@
                         "accountNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "The account number."
+                          "description": "The account number.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3461,7 +3497,8 @@
                       "properties": {
                         "costTypeNumber": {
                           "type": "integer",
-                          "description": "The unique identifier of the cost type."
+                          "description": "The unique identifier of the cost type.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3499,7 +3536,8 @@
                         "departmentalDistributionNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the departmental distribution."
+                          "description": "A unique identifier of the departmental distribution.",
+                          "nullable": true
                         },
                         "distributionType": {
                           "type": "string",
@@ -3519,7 +3557,8 @@
                         "employeeNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique numerical identifier with a maximum of 9 digits."
+                          "description": "A unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3531,7 +3570,8 @@
                     "exchangeRate": {
                       "type": "number",
                       "x-max-decimals": 6,
-                      "description": "The exchange rate between the base currency and the invoice currency."
+                      "description": "The exchange rate between the base currency and the invoice currency.",
+                      "nullable": true
                     },
                     "entryType": {
                       "enum": [
@@ -3547,7 +3587,8 @@
                           "type": "number",
                           "minimum": 1,
                           "maximum": 999999999,
-                          "description": "Journal voucher number must be between 1-999999999."
+                          "description": "Journal voucher number must be between 1-999999999.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3559,29 +3600,34 @@
                     "contraVatAmount": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account."
+                      "description": "The amount of VAT on the entry on the contra account.",
+                      "nullable": true
                     },
                     "contraVatAmountInBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account in base currency."
+                      "description": "The amount of VAT on the entry on the contra account in base currency.",
+                      "nullable": true
                     },
                     "amountBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount in base currency."
+                      "description": "The amount in base currency.",
+                      "nullable": true
                     },
                     "remainder": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid."
+                      "description": "Remaining amount to be paid.",
+                      "nullable": true
                     },
                     "remainderInDefaultCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid in default currency."
+                      "description": "Remaining amount to be paid in default currency.",
+                      "nullable": true
                     },
                     "supplier": {
                       "type": "object",
@@ -3591,7 +3637,8 @@
                           "type": "integer",
                           "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
                           "maximum": 999999999,
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3714,7 +3761,8 @@
                             "paymentTypeNumber": {
                               "type": "integer",
                               "minimum": 1,
-                              "description": "The payment type number is a positive unique numerical identifier."
+                              "description": "The payment type number is a positive unique numerical identifier.",
+                              "nullable": true
                             },
                             "self": {
                               "type": "string",
@@ -3738,7 +3786,8 @@
                         "projectNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the project."
+                          "description": "A unique identifier of the project.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3750,12 +3799,14 @@
                     "quantity1": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "Requires dimension module."
+                      "description": "Requires dimension module.",
+                      "nullable": true
                     },
                     "quantity2": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "Requires dimension module."
+                      "description": "Requires dimension module.",
+                      "nullable": true
                     },
                     "unit1": {
                       "type": "object",
@@ -3764,7 +3815,8 @@
                         "unitNumber": {
                           "type": "integer",
                           "description": "The unique identifier of the unit.",
-                          "minimum": 0
+                          "minimum": 0,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3780,7 +3832,8 @@
                         "unitNumber": {
                           "type": "integer",
                           "description": "The unique identifier of the unit.",
-                          "minimum": 0
+                          "minimum": 0,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3815,7 +3868,8 @@
                         "journalNumber": {
                           "type": "number",
                           "description": "Journal number that must be at least 1.",
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3835,7 +3889,8 @@
                         "accountNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "The account number."
+                          "description": "The account number.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3889,7 +3944,8 @@
                         "departmentalDistributionNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the departmental distribution."
+                          "description": "A unique identifier of the departmental distribution.",
+                          "nullable": true
                         },
                         "distributionType": {
                           "type": "string",
@@ -3909,7 +3965,8 @@
                         "employeeNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique numerical identifier with a maximum of 9 digits."
+                          "description": "A unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3921,7 +3978,8 @@
                     "exchangeRate": {
                       "type": "number",
                       "x-max-decimals": 6,
-                      "description": "The exchange rate between the base currency and the invoice currency."
+                      "description": "The exchange rate between the base currency and the invoice currency.",
+                      "nullable": true
                     },
                     "entryType": {
                       "enum": [
@@ -3937,7 +3995,8 @@
                           "type": "number",
                           "minimum": 1,
                           "maximum": 999999999,
-                          "description": "Journal voucher number must be between 1-999999999."
+                          "description": "Journal voucher number must be between 1-999999999.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -3949,29 +4008,34 @@
                     "contraVatAmount": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account."
+                      "description": "The amount of VAT on the entry on the contra account.",
+                      "nullable": true
                     },
                     "contraVatAmountInBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account in base currency."
+                      "description": "The amount of VAT on the entry on the contra account in base currency.",
+                      "nullable": true
                     },
                     "amountBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount in base currency."
+                      "description": "The amount in base currency.",
+                      "nullable": true
                     },
                     "remainder": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid."
+                      "description": "Remaining amount to be paid.",
+                      "nullable": true
                     },
                     "remainderInDefaultCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid in default currency."
+                      "description": "Remaining amount to be paid in default currency.",
+                      "nullable": true
                     },
                     "supplier": {
                       "type": "object",
@@ -3981,7 +4045,8 @@
                           "type": "integer",
                           "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
                           "maximum": 999999999,
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -4021,7 +4086,8 @@
                         "journalNumber": {
                           "type": "number",
                           "description": "Journal number that must be at least 1.",
-                          "minimum": 1
+                          "minimum": 1,
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -4041,7 +4107,8 @@
                         "accountNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "The account number."
+                          "description": "The account number.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -4095,7 +4162,8 @@
                         "departmentalDistributionNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique identifier of the departmental distribution."
+                          "description": "A unique identifier of the departmental distribution.",
+                          "nullable": true
                         },
                         "distributionType": {
                           "type": "string",
@@ -4115,7 +4183,8 @@
                         "employeeNumber": {
                           "type": "integer",
                           "minimum": 1,
-                          "description": "A unique numerical identifier with a maximum of 9 digits."
+                          "description": "A unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -4127,7 +4196,8 @@
                     "exchangeRate": {
                       "type": "number",
                       "x-max-decimals": 6,
-                      "description": "The exchange rate between the base currency and the invoice currency."
+                      "description": "The exchange rate between the base currency and the invoice currency.",
+                      "nullable": true
                     },
                     "entryType": {
                       "enum": [
@@ -4143,7 +4213,8 @@
                           "type": "number",
                           "minimum": 1,
                           "maximum": 999999999,
-                          "description": "Journal voucher number must be between 1-999999999."
+                          "description": "Journal voucher number must be between 1-999999999.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -4155,29 +4226,34 @@
                     "contraVatAmount": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account."
+                      "description": "The amount of VAT on the entry on the contra account.",
+                      "nullable": true
                     },
                     "contraVatAmountInBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount of VAT on the entry on the contra account in base currency."
+                      "description": "The amount of VAT on the entry on the contra account in base currency.",
+                      "nullable": true
                     },
                     "amountBaseCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
-                      "description": "The amount in base currency."
+                      "description": "The amount in base currency.",
+                      "nullable": true
                     },
                     "remainder": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid."
+                      "description": "Remaining amount to be paid.",
+                      "nullable": true
                     },
                     "remainderInDefaultCurrency": {
                       "type": "number",
                       "x-max-decimals": 2,
                       "readOnly": true,
-                      "description": "Remaining amount to be paid in default currency."
+                      "description": "Remaining amount to be paid in default currency.",
+                      "nullable": true
                     },
                     "customer": {
                       "type": "object",
@@ -4187,7 +4263,8 @@
                           "type": "integer",
                           "maximum": 999999999,
                           "minimum": 1,
-                          "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+                          "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+                          "nullable": true
                         },
                         "self": {
                           "type": "string",
@@ -4200,7 +4277,8 @@
                       "type": "integer",
                       "minimum": 1,
                       "maximum": 999999999,
-                      "description": "Customer invoice number."
+                      "description": "Customer invoice number.",
+                      "nullable": true
                     },
                     "dueDate": {
                       "type": "string",

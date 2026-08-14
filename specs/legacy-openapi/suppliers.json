@@ -789,7 +789,8 @@
             "properties": {
               "supplierContactNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the supplier contact."
+                "description": "Unique number identifying the supplier contact.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -823,7 +824,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the cost account."
+                "description": "Unique number identifying the cost account.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -859,7 +861,8 @@
             "properties": {
               "layoutNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the layout."
+                "description": "The unique identifier of the layout.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -881,7 +884,8 @@
               "paymentTermsNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the payment term."
+                "description": "A unique identifier of the payment term.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -910,7 +914,8 @@
                 "properties": {
                   "paymentTypeNumber": {
                     "type": "integer",
-                    "description": "Unique number identifying the payment type."
+                    "description": "Unique number identifying the payment type.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -928,7 +933,8 @@
               "employeeNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "Unique identifier of the employee."
+                "description": "Unique identifier of the employee.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -943,7 +949,8 @@
             "properties": {
               "supplierContactNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the supplier contact."
+                "description": "Unique number identifying the supplier contact.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -959,7 +966,8 @@
               "supplierGroupNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "Unique number identifying the supplier group."
+                "description": "Unique number identifying the supplier group.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -981,7 +989,8 @@
             "properties": {
               "vatZoneNumber": {
                 "type": "integer",
-                "description": "Unique identifier of the vat zone."
+                "description": "Unique identifier of the vat zone.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1024,7 +1033,8 @@
             "properties": {
               "supplierContactNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the supplier contact."
+                "description": "Unique number identifying the supplier contact.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1058,7 +1068,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the cost account."
+                "description": "Unique number identifying the cost account.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1094,7 +1105,8 @@
             "properties": {
               "layoutNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the layout."
+                "description": "The unique identifier of the layout.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1117,7 +1129,8 @@
               "paymentTermsNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the payment term."
+                "description": "A unique identifier of the payment term.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1146,7 +1159,8 @@
                 "properties": {
                   "paymentTypeNumber": {
                     "type": "integer",
-                    "description": "Unique number identifying the payment type."
+                    "description": "Unique number identifying the payment type.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -1164,7 +1178,8 @@
               "employeeNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "Unique identifier of the employee."
+                "description": "Unique identifier of the employee.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1179,7 +1194,8 @@
             "properties": {
               "supplierContactNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the supplier contact."
+                "description": "Unique number identifying the supplier contact.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1195,7 +1211,8 @@
             "properties": {
               "supplierGroupNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the supplier group."
+                "description": "Unique number identifying the supplier group.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1216,7 +1233,8 @@
             "properties": {
               "vatZoneNumber": {
                 "type": "integer",
-                "description": "Unique identifier of the vat zone."
+                "description": "Unique identifier of the vat zone.",
+                "nullable": true
               },
               "self": {
                 "type": "string",

@@ -2609,7 +2609,8 @@
                 "type": "integer",
                 "maximum": 999999999,
                 "minimum": 1,
-                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2678,7 +2679,8 @@
                 "type": "integer",
                 "maximum": 999999999,
                 "minimum": 1,
-                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2811,7 +2813,8 @@
             "properties": {
               "customerGroupNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the customer group."
+                "description": "The unique identifier of the customer group.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2843,7 +2846,8 @@
             "properties": {
               "vatZoneNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the VAT-zone."
+                "description": "The unique identifier of the VAT-zone.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2858,7 +2862,8 @@
             "properties": {
               "layoutNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the layout."
+                "description": "The unique identifier of the layout.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2879,7 +2884,8 @@
             "properties": {
               "paymentTermsNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the payment terms."
+                "description": "The unique identifier of the payment terms.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2929,7 +2935,8 @@
             "properties": {
               "employeeNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the employee."
+                "description": "The unique identifier of the employee.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3014,7 +3021,8 @@
             "properties": {
               "customerGroupNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the customer group."
+                "description": "The unique identifier of the customer group.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3036,7 +3044,8 @@
             "properties": {
               "deliveryLocationNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the delivery location."
+                "description": "The unique identifier of the delivery location.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3061,7 +3070,8 @@
             "properties": {
               "vatZoneNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the VAT-zone."
+                "description": "The unique identifier of the VAT-zone.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3076,7 +3086,8 @@
             "properties": {
               "layoutNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the layout."
+                "description": "The unique identifier of the layout.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3097,7 +3108,8 @@
             "properties": {
               "paymentTermsNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the payment terms."
+                "description": "The unique identifier of the payment terms.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3147,7 +3159,8 @@
             "properties": {
               "customerContactNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the customer employee."
+                "description": "The unique identifier of the customer employee.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3162,7 +3175,8 @@
             "properties": {
               "customerContactNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the customer contact."
+                "description": "The unique identifier of the customer contact.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3177,7 +3191,8 @@
             "properties": {
               "employeeNumber": {
                 "type": "integer",
-                "description": "The unique identifier of the employee."
+                "description": "The unique identifier of the employee.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3341,7 +3356,8 @@
                 "type": "integer",
                 "maximum": 999999999,
                 "minimum": 1,
-                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. This value will be picked up from the url."
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. This value will be picked up from the url.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -3616,7 +3632,8 @@
                 "type": "integer",
                 "maximum": 999999999,
                 "minimum": 1,
-                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. This value will be picked up from the url."
+                "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. This value will be picked up from the url.",
+                "nullable": true
               },
               "self": {
                 "type": "string",

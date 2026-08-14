@@ -466,7 +466,8 @@
             "properties": {
               "layoutNumber": {
                 "type": "integer",
-                "description": "The layout number."
+                "description": "The layout number.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -502,7 +503,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "The account number."
+                "description": "The account number.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -517,7 +519,8 @@
             "properties": {
               "layoutNumber": {
                 "type": "integer",
-                "description": "The layout number."
+                "description": "The layout number.",
+                "nullable": true
               },
               "self": {
                 "type": "string",

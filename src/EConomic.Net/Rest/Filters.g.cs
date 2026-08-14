@@ -653,7 +653,7 @@ public sealed class ArchivedQuoteSort
 /// toward fewer operators, so it can under-report but will not produce a request the
 /// server rejects.
 /// </remarks>
-public sealed class BookedInvoiceSummaryFilter
+public sealed class BookedInvoiceFilter
 {
     /// <summary>Maps to <c>bookedInvoiceNumber</c>.</summary>
     [EconomicField("bookedInvoiceNumber")]
@@ -771,7 +771,7 @@ public sealed class BookedInvoiceSummaryFilter
 /// <summary>
 /// The properties e-conomic will sort <c>BookedInvoiceSummary</c> by.
 /// </summary>
-public sealed class BookedInvoiceSummarySort
+public sealed class BookedInvoiceSort
 {
     /// <summary>Maps to <c>bookedInvoiceNumber</c>.</summary>
     [EconomicField("bookedInvoiceNumber")]
@@ -1399,7 +1399,7 @@ public sealed class DepartmentalDistributionSummarySort
 /// toward fewer operators, so it can under-report but will not produce a request the
 /// server rejects.
 /// </remarks>
-public sealed class DraftInvoiceSummaryFilter
+public sealed class DraftInvoiceFilter
 {
     /// <summary>Maps to <c>draftInvoiceNumber</c>.</summary>
     [EconomicField("draftInvoiceNumber")]
@@ -1521,7 +1521,7 @@ public sealed class DraftInvoiceSummaryFilter
 /// <summary>
 /// The properties e-conomic will sort <c>DraftInvoiceSummary</c> by.
 /// </summary>
-public sealed class DraftInvoiceSummarySort
+public sealed class DraftInvoiceSort
 {
     /// <summary>Maps to <c>draftInvoiceNumber</c>.</summary>
     [EconomicField("draftInvoiceNumber")]

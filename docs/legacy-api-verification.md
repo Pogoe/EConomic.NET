@@ -70,6 +70,15 @@ these should be re-checked on at least one other resource before being treated a
 | **DELETE status varies** | `204 No Content` for customers, units and products; **`200 OK`** with a status-message body for draft invoices |
 | draft invoice requirements | `date`, `currency`, `layout`, `paymentTerms`, `customer`, `recipient`; an invoice line needs a `product` before `quantity` or `unitNetPrice` is accepted |
 | collection listings omit lines | `/invoices/drafts` items carry no `lines` array — those appear only on the single-invoice GET and the create payload |
+| **an unset number inside a line is rejected** | a draft invoice whose line omitted `lineNumber` and `sortKey` failed with "Integer 0 is less than minimum value of 1" for both. The same rule as `customerNumber`, one level deeper: optional numbers have to be nullable inside nested objects and array items too, not only at the top level |
+| server prices the invoice | a line of `quantity: 2` at `unitNetPrice: 100` came back as `netAmount: 200` and `grossAmount: 250`. Nothing in the request said what the totals should be |
+| draft invoice `PUT` | replaces the lines as well: sending one line at `quantity: 3` moved `netAmount` from 200 to 300 |
+| a referenced record cannot be deleted | the customer and product a draft invoice points at are only deletable once the invoice is gone |
+| **booking a draft** | `POST /invoices/booked` with `{"draftInvoice": {"draftInvoiceNumber": n}}` answers with the booked invoice and its own number. The draft is gone: a query for it comes back empty |
+| booking is irreversible | a booked invoice cannot be deleted, and neither can the customer or product it references |
+| `sendBy` casing | the three values are `none`, `EAN` and `Email` — inconsistently cased, and the server is strict about it |
+| draft orders and quotes | create and delete behave exactly as draft invoices do, from the same generated templates |
+| **the public demo agreement is shared** | its token bucket is spent by everyone reading e-conomic's documentation: `X-RateLimiting` moved between 58 and 352 of 10 000 with no calls of our own in between. A `429` from it says nothing about the caller. The integration tests were moved onto an agreement of their own for this reason, and because reading a shared agreement means asserting on records nobody controls |
 
 Two of these change the design:
 
@@ -142,28 +151,28 @@ One row per endpoint. Fill in as each is exercised.
 | `/accounts` | ✅ live | — | — | — | string enums confirmed |
 | `/app-roles` | ✅ live | — | — | — | |
 | `/currencies` | ✅ live | — | — | — | no filterable properties |
-| `/customer-groups` | ✅ live | ⬜ | ⬜ | ⬜ | |
-| `/customers` | ✅ live | ⬜ | ⬜ | ⬜ | filter under-reports `pNumber` |
-| `/customers/{n}/contacts` | ⬜ | ⬜ | ⬜ | ⬜ | nested, not in the facade |
-| `/customers/{n}/delivery-locations` | ⬜ | ⬜ | ⬜ | ⬜ | nested, not in the facade |
+| `/customer-groups` | ✅ live | ✅ live | ✅ live | ✅ live | |
+| `/customers` | ✅ live | ✅ live | ✅ live | ✅ live | filter under-reports `pNumber` |
+| `/customers/{n}/contacts` | ✅ live | ✅ live | ✅ live | ✅ live | reached through the parent |
+| `/customers/{n}/delivery-locations` | ✅ live | ✅ live | ⬜ | ✅ live | reached through the parent |
 | `/departments` | ✅ live | — | — | — | |
 | `/departmental-distributions` | ✅ live | — | — | — | |
 | `/employees` | ✅ live | — | — | — | |
-| `/invoices/booked` | ⬜ | ⬜ | ⬜ | — | not in the facade |
-| `/invoices/drafts` | ⬜ | ⬜ | ⬜ | ⬜ | **bulk delete removes every draft** |
+| `/invoices/booked` | ✅ live | ✅ live | ⬜ | — | the `POST` books a draft, exposed as `DraftInvoices.BookAsync`. No delete: a booked invoice is part of the accounting record |
+| `/invoices/drafts` | ✅ live | ✅ live | ✅ live | ✅ live | delete answers **200**, not 204. The collection also accepts a delete of its own, which **removes every draft** — deliberately not exposed |
 | `/journals` | ✅ live | — | — | — | |
 | `/journals/{n}/vouchers` | ⬜ | ⬜ | — | — | composite key |
 | `/layouts` | ✅ live | — | — | — | |
-| `/orders/drafts` | ⬜ | ⬜ | ⬜ | ⬜ | delete documented non-idempotent |
-| `/orders/sent` | ⬜ | — | — | ⬜ | delete documented non-idempotent |
-| `/payment-terms` | ✅ live | ⬜ | ⬜ | ⬜ | create payload has no key |
+| `/orders/drafts` | ✅ live | ✅ live | ⬜ | ✅ live | |
+| `/orders/sent` | ✅ live | — | — | ⬜ | |
+| `/payment-terms` | ✅ live | ✅ live | ✅ live | ✅ live | `paymentTermsType` is required on create |
 | `/payment-types` | ✅ live | — | — | — | |
 | `/product-groups` | ✅ live | — | — | — | |
-| `/products` | ✅ live | ⬜ | ⬜ | ⬜ | `productGroup` missing from the model |
-| `/quotes/drafts` | ⬜ | ⬜ | ⬜ | ⬜ | delete documented non-idempotent |
-| `/quotes/sent` | ⬜ | — | — | ⬜ | |
-| `/suppliers` | ✅ live | ⬜ | ⬜ | ⬜ | |
-| `/units` | ✅ live | ⬜ | ⬜ | ⬜ | create payload has no key |
+| `/products` | ✅ live | ✅ live | ✅ live | ✅ live | |
+| `/quotes/drafts` | ✅ live | ✅ live | ⬜ | ✅ live | |
+| `/quotes/sent` | ✅ live | — | — | ⬜ | |
+| `/suppliers` | ✅ live | ✅ live | ✅ live | ✅ live | |
+| `/units` | ✅ live | ✅ live | ✅ live | ✅ live | create payload declares no key; the response carries one |
 | `/vat-accounts` | ✅ live | — | — | — | |
 | `/vat-types` | ✅ live | — | — | — | |
 | `/vat-zones` | ✅ live | — | — | — | |

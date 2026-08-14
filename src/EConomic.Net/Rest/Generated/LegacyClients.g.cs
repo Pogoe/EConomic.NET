@@ -35966,7 +35966,7 @@ namespace EConomic.Rest.Generated
         /// The layout number.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the layout resource.
@@ -35993,7 +35993,7 @@ namespace EConomic.Rest.Generated
         /// The account number.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -36020,7 +36020,7 @@ namespace EConomic.Rest.Generated
         /// The layout number.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the layout resource.
@@ -37409,7 +37409,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -37455,7 +37455,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -37482,7 +37482,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the customer group.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerGroupNumber")]
-        public int CustomerGroupNumber { get; set; } = default!;
+        public int? CustomerGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the customer group item.
@@ -37509,7 +37509,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the VAT-zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the VAT-zone item.
@@ -37536,7 +37536,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the layout.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the layout item.
@@ -37563,7 +37563,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the payment terms.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the payment terms item.
@@ -37590,7 +37590,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee resource.
@@ -37638,7 +37638,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the customer group.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerGroupNumber")]
-        public int CustomerGroupNumber { get; set; } = default!;
+        public int? CustomerGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the customer group item.
@@ -37665,7 +37665,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the delivery location.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the delivery location.
@@ -37692,7 +37692,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the VAT-zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the VAT-zone item.
@@ -37719,7 +37719,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the layout.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the layout item.
@@ -37746,7 +37746,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the payment terms.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the payment terms item.
@@ -37773,7 +37773,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the customer employee item.
@@ -37800,7 +37800,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the customer contact.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the customer contact item.
@@ -37827,7 +37827,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee resource.
@@ -37876,7 +37876,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -37991,7 +37991,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -40235,7 +40235,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the layout resource.
@@ -40263,7 +40263,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -40291,14 +40291,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// The number of days of credit on the invoice. This field is only valid if terms of payment is not of type 'duedate
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// The type the payment term.
@@ -40332,7 +40332,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -40450,7 +40450,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the delivery location resource.
@@ -40635,14 +40635,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lineNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LineNumber { get; set; } = default!;
+        public int? LineNumber { get; set; } = default!;
 
         /// <summary>
         /// A sort key used to sort the lines in ascending order within the invoice.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// A description of the product or service sold. Please note, that when setting existing products, description field is required. While setting non-existing product, description field can remain empty.
@@ -40673,37 +40673,37 @@ namespace EConomic.Rest.Generated
         /// The number of units of goods on the invoice line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity")]
-        public double Quantity { get; set; } = default!;
+        public double? Quantity { get; set; } = default!;
 
         /// <summary>
         /// The price of 1 unit of the goods or services on the invoice line in the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNetPrice")]
-        public double UnitNetPrice { get; set; } = default!;
+        public double? UnitNetPrice { get; set; } = default!;
 
         /// <summary>
         /// A line discount expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("discountPercentage")]
-        public double DiscountPercentage { get; set; } = default!;
+        public double? DiscountPercentage { get; set; } = default!;
 
         /// <summary>
         /// The cost price of 1 unit of the goods or services in the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitCostPrice")]
-        public double UnitCostPrice { get; set; } = default!;
+        public double? UnitCostPrice { get; set; } = default!;
 
         /// <summary>
         /// The difference between the net price and the cost price on the invoice line in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin on the invoice line expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
@@ -40787,14 +40787,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// The number of days of credit on the invoice. This field is only valid if terms of payment is not of type 'duedate
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// The name of the payment terms.
@@ -40835,7 +40835,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -40945,7 +40945,7 @@ namespace EConomic.Rest.Generated
         /// A unique identifier for the delivery location.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the delivery location resource.
@@ -41106,7 +41106,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -41158,14 +41158,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lineNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LineNumber { get; set; } = default!;
+        public int? LineNumber { get; set; } = default!;
 
         /// <summary>
         /// A sort key used to sort the lines in ascending order within the invoice.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// A description of the product or service sold.
@@ -41196,37 +41196,37 @@ namespace EConomic.Rest.Generated
         /// The number of units of goods on the invoice line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity")]
-        public double Quantity { get; set; } = default!;
+        public double? Quantity { get; set; } = default!;
 
         /// <summary>
         /// The price of 1 unit of the goods or services on the invoice line in the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNetPrice")]
-        public double UnitNetPrice { get; set; } = default!;
+        public double? UnitNetPrice { get; set; } = default!;
 
         /// <summary>
         /// A line discount expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("discountPercentage")]
-        public double DiscountPercentage { get; set; } = default!;
+        public double? DiscountPercentage { get; set; } = default!;
 
         /// <summary>
         /// The cost price of 1 unit of the goods or services in the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitCostPrice")]
-        public double UnitCostPrice { get; set; } = default!;
+        public double? UnitCostPrice { get; set; } = default!;
 
         /// <summary>
         /// The difference between the net price and the cost price on the invoice line in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin on the invoice line expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
@@ -41254,7 +41254,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("draftInvoiceNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int DraftInvoiceNumber { get; set; } = default!;
+        public int? DraftInvoiceNumber { get; set; } = default!;
 
         /// <summary>
         /// The unique self reference of the draft invoice to be booked.
@@ -42342,7 +42342,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("draftInvoiceNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DraftInvoiceNumber { get; set; } = default!;
+        public int? DraftInvoiceNumber { get; set; } = default!;
 
         /// <summary>
         /// The unique self reference of the draft invoice to be booked.
@@ -44739,7 +44739,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("journalNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, double.MaxValue)]
-        public double JournalNumber { get; set; } = default!;
+        public double? JournalNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the journal resource.
@@ -46316,14 +46316,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// The number of days of credit on the order. This field is only valid if terms of payment is not of type duedate.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// The name of the payment terms.
@@ -46364,7 +46364,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -46473,7 +46473,7 @@ namespace EConomic.Rest.Generated
         /// A unique identifier for the delivery location.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the delivery location resource.
@@ -46634,7 +46634,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -46734,14 +46734,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lineNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LineNumber { get; set; } = default!;
+        public int? LineNumber { get; set; } = default!;
 
         /// <summary>
         /// A sort key used to sort the lines in ascending order within the order.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// A description of the product or service sold.
@@ -46772,37 +46772,37 @@ namespace EConomic.Rest.Generated
         /// The number of units of goods on the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity")]
-        public double Quantity { get; set; } = default!;
+        public double? Quantity { get; set; } = default!;
 
         /// <summary>
         /// The price of 1 unit of the goods or services on the order line in the order currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNetPrice")]
-        public double UnitNetPrice { get; set; } = default!;
+        public double? UnitNetPrice { get; set; } = default!;
 
         /// <summary>
         /// A line discount expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("discountPercentage")]
-        public double DiscountPercentage { get; set; } = default!;
+        public double? DiscountPercentage { get; set; } = default!;
 
         /// <summary>
         /// The cost price of 1 unit of the goods or services in the order currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitCostPrice")]
-        public double UnitCostPrice { get; set; } = default!;
+        public double? UnitCostPrice { get; set; } = default!;
 
         /// <summary>
         /// The difference between the net price and the cost price on the order line in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin on the order line expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
@@ -46830,7 +46830,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the layout resource.
@@ -46858,7 +46858,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -46886,14 +46886,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// The number of days of credit on the order. This field is only valid if terms of payment is not of type 'duedate
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// The type the payment term.
@@ -46927,7 +46927,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -47045,7 +47045,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the delivery location resource.
@@ -47230,14 +47230,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lineNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LineNumber { get; set; } = default!;
+        public int? LineNumber { get; set; } = default!;
 
         /// <summary>
         /// A sort key used to sort the lines in ascending order within the order.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// A description of the product or service sold. Please note, that when setting existing products, description field is required. While setting non-existing product, description field can remain empty.
@@ -47268,37 +47268,37 @@ namespace EConomic.Rest.Generated
         /// The number of units of goods on the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity")]
-        public double Quantity { get; set; } = default!;
+        public double? Quantity { get; set; } = default!;
 
         /// <summary>
         /// The price of 1 unit of the goods or services on the order line in the order currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNetPrice")]
-        public double UnitNetPrice { get; set; } = default!;
+        public double? UnitNetPrice { get; set; } = default!;
 
         /// <summary>
         /// A line discount expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("discountPercentage")]
-        public double DiscountPercentage { get; set; } = default!;
+        public double? DiscountPercentage { get; set; } = default!;
 
         /// <summary>
         /// The cost price of 1 unit of the goods or services in the order currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitCostPrice")]
-        public double UnitCostPrice { get; set; } = default!;
+        public double? UnitCostPrice { get; set; } = default!;
 
         /// <summary>
         /// The difference between the net price and the cost price on the order line in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin on the order line expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
@@ -49472,7 +49472,7 @@ namespace EConomic.Rest.Generated
         /// The account number of the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the contra account for prepaid amount item.
@@ -49499,7 +49499,7 @@ namespace EConomic.Rest.Generated
         /// The account number of the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the contra account for remainder amount item.
@@ -49527,7 +49527,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the customer item.
@@ -49587,7 +49587,7 @@ namespace EConomic.Rest.Generated
         /// The account number of the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the contra account for prepaid amount item.
@@ -49614,7 +49614,7 @@ namespace EConomic.Rest.Generated
         /// The account number of the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the contra account for remainder amount item.
@@ -49642,7 +49642,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the customer item.
@@ -50844,49 +50844,49 @@ namespace EConomic.Rest.Generated
         /// The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("available")]
-        public double Available { get; set; } = default!;
+        public double? Available { get; set; } = default!;
 
         /// <summary>
         /// The number of units in stock including any that have been ordered by customers.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("inStock")]
-        public double InStock { get; set; } = default!;
+        public double? InStock { get; set; } = default!;
 
         /// <summary>
         /// The number of units that have been ordered by customers, but haven't been sold yet.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("orderedByCustomers")]
-        public double OrderedByCustomers { get; set; } = default!;
+        public double? OrderedByCustomers { get; set; } = default!;
 
         /// <summary>
         /// The number of units that have been ordered from your suppliers, but haven't been delivered to you yet.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("orderedFromSuppliers")]
-        public double OrderedFromSuppliers { get; set; } = default!;
+        public double? OrderedFromSuppliers { get; set; } = default!;
 
         /// <summary>
         /// The volume the shipped package makes up.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("packageVolume")]
-        public double PackageVolume { get; set; } = default!;
+        public double? PackageVolume { get; set; } = default!;
 
         /// <summary>
         /// The gross weight of the product.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossWeight")]
-        public double GrossWeight { get; set; } = default!;
+        public double? GrossWeight { get; set; } = default!;
 
         /// <summary>
         /// The net weight of the product.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netWeight")]
-        public double NetWeight { get; set; } = default!;
+        public double? NetWeight { get; set; } = default!;
 
         /// <summary>
         /// The recommendedCostPrice of the product. The field is required if the Inventory module is enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("recommendedCostPrice")]
-        public double RecommendedCostPrice { get; set; } = default!;
+        public double? RecommendedCostPrice { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -50907,7 +50907,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the unit.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -50934,7 +50934,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the product group.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("productGroupNumber")]
-        public int ProductGroupNumber { get; set; } = default!;
+        public int? ProductGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the product group resource.
@@ -50962,7 +50962,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -50995,49 +50995,49 @@ namespace EConomic.Rest.Generated
         /// The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("available")]
-        public double Available { get; set; } = default!;
+        public double? Available { get; set; } = default!;
 
         /// <summary>
         /// The number of units in stock including any that have been ordered by customers.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("inStock")]
-        public double InStock { get; set; } = default!;
+        public double? InStock { get; set; } = default!;
 
         /// <summary>
         /// The number of units that have been ordered by customers, but haven't been sold yet.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("orderedByCustomers")]
-        public double OrderedByCustomers { get; set; } = default!;
+        public double? OrderedByCustomers { get; set; } = default!;
 
         /// <summary>
         /// The number of units that have been ordered from your suppliers, but haven't been delivered to you yet.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("orderedFromSuppliers")]
-        public double OrderedFromSuppliers { get; set; } = default!;
+        public double? OrderedFromSuppliers { get; set; } = default!;
 
         /// <summary>
         /// The volume the shipped package makes up.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("packageVolume")]
-        public double PackageVolume { get; set; } = default!;
+        public double? PackageVolume { get; set; } = default!;
 
         /// <summary>
         /// The gross weight of the product.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("grossWeight")]
-        public double GrossWeight { get; set; } = default!;
+        public double? GrossWeight { get; set; } = default!;
 
         /// <summary>
         /// The net weight of the product.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("netWeight")]
-        public double NetWeight { get; set; } = default!;
+        public double? NetWeight { get; set; } = default!;
 
         /// <summary>
         /// The recommendedCostPrice of the product. The field is required if the Inventory module is enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("recommendedCostPrice")]
-        public double RecommendedCostPrice { get; set; } = default!;
+        public double? RecommendedCostPrice { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -51058,7 +51058,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the unit.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -51085,7 +51085,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the product group.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("productGroupNumber")]
-        public int ProductGroupNumber { get; set; } = default!;
+        public int? ProductGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the product group resource.
@@ -51113,7 +51113,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -51961,14 +51961,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// The number of days of credit on the quote. This field is only valid if terms of payment is not of type duedate.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// The name of the payment terms.
@@ -52009,7 +52009,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -52118,7 +52118,7 @@ namespace EConomic.Rest.Generated
         /// A unique identifier for the delivery location.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the delivery location resource.
@@ -52279,7 +52279,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -52379,14 +52379,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lineNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LineNumber { get; set; } = default!;
+        public int? LineNumber { get; set; } = default!;
 
         /// <summary>
         /// A sort key used to sort the lines in ascending quote within the quote.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// A description of the product or service sold.
@@ -52417,37 +52417,37 @@ namespace EConomic.Rest.Generated
         /// The number of units of goods on the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity")]
-        public double Quantity { get; set; } = default!;
+        public double? Quantity { get; set; } = default!;
 
         /// <summary>
         /// The price of 1 unit of the goods or services on the quote line in the quote currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNetPrice")]
-        public double UnitNetPrice { get; set; } = default!;
+        public double? UnitNetPrice { get; set; } = default!;
 
         /// <summary>
         /// A line discount expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("discountPercentage")]
-        public double DiscountPercentage { get; set; } = default!;
+        public double? DiscountPercentage { get; set; } = default!;
 
         /// <summary>
         /// The cost price of 1 unit of the goods or services in the quote currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitCostPrice")]
-        public double UnitCostPrice { get; set; } = default!;
+        public double? UnitCostPrice { get; set; } = default!;
 
         /// <summary>
         /// The difference between the net price and the cost price on the quote line in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin on the quote line expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
@@ -52475,7 +52475,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the layout resource.
@@ -52503,7 +52503,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -52531,14 +52531,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// The number of days of credit on the quote. This field is only valid if terms of payment is not of type 'duedate
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// The type the payment term.
@@ -52572,7 +52572,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -52690,7 +52690,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("deliveryLocationNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DeliveryLocationNumber { get; set; } = default!;
+        public int? DeliveryLocationNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the delivery location resource.
@@ -52875,14 +52875,14 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lineNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int LineNumber { get; set; } = default!;
+        public int? LineNumber { get; set; } = default!;
 
         /// <summary>
         /// A sort key used to sort the lines in ascending quote within the quote.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sortKey")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SortKey { get; set; } = default!;
+        public int? SortKey { get; set; } = default!;
 
         /// <summary>
         /// A description of the product or service sold. Please note, that when setting existing products, description field is required. While setting non-existing product, description field can remain empty.
@@ -52913,37 +52913,37 @@ namespace EConomic.Rest.Generated
         /// The number of units of goods on the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity")]
-        public double Quantity { get; set; } = default!;
+        public double? Quantity { get; set; } = default!;
 
         /// <summary>
         /// The price of 1 unit of the goods or services on the quote line in the quote currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNetPrice")]
-        public double UnitNetPrice { get; set; } = default!;
+        public double? UnitNetPrice { get; set; } = default!;
 
         /// <summary>
         /// A line discount expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("discountPercentage")]
-        public double DiscountPercentage { get; set; } = default!;
+        public double? DiscountPercentage { get; set; } = default!;
 
         /// <summary>
         /// The cost price of 1 unit of the goods or services in the quote currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitCostPrice")]
-        public double UnitCostPrice { get; set; } = default!;
+        public double? UnitCostPrice { get; set; } = default!;
 
         /// <summary>
         /// The difference between the net price and the cost price on the quote line in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginInBaseCurrency")]
-        public double MarginInBaseCurrency { get; set; } = default!;
+        public double? MarginInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The margin on the quote line expressed as a percentage.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("marginPercentage")]
-        public double MarginPercentage { get; set; } = default!;
+        public double? MarginPercentage { get; set; } = default!;
 
         /// <summary>
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
@@ -55841,7 +55841,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the supplier contact.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierContactNumber")]
-        public int SupplierContactNumber { get; set; } = default!;
+        public int? SupplierContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the supplier contact resource.
@@ -55868,7 +55868,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the cost account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -55895,7 +55895,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the layout.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the layout item.
@@ -55923,7 +55923,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -55979,7 +55979,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -56006,7 +56006,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the supplier contact.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierContactNumber")]
-        public int SupplierContactNumber { get; set; } = default!;
+        public int? SupplierContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the supplier contact resource.
@@ -56034,7 +56034,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierGroupNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int SupplierGroupNumber { get; set; } = default!;
+        public int? SupplierGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the supplier group resource.
@@ -56061,7 +56061,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -56088,7 +56088,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the supplier contact.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierContactNumber")]
-        public int SupplierContactNumber { get; set; } = default!;
+        public int? SupplierContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the supplier contact resource.
@@ -56115,7 +56115,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the cost account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -56142,7 +56142,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the layout.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("layoutNumber")]
-        public int LayoutNumber { get; set; } = default!;
+        public int? LayoutNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the layout item.
@@ -56170,7 +56170,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTermsNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int PaymentTermsNumber { get; set; } = default!;
+        public int? PaymentTermsNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment term resource.
@@ -56226,7 +56226,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -56253,7 +56253,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the supplier contact.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierContactNumber")]
-        public int SupplierContactNumber { get; set; } = default!;
+        public int? SupplierContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the supplier contact resource.
@@ -56280,7 +56280,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the supplier group.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierGroupNumber")]
-        public int SupplierGroupNumber { get; set; } = default!;
+        public int? SupplierGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the supplier group resource.
@@ -56307,7 +56307,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -57942,7 +57942,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer employee.
@@ -57969,7 +57969,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -58015,7 +58015,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -58043,7 +58043,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -58071,7 +58071,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -58128,7 +58128,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -58184,7 +58184,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -58253,7 +58253,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer employee.
@@ -58280,7 +58280,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -58326,7 +58326,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -58354,7 +58354,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -58382,7 +58382,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -58439,7 +58439,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// The name of the unit (e.g. 'kg' for weight or 'l' for volume).
@@ -58502,7 +58502,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -60845,7 +60845,7 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the base currency and the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// Type of the journal entry. This is automatically set to financeVoucher.
@@ -60863,31 +60863,31 @@ namespace EConomic.Rest.Generated
         /// The amount of VAT on the entry on the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmount")]
-        public double ContraVatAmount { get; set; } = default!;
+        public double? ContraVatAmount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmountInBaseCurrency")]
-        public double ContraVatAmountInBaseCurrency { get; set; } = default!;
+        public double? ContraVatAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("amountBaseCurrency")]
-        public double AmountBaseCurrency { get; set; } = default!;
+        public double? AmountBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainder")]
-        public double Remainder { get; set; } = default!;
+        public double? Remainder { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid in default currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainderInDefaultCurrency")]
-        public double RemainderInDefaultCurrency { get; set; } = default!;
+        public double? RemainderInDefaultCurrency { get; set; } = default!;
 
         /// <summary>
         /// The account used by the entry.
@@ -60911,25 +60911,25 @@ namespace EConomic.Rest.Generated
         /// The amount of VAT on the entry. Used if the entry has a VAT account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmount")]
-        public double VatAmount { get; set; } = default!;
+        public double? VatAmount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the voucher in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAmountBaseCurrency")]
-        public double VatAmountBaseCurrency { get; set; } = default!;
+        public double? VatAmountBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity1")]
-        public double Quantity1 { get; set; } = default!;
+        public double? Quantity1 { get; set; } = default!;
 
         /// <summary>
         /// Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity2")]
-        public double Quantity2 { get; set; } = default!;
+        public double? Quantity2 { get; set; } = default!;
 
         /// <summary>
         /// The first unit of measure applied to the entry. Requires dimension module.
@@ -61022,7 +61022,7 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the base currency and the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// Type of the journal entry. This is automatically set to customerPayment.
@@ -61040,31 +61040,31 @@ namespace EConomic.Rest.Generated
         /// The amount of VAT on the entry on the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmount")]
-        public double ContraVatAmount { get; set; } = default!;
+        public double? ContraVatAmount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmountInBaseCurrency")]
-        public double ContraVatAmountInBaseCurrency { get; set; } = default!;
+        public double? ContraVatAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("amountBaseCurrency")]
-        public double AmountBaseCurrency { get; set; } = default!;
+        public double? AmountBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainder")]
-        public double Remainder { get; set; } = default!;
+        public double? Remainder { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid in default currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainderInDefaultCurrency")]
-        public double RemainderInDefaultCurrency { get; set; } = default!;
+        public double? RemainderInDefaultCurrency { get; set; } = default!;
 
         /// <summary>
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
@@ -61077,7 +61077,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerInvoice")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerInvoice { get; set; } = default!;
+        public int? CustomerInvoice { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -61161,7 +61161,7 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the base currency and the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// Type of the journal entry. This is automatically set to supplierInvoice.
@@ -61179,31 +61179,31 @@ namespace EConomic.Rest.Generated
         /// The amount of VAT on the entry on the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmount")]
-        public double ContraVatAmount { get; set; } = default!;
+        public double? ContraVatAmount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmountInBaseCurrency")]
-        public double ContraVatAmountInBaseCurrency { get; set; } = default!;
+        public double? ContraVatAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("amountBaseCurrency")]
-        public double AmountBaseCurrency { get; set; } = default!;
+        public double? AmountBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainder")]
-        public double Remainder { get; set; } = default!;
+        public double? Remainder { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid in default currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainderInDefaultCurrency")]
-        public double RemainderInDefaultCurrency { get; set; } = default!;
+        public double? RemainderInDefaultCurrency { get; set; } = default!;
 
         /// <summary>
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
@@ -61241,13 +61241,13 @@ namespace EConomic.Rest.Generated
         /// Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity1")]
-        public double Quantity1 { get; set; } = default!;
+        public double? Quantity1 { get; set; } = default!;
 
         /// <summary>
         /// Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("quantity2")]
-        public double Quantity2 { get; set; } = default!;
+        public double? Quantity2 { get; set; } = default!;
 
         /// <summary>
         /// The first unit of measure applied to the entry. Requires dimension module.
@@ -61337,7 +61337,7 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the base currency and the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// Type of the journal entry. This is automatically set to supplierPayment.
@@ -61355,31 +61355,31 @@ namespace EConomic.Rest.Generated
         /// The amount of VAT on the entry on the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmount")]
-        public double ContraVatAmount { get; set; } = default!;
+        public double? ContraVatAmount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmountInBaseCurrency")]
-        public double ContraVatAmountInBaseCurrency { get; set; } = default!;
+        public double? ContraVatAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("amountBaseCurrency")]
-        public double AmountBaseCurrency { get; set; } = default!;
+        public double? AmountBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainder")]
-        public double Remainder { get; set; } = default!;
+        public double? Remainder { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid in default currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainderInDefaultCurrency")]
-        public double RemainderInDefaultCurrency { get; set; } = default!;
+        public double? RemainderInDefaultCurrency { get; set; } = default!;
 
         /// <summary>
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
@@ -61470,7 +61470,7 @@ namespace EConomic.Rest.Generated
         /// The exchange rate between the base currency and the invoice currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("exchangeRate")]
-        public double ExchangeRate { get; set; } = default!;
+        public double? ExchangeRate { get; set; } = default!;
 
         /// <summary>
         /// Type of the journal entry. This is automatically set to manualCustomerInvoice.
@@ -61488,31 +61488,31 @@ namespace EConomic.Rest.Generated
         /// The amount of VAT on the entry on the contra account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmount")]
-        public double ContraVatAmount { get; set; } = default!;
+        public double? ContraVatAmount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("contraVatAmountInBaseCurrency")]
-        public double ContraVatAmountInBaseCurrency { get; set; } = default!;
+        public double? ContraVatAmountInBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// The amount in base currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("amountBaseCurrency")]
-        public double AmountBaseCurrency { get; set; } = default!;
+        public double? AmountBaseCurrency { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainder")]
-        public double Remainder { get; set; } = default!;
+        public double? Remainder { get; set; } = default!;
 
         /// <summary>
         /// Remaining amount to be paid in default currency.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("remainderInDefaultCurrency")]
-        public double RemainderInDefaultCurrency { get; set; } = default!;
+        public double? RemainderInDefaultCurrency { get; set; } = default!;
 
         /// <summary>
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
@@ -61525,7 +61525,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerInvoice")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerInvoice { get; set; } = default!;
+        public int? CustomerInvoice { get; set; } = default!;
 
         /// <summary>
         /// The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
@@ -62890,7 +62890,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer employee.
@@ -62917,7 +62917,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -62963,7 +62963,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// The customer this contact belongs to.
@@ -62997,7 +62997,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -63025,7 +63025,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -63052,7 +63052,7 @@ namespace EConomic.Rest.Generated
         /// ID of the SOAP order handle.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public int Id { get; set; } = default!;
+        public int? Id { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -63103,7 +63103,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// The name of the unit (e.g. 'kg' for weight or 'l' for volume).
@@ -63167,7 +63167,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -63236,7 +63236,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer employee.
@@ -63263,7 +63263,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -63309,7 +63309,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -63337,7 +63337,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -63365,7 +63365,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -63422,7 +63422,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -63478,7 +63478,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -65734,7 +65734,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer employee.
@@ -65761,7 +65761,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -65807,7 +65807,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// The customer this contact belongs to.
@@ -65841,7 +65841,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -65869,7 +65869,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -65896,7 +65896,7 @@ namespace EConomic.Rest.Generated
         /// ID of the SOAP quote handle.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public int Id { get; set; } = default!;
+        public int? Id { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -65947,7 +65947,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// The name of the unit (e.g. 'kg' for weight or 'l' for volume).
@@ -66011,7 +66011,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -66080,7 +66080,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the customer employee.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer employee.
@@ -66107,7 +66107,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier of the vat zone.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatZoneNumber")]
-        public int VatZoneNumber { get; set; } = default!;
+        public int? VatZoneNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the vat zone.
@@ -66153,7 +66153,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerContactNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int CustomerContactNumber { get; set; } = default!;
+        public int? CustomerContactNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -66181,7 +66181,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -66209,7 +66209,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the employee resource.
@@ -66266,7 +66266,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -66322,7 +66322,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -67705,7 +67705,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the payment type.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
-        public int PaymentTypeNumber { get; set; } = default!;
+        public int? PaymentTypeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment type resource.
@@ -67732,7 +67732,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the payment type.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
-        public int PaymentTypeNumber { get; set; } = default!;
+        public int? PaymentTypeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment type resource.
@@ -69695,7 +69695,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("journalNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, double.MaxValue)]
-        public double JournalNumber { get; set; } = default!;
+        public double? JournalNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the journal resource.
@@ -69723,7 +69723,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -69778,7 +69778,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the cost type.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costTypeNumber")]
-        public int CostTypeNumber { get; set; } = default!;
+        public int? CostTypeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the cost type.
@@ -69834,7 +69834,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -69868,7 +69868,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee item.
@@ -69905,7 +69905,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, 999999999D)]
-        public double VoucherNumber { get; set; } = default!;
+        public double? VoucherNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the voucher item.
@@ -69933,7 +69933,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -69961,7 +69961,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -70017,7 +70017,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -70045,7 +70045,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -70073,7 +70073,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("journalNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, double.MaxValue)]
-        public double JournalNumber { get; set; } = default!;
+        public double? JournalNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the journal resource.
@@ -70101,7 +70101,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -70185,7 +70185,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -70219,7 +70219,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee item.
@@ -70256,7 +70256,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, 999999999D)]
-        public double VoucherNumber { get; set; } = default!;
+        public double? VoucherNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the voucher item.
@@ -70284,7 +70284,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -70312,7 +70312,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("journalNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, double.MaxValue)]
-        public double JournalNumber { get; set; } = default!;
+        public double? JournalNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the journal resource.
@@ -70340,7 +70340,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -70395,7 +70395,7 @@ namespace EConomic.Rest.Generated
         /// The unique identifier of the cost type.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costTypeNumber")]
-        public int CostTypeNumber { get; set; } = default!;
+        public int? CostTypeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the cost type.
@@ -70451,7 +70451,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -70485,7 +70485,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee item.
@@ -70522,7 +70522,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, 999999999D)]
-        public double VoucherNumber { get; set; } = default!;
+        public double? VoucherNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the voucher item.
@@ -70550,7 +70550,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int SupplierNumber { get; set; } = default!;
+        public int? SupplierNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique self reference of the supplier.
@@ -70599,7 +70599,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
+        public int? ProjectNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the project resource.
@@ -70627,7 +70627,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -70655,7 +70655,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
         [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
+        public int? UnitNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the unit resource.
@@ -70683,7 +70683,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("journalNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, double.MaxValue)]
-        public double JournalNumber { get; set; } = default!;
+        public double? JournalNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the journal resource.
@@ -70711,7 +70711,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -70795,7 +70795,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -70829,7 +70829,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee item.
@@ -70866,7 +70866,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, 999999999D)]
-        public double VoucherNumber { get; set; } = default!;
+        public double? VoucherNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the voucher item.
@@ -70894,7 +70894,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int SupplierNumber { get; set; } = default!;
+        public int? SupplierNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique self reference of the supplier.
@@ -70922,7 +70922,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("journalNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, double.MaxValue)]
-        public double JournalNumber { get; set; } = default!;
+        public double? JournalNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the journal resource.
@@ -70950,7 +70950,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
+        public int? AccountNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the account resource.
@@ -71034,7 +71034,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
+        public int? DepartmentalDistributionNumber { get; set; } = default!;
 
         /// <summary>
         /// Type of the distribution
@@ -71068,7 +71068,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int EmployeeNumber { get; set; } = default!;
+        public int? EmployeeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the employee item.
@@ -71105,7 +71105,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
         [System.ComponentModel.DataAnnotations.Range(1D, 999999999D)]
-        public double VoucherNumber { get; set; } = default!;
+        public double? VoucherNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the voucher item.
@@ -71133,7 +71133,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -72807,7 +72807,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
@@ -73429,7 +73429,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.

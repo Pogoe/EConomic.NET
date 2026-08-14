@@ -100,6 +100,30 @@ public sealed class SchemaRegistry
     };
 
     /// <summary>
+    /// Public names for entities whose component name is shaped by what else the specifications
+    /// contain rather than by what the type is.
+    /// </summary>
+    /// <remarks>
+    /// <c>DraftInvoice</c> and <c>BookedInvoice</c> are the single-resource <c>GET</c> shapes, which
+    /// take the plain component name and are not published. That left the collection items — the
+    /// ones the facade actually exposes — as <c>…Summary</c>, and would have named the write models
+    /// after them: <c>DraftInvoiceSummaryCreate</c>, and its lines
+    /// <c>DraftInvoiceSummaryCreateLine</c>. The generated layer keeps its names; only the public
+    /// surface is renamed, and the two never meet because they are in different namespaces.
+    /// </remarks>
+    private static readonly Dictionary<string, string> PublicNameOverrides = new(StringComparer.Ordinal)
+    {
+        ["DraftInvoiceSummary"] = "DraftInvoice",
+        ["BookedInvoiceSummary"] = "BookedInvoice",
+    };
+
+    /// <summary>The name an entity is published under, which is its component name unless renamed.</summary>
+    /// <param name="entity">The generated component name.</param>
+    /// <returns>The public type name.</returns>
+    public static string PublicName(string entity) =>
+        PublicNameOverrides.GetValueOrDefault(entity, entity);
+
+    /// <summary>
     /// Entities exposed publicly: filter surfaces, models and client properties are emitted only
     /// for these. Every entry is public API, so the set grows deliberately, one resource at a time.
     /// </summary>
@@ -122,16 +146,46 @@ public sealed class SchemaRegistry
     };
 
     /// <summary>
+    /// Identifier properties that are not <c>{Entity}Number</c>. The convention holds for most
+    /// resources; where it does not, the real name is recorded rather than guessed.
+    /// </summary>
+    /// <remarks>
+    /// It cannot be read off the URL: <c>/customers/{customerNo}</c> and
+    /// <c>/customer-groups/{customergroupnumber}</c> both name their path parameter differently from
+    /// the property in the body, so deriving it from the path would break the resources that
+    /// currently work.
+    /// </remarks>
+    private static readonly Dictionary<string, string> KeyPropertyOverrides = new(StringComparer.Ordinal)
+    {
+        // The invoice, order and quote drafts are keyed by the document's number, not by a name
+        // built from the entity: a draft invoice is identified by `draftInvoiceNumber`, and an
+        // order and a quote drop the "draft" entirely.
+        ["DraftInvoiceSummary"] = "DraftInvoiceNumber",
+        ["DraftOrder"] = "OrderNumber",
+        ["DraftQuote"] = "QuoteNumber",
+    };
+
+    /// <summary>The property that identifies one instance of an entity.</summary>
+    /// <param name="entity">The generated component name.</param>
+    /// <returns>The identifier property's name.</returns>
+    public static string KeyProperty(string entity) =>
+        KeyPropertyOverrides.GetValueOrDefault(entity, $"{entity}Number");
+
+    /// <summary>
     /// Entities whose client property is a resource — exposing writes alongside the query — rather
     /// than a bare query. A resource type is hand-written per entity, so this set grows only as
     /// each one lands, and must stay a subset of <see cref="PublishedEntities"/>.
     /// </summary>
     public static readonly IReadOnlySet<string> WriteEnabledEntities = new HashSet<string>(StringComparer.Ordinal)
     {
-        // AccountingYear is absent: it is keyed by `year` rather than a `{Entity}Number` property,
-        // which the key convention here does not express. Its create otherwise works — verified
-        // live, returning `"year": "2027"` and a self link.
+        // AccountingYear is absent: it is keyed by `year`, a string, rather than by a number, and
+        // the resource template assumes a numeric identifier throughout. Its create otherwise works
+        // — verified live, returning `"year": "2027"` and a self link.
         "Customer", "CustomerGroup", "PaymentTerms", "Product", "Supplier", "Unit",
+
+        // The drafts of the three document families. Only drafts: a booked invoice is immutable,
+        // and a sent order or quote is written by transitioning a draft rather than by a PUT.
+        "DraftInvoiceSummary", "DraftOrder", "DraftQuote",
     };
 
     /// <summary>
@@ -156,6 +210,12 @@ public sealed class SchemaRegistry
         // Nested: DELETE /customers/:customerNumber/contacts/:contactNumber and
         // .../delivery-locations/:deliveryLocationNumber are both documented.
         "CustomerContact", "DeliveryLocation",
+
+        // The documentation describes a delete for each of the three draft families, and warns for
+        // all of them that a repeated call answers 404 — which is why DELETE carries an
+        // idempotency key. Note the drafts collection also accepts a delete of its own, which
+        // removes every draft at once; that one is deliberately not exposed here.
+        "DraftInvoiceSummary", "DraftOrder", "DraftQuote",
     };
 
     private readonly Dictionary<string, string> _namesByStructure = new(StringComparer.Ordinal);

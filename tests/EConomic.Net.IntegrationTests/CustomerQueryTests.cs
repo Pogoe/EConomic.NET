@@ -1,30 +1,31 @@
-using System.Net.Http;
-using EConomic.Authentication;
 using Xunit;
 
 namespace EConomic.IntegrationTests;
 
 /// <summary>
-/// The whole slice against the live demo agreement: query composition, transport, paging, mapping.
+/// The whole slice against a live agreement: query composition, transport, paging, mapping.
 /// </summary>
+/// <remarks>
+/// Each test creates the customers it asserts on. Reading whatever the agreement happened to
+/// contain meant asserting on data the test did not control, which is how "the demo agreement has
+/// five customers, numbered 1 to 5" ended up compiled into a test.
+/// </remarks>
 public class CustomerQueryTests
 {
-    private const string OptInVariable = "ECONOMIC_RUN_INTEGRATION_TESTS";
-
     [Fact]
     public async Task Customers_can_be_enumerated_and_mapped()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
 
-        var customers = new List<Rest.Customer>();
-        await foreach (var customer in client.Customers.AsAsyncEnumerable(TestContext.Current.CancellationToken))
-        {
-            customers.Add(customer);
-        }
+        await using var seed = new AgreementSeed(client, token);
+        var created = await seed.CustomerAsync("ZZ Probe Enumerated");
 
-        Assert.NotEmpty(customers);
+        var customers = await ToListAsync(client.Customers.AsQuery());
+
+        Assert.Contains(customers, c => c.CustomerNumber == created.CustomerNumber);
         Assert.All(customers, c => Assert.True(c.CustomerNumber > 0));
         Assert.All(customers, c => Assert.False(string.IsNullOrWhiteSpace(c.Name)));
     }
@@ -32,31 +33,42 @@ public class CustomerQueryTests
     [Fact]
     public async Task A_typed_filter_restricts_what_the_server_returns()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
 
+        await using var seed = new AgreementSeed(client, token);
+        var first = await seed.CustomerAsync("ZZ Probe Filter A");
+        var second = await seed.CustomerAsync("ZZ Probe Filter B");
+        await seed.CustomerAsync("ZZ Probe Filter C");
+
+        // Filtering on the two the test created, rather than on numbers it hopes exist. Customer
+        // numbers are server-assigned, so they cannot be predicted — only read back.
         var all = await CountAsync(client.Customers.AsQuery());
-        var filtered = await CountAsync(client.Customers.Where(c => c.CustomerNumber.In(1, 2, 3)));
+        var filtered = await ToListAsync(
+            client.Customers.Where(c => c.CustomerNumber.In(first.CustomerNumber, second.CustomerNumber)));
 
-        Assert.True(all > filtered, $"Expected the filter to narrow the result set; got {all} and {filtered}.");
-        Assert.Equal(3, filtered);
+        Assert.True(all > filtered.Count, $"Expected the filter to narrow the result set; got {all} and {filtered.Count}.");
+        Assert.Equal(2, filtered.Count);
+        Assert.All(filtered, c => Assert.Contains(c.CustomerNumber, new[] { first.CustomerNumber, second.CustomerNumber }));
     }
 
     [Fact]
     public async Task Ordering_is_applied_by_the_server()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
 
-        var descending = new List<int>();
-        await foreach (var customer in client.Customers
-            .OrderByDescending(c => c.CustomerNumber)
-            .AsAsyncEnumerable(TestContext.Current.CancellationToken))
-        {
-            descending.Add(customer.CustomerNumber);
-        }
+        await using var seed = new AgreementSeed(client, token);
+        await seed.CustomerAsync("ZZ Probe Order A");
+        await seed.CustomerAsync("ZZ Probe Order B");
+
+        var descending = (await ToListAsync(client.Customers.OrderByDescending(c => c.CustomerNumber)))
+            .Select(c => c.CustomerNumber)
+            .ToList();
 
         Assert.NotEmpty(descending);
         Assert.Equal(descending.OrderByDescending(n => n).ToList(), descending);
@@ -65,24 +77,33 @@ public class CustomerQueryTests
     [Fact]
     public async Task Paging_is_transparent_across_page_boundaries()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
 
-        // One customer per request forces several round trips over the same collection.
+        await using var seed = new AgreementSeed(client, token);
+        await seed.CustomerAsync("ZZ Probe Paging A");
+        await seed.CustomerAsync("ZZ Probe Paging B");
+        await seed.CustomerAsync("ZZ Probe Paging C");
+
+        // One customer per request forces several round trips over the same collection, which is
+        // only a real test if the collection has more than one page in it.
         var paged = await CountAsync(client.Customers.WithPageSize(1));
         var single = await CountAsync(client.Customers.WithPageSize(1000));
 
+        Assert.True(single >= 3, $"Expected the seeded customers to be present; found {single}.");
         Assert.Equal(single, paged);
     }
 
     [Fact]
     public async Task The_raw_escape_hatch_reaches_fields_the_schema_omits()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         // pNumber is filterable on the server but absent from CustomerFilter, because the
-        // published schema does not mark it. This is the case WhereRaw exists for.
+        // published schema does not mark it. This is the case WhereRaw exists for: a 400 here would
+        // mean the server does not accept the field after all.
         var client = CreateClient();
 
         var count = await CountAsync(client.Customers.WhereRaw("pNumber$eq:1234567890"));
@@ -91,30 +112,20 @@ public class CustomerQueryTests
     }
 
     private static async Task<int> CountAsync<TFilter, TSort>(
+        Querying.EconomicQuery<Rest.Customer, TFilter, TSort> query) =>
+        (await ToListAsync(query)).Count;
+
+    private static async Task<List<Rest.Customer>> ToListAsync<TFilter, TSort>(
         Querying.EconomicQuery<Rest.Customer, TFilter, TSort> query)
     {
-        var count = 0;
-        await foreach (var _ in query.AsAsyncEnumerable(TestContext.Current.CancellationToken))
+        var items = new List<Rest.Customer>();
+        await foreach (var customer in query.AsAsyncEnumerable(TestContext.Current.CancellationToken))
         {
-            count++;
+            items.Add(customer);
         }
 
-        return count;
+        return items;
     }
 
-    private static EconomicClient CreateClient() =>
-        new(
-            new HttpClient(new EconomicAuthenticationHandler(EconomicOptions.Demo())
-            {
-                InnerHandler = new HttpClientHandler(),
-            })
-            {
-                BaseAddress = EconomicOptions.DefaultRestApiBaseAddress,
-                Timeout = TimeSpan.FromSeconds(30),
-            });
-
-    private static void SkipUnlessOptedIn() =>
-        Assert.SkipWhen(
-            Environment.GetEnvironmentVariable(OptInVariable) is not "1",
-            $"Set {OptInVariable}=1 to run tests against the live demo agreement.");
+    private static EconomicClient CreateClient() => TestClients.Create();
 }

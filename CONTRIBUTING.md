@@ -125,16 +125,40 @@ for types nothing can yet be used against.
 | --- | --- |
 | `tests/EConomic.Net.Tests` | Unit tests. No network. Handler pipeline, query translation, paging, error mapping and serialization, against recorded fixtures. |
 | `tests/EConomic.SpecConverter.Tests` | The conversion and generation pipeline. |
-| `tests/EConomic.Net.IntegrationTests` | The live demo agreement. Read-only, opt-in, scheduled in CI. |
+| `tests/EConomic.Net.IntegrationTests` | A live agreement of your own. Opt-in, scheduled in CI. |
 | `tests/EConomic.Net.AotSmokeTest` | Published with `PublishAot` and run in CI, so the trimming claim is tested rather than asserted. |
 
 ```bash
 dotnet test tests/EConomic.Net.Tests
+
+export ECONOMIC_APP_SECRET_TOKEN=…
+export ECONOMIC_AGREEMENT_GRANT_TOKEN=…
 ECONOMIC_RUN_INTEGRATION_TESTS=1 dotnet test tests/EConomic.Net.IntegrationTests
 ```
 
 Integration tests are opt-in and run on a schedule rather than on every pull request, because they
-break when e-conomic changes and that must not block unrelated work.
+break when e-conomic changes and that must not block unrelated work. Without the two tokens every
+one of them skips.
+
+**Point them at a throwaway agreement — they write to it.** They used to read from the public
+`demo` agreement, and both reasons for moving off it are worth knowing:
+
+- **It is shared.** Sampling `X-RateLimiting` there showed the budget moving between 58 and 352 of
+  10 000 with no calls of our own in between. A burst from someone else produced a `429` that
+  outlived any retry policy, at a moment with nothing to do with the code under test.
+- **Its data is not ours.** Reading a shared agreement means asserting on records nobody controls;
+  "five customers, numbered 1 to 5" is a fact about someone else's books, and it drifts.
+
+Each test now creates what it asserts on through `AgreementSeed`, which deletes it again in reverse
+order — an invoice has to go before the customer and product it references. Everything is prefixed
+`ZZ Probe`, and a failed run can still leave a record behind.
+
+Booking is the exception and has its own opt-in, `ECONOMIC_RUN_BOOKING_TESTS=1`: a booked invoice
+cannot be deleted, and neither can the customer and product it references, so every run of that one
+leaves three records behind permanently. The scheduled workflow deliberately does not set it.
+
+Set the tokens through the environment rather than on the command line, or they end up in shell
+history. For CI they are repository secrets of the same names.
 
 **Assert on results, not just status codes.** More than one bug here survived a green unit test
 suite because the test pinned an assumption the server did not share — filter syntax that parsed
@@ -160,6 +184,11 @@ dotnet build EConomic.Net.slnx -c Release --nologo 2>&1 \
   | sed "s/^Symbol '//; s/' is not part$//" \
   | LC_ALL=C sort -u >> src/EConomic.Net/PublicAPI.Unshipped.txt
 ```
+
+Run the build once more afterwards. The pattern above stops at the first `'`, so it truncates any
+symbol whose signature contains a quote — a `const char`, for instance — and those have to be added
+by hand. The second build reports exactly which, and is worth doing regardless to confirm the
+baseline is complete.
 
 Entries move from `Unshipped` to `Shipped` at release time, not before.
 

@@ -1639,12 +1639,14 @@
                 "exclusiveMinimum": true,
                 "x-filterable": true,
                 "x-sortable": true,
-                "description": "A unique identifier of the payment term."
+                "description": "A unique identifier of the payment term.",
+                "nullable": true
               },
               "daysOfCredit": {
                 "type": "integer",
                 "minimum": 0,
-                "description": "The number of days of credit on the order. This field is only valid if terms of payment is not of type duedate."
+                "description": "The number of days of credit on the order. This field is only valid if terms of payment is not of type duedate.",
+                "nullable": true
               },
               "name": {
                 "type": "string",
@@ -1682,7 +1684,8 @@
                 "minimum": 1,
                 "x-filterable": true,
                 "x-sortable": true,
-                "description": "The customer id number. The customer id number can be either positive or negative, but it can\u0027t be zero."
+                "description": "The customer id number. The customer id number can be either positive or negative, but it can\u0027t be zero.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1750,7 +1753,8 @@
                 "properties": {
                   "customerContactNumber": {
                     "type": "integer",
-                    "description": "Unique identifier of the customer employee."
+                    "description": "Unique identifier of the customer employee.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -1765,7 +1769,8 @@
                 "properties": {
                   "vatZoneNumber": {
                     "type": "integer",
-                    "description": "Unique identifier of the vat zone."
+                    "description": "Unique identifier of the vat zone.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -1794,7 +1799,8 @@
                 "type": "integer",
                 "x-filterable": true,
                 "x-sortable": true,
-                "description": "A unique identifier for the delivery location."
+                "description": "A unique identifier for the delivery location.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1891,7 +1897,8 @@
                     "type": "integer",
                     "minimum": 0,
                     "exclusiveMinimum": true,
-                    "description": "Unique identifier of the customer contact."
+                    "description": "Unique identifier of the customer contact.",
+                    "nullable": true
                   },
                   "customer": {
                     "type": "object",
@@ -1903,7 +1910,8 @@
                         "minimum": 1,
                         "x-filterable": true,
                         "x-sortable": true,
-                        "description": "The customer id number. The customer id number can be either positive or negative, but it can\u0027t be zero."
+                        "description": "The customer id number. The customer id number can be either positive or negative, but it can\u0027t be zero.",
+                        "nullable": true
                       },
                       "self": {
                         "type": "string",
@@ -1928,7 +1936,8 @@
                     "minimum": 1,
                     "x-filterable": true,
                     "x-sortable": true,
-                    "description": "Unique identifier of the employee."
+                    "description": "Unique identifier of the employee.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -1946,7 +1955,8 @@
                     "minimum": 1,
                     "x-filterable": true,
                     "x-sortable": true,
-                    "description": "Unique identifier of the employee."
+                    "description": "Unique identifier of the employee.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -1971,7 +1981,8 @@
               "projectNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the project."
+                "description": "A unique identifier of the project.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2003,7 +2014,8 @@
                     "type": "integer",
                     "description": "ID of the SOAP order handle.",
                     "x-filterable": true,
-                    "x-sortable": true
+                    "x-sortable": true,
+                    "nullable": true
                   }
                 }
               }
@@ -2038,13 +2050,15 @@
                   "type": "integer",
                   "description": "The line number is a unique number within the order.",
                   "minimum": 0,
-                  "exclusiveMinimum": true
+                  "exclusiveMinimum": true,
+                  "nullable": true
                 },
                 "sortKey": {
                   "type": "integer",
                   "description": "A sort key used to sort the lines in ascending order within the order.",
                   "minimum": 0,
-                  "exclusiveMinimum": true
+                  "exclusiveMinimum": true,
+                  "nullable": true
                 },
                 "description": {
                   "type": "string",
@@ -2077,7 +2091,8 @@
                       "type": "integer",
                       "description": "The unique identifier of the unit.",
                       "minimum": 0,
-                      "exclusiveMinimum": true
+                      "exclusiveMinimum": true,
+                      "nullable": true
                     },
                     "name": {
                       "type": "string",
@@ -2113,32 +2128,38 @@
                 "quantity": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The number of units of goods on the order line."
+                  "description": "The number of units of goods on the order line.",
+                  "nullable": true
                 },
                 "unitNetPrice": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The price of 1 unit of the goods or services on the order line in the order currency."
+                  "description": "The price of 1 unit of the goods or services on the order line in the order currency.",
+                  "nullable": true
                 },
                 "discountPercentage": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "A line discount expressed as a percentage."
+                  "description": "A line discount expressed as a percentage.",
+                  "nullable": true
                 },
                 "unitCostPrice": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The cost price of 1 unit of the goods or services in the order currency."
+                  "description": "The cost price of 1 unit of the goods or services in the order currency.",
+                  "nullable": true
                 },
                 "marginInBaseCurrency": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The difference between the net price and the cost price on the order line in base currency."
+                  "description": "The difference between the net price and the cost price on the order line in base currency.",
+                  "nullable": true
                 },
                 "marginPercentage": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The margin on the order line expressed as a percentage."
+                  "description": "The margin on the order line expressed as a percentage.",
+                  "nullable": true
                 },
                 "departmentalDistribution": {
                   "type": "object",
@@ -2147,7 +2168,8 @@
                     "departmentalDistributionNumber": {
                       "type": "integer",
                       "minimum": 1,
-                      "description": "A unique identifier of the departmental distribution."
+                      "description": "A unique identifier of the departmental distribution.",
+                      "nullable": true
                     },
                     "distributionType": {
                       "type": "string",
@@ -2281,7 +2303,8 @@
               "layoutNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the layout."
+                "description": "A unique identifier of the layout.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2297,7 +2320,8 @@
               "projectNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the project."
+                "description": "A unique identifier of the project.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2313,13 +2337,15 @@
               "paymentTermsNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the payment term."
+                "description": "A unique identifier of the payment term.",
+                "nullable": true
               },
               "daysOfCredit": {
                 "readOnly": true,
                 "type": "integer",
                 "minimum": 0,
-                "description": "The number of days of credit on the order. This field is only valid if terms of payment is not of type \u0027duedate"
+                "description": "The number of days of credit on the order. This field is only valid if terms of payment is not of type \u0027duedate",
+                "nullable": true
               },
               "paymentTermsType": {
                 "enum": [
@@ -2352,7 +2378,8 @@
                 "type": "integer",
                 "maximum": 999999999,
                 "minimum": 1,
-                "description": "The customer id number. The customer id number can be either positive or negative, but it can\u0027t be zero."
+                "description": "The customer id number. The customer id number can be either positive or negative, but it can\u0027t be zero.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2406,7 +2433,8 @@
                 "properties": {
                   "customerContactNumber": {
                     "type": "integer",
-                    "description": "Unique identifier of the customer employee."
+                    "description": "Unique identifier of the customer employee.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -2421,7 +2449,8 @@
                 "properties": {
                   "vatZoneNumber": {
                     "type": "integer",
-                    "description": "Unique identifier of the vat zone."
+                    "description": "Unique identifier of the vat zone.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -2457,7 +2486,8 @@
               "deliveryLocationNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier for the delivery location."
+                "description": "A unique identifier for the delivery location.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -2535,7 +2565,8 @@
                   "customerContactNumber": {
                     "type": "integer",
                     "minimum": 1,
-                    "description": "Unique identifier of the customer contact."
+                    "description": "Unique identifier of the customer contact.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -2551,7 +2582,8 @@
                   "employeeNumber": {
                     "type": "integer",
                     "minimum": 1,
-                    "description": "Unique identifier of the employee."
+                    "description": "Unique identifier of the employee.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -2567,7 +2599,8 @@
                   "employeeNumber": {
                     "type": "integer",
                     "minimum": 1,
-                    "description": "Unique identifier of the employee."
+                    "description": "Unique identifier of the employee.",
+                    "nullable": true
                   },
                   "self": {
                     "type": "string",
@@ -2606,12 +2639,14 @@
                 "lineNumber": {
                   "type": "integer",
                   "description": "The line number is a unique number within the order.",
-                  "minimum": 1
+                  "minimum": 1,
+                  "nullable": true
                 },
                 "sortKey": {
                   "type": "integer",
                   "description": "A sort key used to sort the lines in ascending order within the order.",
-                  "minimum": 1
+                  "minimum": 1,
+                  "nullable": true
                 },
                 "description": {
                   "type": "string",
@@ -2643,7 +2678,8 @@
                     "unitNumber": {
                       "type": "integer",
                       "description": "The unique identifier of the unit.",
-                      "minimum": 1
+                      "minimum": 1,
+                      "nullable": true
                     },
                     "self": {
                       "type": "string",
@@ -2671,32 +2707,38 @@
                 "quantity": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The number of units of goods on the order line."
+                  "description": "The number of units of goods on the order line.",
+                  "nullable": true
                 },
                 "unitNetPrice": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The price of 1 unit of the goods or services on the order line in the order currency."
+                  "description": "The price of 1 unit of the goods or services on the order line in the order currency.",
+                  "nullable": true
                 },
                 "discountPercentage": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "A line discount expressed as a percentage."
+                  "description": "A line discount expressed as a percentage.",
+                  "nullable": true
                 },
                 "unitCostPrice": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The cost price of 1 unit of the goods or services in the order currency."
+                  "description": "The cost price of 1 unit of the goods or services in the order currency.",
+                  "nullable": true
                 },
                 "marginInBaseCurrency": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The difference between the net price and the cost price on the order line in base currency."
+                  "description": "The difference between the net price and the cost price on the order line in base currency.",
+                  "nullable": true
                 },
                 "marginPercentage": {
                   "type": "number",
                   "x-max-decimals": 2,
-                  "description": "The margin on the order line expressed as a percentage."
+                  "description": "The margin on the order line expressed as a percentage.",
+                  "nullable": true
                 },
                 "departmentalDistribution": {
                   "type": "object",
@@ -2705,7 +2747,8 @@
                     "departmentalDistributionNumber": {
                       "type": "integer",
                       "minimum": 1,
-                      "description": "A unique identifier of the departmental distribution."
+                      "description": "A unique identifier of the departmental distribution.",
+                      "nullable": true
                     },
                     "distributionType": {
                       "type": "string",

@@ -81,6 +81,116 @@ internal static class FacadeTransport
             nameof(value));
     }
 
+    /// <summary>Projects a generated collection onto its public counterpart.</summary>
+    /// <typeparam name="TSource">The generated element type, which NSwag names.</typeparam>
+    /// <typeparam name="TResult">The public element type.</typeparam>
+    /// <param name="source">The generated collection, which may be absent.</param>
+    /// <param name="map">Projects one element.</param>
+    /// <returns>The mapped elements, empty when the response carried none.</returns>
+    /// <remarks>
+    /// An absent array and an empty array are the same thing here — e-conomic omits <c>lines</c>
+    /// from its collection listings entirely — so this never returns <see langword="null"/> and the
+    /// public models expose a plain list rather than a nullable one.
+    /// </remarks>
+    public static IReadOnlyList<TResult> MapList<TSource, TResult>(
+        IEnumerable<TSource>? source,
+        Func<TSource, TResult> map)
+    {
+        ArgumentNullException.ThrowIfNull(map);
+
+        if (source is null)
+        {
+            return [];
+        }
+
+        var mapped = new List<TResult>();
+        foreach (var item in source)
+        {
+            mapped.Add(map(item));
+        }
+
+        return mapped;
+    }
+
+    /// <summary>Converts a public string onto a generated enum property that is itself optional.</summary>
+    /// <typeparam name="TEnum">The generated enum, inferred from <paramref name="inferenceOnly"/>.</typeparam>
+    /// <param name="value">The caller's value, or <see langword="null"/> to leave it unset.</param>
+    /// <param name="inferenceOnly">The target property, read solely for type inference.</param>
+    /// <returns>The parsed value, or <see langword="null"/> when nothing is supplied.</returns>
+    /// <remarks>
+    /// NSwag makes a nested class's optional enum nullable, so the same generated assignment needs
+    /// both shapes. Overload resolution picks between them: the non-nullable one cannot infer
+    /// <typeparamref name="TEnum"/> from a <see cref="Nullable{T}"/> argument, and this one cannot
+    /// infer it from a bare enum.
+    /// </remarks>
+    /// <exception cref="ArgumentException">The value is not one this property accepts.</exception>
+    public static TEnum? ParseEnum<TEnum>(string? value, TEnum? inferenceOnly)
+        where TEnum : struct, Enum =>
+        value is null ? inferenceOnly : ParseEnum(value, default(TEnum));
+
+    /// <summary>Builds a generated collection from a public one.</summary>
+    /// <typeparam name="TSource">The public element type.</typeparam>
+    /// <typeparam name="TTarget">The generated element type, inferred from <paramref name="inferenceOnly"/>.</typeparam>
+    /// <param name="source">The caller's elements, or <see langword="null"/> to send none.</param>
+    /// <param name="inferenceOnly">The target property, read solely so the compiler can infer
+    /// <typeparamref name="TTarget"/>. Its value is never used.</param>
+    /// <param name="build">Copies one element onto a fresh generated instance.</param>
+    /// <returns>The generated elements.</returns>
+    /// <remarks>
+    /// The counterpart to <see cref="MapList{TSource, TResult}"/>, and it exists for the same reason
+    /// <see cref="ParseEnum{TEnum}(string?, TEnum)"/> does: NSwag invents the element type's name, so the generator
+    /// cannot write it out. Passing the target property lets the compiler supply it, which also
+    /// makes <paramref name="build"/>'s second parameter concrete enough to assign members on.
+    /// </remarks>
+    public static IReadOnlyList<TTarget> BuildList<TSource, TTarget>(
+        IEnumerable<TSource>? source,
+        IEnumerable<TTarget>? inferenceOnly,
+        Action<TSource, TTarget> build)
+        where TTarget : new()
+    {
+        ArgumentNullException.ThrowIfNull(build);
+
+        if (source is null)
+        {
+            return [];
+        }
+
+        var built = new List<TTarget>();
+        foreach (var item in source)
+        {
+            var target = new TTarget();
+            build(item, target);
+            built.Add(target);
+        }
+
+        return built;
+    }
+
+    /// <summary>Converts public strings onto a generated collection of enums.</summary>
+    /// <typeparam name="TEnum">The generated enum, inferred from <paramref name="inferenceOnly"/>.</typeparam>
+    /// <param name="values">The caller's values, or <see langword="null"/> to send none.</param>
+    /// <param name="inferenceOnly">The target property, read solely for type inference.</param>
+    /// <returns>The parsed values.</returns>
+    /// <exception cref="ArgumentException">One of the values is not one this property accepts.</exception>
+    public static IReadOnlyList<TEnum> ParseEnums<TEnum>(
+        IEnumerable<string>? values,
+        IEnumerable<TEnum>? inferenceOnly)
+        where TEnum : struct, Enum
+    {
+        if (values is null)
+        {
+            return [];
+        }
+
+        var parsed = new List<TEnum>();
+        foreach (var value in values)
+        {
+            parsed.Add(ParseEnum<TEnum>(value, default));
+        }
+
+        return parsed;
+    }
+
     /// <summary>Issues a <c>DELETE</c>, which has no generated method.</summary>
     /// <param name="httpClient">The configured transport.</param>
     /// <param name="requestUri">The resource to delete, relative to the base address.</param>

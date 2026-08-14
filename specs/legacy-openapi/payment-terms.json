@@ -378,7 +378,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "The account number of the contra account."
+                "description": "The account number of the contra account.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -393,7 +394,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "The account number of the contra account."
+                "description": "The account number of the contra account.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -422,7 +424,8 @@
                 "type": "integer",
                 "description": "The credit card company customer number.",
                 "maximum": 999999999,
-                "minimum": 1
+                "minimum": 1,
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -477,7 +480,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "The account number of the contra account."
+                "description": "The account number of the contra account.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -492,7 +496,8 @@
             "properties": {
               "accountNumber": {
                 "type": "integer",
-                "description": "The account number of the contra account."
+                "description": "The account number of the contra account.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -521,7 +526,8 @@
                 "type": "integer",
                 "description": "The credit card company customer number.",
                 "maximum": 999999999,
-                "minimum": 1
+                "minimum": 1,
+                "nullable": true
               },
               "self": {
                 "type": "string",

@@ -1707,44 +1707,52 @@
               "available": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers."
+                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers.",
+                "nullable": true
               },
               "inStock": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units in stock including any that have been ordered by customers."
+                "description": "The number of units in stock including any that have been ordered by customers.",
+                "nullable": true
               },
               "orderedByCustomers": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet."
+                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet.",
+                "nullable": true
               },
               "orderedFromSuppliers": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet."
+                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet.",
+                "nullable": true
               },
               "packageVolume": {
                 "type": "number",
                 "x-max-decimals": 2,
-                "description": "The volume the shipped package makes up."
+                "description": "The volume the shipped package makes up.",
+                "nullable": true
               },
               "grossWeight": {
                 "type": "number",
                 "x-max-decimals": 2,
                 "readOnly": true,
-                "description": "The gross weight of the product."
+                "description": "The gross weight of the product.",
+                "nullable": true
               },
               "netWeight": {
                 "type": "number",
                 "x-max-decimals": 2,
                 "readOnly": true,
-                "description": "The net weight of the product."
+                "description": "The net weight of the product.",
+                "nullable": true
               },
               "recommendedCostPrice": {
                 "type": "number",
                 "x-max-decimals": 2,
-                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled."
+                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled.",
+                "nullable": true
               }
             }
           },
@@ -1754,7 +1762,8 @@
             "properties": {
               "unitNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the unit."
+                "description": "Unique number identifying the unit.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1769,7 +1778,8 @@
             "properties": {
               "productGroupNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the product group."
+                "description": "Unique number identifying the product group.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1785,7 +1795,8 @@
               "departmentalDistributionNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the departmental distribution."
+                "description": "A unique identifier of the departmental distribution.",
+                "nullable": true
               },
               "distributionType": {
                 "type": "string",
@@ -1858,44 +1869,52 @@
               "available": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers."
+                "description": "The number of units available to sell. This is the difference between the amount in stock and the amount ordered by customers.",
+                "nullable": true
               },
               "inStock": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units in stock including any that have been ordered by customers."
+                "description": "The number of units in stock including any that have been ordered by customers.",
+                "nullable": true
               },
               "orderedByCustomers": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet."
+                "description": "The number of units that have been ordered by customers, but haven\u0027t been sold yet.",
+                "nullable": true
               },
               "orderedFromSuppliers": {
                 "type": "number",
                 "readOnly": true,
-                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet."
+                "description": "The number of units that have been ordered from your suppliers, but haven\u0027t been delivered to you yet.",
+                "nullable": true
               },
               "packageVolume": {
                 "type": "number",
                 "x-max-decimals": 2,
-                "description": "The volume the shipped package makes up."
+                "description": "The volume the shipped package makes up.",
+                "nullable": true
               },
               "grossWeight": {
                 "type": "number",
                 "x-max-decimals": 2,
                 "readOnly": true,
-                "description": "The gross weight of the product."
+                "description": "The gross weight of the product.",
+                "nullable": true
               },
               "netWeight": {
                 "type": "number",
                 "x-max-decimals": 2,
                 "readOnly": true,
-                "description": "The net weight of the product."
+                "description": "The net weight of the product.",
+                "nullable": true
               },
               "recommendedCostPrice": {
                 "type": "number",
                 "x-max-decimals": 2,
-                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled."
+                "description": "The recommendedCostPrice of the product. The field is required if the Inventory module is enabled.",
+                "nullable": true
               }
             }
           },
@@ -1905,7 +1924,8 @@
             "properties": {
               "unitNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the unit."
+                "description": "Unique number identifying the unit.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1920,7 +1940,8 @@
             "properties": {
               "productGroupNumber": {
                 "type": "integer",
-                "description": "Unique number identifying the product group."
+                "description": "Unique number identifying the product group.",
+                "nullable": true
               },
               "self": {
                 "type": "string",
@@ -1936,7 +1957,8 @@
               "departmentalDistributionNumber": {
                 "type": "integer",
                 "minimum": 1,
-                "description": "A unique identifier of the departmental distribution."
+                "description": "A unique identifier of the departmental distribution.",
+                "nullable": true
               },
               "distributionType": {
                 "type": "string",

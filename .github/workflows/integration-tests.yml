@@ -1,7 +1,13 @@
 name: Integration tests
 
-# These hit e-conomic's live demo agreement (read-only). They run on a schedule so that an
-# upstream change is caught, without letting an e-conomic outage block pull requests.
+# These run against a live e-conomic agreement and write to it, so they need one of their own.
+# They are scheduled rather than run per pull request: an e-conomic outage should not block a PR.
+#
+# Requires two repository secrets, pointing at a THROWAWAY agreement:
+#   ECONOMIC_APP_SECRET_TOKEN
+#   ECONOMIC_AGREEMENT_GRANT_TOKEN
+# Without them every test skips, and the job still passes — a missing secret is a configuration
+# gap, not a broken library, and failing here would be indistinguishable from a real regression.
 on:
   schedule:
     - cron: '0 6 * * *'
@@ -17,7 +23,7 @@ env:
 
 jobs:
   integration:
-    name: Demo agreement smoke tests
+    name: Live agreement tests
     runs-on: ubuntu-latest
 
     steps:
@@ -28,5 +34,16 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Report whether an agreement is configured
+        run: |
+          if [ -z "${{ secrets.ECONOMIC_APP_SECRET_TOKEN }}" ]; then
+            echo "::warning::No agreement configured; every integration test will skip."
+          fi
+
+      # ECONOMIC_RUN_BOOKING_TESTS is deliberately absent. Booking a draft invoice cannot be
+      # undone, so a scheduled job must not do it every morning.
       - name: Test
+        env:
+          ECONOMIC_APP_SECRET_TOKEN: ${{ secrets.ECONOMIC_APP_SECRET_TOKEN }}
+          ECONOMIC_AGREEMENT_GRANT_TOKEN: ${{ secrets.ECONOMIC_AGREEMENT_GRANT_TOKEN }}
         run: dotnet test tests/EConomic.Net.IntegrationTests --configuration Release

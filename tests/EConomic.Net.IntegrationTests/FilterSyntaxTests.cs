@@ -1,14 +1,12 @@
 using System.Linq.Expressions;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
-using EConomic.Authentication;
 using EConomic.Querying;
 using Xunit;
 
 namespace EConomic.IntegrationTests;
 
-/// <summary>A filter surface for the demo agreement's customers, shaped like a generated one.</summary>
+/// <summary>A filter surface for customers, shaped like a generated one.</summary>
 public sealed class DemoCustomerFilter
 {
     [EconomicField("customerNumber")]
@@ -31,12 +29,10 @@ public sealed class DemoCustomerFilter
 /// </remarks>
 public class FilterSyntaxTests
 {
-    private const string OptInVariable = "ECONOMIC_RUN_INTEGRATION_TESTS";
-
     [Fact]
     public async Task Every_supported_operator_is_accepted_by_the_server()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         // A 400 here means the translator emits syntax e-conomic does not accept.
         Expression<Func<DemoCustomerFilter, bool>>[] filters =
@@ -61,24 +57,33 @@ public class FilterSyntaxTests
         }
     }
 
-    [Theory]
-    // Values are compared against the live demo agreement, which has five customers.
-    [InlineData(3)]
-    public async Task In_restricts_the_result_set_rather_than_merely_parsing(int expected)
+    [Fact]
+    public async Task In_restricts_the_result_set_rather_than_merely_parsing()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
-        var expression = FilterTranslator.Translate<DemoCustomerFilter>(c => c.CustomerNumber.In(1, 2, 3));
+        var client = TestClients.Create();
+        await using var seed = new AgreementSeed(client, TestContext.Current.CancellationToken);
+
+        // Two of the three are asked for, so a filter that merely parses and returns everything is
+        // distinguishable from one the server actually applied.
+        var first = await seed.CustomerAsync("ZZ Probe In A");
+        var second = await seed.CustomerAsync("ZZ Probe In B");
+        await seed.CustomerAsync("ZZ Probe In C");
+
+        var expression = FilterTranslator.Translate<DemoCustomerFilter>(
+            c => c.CustomerNumber.In(first.CustomerNumber, second.CustomerNumber));
+
         var (status, count) = await QueryAsync(expression);
 
         Assert.Equal(HttpStatusCode.OK, status);
-        Assert.Equal(expected, count);
+        Assert.Equal(2, count);
     }
 
     [Fact]
     public async Task An_escaped_wildcard_matches_literally_instead_of_matching_everything()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         // If `*` leaked through unescaped this would match every customer whose name starts with
         // "NoSuch", rather than looking for a literal asterisk.
@@ -92,7 +97,7 @@ public class FilterSyntaxTests
     [Fact]
     public async Task A_filter_on_a_property_the_schema_under_reports_still_works()
     {
-        SkipUnlessOptedIn();
+        TestClients.SkipUnlessConfigured();
 
         // pNumber is absent from the published schema's filterable set but the server accepts it.
         // This is the case the raw escape hatch exists for; if it ever starts failing, the escape
@@ -104,13 +109,7 @@ public class FilterSyntaxTests
 
     private static async Task<(HttpStatusCode Status, int Count)> QueryAsync(string filter)
     {
-        using var client = new HttpClient(new EconomicAuthenticationHandler(EconomicOptions.Demo())
-        {
-            InnerHandler = new HttpClientHandler(),
-        })
-        {
-            Timeout = TimeSpan.FromSeconds(30),
-        };
+        using var client = TestClients.CreateTransport();
 
         var uri = new Uri($"https://restapi.e-conomic.com/customers?pagesize=1000&filter={Uri.EscapeDataString(filter)}");
         using var response = await client.GetAsync(uri, TestContext.Current.CancellationToken);
@@ -125,9 +124,4 @@ public class FilterSyntaxTests
 
         return (response.StatusCode, document.RootElement.GetProperty("collection").GetArrayLength());
     }
-
-    private static void SkipUnlessOptedIn() =>
-        Assert.SkipWhen(
-            Environment.GetEnvironmentVariable(OptInVariable) is not "1",
-            $"Set {OptInVariable}=1 to run tests against the live demo agreement.");
 }

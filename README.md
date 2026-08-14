@@ -17,9 +17,10 @@ await foreach (var customer in client.Customers
 }
 ```
 
-> **Status: pre-release, read-only.** Twenty collection resources on the legacy REST API are
-> covered, with filtering, sorting and transparent paging. Creating and updating records is not
-> implemented yet, and neither are the newer OpenAPI services. The public API may change before 1.0.
+> **Status: pre-release.** Thirty-three collection resources on the legacy REST API are covered,
+> with filtering, sorting and transparent paging. Eleven of them also support creating, updating
+> and deleting. The newer OpenAPI services are not implemented yet, and the public API may change
+> before 1.0.
 
 > **Unofficial.** This project is not affiliated with, endorsed by, or supported by Visma or
 > e-conomic. For API support, contact <api@e-conomic.com>.
@@ -171,12 +172,93 @@ query.GetFilterExpression(); // "barred$eq:false$and:balance$gte:1000"
 query.GetSortExpression();   // "name,-balance"
 ```
 
+## Creating, updating and deleting
+
+Writable resources take a purpose-built model carrying only what e-conomic accepts. Server-
+maintained values such as `balance` are absent, and references to other resources are flattened to
+their numbers:
+
+```csharp
+var customer = await client.Customers.CreateAsync(
+    new CustomerCreate
+    {
+        Name = "Acme A/S",
+        Currency = "DKK",
+        CustomerGroupNumber = 1,
+        PaymentTermsNumber = 1,
+        VatZoneNumber = 1,
+    },
+    cancellationToken);
+
+await client.Customers.DeleteAsync(customer.CustomerNumber, cancellationToken);
+```
+
+A create returns the whole resource as the server stored it, including the identifier it assigned
+and everything the request never mentioned.
+
+`UpdateAsync` **replaces** rather than patches — a property left unset is cleared — and e-conomic
+treats it as an upsert, answering `201 Created` when the identifier does not exist.
+
+Composite properties are records of their own, and repeating groups are lists:
+
+```csharp
+var invoice = await client.DraftInvoices.CreateAsync(
+    new DraftInvoiceCreate
+    {
+        Date = DateOnly.FromDateTime(DateTime.Today),
+        Currency = "DKK",
+        LayoutNumber = 21,
+        CustomerNumber = customer.CustomerNumber,
+        PaymentTerms = new DraftInvoiceCreatePaymentTerms { PaymentTermsNumber = 1 },
+        Recipient = new DraftInvoiceCreateRecipient { Name = "Acme A/S", VatZoneNumber = 1 },
+        Lines =
+        [
+            new DraftInvoiceCreateLine
+            {
+                Description = "Consulting",
+                Product = new DraftInvoiceCreateLineProduct { ProductNumber = "CONS-1" },
+                Quantity = 2,
+                UnitNetPrice = 100,
+            },
+        ],
+    },
+    cancellationToken);
+
+// The server prices it: NetAmount is 200, GrossAmount includes VAT.
+```
+
+Booking a draft turns it into a booked invoice:
+
+```csharp
+var booked = await client.DraftInvoices.BookAsync(invoice.DraftInvoiceNumber, cancellationToken);
+```
+
+**Booking cannot be undone.** A booked invoice is part of the accounting record — it cannot be
+edited or deleted, only corrected with a credit note — and the draft no longer exists afterwards.
+Pass `bookWithNumber` to choose the invoice number, or `sendBy` to have e-conomic send it.
+
+Collections that cannot be addressed without their parent are reached through it:
+
+```csharp
+var contacts = client.Customers.Contacts(customer.CustomerNumber);
+await contacts.CreateAsync(new CustomerContactCreate { Name = "Jane Doe" }, cancellationToken);
+```
+
+Deletes are **not** retried without an `Idempotency-Key`. e-conomic reuses identifiers, so a
+repeated delete can land on a different record than the one you meant — see
+[Retries and idempotency](#retries-and-idempotency).
+
 ## Available resources
 
-`AccountingYears`, `Accounts`, `AppRoles`, `Currencies`, `CustomerGroups`, `Customers`,
-`DepartmentalDistributions`, `Departments`, `Employees`, `Journals`, `Layouts`, `PaymentTerms`,
-`PaymentTypes`, `ProductGroups`, `Products`, `Suppliers`, `Units`, `VatAccounts`, `VatTypes`,
-`VatZones`.
+Queryable: `AccountingYears`, `Accounts`, `AppRoles`, `ArchivedOrders`, `ArchivedQuotes`,
+`BookedInvoices`, `Currencies`, `CustomerGroups`, `Customers`, `DepartmentalDistributions`,
+`Departments`, `DraftInvoices`, `DraftOrders`, `DraftQuotes`, `Employees`, `Journals`, `Layouts`,
+`NotDueInvoices`, `OverdueInvoices`, `PaidInvoices`, `PaymentTerms`, `PaymentTypes`,
+`ProductGroups`, `Products`, `SentInvoices`, `SentOrders`, `SentQuotes`, `Suppliers`,
+`UnpaidInvoices`, `Units`, `VatAccounts`, `VatTypes`, `VatZones`.
+
+Also writable: `Customers` (and its `Contacts` and `DeliveryLocations`), `CustomerGroups`,
+`DraftInvoices`, `DraftOrders`, `DraftQuotes`, `PaymentTerms`, `Products`, `Suppliers`, `Units`.
 
 Danish domain terms keep their e-conomic names — `vatZone`, `paymentTerms`, `bookedEntries` — so
 that everything maps back to the official docs without a translation step.
@@ -255,10 +337,13 @@ dotnet build EConomic.Net.slnx
 dotnet test tests/EConomic.Net.Tests
 ```
 
-Integration tests run against the live demo agreement and are opt-in, so an e-conomic outage never
-fails an unrelated build:
+Integration tests run against a live agreement and are opt-in, so an e-conomic outage never fails
+an unrelated build. They create the records they assert on and delete them again, so point them at
+a **throwaway agreement**:
 
 ```bash
+export ECONOMIC_APP_SECRET_TOKEN=…
+export ECONOMIC_AGREEMENT_GRANT_TOKEN=…
 ECONOMIC_RUN_INTEGRATION_TESTS=1 dotnet test tests/EConomic.Net.IntegrationTests
 ```
 

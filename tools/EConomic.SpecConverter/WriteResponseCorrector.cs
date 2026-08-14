@@ -90,6 +90,12 @@ public static class WriteResponseCorrector
     /// Only components used solely as request bodies are touched, so the read models keep their
     /// non-nullable numbers.
     /// </para>
+    /// <para>
+    /// Nested objects and array items are marked too. They have to be: an invoice line's
+    /// <c>lineNumber</c> and <c>sortKey</c> both declare <c>minimum: 1</c>, so a draft invoice with
+    /// a line the caller did not number was rejected outright — the same failure as
+    /// <c>customerNumber</c>, one level further down.
+    /// </para>
     /// </remarks>
     public static int MarkOptionalNumbersNullable(JsonObject document)
     {
@@ -137,30 +143,59 @@ public static class WriteResponseCorrector
 
         foreach (var name in requestBodies.Where(b => !otherUses.Contains(b)))
         {
-            if (schemas[name] is not JsonObject schema || schema["properties"] is not JsonObject properties)
+            if (schemas[name] is JsonObject schema)
+            {
+                marked += MarkObject(schema);
+            }
+        }
+
+        return marked;
+    }
+
+    /// <summary>Marks one object schema and everything nested inside it.</summary>
+    private static int MarkObject(JsonObject schema)
+    {
+        if (schema["properties"] is not JsonObject properties)
+        {
+            return 0;
+        }
+
+        var required = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var entry in schema["required"]?.AsArray() ?? [])
+        {
+            if (entry?.GetValue<string>() is { } value)
+            {
+                required.Add(value);
+            }
+        }
+
+        var marked = 0;
+
+        foreach (var (property, node) in properties)
+        {
+            if (node is not JsonObject definition)
             {
                 continue;
             }
 
-            var required = new HashSet<string>(StringComparer.Ordinal);
-            foreach (var entry in schema["required"]?.AsArray() ?? [])
+            switch (definition["type"]?.GetValue<string>())
             {
-                if (entry?.GetValue<string>() is { } value)
-                {
-                    required.Add(value);
-                }
-            }
-
-            foreach (var (property, node) in properties)
-            {
-                if (node is JsonObject definition
-                    && !required.Contains(property)
-                    && definition["type"]?.GetValue<string>() is "integer" or "number"
-                    && definition["nullable"] is null)
-                {
+                case "integer" or "number"
+                    when !required.Contains(property) && definition["nullable"] is null:
                     definition["nullable"] = true;
                     marked++;
-                }
+                    break;
+
+                case "object":
+                    marked += MarkObject(definition);
+                    break;
+
+                case "array" when definition["items"] is JsonObject item:
+                    marked += MarkObject(item);
+                    break;
+
+                default:
+                    break;
             }
         }
 
