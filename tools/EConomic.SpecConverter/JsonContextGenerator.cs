@@ -85,6 +85,15 @@ public static partial class JsonContextGenerator
             builder.AppendLine("#if !NET9_0_OR_GREATER");
             builder.AppendLine("        settings.Converters.Add(new JsonStringEnumConverter());");
             builder.AppendLine("#endif");
+            builder.AppendLine();
+            builder.AppendLine("        // e-conomic rejects an explicit null: sending \"address\": null fails schema");
+            builder.AppendLine("        // validation with \"Expected String but got Null\", so an unset optional property");
+            builder.AppendLine("        // must be omitted rather than written. This has to be set on these settings, not");
+            builder.AppendLine("        // only through JsonSourceGenerationOptions: those apply to the context's own");
+            builder.AppendLine("        // Default instance, while the generated clients serialize through options of");
+            builder.AppendLine("        // their own that merely borrow the resolver.");
+            builder.AppendLine("        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;");
+            builder.AppendLine();
             builder.AppendLine($"        settings.TypeInfoResolverChain.Add({contextName}.Default);");
             builder.AppendLine("    }");
             builder.AppendLine("}");
@@ -148,7 +157,12 @@ public static partial class JsonContextGenerator
     [GeneratedRegex(@"ReadObjectResponseAsync<(?<type>[A-Za-z_][A-Za-z0-9_]*)>", RegexOptions.ExplicitCapture)]
     private static partial Regex ResponseTypePattern();
 
-    [GeneratedRegex(@"\((?<type>[A-Za-z_][A-Za-z0-9_]*) body[,)]", RegexOptions.ExplicitCapture)]
+    // The body is not always the first parameter: an update takes its identifier first, as in
+    // PutCustomersBycustomerNoAsync(int customerNo, CustomerPUT body, ...). Anchoring on "(" alone
+    // missed every one of those, and they went unnoticed only because the payload type doubled as
+    // the response type and was rooted that way. Once writes started returning the read entity,
+    // that second route disappeared and every PUT failed at run time for want of metadata.
+    [GeneratedRegex(@"[(,]\s*(?<type>[A-Za-z_][A-Za-z0-9_]*) body[,)]", RegexOptions.ExplicitCapture)]
     private static partial Regex RequestBodyPattern();
 
     [GeneratedRegex(

@@ -33,7 +33,7 @@ public class ReplicatedResourceTests
     {
         SkipUnlessOptedIn();
 
-        var suppliers = await FirstPageAsync(CreateClient().Suppliers);
+        var suppliers = await FirstPageAsync(CreateClient().Suppliers.AsQuery());
 
         Assert.All(suppliers, s => Assert.True(s.SupplierNumber > 0));
     }
@@ -43,7 +43,7 @@ public class ReplicatedResourceTests
     {
         SkipUnlessOptedIn();
 
-        var products = await FirstPageAsync(CreateClient().Products);
+        var products = await FirstPageAsync(CreateClient().Products.AsQuery());
 
         Assert.All(products, p => Assert.False(string.IsNullOrWhiteSpace(p.ProductNumber)));
     }

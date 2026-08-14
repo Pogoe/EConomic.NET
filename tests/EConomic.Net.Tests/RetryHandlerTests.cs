@@ -32,11 +32,34 @@ public class RetryHandlerTests
     [Fact]
     public void Idempotent_methods_are_always_safe_to_retry()
     {
-        foreach (var method in new[] { HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete, HttpMethod.Head })
+        // DELETE is deliberately absent: e-conomic documents it as non-idempotent, so it is
+        // covered by A_delete_without_an_idempotency_key_is_never_retried instead.
+        foreach (var method in new[] { HttpMethod.Get, HttpMethod.Put, HttpMethod.Head })
         {
             using var request = new HttpRequestMessage(method, "https://restapi.e-conomic.com/customers");
             Assert.True(EconomicRetryHandler.IsSafeToRetry(request), $"{method} should be retryable.");
         }
+    }
+
+    [Fact]
+    public void A_delete_without_an_idempotency_key_is_never_retried()
+    {
+        // HTTP says DELETE is idempotent; e-conomic says otherwise. Its drafts and sent endpoints
+        // document that "on the consecutive calls it will be returning status code 404", so a
+        // retry after a lost response would report failure for a delete that actually succeeded.
+        using var request = new HttpRequestMessage(HttpMethod.Delete, "https://restapi.e-conomic.com/customers/1");
+
+        Assert.False(EconomicRetryHandler.IsSafeToRetry(request));
+    }
+
+    [Fact]
+    public void A_delete_with_an_idempotency_key_is_retryable()
+    {
+        // With a key the server replays the original result rather than deleting again.
+        using var request = new HttpRequestMessage(HttpMethod.Delete, "https://restapi.e-conomic.com/customers/1");
+        request.Headers.TryAddWithoutValidation(EconomicIdempotencyHandler.IdempotencyKeyHeader, "a-key");
+
+        Assert.True(EconomicRetryHandler.IsSafeToRetry(request));
     }
 
     [Fact]

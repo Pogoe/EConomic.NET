@@ -89,7 +89,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentTermPOST"
+                  "$ref": "#/components/schemas/PaymentTerms"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTerms"
                 }
               }
             }
@@ -155,7 +165,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentTermUpdate"
+                  "$ref": "#/components/schemas/PaymentTerms"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTerms"
                 }
               }
             }
@@ -325,7 +345,8 @@
         "properties": {
           "daysOfCredit": {
             "type": "integer",
-            "description": "The number of days before payment must be made."
+            "description": "The number of days before payment must be made.",
+            "nullable": true
           },
           "description": {
             "type": "string",
@@ -384,12 +405,14 @@
           "percentageForPrepaidAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be pre paid."
+            "description": "The % to be pre paid.",
+            "nullable": true
           },
           "percentageForRemainderAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be post paid."
+            "description": "The % to be post paid.",
+            "nullable": true
           },
           "creditCardCompany": {
             "type": "object",
@@ -421,7 +444,8 @@
         "properties": {
           "daysOfCredit": {
             "type": "integer",
-            "description": "The number of days before payment must be made."
+            "description": "The number of days before payment must be made.",
+            "nullable": true
           },
           "description": {
             "type": "string",
@@ -480,12 +504,14 @@
           "percentageForPrepaidAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be pre paid."
+            "description": "The % to be pre paid.",
+            "nullable": true
           },
           "percentageForRemainderAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be pre paid."
+            "description": "The % to be pre paid.",
+            "nullable": true
           },
           "creditCardCompany": {
             "type": "object",

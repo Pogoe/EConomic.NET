@@ -89,7 +89,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerPOST"
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
                 }
               }
             }
@@ -123,7 +133,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerPUT"
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
                 }
               }
             }
@@ -273,6 +293,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactPOST"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "customers.customerNumber.contacts.post.schema.json",
@@ -350,6 +380,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -477,6 +517,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "customers.customerNumber.delivery-locations.post.schema.json",
@@ -554,6 +604,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -942,7 +1002,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -2710,7 +2770,8 @@
           "balance": {
             "type": "number",
             "readOnly": true,
-            "description": "The outstanding amount for this customer."
+            "description": "The outstanding amount for this customer.",
+            "nullable": true
           },
           "corporateIdentificationNumber": {
             "type": "string",
@@ -2735,7 +2796,8 @@
           },
           "creditLimit": {
             "type": "number",
-            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic.",
+            "nullable": true
           },
           "currency": {
             "type": "string",
@@ -2762,7 +2824,8 @@
             "type": "integer",
             "maximum": 999999999,
             "minimum": 1,
-            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. If no customer number is specified a number will be supplied by the system."
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. If no customer number is specified a number will be supplied by the system.",
+            "nullable": true
           },
           "ean": {
             "type": "string",
@@ -2910,7 +2973,8 @@
           "balance": {
             "type": "number",
             "readOnly": true,
-            "description": "The outstanding amount for this customer."
+            "description": "The outstanding amount for this customer.",
+            "nullable": true
           },
           "corporateIdentificationNumber": {
             "type": "string",
@@ -2935,7 +2999,8 @@
           },
           "creditLimit": {
             "type": "number",
-            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic.",
+            "nullable": true
           },
           "currency": {
             "type": "string",
@@ -2962,7 +3027,8 @@
             "type": "integer",
             "maximum": 999999999,
             "minimum": 1,
-            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+            "nullable": true
           },
           "defaultDeliveryLocation": {
             "type": "object",

@@ -278,7 +278,20 @@ public static class Draft03Converter
                 required.Add(name);
             }
 
-            converted[name] = Convert(property, unhandled);
+            var result = Convert(property, unhandled);
+
+            // Every resource carries a `self` link and all but one label it `format: "uri"`.
+            // Supplier omits it, which would otherwise surface `Supplier.Self` as a string while
+            // every other entity exposes a Uri — an inconsistency in the public API caused purely
+            // by a missing keyword in one file.
+            if (name == "self"
+                && result["type"]?.GetValue<string>() == "string"
+                && result["format"] is null)
+            {
+                result["format"] = "uri";
+            }
+
+            converted[name] = result;
         }
 
         return converted;

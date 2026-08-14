@@ -89,7 +89,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountingYearsPOST"
+                  "$ref": "#/components/schemas/AccountingYear"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountingYear"
                 }
               }
             }
@@ -1409,7 +1419,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerGroupPOST"
+                  "$ref": "#/components/schemas/CustomerGroup"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroup"
                 }
               }
             }
@@ -1547,7 +1567,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerGroupPUT"
+                  "$ref": "#/components/schemas/CustomerGroup"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroup"
                 }
               }
             }
@@ -1651,7 +1681,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerPOST"
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
                 }
               }
             }
@@ -1685,7 +1725,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerPUT"
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
                 }
               }
             }
@@ -1835,6 +1885,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactPOST"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "customers.customerNumber.contacts.post.schema.json",
@@ -1912,6 +1972,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerContactPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -2039,6 +2109,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationPOST"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "customers.customerNumber.delivery-locations.post.schema.json",
@@ -2116,6 +2196,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryLocationPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -2504,7 +2594,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3163,6 +3253,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForBookingAnInvoice"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "invoices.booked.post.schema.json",
@@ -3190,6 +3290,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoicesForBookingAnInvoice"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -3335,6 +3445,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftInvoicePost"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "invoices.drafts.post.schema.json",
@@ -3401,6 +3521,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftInvoiceUpdate"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "invoices.drafts.draftInvoiceNumber.put.schema.json",
@@ -3438,6 +3568,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftInvoiceLinesPost"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -4767,6 +4907,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalVoucherPost"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "journals.journalNumber.vouchers.post.schema.json",
@@ -5187,6 +5337,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOrderPost"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "orders.drafts.post.schema.json",
@@ -5246,6 +5406,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOrderPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -5483,7 +5653,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentTermPOST"
+                  "$ref": "#/components/schemas/PaymentTerms"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTerms"
                 }
               }
             }
@@ -5549,7 +5729,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentTermUpdate"
+                  "$ref": "#/components/schemas/PaymentTerms"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentTerms"
                 }
               }
             }
@@ -5985,7 +6175,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductsCreate"
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
                 }
               }
             }
@@ -6032,7 +6232,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -6051,7 +6251,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductsUpdate"
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
                 }
               }
             }
@@ -6064,7 +6274,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -6108,7 +6318,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -6167,6 +6377,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPricesCreate"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.post.schema.json",
@@ -6176,7 +6396,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -6220,7 +6440,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -6251,6 +6471,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPricesUpdate"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.currencyCode.put.schema.json",
@@ -6260,7 +6490,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -6483,6 +6713,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftQuotePost"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "quotes.drafts.post.schema.json",
@@ -6542,6 +6782,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftQuotePUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -6747,6 +6997,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyPUT"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "self.company.put.schema.json",
@@ -6781,6 +7041,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyBankInformationPUT"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "self.company.bankinformation.put.schema.json",
@@ -6808,6 +7078,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -6905,7 +7185,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuppliersPostResponse"
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Supplier"
                 }
               }
             }
@@ -6971,7 +7261,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuppliersPutResponse"
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Supplier"
                 }
               }
             }
@@ -7075,7 +7375,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnitsCreate"
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
                 }
               }
             }
@@ -7141,7 +7451,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UnitUpdate"
+                  "$ref": "#/components/schemas/Unit"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unit"
                 }
               }
             }
@@ -10488,7 +10808,8 @@
           "customerGroupNumber": {
             "type": "integer",
             "readOnly": true,
-            "description": "The customer group number."
+            "description": "The customer group number.",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -12572,7 +12893,8 @@
           "balance": {
             "type": "number",
             "readOnly": true,
-            "description": "The outstanding amount for this customer."
+            "description": "The outstanding amount for this customer.",
+            "nullable": true
           },
           "corporateIdentificationNumber": {
             "type": "string",
@@ -12597,7 +12919,8 @@
           },
           "creditLimit": {
             "type": "number",
-            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic.",
+            "nullable": true
           },
           "currency": {
             "type": "string",
@@ -12624,7 +12947,8 @@
             "type": "integer",
             "maximum": 999999999,
             "minimum": 1,
-            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. If no customer number is specified a number will be supplied by the system."
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits. If no customer number is specified a number will be supplied by the system.",
+            "nullable": true
           },
           "ean": {
             "type": "string",
@@ -12772,7 +13096,8 @@
           "balance": {
             "type": "number",
             "readOnly": true,
-            "description": "The outstanding amount for this customer."
+            "description": "The outstanding amount for this customer.",
+            "nullable": true
           },
           "corporateIdentificationNumber": {
             "type": "string",
@@ -12797,7 +13122,8 @@
           },
           "creditLimit": {
             "type": "number",
-            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic."
+            "description": "A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic.",
+            "nullable": true
           },
           "currency": {
             "type": "string",
@@ -12824,7 +13150,8 @@
             "type": "integer",
             "maximum": 999999999,
             "minimum": 1,
-            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits."
+            "description": "The customer number is a positive unique numerical identifier with a maximum of 9 digits.",
+            "nullable": true
           },
           "defaultDeliveryLocation": {
             "type": "object",
@@ -16738,7 +17065,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -17259,7 +17587,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -18158,7 +18487,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -29901,7 +30231,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -30451,7 +30782,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -33282,7 +33614,8 @@
         "properties": {
           "daysOfCredit": {
             "type": "integer",
-            "description": "The number of days before payment must be made."
+            "description": "The number of days before payment must be made.",
+            "nullable": true
           },
           "description": {
             "type": "string",
@@ -33341,12 +33674,14 @@
           "percentageForPrepaidAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be pre paid."
+            "description": "The % to be pre paid.",
+            "nullable": true
           },
           "percentageForRemainderAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be post paid."
+            "description": "The % to be post paid.",
+            "nullable": true
           },
           "creditCardCompany": {
             "type": "object",
@@ -33378,7 +33713,8 @@
         "properties": {
           "daysOfCredit": {
             "type": "integer",
-            "description": "The number of days before payment must be made."
+            "description": "The number of days before payment must be made.",
+            "nullable": true
           },
           "description": {
             "type": "string",
@@ -33437,12 +33773,14 @@
           "percentageForPrepaidAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be pre paid."
+            "description": "The % to be pre paid.",
+            "nullable": true
           },
           "percentageForRemainderAmount": {
             "type": "number",
             "x-max-decimals": 2,
-            "description": "The % to be pre paid."
+            "description": "The % to be pre paid.",
+            "nullable": true
           },
           "creditCardCompany": {
             "type": "object",
@@ -35121,7 +35459,8 @@
               },
               "self": {
                 "type": "string",
-                "description": "A unique reference to the product resource."
+                "description": "A unique reference to the product resource.",
+                "format": "uri"
               }
             }
           },
@@ -35177,7 +35516,8 @@
               },
               "self": {
                 "type": "string",
-                "description": "A unique reference to the product resource."
+                "description": "A unique reference to the product resource.",
+                "format": "uri"
               }
             }
           },
@@ -35674,15 +36014,18 @@
           },
           "costPrice": {
             "type": "number",
-            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored.",
+            "nullable": true
           },
           "recommendedPrice": {
             "type": "number",
-            "description": "Recommended retail price of the goods."
+            "description": "Recommended retail price of the goods.",
+            "nullable": true
           },
           "salesPrice": {
             "type": "number",
-            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line.",
+            "nullable": true
           },
           "barCode": {
             "type": "string",
@@ -35822,15 +36165,18 @@
           },
           "costPrice": {
             "type": "number",
-            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored.",
+            "nullable": true
           },
           "recommendedPrice": {
             "type": "number",
-            "description": "Recommended retail price of the goods."
+            "description": "Recommended retail price of the goods.",
+            "nullable": true
           },
           "salesPrice": {
             "type": "number",
-            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line.",
+            "nullable": true
           },
           "barCode": {
             "type": "string",
@@ -37566,7 +37912,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -38116,7 +38463,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -41558,7 +41906,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [
@@ -41810,7 +42159,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [
@@ -42049,7 +42399,8 @@
             "type": "integer",
             "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
             "maximum": 999999999,
-            "minimum": 1
+            "minimum": 1,
+            "nullable": true
           },
           "vatZone": {
             "type": "object",
@@ -42073,7 +42424,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [
@@ -42307,7 +42659,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [

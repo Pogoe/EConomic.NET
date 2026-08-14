@@ -89,7 +89,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductsCreate"
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
                 }
               }
             }
@@ -136,7 +146,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -155,7 +165,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductsUpdate"
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
                 }
               }
             }
@@ -168,7 +188,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -212,7 +232,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -271,6 +291,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPricesCreate"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.post.schema.json",
@@ -280,7 +310,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -324,7 +354,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -355,6 +385,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPricesUpdate"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "products.productNumber.pricing.currency-specific-sales-prices.currencyCode.put.schema.json",
@@ -364,7 +404,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           },
           {
@@ -1053,7 +1093,8 @@
               },
               "self": {
                 "type": "string",
-                "description": "A unique reference to the product resource."
+                "description": "A unique reference to the product resource.",
+                "format": "uri"
               }
             }
           },
@@ -1109,7 +1150,8 @@
               },
               "self": {
                 "type": "string",
-                "description": "A unique reference to the product resource."
+                "description": "A unique reference to the product resource.",
+                "format": "uri"
               }
             }
           },
@@ -1636,15 +1678,18 @@
           },
           "costPrice": {
             "type": "number",
-            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored.",
+            "nullable": true
           },
           "recommendedPrice": {
             "type": "number",
-            "description": "Recommended retail price of the goods."
+            "description": "Recommended retail price of the goods.",
+            "nullable": true
           },
           "salesPrice": {
             "type": "number",
-            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line.",
+            "nullable": true
           },
           "barCode": {
             "type": "string",
@@ -1784,15 +1829,18 @@
           },
           "costPrice": {
             "type": "number",
-            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored."
+            "description": "The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored.",
+            "nullable": true
           },
           "recommendedPrice": {
             "type": "number",
-            "description": "Recommended retail price of the goods."
+            "description": "Recommended retail price of the goods.",
+            "nullable": true
           },
           "salesPrice": {
             "type": "number",
-            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line."
+            "description": "This is the unit net price that will appear on invoice lines when a product is added to an invoice line.",
+            "nullable": true
           },
           "barCode": {
             "type": "string",

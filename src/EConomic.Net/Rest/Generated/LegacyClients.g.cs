@@ -154,7 +154,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AccountingYearsPOST> PostAccountingYearsAsync(AccountingYearsPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AccountingYear> PostAccountingYearsAsync(AccountingYearsPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -202,7 +202,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AccountingYearsPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<AccountingYear>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AccountingYear>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -2872,7 +2882,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerGroupPOST> PostCustomerGroupsAsync(CustomerGroupPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CustomerGroup> PostCustomerGroupsAsync(CustomerGroupPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -2920,7 +2930,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerGroupPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerGroup>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerGroup>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -3123,7 +3143,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerGroupPUT> PutCustomerGroupsBycustomergroupnumberAsync(int customergroupnumber, CustomerGroupPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CustomerGroup> PutCustomerGroupsBycustomergroupnumberAsync(int customergroupnumber, CustomerGroupPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customergroupnumber == null)
                 throw new System.ArgumentNullException("customergroupnumber");
@@ -3175,7 +3195,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerGroupPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerGroup>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerGroup>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -3459,7 +3489,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerPOST> PostCustomersAsync(CustomerPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Customer> PostCustomersAsync(CustomerPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -3507,7 +3537,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Customer>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Customer>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -3537,7 +3577,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerPUT> PutCustomersBycustomerNoAsync(int customerNo, CustomerPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Customer> PutCustomersBycustomerNoAsync(int customerNo, CustomerPUT body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customerNo == null)
                 throw new System.ArgumentNullException("customerNo");
@@ -3589,7 +3629,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CustomerPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Customer>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Customer>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -3853,6 +3903,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4011,6 +4071,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<CustomerContactPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -4201,6 +4271,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4359,6 +4439,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<DeliveryLocationPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -4912,7 +5002,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomersDraftInvoiceLineTemplate> GetCustomersBycustomerNumberTemplatesInvoicelineByproductNumberAsync(int customerNumber, int productNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CustomersDraftInvoiceLineTemplate> GetCustomersBycustomerNumberTemplatesInvoicelineByproductNumberAsync(int customerNumber, string productNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (customerNumber == null)
                 throw new System.ArgumentNullException("customerNumber");
@@ -6795,6 +6885,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -6868,6 +6968,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<InvoicesForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<InvoicesForBookingAnInvoice>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -7123,6 +7233,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoicePost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -7280,6 +7400,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -7354,6 +7484,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceLinesPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<DraftInvoiceLinesPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -10102,6 +10242,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<JournalVoucherPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -11173,6 +11323,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -11321,6 +11481,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<DraftOrderPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -11850,7 +12020,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PaymentTermPOST> PostPaymentTermsAsync(PaymentTermPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<PaymentTerms> PostPaymentTermsAsync(PaymentTermPOST body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -11898,7 +12068,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<PaymentTermPOST>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<PaymentTerms>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<PaymentTerms>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -12003,7 +12183,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<PaymentTermUpdate> PutPaymentTermsBypaymentTermsNumberAsync(int paymentTermsNumber, PaymentTermUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<PaymentTerms> PutPaymentTermsBypaymentTermsNumberAsync(int paymentTermsNumber, PaymentTermUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (paymentTermsNumber == null)
                 throw new System.ArgumentNullException("paymentTermsNumber");
@@ -12055,7 +12235,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<PaymentTermUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<PaymentTerms>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<PaymentTerms>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13193,7 +13383,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductsCreate> PostProductsAsync(ProductsCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Product> PostProductsAsync(ProductsCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -13241,7 +13431,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductsCreate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Product>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Product>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13271,7 +13471,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Products> GetProductsByproductNumberAsync(int productNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Products> GetProductsByproductNumberAsync(string productNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13346,7 +13546,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductsUpdate> PutProductsByproductNumberAsync(int productNumber, ProductsUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Product> PutProductsByproductNumberAsync(string productNumber, ProductsUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13398,7 +13598,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductsUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Product>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Product>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -13432,7 +13642,7 @@ namespace EConomic.Rest.Generated
         /// <param name="pagesize">Items per page. Defaults to 20, maximum 1000.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductPriceCollection> GetProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(int productNumber, string? filter = null, string? sort = null, int? skippages = null, int? pagesize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<ProductPriceCollection> GetProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(string productNumber, string? filter = null, string? sort = null, int? skippages = null, int? pagesize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13526,7 +13736,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductPricesCreate> PostProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(int productNumber, ProductPricesCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<ProductPricesCreate> PostProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(string productNumber, ProductPricesCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13587,6 +13797,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductPricesCreate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -13609,7 +13829,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductPrices> GetProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(int productNumber, string currencyCode, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<ProductPrices> GetProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(string productNumber, string currencyCode, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13689,7 +13909,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductPricesUpdate> PutProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(int productNumber, string currencyCode, ProductPricesUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<ProductPricesUpdate> PutProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(string productNumber, string currencyCode, ProductPricesUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (productNumber == null)
                 throw new System.ArgumentNullException("productNumber");
@@ -13745,6 +13965,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductPricesUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<ProductPricesUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -14325,6 +14555,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePost>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -14473,6 +14713,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<DraftQuotePUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -15036,6 +15286,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CompanyPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -15114,6 +15374,16 @@ namespace EConomic.Rest.Generated
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CompanyBankInformationPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
                             throw new EconomicGeneratedApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -15183,6 +15453,16 @@ namespace EConomic.Rest.Generated
 
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<UserPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<UserPUT>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -15468,7 +15748,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<SuppliersPostResponse> PostSuppliersAsync(SuppliersPostResponse body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Supplier> PostSuppliersAsync(SuppliersPostResponse body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -15516,7 +15796,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<SuppliersPostResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Supplier>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Supplier>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -15621,7 +15911,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<SuppliersPutResponse> PutSuppliersBysupplierNumberAsync(int supplierNumber, SuppliersPutResponse body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Supplier> PutSuppliersBysupplierNumberAsync(int supplierNumber, SuppliersPutResponse body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (supplierNumber == null)
                 throw new System.ArgumentNullException("supplierNumber");
@@ -15673,7 +15963,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<SuppliersPutResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Supplier>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Supplier>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -15957,7 +16257,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UnitsCreate> PostUnitsAsync(UnitsCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Unit> PostUnitsAsync(UnitsCreate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -16005,7 +16305,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UnitsCreate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Unit>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Unit>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -16110,7 +16420,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UnitUpdate> PutUnitsByunitNumberAsync(int unitNumber, UnitUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Unit> PutUnitsByunitNumberAsync(int unitNumber, UnitUpdate body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (unitNumber == null)
                 throw new System.ArgumentNullException("unitNumber");
@@ -16162,7 +16472,17 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UnitUpdate>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Unit>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Unit>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -19417,7 +19737,7 @@ namespace EConomic.Rest.Generated
         /// The customer group number.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerGroupNumber")]
-        public int CustomerGroupNumber { get; set; } = default!;
+        public int? CustomerGroupNumber { get; set; } = default!;
 
         /// <summary>
         /// The name of the customer group.
@@ -20910,7 +21230,7 @@ namespace EConomic.Rest.Generated
         /// The outstanding amount for this customer.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("balance")]
-        public double Balance { get; set; } = default!;
+        public double? Balance { get; set; } = default!;
 
         /// <summary>
         /// Corporate Identification Number. For example CVR in Denmark.
@@ -20944,7 +21264,7 @@ namespace EConomic.Rest.Generated
         /// A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("creditLimit")]
-        public double CreditLimit { get; set; } = default!;
+        public double? CreditLimit { get; set; } = default!;
 
         /// <summary>
         /// Default payment currency.
@@ -20966,7 +21286,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// European Article Number. EAN is used for invoicing the Danish public sector.
@@ -21102,7 +21422,7 @@ namespace EConomic.Rest.Generated
         /// The outstanding amount for this customer.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("balance")]
-        public double Balance { get; set; } = default!;
+        public double? Balance { get; set; } = default!;
 
         /// <summary>
         /// Corporate Identification Number. For example CVR in Denmark.
@@ -21136,7 +21456,7 @@ namespace EConomic.Rest.Generated
         /// A maximum credit for this customer. Once the maximum is reached or passed in connection with an order/quotation/invoice for this customer you see a warning in e-conomic.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("creditLimit")]
-        public double CreditLimit { get; set; } = default!;
+        public double? CreditLimit { get; set; } = default!;
 
         /// <summary>
         /// Default payment currency.
@@ -21158,7 +21478,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// Customer’s default delivery location.
@@ -29126,7 +29446,7 @@ namespace EConomic.Rest.Generated
         /// The number of days before payment must be made.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// A description of the payment term.
@@ -29165,13 +29485,13 @@ namespace EConomic.Rest.Generated
         /// The % to be pre paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("percentageForPrepaidAmount")]
-        public double PercentageForPrepaidAmount { get; set; } = default!;
+        public double? PercentageForPrepaidAmount { get; set; } = default!;
 
         /// <summary>
         /// The % to be post paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("percentageForRemainderAmount")]
-        public double PercentageForRemainderAmount { get; set; } = default!;
+        public double? PercentageForRemainderAmount { get; set; } = default!;
 
         /// <summary>
         /// The credit card company of the payment term.
@@ -29201,7 +29521,7 @@ namespace EConomic.Rest.Generated
         /// The number of days before payment must be made.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("daysOfCredit")]
-        public int DaysOfCredit { get; set; } = default!;
+        public int? DaysOfCredit { get; set; } = default!;
 
         /// <summary>
         /// A description of the payment term.
@@ -29240,13 +29560,13 @@ namespace EConomic.Rest.Generated
         /// The % to be pre paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("percentageForPrepaidAmount")]
-        public double PercentageForPrepaidAmount { get; set; } = default!;
+        public double? PercentageForPrepaidAmount { get; set; } = default!;
 
         /// <summary>
         /// The % to be pre paid.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("percentageForRemainderAmount")]
-        public double PercentageForRemainderAmount { get; set; } = default!;
+        public double? PercentageForRemainderAmount { get; set; } = default!;
 
         /// <summary>
         /// The credit card company of the payment term.
@@ -30411,19 +30731,19 @@ namespace EConomic.Rest.Generated
         /// The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costPrice")]
-        public double CostPrice { get; set; } = default!;
+        public double? CostPrice { get; set; } = default!;
 
         /// <summary>
         /// Recommended retail price of the goods.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("recommendedPrice")]
-        public double RecommendedPrice { get; set; } = default!;
+        public double? RecommendedPrice { get; set; } = default!;
 
         /// <summary>
         /// This is the unit net price that will appear on invoice lines when a product is added to an invoice line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("salesPrice")]
-        public double SalesPrice { get; set; } = default!;
+        public double? SalesPrice { get; set; } = default!;
 
         /// <summary>
         /// String representation of a machine readable barcode symbol that represents this product.
@@ -30508,19 +30828,19 @@ namespace EConomic.Rest.Generated
         /// The cost of the goods. If you have the inventory module enabled, this is read-only and will just be ignored.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costPrice")]
-        public double CostPrice { get; set; } = default!;
+        public double? CostPrice { get; set; } = default!;
 
         /// <summary>
         /// Recommended retail price of the goods.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("recommendedPrice")]
-        public double RecommendedPrice { get; set; } = default!;
+        public double? RecommendedPrice { get; set; } = default!;
 
         /// <summary>
         /// This is the unit net price that will appear on invoice lines when a product is added to an invoice line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("salesPrice")]
-        public double SalesPrice { get; set; } = default!;
+        public double? SalesPrice { get; set; } = default!;
 
         /// <summary>
         /// String representation of a machine readable barcode symbol that represents this product.
@@ -32742,7 +33062,7 @@ namespace EConomic.Rest.Generated
         /// A unique self reference of the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -32920,7 +33240,7 @@ namespace EConomic.Rest.Generated
         /// A unique self reference of the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -33116,7 +33436,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplierNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int SupplierNumber { get; set; } = default!;
+        public int? SupplierNumber { get; set; } = default!;
 
         /// <summary>
         /// Indicates whether the supplier is located domestically, in Europe or elsewhere abroad
@@ -33136,7 +33456,7 @@ namespace EConomic.Rest.Generated
         /// A unique self reference of the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -33309,7 +33629,7 @@ namespace EConomic.Rest.Generated
         /// A unique self reference of the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -33923,34 +34243,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerInvoice")]
-        CustomerInvoice = 0,
+        customerInvoice = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 1,
+        customerPayment = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 2,
+        supplierInvoice = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 3,
+        supplierPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 4,
+        financeVoucher = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminder")]
-        Reminder = 5,
+        reminder = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"openingEntry")]
-        OpeningEntry = 6,
+        openingEntry = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"transferredOpeningEntry")]
-        TransferredOpeningEntry = 7,
+        transferredOpeningEntry = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"systemEntry")]
-        SystemEntry = 8,
+        systemEntry = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualDebtorInvoice")]
-        ManualDebtorInvoice = 9,
+        manualDebtorInvoice = 9,
 
     }
 
@@ -34265,34 +34585,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerInvoice")]
-        CustomerInvoice = 0,
+        customerInvoice = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 1,
+        customerPayment = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 2,
+        supplierInvoice = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 3,
+        supplierPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 4,
+        financeVoucher = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminder")]
-        Reminder = 5,
+        reminder = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"openingEntry")]
-        OpeningEntry = 6,
+        openingEntry = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"transferredOpeningEntry")]
-        TransferredOpeningEntry = 7,
+        transferredOpeningEntry = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"systemEntry")]
-        SystemEntry = 8,
+        systemEntry = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualDebtorInvoice")]
-        ManualDebtorInvoice = 9,
+        manualDebtorInvoice = 9,
 
     }
 
@@ -34556,25 +34876,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -34611,10 +34931,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -34799,25 +35119,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -34854,10 +35174,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -35125,34 +35445,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerInvoice")]
-        CustomerInvoice = 0,
+        customerInvoice = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 1,
+        customerPayment = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 2,
+        supplierInvoice = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 3,
+        supplierPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 4,
+        financeVoucher = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminder")]
-        Reminder = 5,
+        reminder = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"openingEntry")]
-        OpeningEntry = 6,
+        openingEntry = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"transferredOpeningEntry")]
-        TransferredOpeningEntry = 7,
+        transferredOpeningEntry = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"systemEntry")]
-        SystemEntry = 8,
+        systemEntry = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualDebtorInvoice")]
-        ManualDebtorInvoice = 9,
+        manualDebtorInvoice = 9,
 
     }
 
@@ -36973,16 +37293,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoices")]
-        Invoices = 0,
+        invoices = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orders")]
-        Orders = 1,
+        orders = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quotations")]
-        Quotations = 2,
+        quotations = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminders")]
-        Reminders = 3,
+        reminders = 3,
 
     }
 
@@ -37020,16 +37340,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoices")]
-        Invoices = 0,
+        invoices = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orders")]
-        Orders = 1,
+        orders = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quotations")]
-        Quotations = 2,
+        quotations = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminders")]
-        Reminders = 3,
+        reminders = 3,
 
     }
 
@@ -37067,16 +37387,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoices")]
-        Invoices = 0,
+        invoices = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orders")]
-        Orders = 1,
+        orders = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quotations")]
-        Quotations = 2,
+        quotations = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminders")]
-        Reminders = 3,
+        reminders = 3,
 
     }
 
@@ -37113,16 +37433,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoices")]
-        Invoices = 0,
+        invoices = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orders")]
-        Orders = 1,
+        orders = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quotations")]
-        Quotations = 2,
+        quotations = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"reminders")]
-        Reminders = 3,
+        reminders = 3,
 
     }
 
@@ -38343,10 +38663,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"distribution")]
-        Distribution = 0,
+        distribution = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"department")]
-        Department = 1,
+        department = 1,
 
     }
 
@@ -38355,10 +38675,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"distribution")]
-        Distribution = 0,
+        distribution = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"department")]
-        Department = 1,
+        department = 1,
 
     }
 
@@ -40958,7 +41278,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"none")]
-        None = 0,
+        none = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"EAN")]
         EAN = 1,
@@ -43280,10 +43600,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"mobilePay")]
-        MobilePay = 0,
+        mobilePay = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 1,
+        ean = 1,
 
     }
 
@@ -44147,19 +44467,19 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 1,
+        supplierInvoice = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 2,
+        supplierPayment = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 3,
+        customerPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 4,
+        manualCustomerInvoice = 4,
 
     }
 
@@ -44937,19 +45257,19 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 1,
+        supplierInvoice = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 2,
+        supplierPayment = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 3,
+        customerPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 4,
+        manualCustomerInvoice = 4,
 
     }
 
@@ -48998,31 +49318,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -49116,31 +49436,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -49231,31 +49551,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -49346,31 +49666,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -49664,25 +49984,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -49719,10 +50039,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -50198,7 +50518,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -50255,7 +50575,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -56179,10 +56499,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"distribution")]
-        Distribution = 0,
+        distribution = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"department")]
-        Department = 1,
+        department = 1,
 
     }
 
@@ -56327,25 +56647,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -56354,10 +56674,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -56366,31 +56686,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -56548,31 +56868,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -56844,31 +57164,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -57114,31 +57434,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -57203,16 +57523,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -57531,7 +57851,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -57583,34 +57903,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"avtaleGiro")]
-        AvtaleGiro = 9,
+        avtaleGiro = 9,
 
     }
 
@@ -57673,16 +57993,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -57842,7 +58162,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -57894,34 +58214,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"avtaleGiro")]
-        AvtaleGiro = 9,
+        avtaleGiro = 9,
 
     }
 
@@ -57984,16 +58304,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -58160,7 +58480,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -58562,31 +58882,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -58744,31 +59064,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -58833,16 +59153,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -59590,19 +59910,19 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 1,
+        supplierInvoice = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 2,
+        supplierPayment = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 3,
+        customerPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 4,
+        manualCustomerInvoice = 4,
 
     }
 
@@ -61259,19 +61579,19 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 1,
+        supplierInvoice = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 2,
+        supplierPayment = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 3,
+        customerPayment = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 4,
+        manualCustomerInvoice = 4,
 
     }
 
@@ -62128,31 +62448,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orderWeekStartingSunday")]
-        OrderWeekStartingSunday = 6,
+        orderWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orderWeekStartingMonday")]
-        OrderWeekStartingMonday = 7,
+        orderWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -62331,31 +62651,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orderWeekStartingSunday")]
-        OrderWeekStartingSunday = 6,
+        orderWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orderWeekStartingMonday")]
-        OrderWeekStartingMonday = 7,
+        orderWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -62534,31 +62854,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -62621,16 +62941,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -62825,7 +63145,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -62877,34 +63197,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"avtaleGiro")]
-        AvtaleGiro = 9,
+        avtaleGiro = 9,
 
     }
 
@@ -62967,16 +63287,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -63136,7 +63456,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -63188,31 +63508,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -63521,31 +63841,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -63610,16 +63930,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -63872,31 +64192,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -64205,31 +64525,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orderWeekStartingSunday")]
-        OrderWeekStartingSunday = 6,
+        orderWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"orderWeekStartingMonday")]
-        OrderWeekStartingMonday = 7,
+        orderWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -64408,25 +64728,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -64463,10 +64783,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -64562,25 +64882,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -64617,10 +64937,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -64972,31 +65292,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quoteWeekStartingSunday")]
-        QuoteWeekStartingSunday = 6,
+        quoteWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quoteWeekStartingMonday")]
-        QuoteWeekStartingMonday = 7,
+        quoteWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -65175,31 +65495,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quoteWeekStartingSunday")]
-        QuoteWeekStartingSunday = 6,
+        quoteWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quoteWeekStartingMonday")]
-        QuoteWeekStartingMonday = 7,
+        quoteWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -65378,31 +65698,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -65465,16 +65785,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -65669,7 +65989,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -65721,34 +66041,34 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
         [System.Runtime.Serialization.EnumMember(Value = @"avtaleGiro")]
-        AvtaleGiro = 9,
+        avtaleGiro = 9,
 
     }
 
@@ -65811,16 +66131,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -65980,7 +66300,7 @@ namespace EConomic.Rest.Generated
         /// A unique reference to the product resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public string Self { get; set; } = default!;
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -66032,31 +66352,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -66365,31 +66685,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -66454,16 +66774,16 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"ean")]
-        Ean = 0,
+        ean = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"corporateIdentificationNumber")]
-        CorporateIdentificationNumber = 1,
+        corporateIdentificationNumber = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"pNumber")]
-        PNumber = 2,
+        pNumber = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"peppol")]
-        Peppol = 3,
+        peppol = 3,
 
     }
 
@@ -66716,31 +67036,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingSunday")]
-        InvoiceWeekStartingSunday = 6,
+        invoiceWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceWeekStartingMonday")]
-        InvoiceWeekStartingMonday = 7,
+        invoiceWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -67049,31 +67369,31 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"net")]
-        Net = 0,
+        net = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"invoiceMonth")]
-        InvoiceMonth = 1,
+        invoiceMonth = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"paidInCash")]
-        PaidInCash = 2,
+        paidInCash = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"prepaid")]
-        Prepaid = 3,
+        prepaid = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"dueDate")]
-        DueDate = 4,
+        dueDate = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"factoring")]
-        Factoring = 5,
+        factoring = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quoteWeekStartingSunday")]
-        QuoteWeekStartingSunday = 6,
+        quoteWeekStartingSunday = 6,
 
         [System.Runtime.Serialization.EnumMember(Value = @"quoteWeekStartingMonday")]
-        QuoteWeekStartingMonday = 7,
+        quoteWeekStartingMonday = 7,
 
         [System.Runtime.Serialization.EnumMember(Value = @"creditcard")]
-        Creditcard = 8,
+        creditcard = 8,
 
     }
 
@@ -68073,7 +68393,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
     }
 
@@ -68433,7 +68753,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 0,
+        customerPayment = 0,
 
     }
 
@@ -68706,7 +69026,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 0,
+        supplierInvoice = 0,
 
     }
 
@@ -69058,7 +69378,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 0,
+        supplierPayment = 0,
 
     }
 
@@ -69304,7 +69624,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 0,
+        manualCustomerInvoice = 0,
 
     }
 
@@ -69572,7 +69892,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
     }
 
@@ -69923,7 +70243,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 0,
+        customerPayment = 0,
 
     }
 
@@ -70189,7 +70509,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 0,
+        supplierInvoice = 0,
 
     }
 
@@ -70533,7 +70853,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 0,
+        supplierPayment = 0,
 
     }
 
@@ -70772,7 +71092,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 0,
+        manualCustomerInvoice = 0,
 
     }
 
@@ -71127,7 +71447,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        FinanceVoucher = 0,
+        financeVoucher = 0,
 
     }
 
@@ -71487,7 +71807,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        CustomerPayment = 0,
+        customerPayment = 0,
 
     }
 
@@ -71760,7 +72080,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        SupplierInvoice = 0,
+        supplierInvoice = 0,
 
     }
 
@@ -72112,7 +72432,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        SupplierPayment = 0,
+        supplierPayment = 0,
 
     }
 
@@ -72358,7 +72678,7 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"manualCustomerInvoice")]
-        ManualCustomerInvoice = 0,
+        manualCustomerInvoice = 0,
 
     }
 
@@ -72739,25 +73059,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -72794,10 +73114,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 
@@ -72893,25 +73213,25 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
-        ProfitAndLoss = 0,
+        profitAndLoss = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"status")]
-        Status = 1,
+        status = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"totalFrom")]
-        TotalFrom = 2,
+        totalFrom = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"heading")]
-        Heading = 3,
+        heading = 3,
 
         [System.Runtime.Serialization.EnumMember(Value = @"headingStart")]
-        HeadingStart = 4,
+        headingStart = 4,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumInterval")]
-        SumInterval = 5,
+        sumInterval = 5,
 
         [System.Runtime.Serialization.EnumMember(Value = @"sumAlpha")]
-        SumAlpha = 6,
+        sumAlpha = 6,
 
     }
 
@@ -72948,10 +73268,10 @@ namespace EConomic.Rest.Generated
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
-        Debit = 0,
+        debit = 0,
 
         [System.Runtime.Serialization.EnumMember(Value = @"credit")]
-        Credit = 1,
+        credit = 1,
 
     }
 

@@ -89,7 +89,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuppliersPostResponse"
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Supplier"
                 }
               }
             }
@@ -155,7 +165,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuppliersPutResponse"
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Supplier"
                 }
               }
             }
@@ -459,7 +479,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [
@@ -711,7 +732,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [
@@ -950,7 +972,8 @@
             "type": "integer",
             "description": "The supplier number is a positive unique numerical identifier with a maximum of 9 digits.",
             "maximum": 999999999,
-            "minimum": 1
+            "minimum": 1,
+            "nullable": true
           },
           "vatZone": {
             "type": "object",
@@ -974,7 +997,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [
@@ -1208,7 +1232,8 @@
           },
           "self": {
             "type": "string",
-            "description": "A unique self reference of the supplier."
+            "description": "A unique self reference of the supplier.",
+            "format": "uri"
           }
         },
         "required": [

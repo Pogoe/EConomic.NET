@@ -50,6 +50,7 @@ namespace EConomic.Rest.Generated;
 [JsonSerializable(typeof(CompanyPUT))]
 [JsonSerializable(typeof(CurrencyCollection))]
 [JsonSerializable(typeof(CurrencyDetails))]
+[JsonSerializable(typeof(Customer))]
 [JsonSerializable(typeof(CustomerBookedInvoicesCollection))]
 [JsonSerializable(typeof(CustomerCollection))]
 [JsonSerializable(typeof(CustomerContactDetails))]
@@ -135,9 +136,11 @@ namespace EConomic.Rest.Generated;
 [JsonSerializable(typeof(PaymentTerm))]
 [JsonSerializable(typeof(PaymentTermPOST))]
 [JsonSerializable(typeof(PaymentTermUpdate))]
+[JsonSerializable(typeof(PaymentTerms))]
 [JsonSerializable(typeof(PaymentTermsCollection))]
 [JsonSerializable(typeof(PaymentTypeCollection))]
 [JsonSerializable(typeof(PaymentTypeYear))]
+[JsonSerializable(typeof(Product))]
 [JsonSerializable(typeof(ProductCollection))]
 [JsonSerializable(typeof(ProductGroups))]
 [JsonSerializable(typeof(ProductGroupsAccountsCollection))]
@@ -159,10 +162,12 @@ namespace EConomic.Rest.Generated;
 [JsonSerializable(typeof(SentInvoiceCollection))]
 [JsonSerializable(typeof(SentOrderCollection))]
 [JsonSerializable(typeof(SentQuoteCollection))]
+[JsonSerializable(typeof(Supplier))]
 [JsonSerializable(typeof(SupplierResource))]
 [JsonSerializable(typeof(SuppliersCollection))]
 [JsonSerializable(typeof(SuppliersPostResponse))]
 [JsonSerializable(typeof(SuppliersPutResponse))]
+[JsonSerializable(typeof(Unit))]
 [JsonSerializable(typeof(UnitDetails))]
 [JsonSerializable(typeof(UnitUpdate))]
 [JsonSerializable(typeof(UnitsCollection))]
@@ -189,6 +194,15 @@ internal partial class AccountingYearsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -200,6 +214,15 @@ internal partial class AccountsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -211,6 +234,15 @@ internal partial class AppRolesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -222,6 +254,15 @@ internal partial class CurrenciesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -233,6 +274,15 @@ internal partial class CustomerGroupsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -244,6 +294,15 @@ internal partial class CustomersClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -255,6 +314,15 @@ internal partial class DepartmentalDistributionsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -266,6 +334,15 @@ internal partial class DepartmentsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -277,6 +354,15 @@ internal partial class EmployeesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -288,6 +374,15 @@ internal partial class InvoicesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -299,6 +394,15 @@ internal partial class JournalsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -310,6 +414,15 @@ internal partial class LayoutsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -321,6 +434,15 @@ internal partial class OrdersClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -332,6 +454,15 @@ internal partial class PaymentTermsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -343,6 +474,15 @@ internal partial class PaymentTypesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -354,6 +494,15 @@ internal partial class ProductGroupsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -365,6 +514,15 @@ internal partial class ProductsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -376,6 +534,15 @@ internal partial class QuotesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -387,6 +554,15 @@ internal partial class SelfClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -398,6 +574,15 @@ internal partial class SuppliersClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -409,6 +594,15 @@ internal partial class UnitsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -420,6 +614,15 @@ internal partial class VatAccountsClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -431,6 +634,15 @@ internal partial class VatTypesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }
@@ -442,6 +654,15 @@ internal partial class VatZonesClient
 #if !NET9_0_OR_GREATER
         settings.Converters.Add(new JsonStringEnumConverter());
 #endif
+
+        // e-conomic rejects an explicit null: sending "address": null fails schema
+        // validation with "Expected String but got Null", so an unset optional property
+        // must be omitted rather than written. This has to be set on these settings, not
+        // only through JsonSourceGenerationOptions: those apply to the context's own
+        // Default instance, while the generated clients serialize through options of
+        // their own that merely borrow the resolver.
+        settings.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
         settings.TypeInfoResolverChain.Add(EconomicRestJsonContext.Default);
     }
 }

@@ -57,6 +57,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyPUT"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "self.company.put.schema.json",
@@ -91,6 +101,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyBankInformationPUT"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "self.company.bankinformation.put.schema.json",
@@ -118,6 +138,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {

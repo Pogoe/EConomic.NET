@@ -213,6 +213,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOrderPost"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "orders.drafts.post.schema.json",
@@ -272,6 +282,16 @@
         "responses": {
           "200": {
             "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOrderPUT"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -2074,7 +2094,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },
@@ -2624,7 +2645,8 @@
                     },
                     "self": {
                       "type": "string",
-                      "description": "A unique reference to the product resource."
+                      "description": "A unique reference to the product resource.",
+                      "format": "uri"
                     }
                   }
                 },

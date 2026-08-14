@@ -36,7 +36,7 @@ public class CustomerQueryTests
 
         var client = CreateClient();
 
-        var all = await CountAsync(client.Customers);
+        var all = await CountAsync(client.Customers.AsQuery());
         var filtered = await CountAsync(client.Customers.Where(c => c.CustomerNumber.In(1, 2, 3)));
 
         Assert.True(all > filtered, $"Expected the filter to narrow the result set; got {all} and {filtered}.");

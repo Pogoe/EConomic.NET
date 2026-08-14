@@ -169,21 +169,43 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
             }
         }
 
+        var responses = new JsonObject
+        {
+            ["200"] = new JsonObject
+            {
+                ["description"] = "Success",
+                ["content"] = new JsonObject
+                {
+                    ["application/json"] = new JsonObject { ["schema"] = reference.DeepClone() },
+                },
+            },
+        };
+
+        // The schema files describe bodies, never status codes, so these have to come from the
+        // documentation. Its status table is explicit: "201 Created — When you create resources,
+        // this is what you get. This will be accompanied by the created resource in the body."
+        // Declaring only 200 makes the generated client reject every successful create.
+        //
+        // PUT needs it too, which the documentation does not mention: PUT is an upsert. Sending one
+        // for an identifier that does not exist creates the resource and answers 201, verified
+        // against a live agreement. Without this a perfectly successful upsert throws.
+        if (endpoint.Method is "post" or "put")
+        {
+            responses["201"] = new JsonObject
+            {
+                ["description"] = "Created",
+                ["content"] = new JsonObject
+                {
+                    ["application/json"] = new JsonObject { ["schema"] = reference.DeepClone() },
+                },
+            };
+        }
+
         var operation = new JsonObject
         {
             ["operationId"] = OperationId(endpoint),
             ["tags"] = new JsonArray { endpoint.Resource },
-            ["responses"] = new JsonObject
-            {
-                ["200"] = new JsonObject
-                {
-                    ["description"] = "Success",
-                    ["content"] = new JsonObject
-                    {
-                        ["application/json"] = new JsonObject { ["schema"] = reference.DeepClone() },
-                    },
-                },
-            },
+            ["responses"] = responses,
             ["x-economic-source"] = endpoint.SourceFile,
         };
 
@@ -235,14 +257,29 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
     };
 
     /// <summary>
+    /// Identifiers ending in "Number" that are nonetheless strings.
+    /// </summary>
+    /// <remarks>
+    /// <c>productNumber</c> is a string in the read schema and a string on the wire: a live
+    /// agreement accepts <c>ZZ-TEST-1</c> for create, update and delete, and returns
+    /// <c>"productNumber": "1"</c> quoted. Typing the path parameter as an integer would make a
+    /// perfectly valid product number unrepresentable.
+    /// </remarks>
+    private static readonly HashSet<string> StringIdentifiers = new(StringComparer.Ordinal)
+    {
+        "productNumber",
+    };
+
+    /// <summary>
     /// The schemas do not type their path parameters, so this is inferred from the name:
-    /// anything ending in "Number", plus "id", is numeric; everything else stays a string.
+    /// anything ending in "Number", plus "id", is numeric unless listed as a string identifier.
     /// </summary>
     private static string ParameterType(string name) =>
-        name.EndsWith("Number", StringComparison.Ordinal)
-        || name.Equals("id", StringComparison.Ordinal)
-        || name.Equals("customergroupnumber", StringComparison.Ordinal)
-        || name.Equals("customerNo", StringComparison.Ordinal)
+        !StringIdentifiers.Contains(name)
+        && (name.EndsWith("Number", StringComparison.Ordinal)
+            || name.Equals("id", StringComparison.Ordinal)
+            || name.Equals("customergroupnumber", StringComparison.Ordinal)
+            || name.Equals("customerNo", StringComparison.Ordinal))
             ? "integer"
             : "string";
 

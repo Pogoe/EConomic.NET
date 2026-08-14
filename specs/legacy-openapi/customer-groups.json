@@ -89,7 +89,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerGroupPOST"
+                  "$ref": "#/components/schemas/CustomerGroup"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroup"
                 }
               }
             }
@@ -227,7 +237,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerGroupPUT"
+                  "$ref": "#/components/schemas/CustomerGroup"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerGroup"
                 }
               }
             }
@@ -468,7 +488,8 @@
           "customerGroupNumber": {
             "type": "integer",
             "readOnly": true,
-            "description": "The customer group number."
+            "description": "The customer group number.",
+            "nullable": true
           },
           "name": {
             "type": "string",

@@ -316,6 +316,218 @@ internal sealed class CustomerGroupPageSource(Generated.CustomerGroupsClient cli
 }
 
 /// <summary>
+/// The <c>CustomerGroup</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record CustomerGroupCreate
+{
+    /// <summary>The <c>customerGroupNumber</c> field.</summary>
+    public required int CustomerGroupNumber { get; init; }
+
+    /// <summary>The <c>account</c> field.</summary>
+    public int? AccountNumber { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public int? LayoutNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+}
+
+/// <summary>
+/// The <c>CustomerGroup</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record CustomerGroupUpdate
+{
+    /// <summary>The <c>account</c> field.</summary>
+    public int? AccountNumber { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public int? LayoutNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+}
+
+/// <summary>
+/// The <c>/customer-groups</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed class CustomerGroupResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomerGroupsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public CustomerGroupResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomerGroupsClient(httpClient);
+    }
+
+    private EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> Query => new(new CustomerGroupPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerGroupFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> OrderBy(System.Linq.Expressions.Expression<System.Func<CustomerGroupSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CustomerGroupSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<CustomerGroup> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<CustomerGroup>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a customerGroup.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<CustomerGroup> CreateAsync(CustomerGroupCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostCustomerGroupsAsync(ToGenerated(item), cancellationToken),
+            "POST /customer-groups").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing customerGroup.</summary>
+    /// <param name="customerGroupNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>
+    /// This replaces rather than patches: a property left unset is cleared.
+    /// <para>
+    /// It is also an upsert. e-conomic answers <c>201 Created</c> and creates the resource
+    /// when the identifier does not exist, so this never reports a missing record as an
+    /// error. Verified against a live agreement.
+    /// </para>
+    /// </remarks>
+    public async System.Threading.Tasks.Task<CustomerGroup> UpdateAsync(int customerGroupNumber, CustomerGroupUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutCustomerGroupsBycustomergroupnumberAsync(customerGroupNumber, ToGenerated(item, customerGroupNumber), cancellationToken),
+            "PUT /customer-groups/{customerGroupNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a customerGroup.</summary>
+    /// <param name="customerGroupNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    /// <remarks>
+    /// e-conomic answers <c>204 No Content</c>. This endpoint comes from the published
+    /// documentation rather than a schema: <c>DELETE</c> has no body, so none is published.
+    /// </remarks>
+    public System.Threading.Tasks.Task DeleteAsync(int customerGroupNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"customer-groups/{customerGroupNumber}"),
+            cancellationToken);
+
+    private static Generated.CustomerGroupPOST ToGenerated(CustomerGroupCreate source)
+    {
+        var target = new Generated.CustomerGroupPOST
+        {
+            CustomerGroupNumber = source.CustomerGroupNumber,
+            Name = source.Name!,
+        };
+
+        if (source.AccountNumber is { } accountNumber)
+        {
+            target.Account = new() { AccountNumber = accountNumber };
+        }
+
+        if (source.LayoutNumber is { } layoutNumber)
+        {
+            target.Layout = new() { LayoutNumber = layoutNumber };
+        }
+
+        return target;
+    }
+
+    private static Generated.CustomerGroupPUT ToGenerated(CustomerGroupUpdate source, int customerGroupNumber)
+    {
+        var target = new Generated.CustomerGroupPUT
+        {
+            CustomerGroupNumber = customerGroupNumber,
+            Name = source.Name!,
+        };
+
+        if (source.AccountNumber is { } accountNumber)
+        {
+            target.Account = new() { AccountNumber = accountNumber };
+        }
+
+        if (source.LayoutNumber is { } layoutNumber)
+        {
+            target.Layout = new() { LayoutNumber = layoutNumber };
+        }
+
+        return target;
+    }
+
+    private static CustomerGroup FromGenerated(Generated.CustomerGroup source) => new()
+    {
+        CustomerGroupNumber = source.CustomerGroupNumber,
+        Name = source.Name,
+        Customers = source.Customers,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/customers</c>.
 /// </summary>
 public sealed record Customer
@@ -481,6 +693,443 @@ internal sealed class CustomerPageSource(Generated.CustomersClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>Customer</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record CustomerCreate
+{
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>customerGroup</c> field.</summary>
+    public required int CustomerGroupNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public required int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public required int VatZoneNumber { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>creditLimit</c> field.</summary>
+    public decimal? CreditLimit { get; init; }
+
+    /// <summary>The <c>customerNumber</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>eInvoicingDisabledByDefault</c> field.</summary>
+    public bool EInvoicingDisabledByDefault { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public int? LayoutNumber { get; init; }
+
+    /// <summary>The <c>mobilePhone</c> field.</summary>
+    public string? MobilePhone { get; init; }
+
+    /// <summary>The <c>pNumber</c> field.</summary>
+    public string? PNumber { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public int? SalesPersonNumber { get; init; }
+
+    /// <summary>The <c>telephoneAndFaxNumber</c> field.</summary>
+    public string? TelephoneAndFaxNumber { get; init; }
+
+    /// <summary>The <c>vatNumber</c> field.</summary>
+    public string? VatNumber { get; init; }
+
+    /// <summary>The <c>website</c> field.</summary>
+    public string? Website { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+}
+
+/// <summary>
+/// The <c>Customer</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record CustomerUpdate
+{
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>customerGroup</c> field.</summary>
+    public required int CustomerGroupNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public required int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public required int VatZoneNumber { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public int? AttentionNumber { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>creditLimit</c> field.</summary>
+    public decimal? CreditLimit { get; init; }
+
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public int? CustomerContactNumber { get; init; }
+
+    /// <summary>The <c>defaultDeliveryLocation</c> field.</summary>
+    public int? DefaultDeliveryLocationNumber { get; init; }
+
+    /// <summary>The <c>eInvoicingDisabledByDefault</c> field.</summary>
+    public bool EInvoicingDisabledByDefault { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public int? LayoutNumber { get; init; }
+
+    /// <summary>The <c>mobilePhone</c> field.</summary>
+    public string? MobilePhone { get; init; }
+
+    /// <summary>The <c>pNumber</c> field.</summary>
+    public string? PNumber { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public int? SalesPersonNumber { get; init; }
+
+    /// <summary>The <c>telephoneAndFaxNumber</c> field.</summary>
+    public string? TelephoneAndFaxNumber { get; init; }
+
+    /// <summary>The <c>vatNumber</c> field.</summary>
+    public string? VatNumber { get; init; }
+
+    /// <summary>The <c>website</c> field.</summary>
+    public string? Website { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+}
+
+/// <summary>
+/// The <c>/customers</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed class CustomerResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomersClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public CustomerResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomersClient(httpClient);
+    }
+
+    private EconomicQuery<Customer, CustomerFilter, CustomerSort> Query => new(new CustomerPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Customer, CustomerFilter, CustomerSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Customer, CustomerFilter, CustomerSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Customer, CustomerFilter, CustomerSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Customer, CustomerFilter, CustomerSort> OrderBy(System.Linq.Expressions.Expression<System.Func<CustomerSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Customer, CustomerFilter, CustomerSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CustomerSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Customer, CustomerFilter, CustomerSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Customer> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Customer>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a customer.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<Customer> CreateAsync(CustomerCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostCustomersAsync(ToGenerated(item), cancellationToken),
+            "POST /customers").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing customer.</summary>
+    /// <param name="customerNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>
+    /// This replaces rather than patches: a property left unset is cleared.
+    /// <para>
+    /// It is also an upsert. e-conomic answers <c>201 Created</c> and creates the resource
+    /// when the identifier does not exist, so this never reports a missing record as an
+    /// error. Verified against a live agreement.
+    /// </para>
+    /// </remarks>
+    public async System.Threading.Tasks.Task<Customer> UpdateAsync(int customerNumber, CustomerUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutCustomersBycustomerNoAsync(customerNumber, ToGenerated(item, customerNumber), cancellationToken),
+            "PUT /customers/{customerNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a customer.</summary>
+    /// <param name="customerNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    /// <remarks>
+    /// e-conomic answers <c>204 No Content</c>. This endpoint comes from the published
+    /// documentation rather than a schema: <c>DELETE</c> has no body, so none is published.
+    /// </remarks>
+    public System.Threading.Tasks.Task DeleteAsync(int customerNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"customers/{customerNumber}"),
+            cancellationToken);
+
+    private static Generated.CustomerPOST ToGenerated(CustomerCreate source)
+    {
+        var target = new Generated.CustomerPOST
+        {
+            Barred = source.Barred,
+            Address = source.Address!,
+            CorporateIdentificationNumber = source.CorporateIdentificationNumber!,
+            PNumber = source.PNumber!,
+            City = source.City!,
+            Country = source.Country!,
+            Currency = source.Currency,
+            CustomerGroup = new() { CustomerGroupNumber = source.CustomerGroupNumber },
+            Ean = source.Ean!,
+            Email = source.Email!,
+            VatZone = new() { VatZoneNumber = source.VatZoneNumber },
+            Name = source.Name,
+            PaymentTerms = new() { PaymentTermsNumber = source.PaymentTermsNumber },
+            Zip = source.Zip!,
+            PublicEntryNumber = source.PublicEntryNumber!,
+            TelephoneAndFaxNumber = source.TelephoneAndFaxNumber!,
+            MobilePhone = source.MobilePhone!,
+            EInvoicingDisabledByDefault = source.EInvoicingDisabledByDefault,
+            VatNumber = source.VatNumber!,
+            Website = source.Website!,
+        };
+
+        if (source.CreditLimit is { } creditLimit)
+        {
+            target.CreditLimit = (double)creditLimit;
+        }
+
+        if (source.CustomerNumber is { } customerNumber)
+        {
+            target.CustomerNumber = customerNumber;
+        }
+
+        if (source.LayoutNumber is { } layoutNumber)
+        {
+            target.Layout = new() { LayoutNumber = layoutNumber };
+        }
+
+        if (source.SalesPersonNumber is { } salesPersonNumber)
+        {
+            target.SalesPerson = new() { EmployeeNumber = salesPersonNumber };
+        }
+
+        return target;
+    }
+
+    private static Generated.CustomerPUT ToGenerated(CustomerUpdate source, int customerNumber)
+    {
+        var target = new Generated.CustomerPUT
+        {
+            CustomerNumber = customerNumber,
+            Barred = source.Barred,
+            Address = source.Address!,
+            CorporateIdentificationNumber = source.CorporateIdentificationNumber!,
+            PNumber = source.PNumber!,
+            City = source.City!,
+            Country = source.Country!,
+            Currency = source.Currency,
+            CustomerGroup = new() { CustomerGroupNumber = source.CustomerGroupNumber },
+            Ean = source.Ean!,
+            Email = source.Email!,
+            VatZone = new() { VatZoneNumber = source.VatZoneNumber },
+            Name = source.Name,
+            PaymentTerms = new() { PaymentTermsNumber = source.PaymentTermsNumber },
+            Zip = source.Zip!,
+            PublicEntryNumber = source.PublicEntryNumber!,
+            TelephoneAndFaxNumber = source.TelephoneAndFaxNumber!,
+            MobilePhone = source.MobilePhone!,
+            EInvoicingDisabledByDefault = source.EInvoicingDisabledByDefault,
+            VatNumber = source.VatNumber!,
+            Website = source.Website!,
+        };
+
+        if (source.CreditLimit is { } creditLimit)
+        {
+            target.CreditLimit = (double)creditLimit;
+        }
+
+        if (source.DefaultDeliveryLocationNumber is { } defaultDeliveryLocationNumber)
+        {
+            target.DefaultDeliveryLocation = new() { DeliveryLocationNumber = defaultDeliveryLocationNumber };
+        }
+
+        if (source.LayoutNumber is { } layoutNumber)
+        {
+            target.Layout = new() { LayoutNumber = layoutNumber };
+        }
+
+        if (source.AttentionNumber is { } attentionNumber)
+        {
+            target.Attention = new() { CustomerContactNumber = attentionNumber };
+        }
+
+        if (source.CustomerContactNumber is { } customerContactNumber)
+        {
+            target.CustomerContact = new() { CustomerContactNumber = customerContactNumber };
+        }
+
+        if (source.SalesPersonNumber is { } salesPersonNumber)
+        {
+            target.SalesPerson = new() { EmployeeNumber = salesPersonNumber };
+        }
+
+        return target;
+    }
+
+    private static Customer FromGenerated(Generated.Customer source) => new()
+    {
+        Address = source.Address,
+        Balance = (decimal)source.Balance,
+        Barred = source.Barred,
+        City = source.City,
+        CorporateIdentificationNumber = source.CorporateIdentificationNumber,
+        PNumber = source.PNumber,
+        Country = source.Country,
+        CreditLimit = (decimal)source.CreditLimit,
+        Currency = source.Currency ?? string.Empty,
+        CustomerNumber = source.CustomerNumber,
+        DueAmount = (decimal)source.DueAmount,
+        Ean = source.Ean,
+        Email = source.Email,
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Name = source.Name ?? string.Empty,
+        PublicEntryNumber = source.PublicEntryNumber,
+        TelephoneAndFaxNumber = source.TelephoneAndFaxNumber,
+        MobilePhone = source.MobilePhone,
+        EInvoicingDisabledByDefault = source.EInvoicingDisabledByDefault,
+        VatNumber = source.VatNumber,
+        Website = source.Website,
+        Zip = source.Zip,
+        Contacts = source.Contacts,
+        DeliveryLocations = source.DeliveryLocations,
+        DefaultDeliveryLocation = Reference(source.DefaultDeliveryLocation?.DeliveryLocationNumber, source.DefaultDeliveryLocation?.Self),
+        Attention = Reference(source.Attention?.CustomerContactNumber, source.Attention?.Self),
+        CustomerContact = Reference(source.CustomerContact?.CustomerContactNumber, source.CustomerContact?.Self),
+        CustomerGroup = Reference(source.CustomerGroup?.CustomerGroupNumber, source.CustomerGroup?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        PaymentTerms = Reference(source.PaymentTerms?.PaymentTermsNumber, source.PaymentTerms?.Self),
+        SalesPerson = Reference(source.SalesPerson?.EmployeeNumber, source.SalesPerson?.Self),
+        VatZone = Reference(source.VatZone?.VatZoneNumber, source.VatZone?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -852,6 +1501,302 @@ internal sealed class PaymentTermsPageSource(Generated.PaymentTermsClient client
 }
 
 /// <summary>
+/// The <c>PaymentTerms</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record PaymentTermsCreate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public required string PaymentTermsType { get; init; }
+
+    /// <summary>The <c>contraAccountForPrepaidAmount</c> field.</summary>
+    public int? ContraAccountForPrepaidAmountNumber { get; init; }
+
+    /// <summary>The <c>contraAccountForRemainderAmount</c> field.</summary>
+    public int? ContraAccountForRemainderAmountNumber { get; init; }
+
+    /// <summary>The <c>creditCardCompany</c> field.</summary>
+    public int? CreditCardCompanyNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int? DaysOfCredit { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>percentageForPrepaidAmount</c> field.</summary>
+    public decimal? PercentageForPrepaidAmount { get; init; }
+
+    /// <summary>The <c>percentageForRemainderAmount</c> field.</summary>
+    public decimal? PercentageForRemainderAmount { get; init; }
+}
+
+/// <summary>
+/// The <c>PaymentTerms</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record PaymentTermsUpdate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public required string PaymentTermsType { get; init; }
+
+    /// <summary>The <c>contraAccountForPrepaidAmount</c> field.</summary>
+    public int? ContraAccountForPrepaidAmountNumber { get; init; }
+
+    /// <summary>The <c>contraAccountForRemainderAmount</c> field.</summary>
+    public int? ContraAccountForRemainderAmountNumber { get; init; }
+
+    /// <summary>The <c>creditCardCompany</c> field.</summary>
+    public int? CreditCardCompanyNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int? DaysOfCredit { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>percentageForPrepaidAmount</c> field.</summary>
+    public decimal? PercentageForPrepaidAmount { get; init; }
+
+    /// <summary>The <c>percentageForRemainderAmount</c> field.</summary>
+    public decimal? PercentageForRemainderAmount { get; init; }
+}
+
+/// <summary>
+/// The <c>/payment-terms</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed class PaymentTermsResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.PaymentTermsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public PaymentTermsResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.PaymentTermsClient(httpClient);
+    }
+
+    private EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> Query => new(new PaymentTermsPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> Where(System.Linq.Expressions.Expression<System.Func<PaymentTermsFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> OrderBy(System.Linq.Expressions.Expression<System.Func<PaymentTermsSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<PaymentTermsSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<PaymentTerms> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<PaymentTerms>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a paymentTerms.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<PaymentTerms> CreateAsync(PaymentTermsCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostPaymentTermsAsync(ToGenerated(item), cancellationToken),
+            "POST /payment-terms").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing paymentTerms.</summary>
+    /// <param name="paymentTermsNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>
+    /// This replaces rather than patches: a property left unset is cleared.
+    /// <para>
+    /// It is also an upsert. e-conomic answers <c>201 Created</c> and creates the resource
+    /// when the identifier does not exist, so this never reports a missing record as an
+    /// error. Verified against a live agreement.
+    /// </para>
+    /// </remarks>
+    public async System.Threading.Tasks.Task<PaymentTerms> UpdateAsync(int paymentTermsNumber, PaymentTermsUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutPaymentTermsBypaymentTermsNumberAsync(paymentTermsNumber, ToGenerated(item, paymentTermsNumber), cancellationToken),
+            "PUT /payment-terms/{paymentTermsNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a paymentTerms.</summary>
+    /// <param name="paymentTermsNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    /// <remarks>
+    /// e-conomic answers <c>204 No Content</c>. This endpoint comes from the published
+    /// documentation rather than a schema: <c>DELETE</c> has no body, so none is published.
+    /// </remarks>
+    public System.Threading.Tasks.Task DeleteAsync(int paymentTermsNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"payment-terms/{paymentTermsNumber}"),
+            cancellationToken);
+
+    private static Generated.PaymentTermPOST ToGenerated(PaymentTermsCreate source)
+    {
+        var target = new Generated.PaymentTermPOST
+        {
+            Description = source.Description!,
+            Name = source.Name,
+        };
+
+        target.PaymentTermsType = FacadeTransport.ParseEnum(source.PaymentTermsType, target.PaymentTermsType);
+
+        if (source.DaysOfCredit is { } daysOfCredit)
+        {
+            target.DaysOfCredit = daysOfCredit;
+        }
+
+        if (source.ContraAccountForPrepaidAmountNumber is { } contraAccountForPrepaidAmountNumber)
+        {
+            target.ContraAccountForPrepaidAmount = new() { AccountNumber = contraAccountForPrepaidAmountNumber };
+        }
+
+        if (source.ContraAccountForRemainderAmountNumber is { } contraAccountForRemainderAmountNumber)
+        {
+            target.ContraAccountForRemainderAmount = new() { AccountNumber = contraAccountForRemainderAmountNumber };
+        }
+
+        if (source.PercentageForPrepaidAmount is { } percentageForPrepaidAmount)
+        {
+            target.PercentageForPrepaidAmount = (double)percentageForPrepaidAmount;
+        }
+
+        if (source.PercentageForRemainderAmount is { } percentageForRemainderAmount)
+        {
+            target.PercentageForRemainderAmount = (double)percentageForRemainderAmount;
+        }
+
+        if (source.CreditCardCompanyNumber is { } creditCardCompanyNumber)
+        {
+            target.CreditCardCompany = new() { CustomerNumber = creditCardCompanyNumber };
+        }
+
+        return target;
+    }
+
+    private static Generated.PaymentTermUpdate ToGenerated(PaymentTermsUpdate source, int paymentTermsNumber)
+    {
+        var target = new Generated.PaymentTermUpdate
+        {
+            Description = source.Description!,
+            Name = source.Name,
+        };
+
+        target.PaymentTermsType = FacadeTransport.ParseEnum(source.PaymentTermsType, target.PaymentTermsType);
+
+        if (source.DaysOfCredit is { } daysOfCredit)
+        {
+            target.DaysOfCredit = daysOfCredit;
+        }
+
+        if (source.ContraAccountForPrepaidAmountNumber is { } contraAccountForPrepaidAmountNumber)
+        {
+            target.ContraAccountForPrepaidAmount = new() { AccountNumber = contraAccountForPrepaidAmountNumber };
+        }
+
+        if (source.ContraAccountForRemainderAmountNumber is { } contraAccountForRemainderAmountNumber)
+        {
+            target.ContraAccountForRemainderAmount = new() { AccountNumber = contraAccountForRemainderAmountNumber };
+        }
+
+        if (source.PercentageForPrepaidAmount is { } percentageForPrepaidAmount)
+        {
+            target.PercentageForPrepaidAmount = (double)percentageForPrepaidAmount;
+        }
+
+        if (source.PercentageForRemainderAmount is { } percentageForRemainderAmount)
+        {
+            target.PercentageForRemainderAmount = (double)percentageForRemainderAmount;
+        }
+
+        if (source.CreditCardCompanyNumber is { } creditCardCompanyNumber)
+        {
+            target.CreditCardCompany = new() { CustomerNumber = creditCardCompanyNumber };
+        }
+
+        return target;
+    }
+
+    private static PaymentTerms FromGenerated(Generated.PaymentTerms source) => new()
+    {
+        PaymentTermsNumber = source.PaymentTermsNumber,
+        DaysOfCredit = source.DaysOfCredit,
+        Description = source.Description,
+        Name = source.Name,
+        PaymentTermsType = source.PaymentTermsType.ToString(),
+        ContraAccountForPrepaidAmount = Reference(source.ContraAccountForPrepaidAmount?.AccountNumber, source.ContraAccountForPrepaidAmount?.Self),
+        ContraAccountForRemainderAmount = Reference(source.ContraAccountForRemainderAmount?.AccountNumber, source.ContraAccountForRemainderAmount?.Self),
+        PercentageForPrepaidAmount = (decimal)source.PercentageForPrepaidAmount,
+        PercentageForRemainderAmount = (decimal)source.PercentageForRemainderAmount,
+        CreditCardCompany = Reference(source.CreditCardCompany?.CustomerNumber, source.CreditCardCompany?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/payment-types</c>.
 /// </summary>
 public sealed record PaymentType
@@ -1044,6 +1989,306 @@ internal sealed class ProductPageSource(Generated.ProductsClient client)
 }
 
 /// <summary>
+/// The <c>Product</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record ProductCreate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>productGroup</c> field.</summary>
+    public required int ProductGroupNumber { get; init; }
+
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public required string ProductNumber { get; init; }
+
+    /// <summary>The <c>barCode</c> field.</summary>
+    public string? BarCode { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>costPrice</c> field.</summary>
+    public decimal? CostPrice { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>recommendedPrice</c> field.</summary>
+    public decimal? RecommendedPrice { get; init; }
+
+    /// <summary>The <c>salesPrice</c> field.</summary>
+    public decimal? SalesPrice { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public int? UnitNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>Product</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record ProductUpdate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>productGroup</c> field.</summary>
+    public required int ProductGroupNumber { get; init; }
+
+    /// <summary>The <c>barCode</c> field.</summary>
+    public string? BarCode { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>costPrice</c> field.</summary>
+    public decimal? CostPrice { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>recommendedPrice</c> field.</summary>
+    public decimal? RecommendedPrice { get; init; }
+
+    /// <summary>The <c>salesPrice</c> field.</summary>
+    public decimal? SalesPrice { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public int? UnitNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>/products</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed class ProductResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.ProductsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public ProductResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.ProductsClient(httpClient);
+    }
+
+    private EconomicQuery<Product, ProductFilter, ProductSort> Query => new(new ProductPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Product, ProductFilter, ProductSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Product, ProductFilter, ProductSort> Where(System.Linq.Expressions.Expression<System.Func<ProductFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Product, ProductFilter, ProductSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Product, ProductFilter, ProductSort> OrderBy(System.Linq.Expressions.Expression<System.Func<ProductSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Product, ProductFilter, ProductSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<ProductSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Product, ProductFilter, ProductSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Product> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Product>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a product.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<Product> CreateAsync(ProductCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostProductsAsync(ToGenerated(item), cancellationToken),
+            "POST /products").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing product.</summary>
+    /// <param name="productNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>
+    /// This replaces rather than patches: a property left unset is cleared.
+    /// <para>
+    /// It is also an upsert. e-conomic answers <c>201 Created</c> and creates the resource
+    /// when the identifier does not exist, so this never reports a missing record as an
+    /// error. Verified against a live agreement.
+    /// </para>
+    /// </remarks>
+    public async System.Threading.Tasks.Task<Product> UpdateAsync(string productNumber, ProductUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutProductsByproductNumberAsync(productNumber, ToGenerated(item, productNumber), cancellationToken),
+            "PUT /products/{productNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a product.</summary>
+    /// <param name="productNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    /// <remarks>
+    /// e-conomic answers <c>204 No Content</c>. This endpoint comes from the published
+    /// documentation rather than a schema: <c>DELETE</c> has no body, so none is published.
+    /// </remarks>
+    public System.Threading.Tasks.Task DeleteAsync(string productNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"products/{productNumber}"),
+            cancellationToken);
+
+    private static Generated.ProductsCreate ToGenerated(ProductCreate source)
+    {
+        var target = new Generated.ProductsCreate
+        {
+            ProductNumber = source.ProductNumber,
+            Name = source.Name,
+            Description = source.Description!,
+            BarCode = source.BarCode!,
+            Barred = source.Barred,
+            ProductGroup = new() { ProductGroupNumber = source.ProductGroupNumber },
+        };
+
+        if (source.CostPrice is { } costPrice)
+        {
+            target.CostPrice = (double)costPrice;
+        }
+
+        if (source.RecommendedPrice is { } recommendedPrice)
+        {
+            target.RecommendedPrice = (double)recommendedPrice;
+        }
+
+        if (source.SalesPrice is { } salesPrice)
+        {
+            target.SalesPrice = (double)salesPrice;
+        }
+
+        if (source.UnitNumber is { } unitNumber)
+        {
+            target.Unit = new() { UnitNumber = unitNumber };
+        }
+
+        if (source.DepartmentalDistributionNumber is { } departmentalDistributionNumber)
+        {
+            target.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber };
+        }
+
+        return target;
+    }
+
+    private static Generated.ProductsUpdate ToGenerated(ProductUpdate source, string productNumber)
+    {
+        var target = new Generated.ProductsUpdate
+        {
+            ProductNumber = productNumber,
+            Name = source.Name,
+            Description = source.Description!,
+            BarCode = source.BarCode!,
+            Barred = source.Barred,
+            ProductGroup = new() { ProductGroupNumber = source.ProductGroupNumber },
+        };
+
+        if (source.CostPrice is { } costPrice)
+        {
+            target.CostPrice = (double)costPrice;
+        }
+
+        if (source.RecommendedPrice is { } recommendedPrice)
+        {
+            target.RecommendedPrice = (double)recommendedPrice;
+        }
+
+        if (source.SalesPrice is { } salesPrice)
+        {
+            target.SalesPrice = (double)salesPrice;
+        }
+
+        if (source.UnitNumber is { } unitNumber)
+        {
+            target.Unit = new() { UnitNumber = unitNumber };
+        }
+
+        if (source.DepartmentalDistributionNumber is { } departmentalDistributionNumber)
+        {
+            target.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber };
+        }
+
+        return target;
+    }
+
+    private static Product FromGenerated(Generated.Product source) => new()
+    {
+        ProductNumber = source.ProductNumber ?? string.Empty,
+        Description = source.Description,
+        Name = source.Name ?? string.Empty,
+        CostPrice = (decimal)source.CostPrice,
+        RecommendedPrice = (decimal)source.RecommendedPrice,
+        SalesPrice = (decimal)source.SalesPrice,
+        BarCode = source.BarCode,
+        Barred = source.Barred,
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Unit = Reference(source.Unit?.UnitNumber, source.Unit?.Self),
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/suppliers</c>.
 /// </summary>
 public sealed record Supplier
@@ -1115,7 +2360,7 @@ public sealed record Supplier
     public string? Zip { get; init; }
 
     /// <summary>The <c>self</c> field.</summary>
-    public string? Self { get; init; }
+    public System.Uri? Self { get; init; }
 }
 
 /// <summary>Fetches pages of <c>/suppliers</c> and maps them to <see cref="Supplier"/>.</summary>
@@ -1172,6 +2417,401 @@ internal sealed class SupplierPageSource(Generated.SuppliersClient client)
 }
 
 /// <summary>
+/// The <c>Supplier</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record SupplierCreate
+{
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public required int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>supplierGroup</c> field.</summary>
+    public required int SupplierGroupNumber { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public required int VatZoneNumber { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public int? AttentionNumber { get; init; }
+
+    /// <summary>The <c>bankAccount</c> field.</summary>
+    public string? BankAccount { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>costAccount</c> field.</summary>
+    public int? CostAccountNumber { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>defaultInvoiceText</c> field.</summary>
+    public string? DefaultInvoiceText { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public int? LayoutNumber { get; init; }
+
+    /// <summary>The <c>phone</c> field.</summary>
+    public string? Phone { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public int? SalesPersonNumber { get; init; }
+
+    /// <summary>The <c>supplierContact</c> field.</summary>
+    public int? SupplierContactNumber { get; init; }
+
+    /// <summary>The <c>supplierNumber</c> field.</summary>
+    public int? SupplierNumber { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+}
+
+/// <summary>
+/// The <c>Supplier</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record SupplierUpdate
+{
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public required int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>supplierGroup</c> field.</summary>
+    public required int SupplierGroupNumber { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public required int VatZoneNumber { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public int? AttentionNumber { get; init; }
+
+    /// <summary>The <c>bankAccount</c> field.</summary>
+    public string? BankAccount { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>costAccount</c> field.</summary>
+    public int? CostAccountNumber { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>defaultInvoiceText</c> field.</summary>
+    public string? DefaultInvoiceText { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public int? LayoutNumber { get; init; }
+
+    /// <summary>The <c>phone</c> field.</summary>
+    public string? Phone { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public int? SalesPersonNumber { get; init; }
+
+    /// <summary>The <c>supplierContact</c> field.</summary>
+    public int? SupplierContactNumber { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+}
+
+/// <summary>
+/// The <c>/suppliers</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed class SupplierResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.SuppliersClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public SupplierResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.SuppliersClient(httpClient);
+    }
+
+    private EconomicQuery<Supplier, SupplierFilter, SupplierSort> Query => new(new SupplierPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Supplier, SupplierFilter, SupplierSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Supplier, SupplierFilter, SupplierSort> Where(System.Linq.Expressions.Expression<System.Func<SupplierFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Supplier, SupplierFilter, SupplierSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Supplier, SupplierFilter, SupplierSort> OrderBy(System.Linq.Expressions.Expression<System.Func<SupplierSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Supplier, SupplierFilter, SupplierSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<SupplierSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Supplier, SupplierFilter, SupplierSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Supplier> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Supplier>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a supplier.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<Supplier> CreateAsync(SupplierCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostSuppliersAsync(ToGenerated(item), cancellationToken),
+            "POST /suppliers").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing supplier.</summary>
+    /// <param name="supplierNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>
+    /// This replaces rather than patches: a property left unset is cleared.
+    /// <para>
+    /// It is also an upsert. e-conomic answers <c>201 Created</c> and creates the resource
+    /// when the identifier does not exist, so this never reports a missing record as an
+    /// error. Verified against a live agreement.
+    /// </para>
+    /// </remarks>
+    public async System.Threading.Tasks.Task<Supplier> UpdateAsync(int supplierNumber, SupplierUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutSuppliersBysupplierNumberAsync(supplierNumber, ToGenerated(item, supplierNumber), cancellationToken),
+            "PUT /suppliers/{supplierNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a supplier.</summary>
+    /// <param name="supplierNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    /// <remarks>
+    /// e-conomic answers <c>204 No Content</c>. This endpoint comes from the published
+    /// documentation rather than a schema: <c>DELETE</c> has no body, so none is published.
+    /// </remarks>
+    public System.Threading.Tasks.Task DeleteAsync(int supplierNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"suppliers/{supplierNumber}"),
+            cancellationToken);
+
+    private static Generated.SuppliersPostResponse ToGenerated(SupplierCreate source)
+    {
+        var target = new Generated.SuppliersPostResponse
+        {
+            Address = source.Address!,
+            BankAccount = source.BankAccount!,
+            Barred = source.Barred,
+            City = source.City!,
+            CorporateIdentificationNumber = source.CorporateIdentificationNumber!,
+            Country = source.Country!,
+            Currency = source.Currency,
+            DefaultInvoiceText = source.DefaultInvoiceText!,
+            Email = source.Email!,
+            Name = source.Name,
+            PaymentTerms = new() { PaymentTermsNumber = source.PaymentTermsNumber },
+            Phone = source.Phone!,
+            SupplierGroup = new() { SupplierGroupNumber = source.SupplierGroupNumber },
+            VatZone = new() { VatZoneNumber = source.VatZoneNumber },
+            Zip = source.Zip!,
+        };
+
+        if (source.AttentionNumber is { } attentionNumber)
+        {
+            target.Attention = new() { SupplierContactNumber = attentionNumber };
+        }
+
+        if (source.CostAccountNumber is { } costAccountNumber)
+        {
+            target.CostAccount = new() { AccountNumber = costAccountNumber };
+        }
+
+        if (source.LayoutNumber is { } layoutNumber)
+        {
+            target.Layout = new() { LayoutNumber = layoutNumber };
+        }
+
+        if (source.SalesPersonNumber is { } salesPersonNumber)
+        {
+            target.SalesPerson = new() { EmployeeNumber = salesPersonNumber };
+        }
+
+        if (source.SupplierContactNumber is { } supplierContactNumber)
+        {
+            target.SupplierContact = new() { SupplierContactNumber = supplierContactNumber };
+        }
+
+        if (source.SupplierNumber is { } supplierNumber)
+        {
+            target.SupplierNumber = supplierNumber;
+        }
+
+        return target;
+    }
+
+    private static Generated.SuppliersPutResponse ToGenerated(SupplierUpdate source, int supplierNumber)
+    {
+        var target = new Generated.SuppliersPutResponse
+        {
+            SupplierNumber = supplierNumber,
+            Address = source.Address!,
+            BankAccount = source.BankAccount!,
+            Barred = source.Barred,
+            City = source.City!,
+            CorporateIdentificationNumber = source.CorporateIdentificationNumber!,
+            Country = source.Country!,
+            Currency = source.Currency,
+            DefaultInvoiceText = source.DefaultInvoiceText!,
+            Email = source.Email!,
+            Name = source.Name,
+            PaymentTerms = new() { PaymentTermsNumber = source.PaymentTermsNumber },
+            Phone = source.Phone!,
+            SupplierGroup = new() { SupplierGroupNumber = source.SupplierGroupNumber },
+            VatZone = new() { VatZoneNumber = source.VatZoneNumber },
+            Zip = source.Zip!,
+        };
+
+        if (source.AttentionNumber is { } attentionNumber)
+        {
+            target.Attention = new() { SupplierContactNumber = attentionNumber };
+        }
+
+        if (source.CostAccountNumber is { } costAccountNumber)
+        {
+            target.CostAccount = new() { AccountNumber = costAccountNumber };
+        }
+
+        if (source.LayoutNumber is { } layoutNumber)
+        {
+            target.Layout = new() { LayoutNumber = layoutNumber };
+        }
+
+        if (source.SalesPersonNumber is { } salesPersonNumber)
+        {
+            target.SalesPerson = new() { EmployeeNumber = salesPersonNumber };
+        }
+
+        if (source.SupplierContactNumber is { } supplierContactNumber)
+        {
+            target.SupplierContact = new() { SupplierContactNumber = supplierContactNumber };
+        }
+
+        return target;
+    }
+
+    private static Supplier FromGenerated(Generated.Supplier source) => new()
+    {
+        Address = source.Address,
+        Attention = Reference(source.Attention?.SupplierContactNumber, source.Attention?.Self),
+        BankAccount = source.BankAccount,
+        Barred = source.Barred,
+        City = source.City,
+        Contacts = source.Contacts,
+        CorporateIdentificationNumber = source.CorporateIdentificationNumber,
+        CostAccount = Reference(source.CostAccount?.AccountNumber, source.CostAccount?.Self),
+        Country = source.Country,
+        Currency = source.Currency ?? string.Empty,
+        DefaultInvoiceText = source.DefaultInvoiceText,
+        Email = source.Email,
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Name = source.Name,
+        PaymentTerms = Reference(source.PaymentTerms?.PaymentTermsNumber, source.PaymentTerms?.Self),
+        Phone = source.Phone,
+        SalesPerson = Reference(source.SalesPerson?.EmployeeNumber, source.SalesPerson?.Self),
+        SupplierContact = Reference(source.SupplierContact?.SupplierContactNumber, source.SupplierContact?.Self),
+        SupplierGroup = Reference(source.SupplierGroup?.SupplierGroupNumber, source.SupplierGroup?.Self),
+        SupplierNumber = source.SupplierNumber,
+        VatZone = Reference(source.VatZone?.VatZoneNumber, source.VatZone?.Self),
+        Zip = source.Zip,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/units</c>.
 /// </summary>
 public sealed record Unit
@@ -1217,6 +2857,180 @@ internal sealed class UnitPageSource(Generated.UnitsClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>Unit</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record UnitCreate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+}
+
+/// <summary>
+/// The <c>Unit</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record UnitUpdate
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+}
+
+/// <summary>
+/// The <c>/units</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed class UnitResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.UnitsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public UnitResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.UnitsClient(httpClient);
+    }
+
+    private EconomicQuery<Unit, UnitFilter, UnitSort> Query => new(new UnitPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Unit, UnitFilter, UnitSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Unit, UnitFilter, UnitSort> Where(System.Linq.Expressions.Expression<System.Func<UnitFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Unit, UnitFilter, UnitSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Unit, UnitFilter, UnitSort> OrderBy(System.Linq.Expressions.Expression<System.Func<UnitSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Unit, UnitFilter, UnitSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<UnitSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Unit, UnitFilter, UnitSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Unit> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Unit>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a unit.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<Unit> CreateAsync(UnitCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostUnitsAsync(ToGenerated(item), cancellationToken),
+            "POST /units").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing unit.</summary>
+    /// <param name="unitNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>
+    /// This replaces rather than patches: a property left unset is cleared.
+    /// <para>
+    /// It is also an upsert. e-conomic answers <c>201 Created</c> and creates the resource
+    /// when the identifier does not exist, so this never reports a missing record as an
+    /// error. Verified against a live agreement.
+    /// </para>
+    /// </remarks>
+    public async System.Threading.Tasks.Task<Unit> UpdateAsync(int unitNumber, UnitUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutUnitsByunitNumberAsync(unitNumber, ToGenerated(item, unitNumber), cancellationToken),
+            "PUT /units/{unitNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Deletes a unit.</summary>
+    /// <param name="unitNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    /// <remarks>
+    /// e-conomic answers <c>204 No Content</c>. This endpoint comes from the published
+    /// documentation rather than a schema: <c>DELETE</c> has no body, so none is published.
+    /// </remarks>
+    public System.Threading.Tasks.Task DeleteAsync(int unitNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"units/{unitNumber}"),
+            cancellationToken);
+
+    private static Generated.UnitsCreate ToGenerated(UnitCreate source)
+    {
+        var target = new Generated.UnitsCreate
+        {
+            Name = source.Name,
+        };
+
+        return target;
+    }
+
+    private static Generated.UnitUpdate ToGenerated(UnitUpdate source, int unitNumber)
+    {
+        var target = new Generated.UnitUpdate
+        {
+            Name = source.Name,
+        };
+
+        return target;
+    }
+
+    private static Unit FromGenerated(Generated.Unit source) => new()
+    {
+        UnitNumber = source.UnitNumber,
+        Name = source.Name,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -1414,13 +3228,13 @@ namespace EConomic
         public EconomicQuery<Currency, CurrencyFilter, CurrencySort> Currencies =>
             new(new CurrencyPageSource(new Generated.CurrenciesClient(HttpClient)));
 
-        /// <summary><c>/customer-groups</c>, as a composable query.</summary>
-        public EconomicQuery<CustomerGroup, CustomerGroupFilter, CustomerGroupSort> CustomerGroups =>
-            new(new CustomerGroupPageSource(new Generated.CustomerGroupsClient(HttpClient)));
+        /// <summary><c>/customer-groups</c>, as a queryable and writable resource.</summary>
+        public CustomerGroupResource CustomerGroups =>
+            new(HttpClient);
 
-        /// <summary><c>/customers</c>, as a composable query.</summary>
-        public EconomicQuery<Customer, CustomerFilter, CustomerSort> Customers =>
-            new(new CustomerPageSource(new Generated.CustomersClient(HttpClient)));
+        /// <summary><c>/customers</c>, as a queryable and writable resource.</summary>
+        public CustomerResource Customers =>
+            new(HttpClient);
 
         /// <summary><c>/departmental-distributions</c>, as a composable query.</summary>
         public EconomicQuery<DepartmentalDistributionSummary, DepartmentalDistributionSummaryFilter, DepartmentalDistributionSummarySort> DepartmentalDistributions =>
@@ -1442,9 +3256,9 @@ namespace EConomic
         public EconomicQuery<Layout, LayoutFilter, LayoutSort> Layouts =>
             new(new LayoutPageSource(new Generated.LayoutsClient(HttpClient)));
 
-        /// <summary><c>/payment-terms</c>, as a composable query.</summary>
-        public EconomicQuery<PaymentTerms, PaymentTermsFilter, PaymentTermsSort> PaymentTerms =>
-            new(new PaymentTermsPageSource(new Generated.PaymentTermsClient(HttpClient)));
+        /// <summary><c>/payment-terms</c>, as a queryable and writable resource.</summary>
+        public PaymentTermsResource PaymentTerms =>
+            new(HttpClient);
 
         /// <summary><c>/payment-types</c>, as a composable query.</summary>
         public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> PaymentTypes =>
@@ -1454,17 +3268,17 @@ namespace EConomic
         public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> ProductGroups =>
             new(new ProductGroupPageSource(new Generated.ProductGroupsClient(HttpClient)));
 
-        /// <summary><c>/products</c>, as a composable query.</summary>
-        public EconomicQuery<Product, ProductFilter, ProductSort> Products =>
-            new(new ProductPageSource(new Generated.ProductsClient(HttpClient)));
+        /// <summary><c>/products</c>, as a queryable and writable resource.</summary>
+        public ProductResource Products =>
+            new(HttpClient);
 
-        /// <summary><c>/suppliers</c>, as a composable query.</summary>
-        public EconomicQuery<Supplier, SupplierFilter, SupplierSort> Suppliers =>
-            new(new SupplierPageSource(new Generated.SuppliersClient(HttpClient)));
+        /// <summary><c>/suppliers</c>, as a queryable and writable resource.</summary>
+        public SupplierResource Suppliers =>
+            new(HttpClient);
 
-        /// <summary><c>/units</c>, as a composable query.</summary>
-        public EconomicQuery<Unit, UnitFilter, UnitSort> Units =>
-            new(new UnitPageSource(new Generated.UnitsClient(HttpClient)));
+        /// <summary><c>/units</c>, as a queryable and writable resource.</summary>
+        public UnitResource Units =>
+            new(HttpClient);
 
         /// <summary><c>/vat-accounts</c>, as a composable query.</summary>
         public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> VatAccounts =>

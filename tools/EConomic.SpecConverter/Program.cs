@@ -65,6 +65,39 @@ if (args.Length > 0 && args[0].Equals("filters", StringComparison.Ordinal))
     return 0;
 }
 
+// Subcommand: rename generated enum members to the values e-conomic sends, so the
+// source-generated converter writes them correctly without a reflection-based naming policy.
+if (args.Length > 0 && args[0].Equals("enum-names", StringComparison.Ordinal))
+{
+    var enumFile = args.Length > 1
+        ? args[1]
+        : Path.Combine("src", "EConomic.Net", "Rest", "Generated", "LegacyClients.g.cs");
+
+    if (!File.Exists(enumFile))
+    {
+        Console.Error.WriteLine($"Generated file not found: {Path.GetFullPath(enumFile)}");
+        Console.Error.WriteLine("Run NSwag first: cd tools/nswag && dotnet nswag run legacy.nswag");
+        return 1;
+    }
+
+    var unusable = new List<string>();
+    var (rewritten, renamed) = EnumNameRewriter.Rewrite(File.ReadAllText(enumFile), unusable);
+    File.WriteAllText(enumFile, rewritten.ReplaceLineEndings("\n"));
+
+    Console.WriteLine($"Renamed {renamed} enum members in {enumFile}");
+
+    if (unusable.Count > 0)
+    {
+        Console.WriteLine("Values that are not valid identifiers, left as generated:");
+        foreach (var entry in unusable)
+        {
+            Console.WriteLine($"  {entry}");
+        }
+    }
+
+    return 0;
+}
+
 // Subcommand: emit the source-generated JSON context for an NSwag-generated file.
 if (args.Length > 0 && args[0].Equals("json-context", StringComparison.Ordinal))
 {
@@ -240,9 +273,16 @@ foreach (var (resource, endpoints) in byResource)
     endpointCount += endpoints.Count;
 }
 
+var correctedResponses = 0;
+
 foreach (var (resource, document) in documents)
 {
     builder.AddComponents(document, OpenApiDocumentBuilder.References(document["paths"]));
+
+    // Must run after the components are embedded: it rewrites a response to reference the read
+    // entity, which has to already be present in the document for the reference to resolve.
+    correctedResponses += WriteResponseCorrector.Apply(document);
+    WriteResponseCorrector.MarkOptionalNumbersNullable(document);
 
     foreach (var applied in ApplyNameOverrides(document, resource, overrideConflicts))
     {

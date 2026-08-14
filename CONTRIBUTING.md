@@ -87,10 +87,18 @@ Run the steps **in this order**, from the repository root:
 ```bash
 dotnet run --project tools/EConomic.SpecConverter -c Release                  # specs -> legacy-openapi + _all.json
 (cd tools/nswag && dotnet nswag run legacy.nswag)                             # -> Rest/Generated/LegacyClients.g.cs
+dotnet run --project tools/EConomic.SpecConverter -c Release -- enum-names    # enum members -> the values e-conomic sends
 dotnet run --project tools/EConomic.SpecConverter -c Release -- json-context  # serialization metadata
 dotnet run --project tools/EConomic.SpecConverter -c Release -- filters       # public filter/sort surfaces
 dotnet run --project tools/EConomic.SpecConverter -c Release -- facade        # public models and client properties
 ```
+
+`enum-names` edits the NSwag output in place, and must run before the JSON context is generated.
+NSwag names an enum member `Net` for the value `"net"`, recording the original on an `[EnumMember]`
+attribute that `System.Text.Json` ignores. Reading tolerated that, because enum deserialization is
+case-insensitive; writing did not, and e-conomic rejects `"Net"` outright. Renaming the member is
+the fix that keeps the source-generated converter — a `JsonStringEnumConverter` with a camel-case
+policy is reflection-based and would break the trimming and AOT guarantees.
 
 Skipping a step leaves generated code referring to names that no longer exist, and the failure
 surfaces much later than the mistake. Two ordering details are easy to get wrong:

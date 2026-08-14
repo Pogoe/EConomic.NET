@@ -105,6 +105,39 @@ public sealed class SchemaRegistry
         "VatAccount", "VatType", "VatZone",
     };
 
+    /// <summary>
+    /// Entities whose client property is a resource — exposing writes alongside the query — rather
+    /// than a bare query. A resource type is hand-written per entity, so this set grows only as
+    /// each one lands, and must stay a subset of <see cref="PublishedEntities"/>.
+    /// </summary>
+    public static readonly IReadOnlySet<string> WriteEnabledEntities = new HashSet<string>(StringComparer.Ordinal)
+    {
+        // AccountingYear is absent: it is keyed by `year` rather than a `{Entity}Number` property,
+        // which the key convention here does not express. Its create otherwise works — verified
+        // live, returning `"year": "2027"` and a self link.
+        "Customer", "CustomerGroup", "PaymentTerms", "Product", "Supplier", "Unit",
+    };
+
+    /// <summary>
+    /// Entities whose resource supports <c>DELETE</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Derived from the published documentation, not from <c>specs/</c>.</strong> e-conomic
+    /// publishes one JSON schema per request or response body and <c>DELETE</c> has neither, so no
+    /// schema exists for any of these and nothing here can be checked against the specs.
+    /// </para>
+    /// <para>
+    /// Each entry was read from <see href="https://restdocs.e-conomic.com/"/>. An entity absent
+    /// here means the documentation does not describe a delete for it — <c>accounting-years</c> is
+    /// the case in point — not that the generator failed to find one.
+    /// </para>
+    /// </remarks>
+    public static readonly IReadOnlySet<string> DeletableEntities = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "Customer", "CustomerGroup", "PaymentTerms", "Product", "Supplier", "Unit",
+    };
+
     private readonly Dictionary<string, string> _namesByStructure = new(StringComparer.Ordinal);
     private readonly Dictionary<string, JsonObject> _schemasByName = new(StringComparer.Ordinal);
     private readonly List<SchemaCollision> _collisions = [];

@@ -447,6 +447,16 @@
                 }
               }
             }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JournalVoucherPost"
+                }
+              }
+            }
           }
         },
         "x-economic-source": "journals.journalNumber.vouchers.post.schema.json",

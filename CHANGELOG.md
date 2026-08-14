@@ -50,8 +50,42 @@ is a mapping change inside the facade, not automatically a major release here.
 - Native AOT smoke test, published and executed in CI, so the `IsTrimmable` and `IsAotCompatible`
   claims are tested rather than asserted.
 
+- Write support for customers, customer groups, payment terms, suppliers and units. Each is now a
+  `{Entity}Resource` exposing the writes e-conomic supports alongside the query methods, which
+  continue to return a query, so existing read code is unaffected apart from the property's type.
+  Three creates, five updates and five deletes in total.
+- `{Entity}Create` and `{Entity}Update` write models, carrying only the properties e-conomic
+  accepts. Server-maintained values such as `balance` are absent, and references to other resources
+  are flattened to their numbers.
+- `AsQuery()` on each resource, for obtaining an unfiltered query.
+- `DELETE` support, from the 21 endpoints described in the published documentation. e-conomic
+  publishes no schema for `DELETE` — it has neither request nor response body — so these are issued
+  directly rather than through the generated clients, and are documented as documentation-derived.
+
 ### Fixed
 
+- Unset optional properties were serialized as explicit `null`, which e-conomic rejects outright
+  with "Expected String but got Null". Every write would have failed. The generated clients now
+  omit them: the ignore condition has to be set on the options the clients serialize through, not
+  only through `JsonSourceGenerationOptions`, which applies to the context's own instance.
+- Unset optional numbers were serialized as `0`, which e-conomic rejects for identifiers —
+  `customerNumber` declares a minimum of 1. They are nullable on the write payloads now, so an
+  unset value is omitted while an explicit zero is still sent.
+- Update payload types were missing from the serialization metadata. The root scanner only matched
+  a request body in first position, so anything taking an identifier first — every `PUT` — was
+  skipped, and would have failed at run time once writes stopped doubling as their own response.
+- Write responses were typed as the request payload, so everything the request did not describe was
+  discarded — including the identifier and `self` that e-conomic returns for every create. They now
+  reference the read entity, which is what the server actually sends.
+- Every `POST` was declared as returning `200` only, so the generated clients rejected the `201
+  Created` that e-conomic documents for resource creation — every create would have failed. `PUT`
+  needed it too: it is an upsert, and answers `201` when the identifier does not exist.
+- `productNumber` path parameters were typed as integers while product numbers are strings, making
+  an alphanumeric product number unrepresentable.
+- `DELETE` was always considered safe to retry, on the HTTP convention that it is idempotent.
+  e-conomic documents the opposite on its drafts and sent endpoints, where a repeated delete
+  answers `404`, so a retry after a lost response reported failure for a delete that had succeeded.
+  It now requires an `Idempotency-Key`, exactly as `POST` does.
 - `lastUpdated` and 17 other properties are labelled `full-date` in the legacy schemas but carry a
   pattern — and real values — that include a time component. They now convert to `date-time`
   instead of `DateOnly`, which no live response could parse.

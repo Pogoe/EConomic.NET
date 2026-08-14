@@ -45,7 +45,14 @@ public sealed class EconomicRetryHandler : DelegatingHandler
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Patch)
+        // DELETE is idempotent by HTTP semantics but not at e-conomic, which documents on the
+        // drafts and sent endpoints that "on the consecutive calls it will be returning status
+        // code 404". Retrying after a lost response would therefore report failure for a delete
+        // that actually succeeded. It needs the same key POST does: with one the server replays the
+        // original result instead of running the operation again.
+        if (request.Method == HttpMethod.Post
+            || request.Method == HttpMethod.Patch
+            || request.Method == HttpMethod.Delete)
         {
             return request.Headers.Contains(EconomicIdempotencyHandler.IdempotencyKeyHeader);
         }
