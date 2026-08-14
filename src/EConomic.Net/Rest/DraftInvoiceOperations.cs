@@ -21,17 +21,67 @@ public enum EconomicInvoiceDelivery
 }
 
 /// <summary>
-/// Booking a draft invoice, which the generated write templates cannot express.
+/// Confirms a delete that takes no identifier and removes every record in a collection.
 /// </summary>
 /// <remarks>
-/// e-conomic models booking as a <c>POST</c> to <c>/invoices/booked</c> carrying a reference to the
-/// draft. That is an action on a draft rather than the creation of a booked invoice from a payload
-/// describing one, so it has no <c>{Entity}Create</c> model and does not fit the shape every other
-/// write follows. It is written by hand for the same reason <c>DELETE</c> is: the pattern is real,
-/// and pretending otherwise would distort the generator.
+/// The parameter exists to be inconvenient. e-conomic's bulk delete looks exactly like an ordinary
+/// one at the call site — no identifier, no filter, no undo — so the intent is spelled out in the
+/// argument instead. The default value is <see cref="Unspecified"/> and is rejected, which means
+/// <c>default</c> and an uninitialised field both fail rather than deleting an agreement's work.
+/// </remarks>
+public enum DraftInvoiceBulkDelete
+{
+    /// <summary>No confirmation was given. Rejected.</summary>
+    Unspecified = 0,
+
+    /// <summary>Delete every draft invoice on the agreement.</summary>
+    EveryDraft = 1,
+}
+
+/// <summary>
+/// The draft invoice operations the generated write templates cannot express.
+/// </summary>
+/// <remarks>
+/// Both are shapes that occur once in the whole API, and encoding either in the generator would
+/// distort it for no gain. Booking is an <em>action</em> on a draft — a <c>POST</c> to
+/// <c>/invoices/booked</c> carrying a reference to it — rather than the creation of a booked
+/// invoice from a payload describing one, so it has no <c>{Entity}Create</c> model. The bulk delete
+/// is a <c>DELETE</c> on a collection rather than on a record, and so takes no identifier at all.
 /// </remarks>
 public sealed partial class DraftInvoiceResource
 {
+    /// <summary>Deletes <strong>every</strong> draft invoice on the agreement.</summary>
+    /// <param name="confirmation">Must be <see cref="DraftInvoiceBulkDelete.EveryDraft"/>.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the drafts are gone.</returns>
+    /// <remarks>
+    /// <strong>This deletes all of them.</strong> e-conomic exposes it as a <c>DELETE</c> on the
+    /// collection itself — <c>DELETE /invoices/drafts</c> — which takes no identifier and no filter,
+    /// and there is no undo. It is a plausible typo away from the single-draft delete, so the
+    /// confirmation is required and has no usable default.
+    /// <para>
+    /// It is deliberately named apart from <c>DeleteAsync</c> as well, so the two never resolve to
+    /// each other by overload.
+    /// </para>
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">No confirmation was given.</exception>
+    /// <exception cref="Exceptions.EconomicApiException">The request failed.</exception>
+    public Task DeleteEveryDraftAsync(
+        DraftInvoiceBulkDelete confirmation,
+        CancellationToken cancellationToken = default)
+    {
+        if (confirmation != DraftInvoiceBulkDelete.EveryDraft)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(confirmation),
+                confirmation,
+                $"Deleting every draft invoice requires {nameof(DraftInvoiceBulkDelete)}."
+                + $"{nameof(DraftInvoiceBulkDelete.EveryDraft)}. Use DeleteAsync to delete one.");
+        }
+
+        return FacadeTransport.DeleteAsync(_httpClient, "invoices/drafts", cancellationToken);
+    }
+
     /// <summary>Books a draft invoice, turning it into a booked one.</summary>
     /// <param name="draftInvoiceNumber">The draft to book.</param>
     /// <param name="cancellationToken">Cancels the request.</param>

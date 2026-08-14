@@ -82,6 +82,7 @@ these should be re-checked on at least one other resource before being treated a
 | voucher entries | a finance voucher entry needs `date`, `amount`, `account` and `contraAccount`; both accounts must accept direct entries |
 | voucher key | a voucher is addressed as `{accountingYear}-{voucherNumber}`, e.g. `/journals/1/vouchers/2026-2` |
 | **a journal entry can be deleted** | `DELETE /journals/{n}/entries/{k}` answers `204`. It appears in no schema and in no documentation page — every entry carries it as a `metaData.delete` link, which is the server describing its own records |
+| **bulk delete of drafts** | `DELETE /invoices/drafts` — no identifier, no filter — removes every draft invoice on the agreement. Verified: two drafts, one call, collection empty |
 | `journalEntryNumber` under-reported | the server sends it on a voucher's entries; the schema for those does not declare it, so it has to be read back from `/journals/{n}/entries` |
 | **the public demo agreement is shared** | its token bucket is spent by everyone reading e-conomic's documentation: `X-RateLimiting` moved between 58 and 352 of 10 000 with no calls of our own in between. A `429` from it says nothing about the caller. The integration tests were moved onto an agreement of their own for this reason, and because reading a shared agreement means asserting on records nobody controls |
 
@@ -164,7 +165,7 @@ One row per endpoint. Fill in as each is exercised.
 | `/departmental-distributions` | ✅ live | — | — | — | |
 | `/employees` | ✅ live | — | — | — | |
 | `/invoices/booked` | ✅ live | ✅ live | ⬜ | — | the `POST` books a draft, exposed as `DraftInvoices.BookAsync`. No delete: a booked invoice is part of the accounting record |
-| `/invoices/drafts` | ✅ live | ✅ live | ✅ live | ✅ live | delete answers **200**, not 204. The collection also accepts a delete of its own, which **removes every draft** — deliberately not exposed |
+| `/invoices/drafts` | ✅ live | ✅ live | ✅ live | ✅ live | delete answers **200**, not 204. The collection also accepts a delete of its own, which **removes every draft**, exposed as `DeleteEveryDraftAsync` behind a required confirmation |
 | `/journals` | ✅ live | — | — | — | read-only, but exposed as a resource so its vouchers can hang off it |
 | `/journals/{n}/vouchers` | ✅ live | ✅ live | — | — | reached through the journal, which is itself read-only. The create answers with an **array** |
 | `/journals/{n}/entries` | ✅ live | — | — | ✅ live | the delete is hypermedia-derived: it is in no schema and no documentation page |

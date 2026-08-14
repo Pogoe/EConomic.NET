@@ -256,6 +256,34 @@ public class DraftInvoiceWriteTests
         Assert.Equal(500, body.RootElement.GetProperty("bookWithNumber").GetInt32());
     }
 
+    [Fact]
+    public async Task Deleting_every_draft_targets_the_collection_itself()
+    {
+        var handler = new RecordingHandler(HttpStatusCode.OK, """{ "message": "Deleted" }""");
+        var client = CreateClient(handler);
+
+        await client.DraftInvoices.DeleteEveryDraftAsync(
+            DraftInvoiceBulkDelete.EveryDraft, TestContext.Current.CancellationToken);
+
+        // No identifier: the delete addresses the collection, which is what makes it dangerous.
+        Assert.Equal(HttpMethod.Delete, handler.LastMethod);
+        Assert.Equal("https://restapi.e-conomic.com/invoices/drafts", handler.LastUri?.GetLeftPart(UriPartial.Path));
+    }
+
+    [Fact]
+    public async Task Deleting_every_draft_refuses_without_a_confirmation()
+    {
+        var handler = new RecordingHandler(HttpStatusCode.OK, null);
+        var client = CreateClient(handler);
+
+        // default(DraftInvoiceBulkDelete) is Unspecified, so an uninitialised field or a stray
+        // `default` cannot reach the server. Nothing is sent.
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+            () => client.DraftInvoices.DeleteEveryDraftAsync(default, TestContext.Current.CancellationToken));
+
+        Assert.Null(handler.LastMethod);
+    }
+
     private static EconomicClient CreateClient(RecordingHandler handler) =>
         new(new HttpClient(handler), EconomicOptions.Demo());
 

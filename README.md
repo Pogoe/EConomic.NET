@@ -276,6 +276,14 @@ A voucher has no delete, but the entries it produced do, which is how a mis-post
 await client.Journals.Entries(journalNumber).DeleteAsync(journalEntryNumber, cancellationToken);
 ```
 
+One delete removes a whole collection. e-conomic exposes `DELETE /invoices/drafts` with no
+identifier and no filter, so it is named apart from `DeleteAsync` and needs an argument you have to
+mean:
+
+```csharp
+await client.DraftInvoices.DeleteEveryDraftAsync(DraftInvoiceBulkDelete.EveryDraft, cancellationToken);
+```
+
 Deletes are **not** retried without an `Idempotency-Key`. e-conomic reuses identifiers, so a
 repeated delete can land on a different record than the one you meant — see
 [Retries and idempotency](#retries-and-idempotency).

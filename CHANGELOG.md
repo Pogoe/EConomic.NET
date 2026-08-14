@@ -99,6 +99,10 @@ is a mapping change inside the facade, not automatically a major release here.
   in no schema and on no documentation page; every entry carries it as a `metaData.delete` link,
   which is the server describing its own records. Deleting an entry is how a mis-posted voucher is
   undone, since a voucher itself has no delete.
+- `DraftInvoices.DeleteEveryDraftAsync` — e-conomic exposes a `DELETE` on the drafts collection
+  itself, which takes no identifier and no filter and removes every draft on the agreement. It
+  requires a `DraftInvoiceBulkDelete.EveryDraft` argument whose default value is rejected, and is
+  named apart from `DeleteAsync` so the two cannot resolve to each other by overload.
 - `AsQuery()` on each resource, for obtaining an unfiltered query.
 - `DELETE` support, from the 21 endpoints described in the published documentation. e-conomic
   publishes no schema for `DELETE` — it has neither request nor response body — so these are issued

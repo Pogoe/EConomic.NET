@@ -1657,6 +1657,9 @@ EConomic.Rest.DraftInvoice.Templates.get -> EConomic.Rest.DraftInvoiceTemplates?
 EConomic.Rest.DraftInvoice.Templates.init -> void
 EConomic.Rest.DraftInvoice.VatAmount.get -> decimal
 EConomic.Rest.DraftInvoice.VatAmount.init -> void
+EConomic.Rest.DraftInvoiceBulkDelete
+EConomic.Rest.DraftInvoiceBulkDelete.EveryDraft = 1 -> EConomic.Rest.DraftInvoiceBulkDelete
+EConomic.Rest.DraftInvoiceBulkDelete.Unspecified = 0 -> EConomic.Rest.DraftInvoiceBulkDelete
 EConomic.Rest.DraftInvoiceCreate
 EConomic.Rest.DraftInvoiceCreate.<Clone>$() -> EConomic.Rest.DraftInvoiceCreate!
 EConomic.Rest.DraftInvoiceCreate.Currency.get -> string!
@@ -1925,6 +1928,7 @@ EConomic.Rest.DraftInvoiceResource.BookAsync(int draftInvoiceNumber, System.Thre
 EConomic.Rest.DraftInvoiceResource.BookAsync(int draftInvoiceNumber, int? bookWithNumber = null, EConomic.Rest.EconomicInvoiceDelivery sendBy = EConomic.Rest.EconomicInvoiceDelivery.None, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.BookedInvoice!>!
 EConomic.Rest.DraftInvoiceResource.CreateAsync(EConomic.Rest.DraftInvoiceCreate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.DraftInvoice!>!
 EConomic.Rest.DraftInvoiceResource.DeleteAsync(int draftInvoiceNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+EConomic.Rest.DraftInvoiceResource.DeleteEveryDraftAsync(EConomic.Rest.DraftInvoiceBulkDelete confirmation, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 EConomic.Rest.DraftInvoiceResource.DraftInvoiceResource(System.Net.Http.HttpClient! httpClient) -> void
 EConomic.Rest.DraftInvoiceResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.DraftInvoice!>!>!
 EConomic.Rest.DraftInvoiceResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.DraftInvoiceSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.DraftInvoice!, EConomic.Rest.DraftInvoiceFilter!, EConomic.Rest.DraftInvoiceSort!>!

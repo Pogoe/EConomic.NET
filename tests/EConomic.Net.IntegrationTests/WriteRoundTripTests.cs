@@ -615,6 +615,37 @@ public class WriteRoundTripTests
     }
 
     [Fact]
+    public async Task Deleting_every_draft_invoice_empties_the_collection()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
+
+        // This one deletes drafts it did not create, so it insists on starting from an empty
+        // collection. On a throwaway agreement that is true; anywhere else the skip is the point.
+        var before = await client.DraftInvoices.GetPageAsync(0, token);
+        Assert.SkipWhen(
+            before.Items.Count > 0,
+            "The agreement already has draft invoices, and this test would delete them.");
+
+        await using var seed = new AgreementSeed(client, token);
+        var customer = await seed.CustomerAsync("ZZ Probe Bulk Delete");
+        await seed.DraftInvoiceAsync(customer, recipientName: "ZZ Probe Bulk A");
+        await seed.DraftInvoiceAsync(customer, recipientName: "ZZ Probe Bulk B");
+
+        Assert.Equal(2, (await client.DraftInvoices.GetPageAsync(0, token)).Items.Count);
+
+        await client.DraftInvoices.DeleteEveryDraftAsync(DraftInvoiceBulkDelete.EveryDraft, token);
+
+        Assert.Empty((await client.DraftInvoices.GetPageAsync(0, token)).Items);
+
+        // Both drafts are already gone, so the seed must not try to delete them again.
+        seed.Forget();
+        seed.Forget();
+    }
+
+    [Fact]
     public async Task A_journal_voucher_is_posted_with_its_entries()
     {
         TestClients.SkipUnlessConfigured();
