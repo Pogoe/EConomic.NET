@@ -62,6 +62,29 @@ internal static class Program
         }
         """;
 
+    private const string OpenCustomersJson = """
+        {
+          "items": [
+            {
+              "customerNumber": 1,
+              "name": "Demo Customer",
+              "currency": "DKK",
+              "city": "Copenhagen",
+              "zip": "1000",
+              "access": true,
+              "paymentTermId": 1,
+              "paymentDays": 14,
+              "objectVersion": "AAAAAAAAB9E="
+            }
+          ],
+          "cursor": "Mg=="
+        }
+        """;
+
+    private const string OpenCreatedJson = """
+        { "customerNumber": 42 }
+        """;
+
     private static int _failures;
 
     private static async Task<int> Main()
@@ -70,6 +93,7 @@ internal static class Program
 
         await GeneratedClientDeserializesAResponseAsync().ConfigureAwait(false);
         await GeneratedClientSerializesACompositePayloadAsync().ConfigureAwait(false);
+        await OpenServiceRoundTripsAsync().ConfigureAwait(false);
         await LegacyErrorBodyIsParsedAsync().ConfigureAwait(false);
         RateLimitHeadersAreParsed();
         OptionsRedactTheirTokens();
@@ -130,7 +154,7 @@ internal static class Program
 
         var client = new EconomicClient(httpClient, EconomicOptions.Demo());
 
-        var created = await client.DraftInvoices.CreateAsync(
+        var created = await client.Rest.DraftInvoices.CreateAsync(
             new DraftInvoiceCreate
             {
                 Date = new DateOnly(2026, 8, 14),
@@ -171,6 +195,50 @@ internal static class Program
         Check("nested response object is mapped", created.Recipient?.Name == "Acme A/S");
     }
 
+    /// <summary>
+    /// The OpenAPI services, whose serialization is a separate path from the legacy one.
+    /// </summary>
+    /// <remarks>
+    /// Each service is generated into its own namespace with its own <c>JsonSerializerContext</c>
+    /// and its own set of client hooks, so the legacy checks above prove nothing about them: a
+    /// service whose hook was never wired up would deserialize by reflection on CoreCLR and fail
+    /// only once trimmed. Both directions are exercised, since the reader and the writer are
+    /// separately generated.
+    /// </remarks>
+    private static async Task OpenServiceRoundTripsAsync()
+    {
+        var handler = new OpenHandler(OpenCustomersJson, OpenCreatedJson);
+        using var httpClient = new HttpClient(handler)
+        {
+            BaseAddress = EconomicOptions.DefaultRestApiBaseAddress,
+        };
+
+        var client = new EconomicClient(httpClient, EconomicOptions.Demo());
+
+        var page = await client.Open.Customers.AsQuery()
+            .GetCursorPageAsync(cancellationToken: default).ConfigureAwait(false);
+
+        Check("open service deserializes a cursor page", page.Items.Count == 1);
+        Check("open cursor survives trimming", page.Cursor == "Mg==");
+        Check("open scalar property survives trimming", page.Items[0].CustomerNumber == 1);
+        Check("open boolean survives trimming", page.Items[0].Access == true);
+        Check("open version token survives trimming", page.Items[0].ObjectVersion == "AAAAAAAAB9E=");
+
+        var assigned = await client.Open.Customers.CreateAsync(
+            new Open.Customer
+            {
+                CustomerNumber = 42,
+                Name = "Acme A/S",
+                Currency = "DKK",
+                PaymentTermId = 1,
+            }).ConfigureAwait(false);
+
+        var body = handler.LastBody ?? string.Empty;
+
+        Check("open write serializes its payload", body.Contains("Acme A/S", StringComparison.Ordinal));
+        Check("open create response is mapped", assigned == 42);
+    }
+
     private static void RateLimitHeadersAreParsed()
     {
         var parsed = RateLimitStatus.TryParse("token-limit-10000-per-60-seconds: 147/10000", out var status);
@@ -191,6 +259,37 @@ internal static class Program
         if (!passed)
         {
             _failures++;
+        }
+    }
+
+    /// <summary>
+    /// Answers a read with the listing and a write with the created identifier.
+    /// </summary>
+    /// <remarks>
+    /// The OpenAPI services answer a create with <c>201</c> and a read with <c>200</c>, and the
+    /// generated client checks the status before it deserializes, so one canned response cannot
+    /// serve both.
+    /// </remarks>
+    private sealed class OpenHandler(string readBody, string writeBody) : HttpMessageHandler
+    {
+        public string? LastBody { get; private set; }
+
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            var isWrite = request.Method != HttpMethod.Get;
+
+            if (request.Content is not null)
+            {
+                LastBody = await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            return new HttpResponseMessage(isWrite ? HttpStatusCode.Created : HttpStatusCode.OK)
+            {
+                Content = new StringContent(isWrite ? writeBody : readBody, Encoding.UTF8, "application/json"),
+                RequestMessage = request,
+            };
         }
     }
 

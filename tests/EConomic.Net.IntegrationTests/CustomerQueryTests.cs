@@ -23,7 +23,7 @@ public class CustomerQueryTests
         await using var seed = new AgreementSeed(client, token);
         var created = await seed.CustomerAsync("ZZ Probe Enumerated");
 
-        var customers = await ToListAsync(client.Customers.AsQuery());
+        var customers = await ToListAsync(client.Rest.Customers.AsQuery());
 
         Assert.Contains(customers, c => c.CustomerNumber == created.CustomerNumber);
         Assert.All(customers, c => Assert.True(c.CustomerNumber > 0));
@@ -45,9 +45,9 @@ public class CustomerQueryTests
 
         // Filtering on the two the test created, rather than on numbers it hopes exist. Customer
         // numbers are server-assigned, so they cannot be predicted — only read back.
-        var all = await CountAsync(client.Customers.AsQuery());
+        var all = await CountAsync(client.Rest.Customers.AsQuery());
         var filtered = await ToListAsync(
-            client.Customers.Where(c => c.CustomerNumber.In(first.CustomerNumber, second.CustomerNumber)));
+            client.Rest.Customers.Where(c => c.CustomerNumber.In(first.CustomerNumber, second.CustomerNumber)));
 
         Assert.True(all > filtered.Count, $"Expected the filter to narrow the result set; got {all} and {filtered.Count}.");
         Assert.Equal(2, filtered.Count);
@@ -66,7 +66,7 @@ public class CustomerQueryTests
         await seed.CustomerAsync("ZZ Probe Order A");
         await seed.CustomerAsync("ZZ Probe Order B");
 
-        var descending = (await ToListAsync(client.Customers.OrderByDescending(c => c.CustomerNumber)))
+        var descending = (await ToListAsync(client.Rest.Customers.OrderByDescending(c => c.CustomerNumber)))
             .Select(c => c.CustomerNumber)
             .ToList();
 
@@ -89,8 +89,8 @@ public class CustomerQueryTests
 
         // One customer per request forces several round trips over the same collection, which is
         // only a real test if the collection has more than one page in it.
-        var paged = await CountAsync(client.Customers.WithPageSize(1));
-        var single = await CountAsync(client.Customers.WithPageSize(1000));
+        var paged = await CountAsync(client.Rest.Customers.WithPageSize(1));
+        var single = await CountAsync(client.Rest.Customers.WithPageSize(1000));
 
         Assert.True(single >= 3, $"Expected the seeded customers to be present; found {single}.");
         Assert.Equal(single, paged);
@@ -106,7 +106,7 @@ public class CustomerQueryTests
         // mean the server does not accept the field after all.
         var client = CreateClient();
 
-        var count = await CountAsync(client.Customers.WhereRaw("pNumber$eq:1234567890"));
+        var count = await CountAsync(client.Rest.Customers.WhereRaw("pNumber$eq:1234567890"));
 
         Assert.Equal(0, count);
     }

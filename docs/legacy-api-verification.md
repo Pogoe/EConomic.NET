@@ -194,6 +194,25 @@ One row per endpoint. Fill in as each is exercised.
 
 Legend: ✅ verified against a live agreement · ⬜ unverified · — no such endpoint in the specs.
 
+## Filters the server lists and then crashes on
+
+Found by sending every operator each generated filter surface offers, one clause per request. All
+reproduce on the demo agreement, so they are e-conomic's own bugs rather than one agreement's data.
+Every one of these fields appears in the resource's `allowedFilteringFields`, so the server's own
+list cannot reveal them.
+
+| Resource | Field | Behaviour |
+| --- | --- | --- |
+| `/orders/drafts`, `/sent`, `/archived` | `paymentTerms.paymentTermsNumber` | `500` on every operator. `/invoices/drafts` filters on the same nested block correctly. |
+| `/quotes/drafts`, `/sent`, `/archived` | `paymentTerms.paymentTermsNumber` | `500` on every operator. |
+| `/products` | `departmentalDistribution.departmentalDistributionNumber` | `500` on every operator, though `/departmental-distributions` filters on the same number. |
+| `/products` | `barred` | `$eq:` works; `$ne:` and `$eq:$null:` are `500`. `/customers` answers all three. |
+| `/accounts` | `debitCredit$like:` | `400`, an honest rejection: an enumerated property compares but does not match inside. `$eq:` and `$ne:` work. |
+
+The first four are out of the generated surface — a field that crashes the server is a worse promise
+than one that is merely rejected — and `WhereRaw` still reaches them. The last is a correction to
+how operator sets are inferred: an enumerated property gets equality only.
+
 ## Recording what is learned
 
 A finding is only useful once it is pinned. For each one:

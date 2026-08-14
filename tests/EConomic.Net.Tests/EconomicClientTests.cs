@@ -53,7 +53,7 @@ public class EconomicClientTests
         var handler = new StubHandler(HttpStatusCode.OK, CustomersJson);
         var client = CreateClient(handler);
 
-        _ = await client.Customers
+        _ = await client.Rest.Customers
             .Where(c => c.CustomerNumber > 1000 && c.Name.Like("Acme*"))
             .OrderByDescending(c => c.CustomerNumber)
             .WithPageSize(50)
@@ -75,7 +75,7 @@ public class EconomicClientTests
         var client = CreateClient(new StubHandler(HttpStatusCode.OK, CustomersJson));
 
         var customers = new List<Rest.Customer>();
-        await foreach (var customer in client.Customers.AsAsyncEnumerable(TestContext.Current.CancellationToken))
+        await foreach (var customer in client.Rest.Customers.AsAsyncEnumerable(TestContext.Current.CancellationToken))
         {
             customers.Add(customer);
         }
@@ -102,7 +102,7 @@ public class EconomicClientTests
         var client = CreateClient(new StubHandler(HttpStatusCode.BadRequest, LegacyErrorJson));
 
         var exception = await Assert.ThrowsAsync<EconomicApiException>(
-            () => client.Customers.GetPageAsync(0, TestContext.Current.CancellationToken));
+            () => client.Rest.Customers.GetPageAsync(0, TestContext.Current.CancellationToken));
 
         Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
         Assert.Equal("test-log-id", exception.TraceId);
@@ -116,7 +116,7 @@ public class EconomicClientTests
         var client = CreateClient(new StubHandler(HttpStatusCode.TooManyRequests, "{}"));
 
         await Assert.ThrowsAsync<EconomicRateLimitException>(
-            () => client.Customers.GetPageAsync(0, TestContext.Current.CancellationToken));
+            () => client.Rest.Customers.GetPageAsync(0, TestContext.Current.CancellationToken));
     }
 
     [Fact]

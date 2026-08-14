@@ -14346,12 +14346,23 @@ public sealed partial class JournalVoucherResource
 }
 }
 
-namespace EConomic
+namespace EConomic.Rest
 {
-    using EConomic.Rest;
-
-    public sealed partial class EconomicClient
+    /// <summary>
+    /// The legacy REST API, reached through <see cref="EConomic.EconomicClient.Rest"/>.
+    /// </summary>
+    /// <remarks>
+    /// The two API surfaces are addressed separately and deliberately. Both publish an entity
+    /// called <c>Customer</c>, and they disagree: this one spells a reference
+    /// <c>paymentTermsNumber</c> where the OpenAPI services spell it <c>paymentTermId</c>, and
+    /// here the server assigns a customer number where there the caller supplies one. Naming the
+    /// surface at the call site is what keeps the two from being confused for each other.
+    /// </remarks>
+    /// <param name="httpClient">The configured transport.</param>
+    public sealed partial class EconomicRestApi(System.Net.Http.HttpClient httpClient)
     {
+        private System.Net.Http.HttpClient HttpClient { get; } = httpClient;
+
         /// <summary><c>/accounting-years</c>, as a queryable and writable resource.</summary>
         public AccountingYearResource AccountingYears =>
             new(HttpClient);

@@ -49,7 +49,7 @@ public class CustomerWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
+        await client.Rest.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastMethod);
         Assert.Equal("https://restapi.e-conomic.com/customers", handler.LastUri?.GetLeftPart(UriPartial.Path));
@@ -61,7 +61,7 @@ public class CustomerWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
+        await client.Rest.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
 
         // The public model takes plain numbers; e-conomic wants { "customerGroupNumber": 1 }.
         using var body = JsonDocument.Parse(handler.LastBody!);
@@ -78,7 +78,7 @@ public class CustomerWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
+        await client.Rest.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
 
         // balance is readOnly, so CustomerCreate offers no way to set it and the payload omits it
         // entirely. Optional numbers are nullable on the generated payloads precisely so an unset
@@ -97,7 +97,7 @@ public class CustomerWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        var created = await client.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
+        var created = await client.Rest.Customers.CreateAsync(NewCustomer(), TestContext.Current.CancellationToken);
 
         // The create schema declares neither `self` nor the assigned number, but the server returns
         // both — verified live. The response is mapped as the read entity rather than the payload,
@@ -125,7 +125,7 @@ public class CustomerWriteTests
             DefaultDeliveryLocationNumber = 7,
         };
 
-        await client.Customers.UpdateAsync(42, update, TestContext.Current.CancellationToken);
+        await client.Rest.Customers.UpdateAsync(42, update, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastMethod);
         Assert.Equal("https://restapi.e-conomic.com/customers/42", handler.LastUri?.GetLeftPart(UriPartial.Path));
@@ -143,7 +143,7 @@ public class CustomerWriteTests
         var handler = new RecordingHandler(HttpStatusCode.NoContent, body: null);
         var client = CreateClient(handler);
 
-        await client.Customers.DeleteAsync(42, TestContext.Current.CancellationToken);
+        await client.Rest.Customers.DeleteAsync(42, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastMethod);
         Assert.Equal("https://restapi.e-conomic.com/customers/42", handler.LastUri?.GetLeftPart(UriPartial.Path));
@@ -159,7 +159,7 @@ public class CustomerWriteTests
         var client = CreateClient(handler);
 
         var exception = await Assert.ThrowsAsync<EconomicApiException>(
-            () => client.Customers.DeleteAsync(42, TestContext.Current.CancellationToken));
+            () => client.Rest.Customers.DeleteAsync(42, TestContext.Current.CancellationToken));
 
         Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
     }

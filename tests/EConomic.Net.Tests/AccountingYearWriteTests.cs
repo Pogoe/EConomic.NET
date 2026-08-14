@@ -34,7 +34,7 @@ public class AccountingYearWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, createdResponse);
         var client = CreateClient(handler);
 
-        var year = await client.AccountingYears.CreateAsync(
+        var year = await client.Rest.AccountingYears.CreateAsync(
             new AccountingYearCreate
             {
                 FromDate = new DateOnly(2027, 1, 1),

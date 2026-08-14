@@ -61,7 +61,7 @@ public class FacadeMappingTests
 
         // A guard against the reflection silently matching nothing, which would make this pass
         // while mapping zero resources.
-        Assert.True(mapped.Count >= 30, $"Expected every resource; only mapped {mapped.Count}.");
+        Assert.True(mapped.Count >= 52, $"Expected every resource; only mapped {mapped.Count}.");
     }
 
     /// <summary>
@@ -96,7 +96,9 @@ public class FacadeMappingTests
     private static IEnumerable<MethodInfo> Mappers() =>
         typeof(EconomicClient).Assembly
             .GetTypes()
-            .Where(t => t.Name.EndsWith("PageSource", StringComparison.Ordinal))
+            // Both surfaces: the legacy sources are named ...PageSource and the OpenAPI ones
+            // ...Source, and the common suffix is what keeps this from needing a list per surface.
+            .Where(t => t.Name.EndsWith("Source", StringComparison.Ordinal))
             .Select(t => t.GetMethod("Map", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public))
             .OfType<MethodInfo>()
             .Where(m => m.GetParameters().Length == 1)

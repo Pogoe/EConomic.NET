@@ -19,6 +19,7 @@ namespace EConomic;
 public sealed partial class EconomicClient
 {
     private readonly HttpClient _httpClient;
+    private readonly Uri _openApiBaseAddress;
 
     /// <summary>The configured transport the generated resource properties build on.</summary>
     internal HttpClient HttpClient => _httpClient;
@@ -33,6 +34,11 @@ public sealed partial class EconomicClient
     {
         ArgumentNullException.ThrowIfNull(httpClient);
         _httpClient = httpClient;
+
+        // Dependency injection configures the transport for the legacy base address; the OpenAPI
+        // services are addressed absolutely, so their root is the default unless options say
+        // otherwise.
+        _openApiBaseAddress = Authentication.EconomicOptions.DefaultOpenApiBaseAddress;
     }
 
     /// <summary>
@@ -66,6 +72,35 @@ public sealed partial class EconomicClient
         }
 
         _httpClient = httpClient;
+        _openApiBaseAddress = options.OpenApiBaseAddress;
     }
 
+    /// <summary>
+    /// The legacy REST API at <c>restapi.e-conomic.com</c>, which has the broader endpoint coverage.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Both surfaces hang off this client under their own name, because they are not
+    /// interchangeable. Each publishes an entity called <c>Customer</c> and they disagree about it:
+    /// here the server assigns the customer number and a reference is spelled
+    /// <c>paymentTermsNumber</c>; on the OpenAPI services the caller supplies the number and it is
+    /// <c>paymentTermId</c>. Naming the surface at the call site is what keeps them apart.
+    /// </para>
+    /// <para>
+    /// They share everything below the models: one set of tokens, one transport, and — measured
+    /// against a live agreement — one rate-limit budget, whose <c>X-RateLimiting</c> header moves
+    /// together whichever host serves the request.
+    /// </para>
+    /// </remarks>
+    public Rest.EconomicRestApi Rest => new(_httpClient);
+
+    /// <summary>
+    /// The OpenAPI services at <c>apis.e-conomic.com</c>, versioned per service.
+    /// </summary>
+    /// <remarks>
+    /// Reached over the same transport as <see cref="Rest"/> — the requests carry an absolute
+    /// address, so one <see cref="HttpClient"/> serves both hosts and both share the agreement's
+    /// single rate-limit budget.
+    /// </remarks>
+    public Open.EconomicOpenApi Open => new(_httpClient, _openApiBaseAddress);
 }

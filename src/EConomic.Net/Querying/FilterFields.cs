@@ -97,6 +97,37 @@ public sealed class BooleanField : EconomicFilterField
 }
 
 /// <summary>
+/// A property supporting only <c>$eq:</c> and <c>$ne:</c>.
+/// </summary>
+/// <typeparam name="T">The value type, e.g. <see cref="string"/>.</typeparam>
+/// <remarks>
+/// The OpenAPI services publish what each property accepts, and for several it is equality and
+/// nothing else. This is what that maps to: a text property with no <c>Like</c> to reach for, and
+/// no ordering. The legacy surface has no use for it — there, operator sets are inferred from the
+/// property's type, and a text property is assumed to accept <c>$like:</c>.
+/// </remarks>
+[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates",
+    Justification = "The operators are markers read out of an expression tree, never invoked.")]
+public sealed class EqualityField<T> : EconomicFilterField
+{
+    internal EqualityField()
+    {
+    }
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj) => throw NotAnExpression();
+
+    /// <inheritdoc />
+    public override int GetHashCode() => throw NotAnExpression();
+
+    /// <summary>Translates to <c>$eq:</c>, or <c>$null:</c> when compared with <see langword="null"/>.</summary>
+    public static bool operator ==(EqualityField<T> field, T? value) => throw NotAnExpression();
+
+    /// <summary>Translates to <c>$ne:</c>, or <c>$ne:$null:</c> when compared with <see langword="null"/>.</summary>
+    public static bool operator !=(EqualityField<T> field, T? value) => throw NotAnExpression();
+}
+
+/// <summary>
 /// An ordered property supporting <c>$eq:</c>, <c>$ne:</c>, <c>$lt:</c>, <c>$lte:</c>,
 /// <c>$gt:</c> and <c>$gte:</c>.
 /// </summary>

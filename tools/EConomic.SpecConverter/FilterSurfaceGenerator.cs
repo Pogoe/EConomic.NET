@@ -52,10 +52,16 @@ public static class FilterSurfaceGenerator
     /// </para>
     /// <para>
     /// Nothing offline can find these, because the specification is the only offline authority and
-    /// it is the thing that is wrong. Every entry below was read from a live agreement's
-    /// <c>allowedFilteringFields</c> by <c>FilterSurfaceTests</c>, which is what keeps the list
-    /// honest: an entry that becomes unnecessary makes this generator fail, and a field that starts
-    /// being over-reported fails that test.
+    /// it is the thing that is wrong. Every entry below was read from a live agreement by
+    /// <c>FilterSurfaceTests</c>, which is what keeps the list honest: an entry that becomes
+    /// unnecessary makes this generator fail, and a field that starts being over-reported fails
+    /// that test.
+    /// </para>
+    /// <para>
+    /// "Refuses" covers two answers, and the second is the one the server's own list cannot reveal.
+    /// Most of these are absent from <c>allowedFilteringFields</c> and answered <c>400</c>. The
+    /// rest are listed there as filterable and answered <c>500</c> when actually used — a crash
+    /// rather than a rejection, found only by sending each operator on each field.
     /// </para>
     /// </remarks>
     public static IReadOnlySet<string> UnfilterableFields { get; } = new HashSet<string>(StringComparer.Ordinal)
@@ -87,6 +93,31 @@ public static class FilterSurfaceGenerator
         "Product.inventory.netWeight",
         "Product.inventory.packageVolume",
         "Product.inventory.recommendedCostPrice",
+
+        // The rest of this list is fields the server lists as filterable and then answers with a
+        // 500 rather than a result — reproduced on the demo agreement, so they are e-conomic's
+        // bugs and not this agreement's data. A field that crashes the server is a worse promise
+        // than one that is merely rejected, so they come out of the surface on the same terms.
+        // WhereRaw still reaches them, for whenever they start working.
+
+        // Filtering products on a departmental distribution is a 500 on every operator, though
+        // /departmental-distributions filters on the same number perfectly well.
+        "Product.departmentalDistribution.departmentalDistributionNumber",
+
+        // Only $eq: survives here: products.barred$ne: and barred$eq:$null: are both 500s, where
+        // customers.barred answers all three. Since the operators cannot be narrowed one at a
+        // time, the field goes rather than the surface keeping two clauses that crash.
+        "Product.barred",
+
+        // Orders and quotes 500 on their payment terms number, in every view. Invoices carry the
+        // same nested block and filter on it correctly, which is what makes this a bug rather than
+        // a field that was never meant to be filterable.
+        "ArchivedOrder.paymentTerms.paymentTermsNumber",
+        "ArchivedQuote.paymentTerms.paymentTermsNumber",
+        "DraftOrder.paymentTerms.paymentTermsNumber",
+        "DraftQuote.paymentTerms.paymentTermsNumber",
+        "SentOrder.paymentTerms.paymentTermsNumber",
+        "SentQuote.paymentTerms.paymentTermsNumber",
     };
 
     /// <summary>
@@ -383,6 +414,15 @@ public static class FilterSurfaceGenerator
     {
         var type = property["type"]?.GetValue<string>();
         var format = property["format"]?.GetValue<string>();
+
+        // An enumerated property is a closed set of names, and the server will compare them but not
+        // match inside them: accounts.debitCredit accepts $eq: and $ne: and answers $like: with a
+        // parse error. Matched on the enum array rather than on a string type, because e-conomic's
+        // schemas give enums no type at all — which is why they landed in the TextField default.
+        if (property["enum"] is not null)
+        {
+            return "EqualityField<string>";
+        }
 
         return (type, format) switch
         {

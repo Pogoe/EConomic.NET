@@ -8,7 +8,7 @@ A .NET client for the Visma **e-conomic** accounting APIs, with queries written 
 only compile if e-conomic will actually accept them.
 
 ```csharp
-await foreach (var customer in client.Customers
+await foreach (var customer in client.Rest.Customers
     .Where(c => c.Country == "Denmark" && c.Balance > 0)
     .OrderByDescending(c => c.Balance)
     .AsAsyncEnumerable(cancellationToken))
@@ -18,8 +18,9 @@ await foreach (var customer in client.Customers
 ```
 
 > **Status: pre-release.** Thirty-three collection resources on the legacy REST API are covered,
-> with filtering, sorting and transparent paging. Twelve of them also support writing. The newer
-> OpenAPI services are not implemented yet, and the public API may change before 1.0.
+> with filtering, sorting and transparent paging; twelve of them also support writing. The first of
+> four of the newer OpenAPI services — customers, accounts, products and suppliers, fifteen
+> collections in all — are covered under `client.Open`. The public API may change before 1.0.
 
 > **Unofficial.** This project is not affiliated with, endorsed by, or supported by Visma or
 > e-conomic. For API support, contact <api@e-conomic.com>.
@@ -82,7 +83,7 @@ var client = new EconomicClient(http, EconomicOptions.Demo());
 Every resource on the client exposes `Where`, `OrderBy`, `ThenBy` and async enumeration:
 
 ```csharp
-var query = client.Customers
+var query = client.Rest.Customers
     .Where(c => c.Barred == false && c.Balance >= 1000m)
     .OrderBy(c => c.Name)
     .ThenByDescending(c => c.Balance);
@@ -102,8 +103,8 @@ e-conomic will filter on, each typed to expose only the operators it accepts. So
 compiles:
 
 ```csharp
-client.Customers.Where(c => c.DueAmount > 0)     // CS1061: dueAmount is not filterable
-client.Customers.Where(c => c.Balance.Like("*")) // CS1061: Like is for text fields
+client.Rest.Customers.Where(c => c.DueAmount > 0)     // CS1061: dueAmount is not filterable
+client.Rest.Customers.Where(c => c.Balance.Like("*")) // CS1061: Like is for text fields
 ```
 
 Sorting works the same way, from a separate generated type. Filterability and sortability are
@@ -134,7 +135,7 @@ Anchor it with `Like("Acme*")` if you want a prefix match.
 fetching:
 
 ```csharp
-await foreach (var product in client.Products.AsAsyncEnumerable(cancellationToken))
+await foreach (var product in client.Rest.Products.AsAsyncEnumerable(cancellationToken))
 {
     // one request per page, transparently
 }
@@ -144,7 +145,7 @@ There is no method that silently loads everything into a list. If you want to co
 yourself, ask for a page at a time:
 
 ```csharp
-var page = await client.Products.WithPageSize(100).GetPageAsync(0, cancellationToken);
+var page = await client.Rest.Products.WithPageSize(100).GetPageAsync(0, cancellationToken);
 // page.Items, page.PageIndex, page.PageSize, page.HasMore
 ```
 
@@ -158,7 +159,7 @@ rejects, so the error is always in the safe direction, but it means the generate
 whole story. For those cases there is a raw escape hatch:
 
 ```csharp
-client.Customers.WhereRaw("pNumber$eq:1234567890");
+client.Rest.Customers.WhereRaw("pNumber$eq:1234567890");
 ```
 
 If a raw filter is wrong, e-conomic replies with the fields it *would* have accepted, and those
@@ -178,7 +179,7 @@ maintained values such as `balance` are absent, and references to other resource
 their numbers:
 
 ```csharp
-var customer = await client.Customers.CreateAsync(
+var customer = await client.Rest.Customers.CreateAsync(
     new CustomerCreate
     {
         Name = "Acme A/S",
@@ -189,7 +190,7 @@ var customer = await client.Customers.CreateAsync(
     },
     cancellationToken);
 
-await client.Customers.DeleteAsync(customer.CustomerNumber, cancellationToken);
+await client.Rest.Customers.DeleteAsync(customer.CustomerNumber, cancellationToken);
 ```
 
 A create returns the whole resource as the server stored it, including the identifier it assigned
@@ -201,7 +202,7 @@ treats it as an upsert, answering `201 Created` when the identifier does not exi
 Composite properties are records of their own, and repeating groups are lists:
 
 ```csharp
-var invoice = await client.DraftInvoices.CreateAsync(
+var invoice = await client.Rest.DraftInvoices.CreateAsync(
     new DraftInvoiceCreate
     {
         Date = DateOnly.FromDateTime(DateTime.Today),
@@ -229,7 +230,7 @@ var invoice = await client.DraftInvoices.CreateAsync(
 Booking a draft turns it into a booked invoice:
 
 ```csharp
-var booked = await client.DraftInvoices.BookAsync(invoice.DraftInvoiceNumber, cancellationToken);
+var booked = await client.Rest.DraftInvoices.BookAsync(invoice.DraftInvoiceNumber, cancellationToken);
 ```
 
 **Booking cannot be undone.** A booked invoice is part of the accounting record — it cannot be
@@ -239,14 +240,14 @@ Pass `bookWithNumber` to choose the invoice number, or `sendBy` to have e-conomi
 Collections that cannot be addressed without their parent are reached through it:
 
 ```csharp
-var contacts = client.Customers.Contacts(customer.CustomerNumber);
+var contacts = client.Rest.Customers.Contacts(customer.CustomerNumber);
 await contacts.CreateAsync(new CustomerContactCreate { Name = "Jane Doe" }, cancellationToken);
 ```
 
 Journal vouchers work the same way, and are how entries are posted:
 
 ```csharp
-var vouchers = await client.Journals.Vouchers(journalNumber).CreateAsync(
+var vouchers = await client.Rest.Journals.Vouchers(journalNumber).CreateAsync(
     new JournalVoucherCreate
     {
         AccountingYear = new JournalVoucherCreateAccountingYear { Year = "2026" },
@@ -273,7 +274,7 @@ That one returns a **list**: e-conomic may split the entries it was sent across 
 A voucher has no delete, but the entries it produced do, which is how a mis-posted one is undone:
 
 ```csharp
-await client.Journals.Entries(journalNumber).DeleteAsync(journalEntryNumber, cancellationToken);
+await client.Rest.Journals.Entries(journalNumber).DeleteAsync(journalEntryNumber, cancellationToken);
 ```
 
 One delete removes a whole collection. e-conomic exposes `DELETE /invoices/drafts` with no
@@ -281,7 +282,7 @@ identifier and no filter, so it is named apart from `DeleteAsync` and needs an a
 mean:
 
 ```csharp
-await client.DraftInvoices.DeleteEveryDraftAsync(DraftInvoiceBulkDelete.EveryDraft, cancellationToken);
+await client.Rest.DraftInvoices.DeleteEveryDraftAsync(DraftInvoiceBulkDelete.EveryDraft, cancellationToken);
 ```
 
 Deletes are **not** retried without an `Idempotency-Key`. e-conomic reuses identifiers, so a
@@ -364,15 +365,99 @@ exercises the real deserialization path on every commit.
 
 | | Legacy REST API | OpenAPI services |
 | --- | --- | --- |
+| Reached through | `client.Rest` | `client.Open` |
 | Base address | `https://restapi.e-conomic.com` | `https://apis.e-conomic.com/{service}api/v{version}/` |
-| Status here | Implemented, read-only | Not implemented yet |
+| Status here | Implemented, reads and writes | 4 of 14 services |
 | Coverage | Broadest | Newer, per-service versioned |
 | Paging | `skippages` + `pagesize` | `cursor` (preferred), or `skipPages` + `pageSize` |
+| Identifiers | assigned by the server | supplied by the caller |
+| Concurrency | last write wins | `objectVersion` — an update without it is rejected `409` |
 | Docs | [restdocs.e-conomic.com](https://restdocs.e-conomic.com/) | `.../{service}api/redoc.html` |
 
-Both share the same authentication and the same `filter`/`sort` syntax, which is why they belong in
-one package. When the OpenAPI services land they will sit under `EConomic.Open`, alongside the
-existing `EConomic.Rest`, on the same client.
+They belong in one package because everything underneath the models is shared: one pair of tokens,
+one transport, the same `filter`/`sort` syntax, and — measured against a live agreement — a single
+rate-limit budget, whose `X-RateLimiting` header moves together whichever host answers.
+
+Everything above that is separate, and the call site says which surface it means. The two are not
+interchangeable even where they look it: both publish a `Customer`, but this one spells a payment
+terms reference `paymentTermsNumber` and lets the server assign the customer number, while the
+OpenAPI services spell it `paymentTermId` and expect you to supply the number yourself.
+
+## The OpenAPI services
+
+The newer services sit under `client.Open` and behave differently enough that the two are never
+mixed up:
+
+```csharp
+// Cursor paging by default — no page numbers, no total, no limit on how far it reaches.
+await foreach (var customer in client.Open.Customers.AsAsyncEnumerable(cancellationToken))
+{
+    Console.WriteLine(customer.Name);
+}
+
+var total = await client.Open.Customers.CountAsync(cancellationToken);
+```
+
+Three things differ from the legacy surface, all of them verified against a live agreement:
+
+**You supply the identifier, and a create returns only that.** Omitting `CustomerNumber` fails with
+"The field CustomerNumber must be between 1 and 999999999", and the response carries the number and
+nothing else — so read the record back if you want it.
+
+**Updates are read-modify-write.** Every record carries an `objectVersion`, and an update that does
+not send the current one is rejected with `409` and `EconomicConcurrencyException`. Nothing is
+written, and retrying the same request cannot help:
+
+```csharp
+var customer = await client.Open.Customers.GetAsync(number, cancellationToken);
+
+await client.Open.Customers.UpdateAsync(
+    number,
+    customer with { Name = "Acme A/S" },   // objectVersion comes along with it
+    cancellationToken);
+```
+
+**Sorting moves the query to the classic endpoint.** e-conomic ignores `sort` on a cursor request —
+it answers `200` with unordered data — so `OrderBy` switches endpoints rather than letting that
+happen. The classic endpoint stops after 10 000 items, so filter a large collection down before
+sorting it. Asking for a cursor page explicitly on a sorted query throws instead.
+
+Filtering is far more restricted here than on the legacy API: of a customer's 55 properties, the
+service will filter on exactly one. That is published per property, so the filter surface is
+generated from it and the restriction is a compile error rather than a surprise.
+
+**Names carry their service.** Customers and suppliers both publish a `Contact`, and they are
+different shapes, so they are `CustomerContact` and `SupplierContact` — as are the collections they
+hang off:
+
+```csharp
+await foreach (var contact in client.Open.CustomerContacts
+    .Where(c => c.CustomerNumber == number)
+    .AsAsyncEnumerable(cancellationToken))
+{
+    Console.WriteLine(contact.Name);
+}
+
+var groups = await client.Open.SupplierGroups.GetPageAsync(0, cancellationToken);
+```
+
+Qualifying every name, rather than only the ones that clash today, is what keeps adding a service
+from renaming types you already compile against. The prefix is dropped where it would stutter, so
+`Customer` and `Account` stay as they are.
+
+**Some collections are scoped by a parent**, because e-conomic addresses them that way. Those are
+methods rather than properties, taking the identifier they need:
+
+```csharp
+var zones = await client.Open.ProductZones(productGroupNumber).GetPageAsync(0, cancellationToken);
+```
+
+Several collections offer less than the pattern suggests, because the service does.
+`AccountKeyFigureCodes` is read-only, and so is `ProductSalesPricesInCurrency` — e-conomic publishes
+its writes under a product, keyed by currency. `AccountTotalIntervals` has no delete: that one is
+addressed by account number and starting account together. `Products` has no `CountAsync`, because
+it is the one collection here that publishes no `/count`. The suppliers service publishes no
+suppliers at all; those remain at `client.Rest.Suppliers`.
 
 ## Building
 

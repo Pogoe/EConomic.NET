@@ -28,7 +28,7 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
     /// <returns>The created customer.</returns>
     public async Task<Customer> CustomerAsync(string name = "ZZ Probe Customer")
     {
-        var customer = await client.Customers.CreateAsync(
+        var customer = await client.Rest.Customers.CreateAsync(
             new CustomerCreate
             {
                 Name = name,
@@ -39,7 +39,7 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
             },
             cancellationToken);
 
-        _cleanup.Add(() => client.Customers.DeleteAsync(customer.CustomerNumber, cancellationToken));
+        _cleanup.Add(() => client.Rest.Customers.DeleteAsync(customer.CustomerNumber, cancellationToken));
         return customer;
     }
 
@@ -48,7 +48,7 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
     /// <returns>The created product.</returns>
     public async Task<Product> ProductAsync(string productNumber)
     {
-        var product = await client.Products.CreateAsync(
+        var product = await client.Rest.Products.CreateAsync(
             new ProductCreate
             {
                 ProductNumber = productNumber,
@@ -57,7 +57,7 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
             },
             cancellationToken);
 
-        _cleanup.Add(() => client.Products.DeleteAsync(product.ProductNumber, cancellationToken));
+        _cleanup.Add(() => client.Rest.Products.DeleteAsync(product.ProductNumber, cancellationToken));
         return product;
     }
 
@@ -77,7 +77,7 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
     {
         ArgumentNullException.ThrowIfNull(customer);
 
-        var invoice = await client.DraftInvoices.CreateAsync(
+        var invoice = await client.Rest.DraftInvoices.CreateAsync(
             new DraftInvoiceCreate
             {
                 Date = new DateOnly(2026, 8, 14),
@@ -109,7 +109,7 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
             },
             cancellationToken);
 
-        _cleanup.Add(() => client.DraftInvoices.DeleteAsync(invoice.DraftInvoiceNumber, cancellationToken));
+        _cleanup.Add(() => client.Rest.DraftInvoices.DeleteAsync(invoice.DraftInvoiceNumber, cancellationToken));
         return invoice;
     }
 
@@ -128,19 +128,19 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
     }
 
     private async Task<int> FirstCustomerGroupAsync() =>
-        (await FirstPageAsync(client.CustomerGroups.AsQuery())).CustomerGroupNumber;
+        (await FirstPageAsync(client.Rest.CustomerGroups.AsQuery())).CustomerGroupNumber;
 
     private async Task<int> FirstPaymentTermsAsync() =>
-        (await FirstPageAsync(client.PaymentTerms.AsQuery())).PaymentTermsNumber;
+        (await FirstPageAsync(client.Rest.PaymentTerms.AsQuery())).PaymentTermsNumber;
 
     private async Task<int> FirstVatZoneAsync() =>
-        (await FirstPageAsync(client.VatZones)).VatZoneNumber;
+        (await FirstPageAsync(client.Rest.VatZones)).VatZoneNumber;
 
     private async Task<int> FirstProductGroupAsync() =>
-        (await FirstPageAsync(client.ProductGroups)).ProductGroupNumber;
+        (await FirstPageAsync(client.Rest.ProductGroups)).ProductGroupNumber;
 
     private async Task<int> FirstLayoutAsync() =>
-        (await FirstPageAsync(client.Layouts)).LayoutNumber;
+        (await FirstPageAsync(client.Rest.Layouts)).LayoutNumber;
 
     /// <summary>
     /// The first item of a collection e-conomic seeds itself. Which numbers those carry differs per

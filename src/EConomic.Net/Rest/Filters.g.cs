@@ -26,7 +26,7 @@ public sealed class AccountFilter
 
     /// <summary>Maps to <c>accountType</c>.</summary>
     [EconomicField("accountType")]
-    public TextField AccountType { get; } = null!;
+    public EqualityField<string> AccountType { get; } = null!;
 
     /// <summary>Maps to <c>balance</c>.</summary>
     [EconomicField("balance")]
@@ -42,7 +42,7 @@ public sealed class AccountFilter
 
     /// <summary>Maps to <c>debitCredit</c>.</summary>
     [EconomicField("debitCredit")]
-    public TextField DebitCredit { get; } = null!;
+    public EqualityField<string> DebitCredit { get; } = null!;
 
     /// <summary>Maps to <c>name</c>.</summary>
     [EconomicField("name")]
@@ -176,10 +176,6 @@ public sealed class ArchivedOrderFilter
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public NumericField<decimal> ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public NumericField<int> PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -415,10 +411,6 @@ public sealed class ArchivedQuoteFilter
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public NumericField<decimal> ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public NumericField<int> PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -1576,10 +1568,6 @@ public sealed class DraftOrderFilter
     [EconomicField("exchangeRate")]
     public NumericField<decimal> ExchangeRate { get; } = null!;
 
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public NumericField<int> PaymentTermsNumber { get; } = null!;
-
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
     public NumericField<int> CustomerNumber { get; } = null!;
@@ -1818,10 +1806,6 @@ public sealed class DraftQuoteFilter
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public NumericField<decimal> ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public NumericField<int> PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -2170,7 +2154,7 @@ public sealed class JournalEntryFilter
 
     /// <summary>Maps to <c>entryType</c>.</summary>
     [EconomicField("entryType")]
-    public TextField EntryType { get; } = null!;
+    public EqualityField<string> EntryType { get; } = null!;
 
     /// <summary>Maps to <c>voucher.voucherNumber</c>.</summary>
     [EconomicField("voucher.voucherNumber")]
@@ -3039,10 +3023,6 @@ public sealed class ProductFilter
     [EconomicField("barCode")]
     public TextField BarCode { get; } = null!;
 
-    /// <summary>Maps to <c>barred</c>.</summary>
-    [EconomicField("barred")]
-    public BooleanField Barred { get; } = null!;
-
     /// <summary>Maps to <c>lastUpdated</c>.</summary>
     [EconomicField("lastUpdated")]
     public ComparableField<System.DateTimeOffset> LastUpdated { get; } = null!;
@@ -3054,10 +3034,6 @@ public sealed class ProductFilter
     /// <summary>Maps to <c>productGroup.productGroupNumber</c>.</summary>
     [EconomicField("productGroup.productGroupNumber")]
     public NumericField<int> ProductGroupNumber { get; } = null!;
-
-    /// <summary>Maps to <c>departmentalDistribution.departmentalDistributionNumber</c>.</summary>
-    [EconomicField("departmentalDistribution.departmentalDistributionNumber")]
-    public NumericField<int> DepartmentalDistributionNumber { get; } = null!;
 }
 
 /// <summary>
@@ -3167,10 +3143,6 @@ public sealed class SentOrderFilter
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public NumericField<decimal> ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public NumericField<int> PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]
@@ -3410,10 +3382,6 @@ public sealed class SentQuoteFilter
     /// <summary>Maps to <c>exchangeRate</c>.</summary>
     [EconomicField("exchangeRate")]
     public NumericField<decimal> ExchangeRate { get; } = null!;
-
-    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
-    [EconomicField("paymentTerms.paymentTermsNumber")]
-    public NumericField<int> PaymentTermsNumber { get; } = null!;
 
     /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
     [EconomicField("customer.customerNumber")]

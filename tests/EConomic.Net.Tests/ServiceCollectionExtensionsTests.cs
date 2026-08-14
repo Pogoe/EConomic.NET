@@ -21,7 +21,7 @@ public class ServiceCollectionExtensionsTests
         var client = provider.GetRequiredService<EconomicClient>();
 
         Assert.NotNull(client);
-        Assert.NotNull(client.Customers);
+        Assert.NotNull(client.Rest.Customers);
     }
 
     [Fact]

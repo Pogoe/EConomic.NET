@@ -2,6 +2,124 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using EConomic.SpecConverter;
 
+// Subcommand: emit the public facade for one OpenAPI service.
+if (args.Length > 0 && args[0].Equals("open-facade", StringComparison.Ordinal))
+{
+    var service = args.Length > 1 ? args[1] : "Customers";
+    var specFile = Path.Combine("specs", "openapi-prepared", $"openapi-{service}.json");
+    var clientFile = Path.Combine("src", "EConomic.Net", "Open", "Generated", $"{service}Service.g.cs");
+    var outputFile = Path.Combine("src", "EConomic.Net", "Open", $"{service}.g.cs");
+
+    foreach (var required in (string[])[specFile, clientFile])
+    {
+        if (!File.Exists(required))
+        {
+            Console.Error.WriteLine($"Not found: {Path.GetFullPath(required)}");
+            return 1;
+        }
+    }
+
+    if (JsonNode.Parse(File.ReadAllText(specFile)) is not JsonObject openDocument)
+    {
+        Console.Error.WriteLine($"Not an object: {specFile}");
+        return 1;
+    }
+
+    var openSource = OpenFacadeGenerator.Generate(
+        openDocument, File.ReadAllText(clientFile), "EConomic.Open", service);
+    File.WriteAllText(outputFile, openSource.ReplaceLineEndings("\n"));
+
+    var qualifier = OpenFacadeGenerator.ServiceNames[service];
+    var collections = OpenFacadeGenerator
+        .Collections(openDocument["paths"]!.AsObject(), openDocument["components"]!["schemas"]!.AsObject())
+        .Select(c => c.QualifiedBy(qualifier))
+        .ToList();
+
+    Console.WriteLine(
+        $"Wrote {outputFile}: {collections.Count} collections "
+        + $"({string.Join(", ", collections.Select(c => c.PublicName))})");
+
+    foreach (var scoped in collections.Where(c => c.Parent is not null))
+    {
+        Console.WriteLine($"  {scoped.PublicName} hangs off {scoped.Parent!.Name} ({scoped.Path})");
+    }
+
+    foreach (var odd in collections.Where(c => c.PagedPath is not null && c.PagedPath != $"{c.Path}/paged"))
+    {
+        Console.WriteLine($"  {odd.PublicName} pages through {odd.PagedPath}, not {odd.Path}/paged");
+    }
+
+    foreach (var uncounted in collections.Where(c => c.Count is null))
+    {
+        Console.WriteLine($"  {uncounted.PublicName} publishes no count endpoint");
+    }
+
+    // Everything the document declares that no emitted resource reaches. Reported rather than
+    // dropped: an operation the facade cannot express is a gap someone has to decide about, and
+    // the legacy facade generator reports its own the same way.
+    var reached = collections
+        .SelectMany(c => new[] { c.Cursor, c.Paged, c.Count, c.Get, c.Create, c.Update, c.Delete })
+        .OfType<string>()
+        .ToHashSet(StringComparer.Ordinal);
+
+    var missed = openDocument["paths"]!.AsObject()
+        .SelectMany(path => path.Value!.AsObject()
+            .Where(operation => operation.Value?["operationId"] is not null)
+            .Select(operation => (
+                Path: path.Key,
+                Method: operation.Key.ToUpperInvariant(),
+                Id: operation.Value!["operationId"]!.GetValue<string>())))
+        .Where(o => !reached.Contains(o.Id))
+        .OrderBy(o => o.Path, StringComparer.Ordinal)
+        .ToList();
+
+    foreach (var (path, method, id) in missed)
+    {
+        Console.WriteLine($"  not expressed: {method} {path} ({id})");
+    }
+
+    return 0;
+}
+
+// Subcommand: prepare the OpenAPI service specifications for generation.
+if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
+{
+    var openInput = args.Length > 1 ? args[1] : Path.Combine("specs", "openapi");
+    var openOutput = args.Length > 2 ? args[2] : Path.Combine("specs", "openapi-prepared");
+
+    if (!Directory.Exists(openInput))
+    {
+        Console.Error.WriteLine($"Input directory not found: {Path.GetFullPath(openInput)}");
+        return 1;
+    }
+
+    Directory.CreateDirectory(openOutput);
+    var writeSettings = new JsonSerializerOptions { WriteIndented = true };
+    var preparedCount = 0;
+    var markedCount = 0;
+
+    foreach (var file in Directory.GetFiles(openInput, "*.json").OrderBy(f => f, StringComparer.Ordinal))
+    {
+        if (JsonNode.Parse(File.ReadAllText(file)) is not JsonObject document)
+        {
+            Console.Error.WriteLine($"Not an object: {file}");
+            return 1;
+        }
+
+        markedCount += OpenSpecPreparer.Prepare(document);
+        File.WriteAllText(
+            Path.Combine(openOutput, Path.GetFileName(file)),
+            document.ToJsonString(writeSettings).ReplaceLineEndings("\n") + "\n");
+        preparedCount++;
+    }
+
+    Console.WriteLine(
+        $"Prepared {preparedCount} service specifications into {openOutput}: "
+        + $"{markedCount} optional value-typed properties marked nullable");
+
+    return 0;
+}
+
 // Subcommand: emit the public models, transports and client properties.
 if (args.Length > 0 && args[0].Equals("facade", StringComparison.Ordinal))
 {
@@ -117,7 +235,9 @@ if (args.Length > 0 && args[0].Equals("json-context", StringComparison.Ordinal))
     }
 
     var generated = File.ReadAllText(generatedFile);
-    var source = JsonContextGenerator.Generate(generated, "EConomic.Rest.Generated", "EconomicRestJsonContext");
+    var contextNamespace = args.Length > 3 ? args[3] : "EConomic.Rest.Generated";
+    var contextName = args.Length > 4 ? args[4] : "EconomicRestJsonContext";
+    var source = JsonContextGenerator.Generate(generated, contextNamespace, contextName);
     File.WriteAllText(contextFile, source.ReplaceLineEndings("\n"));
 
     Console.WriteLine(

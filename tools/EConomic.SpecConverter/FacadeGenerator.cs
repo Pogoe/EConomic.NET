@@ -683,12 +683,23 @@ public static class FacadeGenerator
         HashSet<string> withResourceType)
     {
         builder.AppendLine();
-        builder.AppendLine("namespace EConomic");
+        builder.AppendLine("namespace EConomic.Rest");
         builder.AppendLine("{");
-        builder.AppendLine("    using EConomic.Rest;");
-        builder.AppendLine();
-        builder.AppendLine("    public sealed partial class EconomicClient");
+        builder.AppendLine("    /// <summary>");
+        builder.AppendLine("    /// The legacy REST API, reached through <see cref=\"EConomic.EconomicClient.Rest\"/>.");
+        builder.AppendLine("    /// </summary>");
+        builder.AppendLine("    /// <remarks>");
+        builder.AppendLine("    /// The two API surfaces are addressed separately and deliberately. Both publish an entity");
+        builder.AppendLine("    /// called <c>Customer</c>, and they disagree: this one spells a reference");
+        builder.AppendLine("    /// <c>paymentTermsNumber</c> where the OpenAPI services spell it <c>paymentTermId</c>, and");
+        builder.AppendLine("    /// here the server assigns a customer number where there the caller supplies one. Naming the");
+        builder.AppendLine("    /// surface at the call site is what keeps the two from being confused for each other.");
+        builder.AppendLine("    /// </remarks>");
+        builder.AppendLine("    /// <param name=\"httpClient\">The configured transport.</param>");
+        builder.AppendLine("    public sealed partial class EconomicRestApi(System.Net.Http.HttpClient httpClient)");
         builder.AppendLine("    {");
+        builder.AppendLine("        private System.Net.Http.HttpClient HttpClient { get; } = httpClient;");
+        builder.AppendLine();
 
         foreach (var resource in resources)
         {

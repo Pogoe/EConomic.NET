@@ -24,14 +24,18 @@ The solution is in `.slnx` format. Add projects with
 specs/                        API specifications. The source of truth for all generated code.
   legacy/                     160 JSON Schema draft-03 files, e-conomic's originals. Never edit.
   legacy-openapi/             OpenAPI 3.0 documents converted from them. Generated. Never edit.
+  openapi/                    The OpenAPI services' own documents, one per service. Never edit.
+  openapi-prepared/           Corrected copies of them. Generated. Never edit.
 src/EConomic.Net/
   Authentication/             EconomicOptions, EconomicAuthenticationHandler
   Http/                       Retry, idempotency, rate-limit parsing
   Exceptions/                 Unified error mapping across both API surfaces
   Querying/                   Filter and sort translation, value escaping
   Pagination/                 Page models and transparent paging
-  Rest/                       The legacy REST API surface
+  Rest/                       The legacy REST API surface        -> client.Rest
     Generated/                NSwag output. Internal, analyzer-exempt, never edited by hand.
+  Open/                       The OpenAPI services               -> client.Open
+    Generated/                NSwag output, one file per service. Internal, never edited by hand.
 tools/EConomic.SpecConverter/ Spec conversion and all code generation
 tools/nswag/                  NSwag configuration
 tests/                        Unit, integration and AOT smoke tests
@@ -112,6 +116,72 @@ Afterwards, confirm the public API baseline did not move. Generated churn should
 diff in `PublicAPI.Unshipped.txt` unless you deliberately changed the facade. That is the whole
 point of the split.
 
+### The OpenAPI services
+
+A second pipeline, deliberately separate from the legacy one, because the inputs are different
+kinds of thing: these are already OpenAPI 3.0, they publish an operator list per property, and their
+entities are flat. Run from the repository root, per service:
+
+```bash
+S=Customers   # or Accounts, Products, Suppliers
+dotnet run --project tools/EConomic.SpecConverter -c Release -- open-specs      # specs/openapi -> openapi-prepared
+(cd tools/nswag && dotnet nswag run "open-${S,,}.nswag")                        # -> Open/Generated/${S}Service.g.cs
+dotnet run --project tools/EConomic.SpecConverter -c Release -- json-context   "src/EConomic.Net/Open/Generated/${S}Service.g.cs"   "src/EConomic.Net/Open/Generated/EconomicOpen${S}JsonContext.g.cs"   "EConomic.Open.Generated.${S}" "EconomicOpen${S}JsonContext"
+dotnet run --project tools/EConomic.SpecConverter -c Release -- open-facade "$S"
+```
+
+Each service gets its own generated namespace, `EConomic.Open.Generated.{Service}`, and its own
+serialization context. That is not tidiness: the services overlap, and two `Contact` classes in one
+namespace do not compile. The facade alias is spelled `Raw` rather than `Generated` for a related
+reason — inside `namespace EConomic.Open` the identifier `Generated` binds to the nested namespace,
+which beats a file-level using alias and hides the per-service one.
+
+Adding a service also means an entry in `OpenFacadeGenerator.ServiceNames`, which is what every
+public type from that service is prefixed with. An unknown service fails the run rather than having
+a name guessed for it: a public name is the one thing this package cannot take back.
+
+`open-facade` reports what it found and what it could not express, and both are worth reading. The
+products service is where every assumption the first three services supported turned out to be
+local to them: `/products` is keyed by a string rather than a number, publishes no `/count`, and
+reaches its paged listing through `/productspaged/paged`; three of its collections are scoped by a
+path parameter; and its create answers with a string product number rather than an integer. The
+generator handles each and says so, and lists the operations no resource reaches — nine across the
+four services — rather than dropping them quietly.
+
+Generated calls use **named arguments**. NSwag puts required path parameters first, so a scoped
+collection's positional order differs between its own operations — `GetZoneByIdAsync(number,
+productGroupNumber)` against `GetAllZonesAsync(productGroupNumber, cursor, filter)` — and emitting
+positionally would be a bug waiting on the next service.
+
+`specs/openapi/` holds e-conomic's own documents and is never edited, exactly as `specs/legacy/` is
+not. `open-specs` writes the prepared copies that NSwag consumes, and it makes three corrections,
+each of which the server forced:
+
+- **Optional value types become nullable.** An untouched `customerNumber` was sent as `0` and
+  rejected. Unlike the legacy pipeline this cannot be limited to request-only schemas, because there
+  are none — a resource is described once and used for reading and writing alike.
+- **`200` is accepted wherever only `204` is declared.** `DELETE` answers `200`, and the generated
+  client rejects any status it was not told about.
+- **Declared error responses are dropped.** NSwag parses a declared error off the stream and leaves
+  the raw text empty, so a `409` arrived carrying nothing. Removing them puts every failure on the
+  same path the legacy clients take, and leaves one place that parses an error body.
+
+The facade models mirror NSwag's own output rather than being derived from the specification twice,
+so property names and types cannot drift apart and the mapping is a straight copy. Only the filter
+and sort surfaces come from the specification, since only it publishes the operator lists — and
+those are narrowed by type before being offered, because a contact's `name` claims `$in:` while
+e-conomic documents that operator as numeric-only.
+
+Narrowing by type is not enough on its own. These services over-report the way the legacy schemas
+do, only less: `Account.assetGroupNumber` answers `500` to every filter operator and to a sort, and
+`Account.isDepartmentMandatory` answers `500` to `$eq:` and `$ne:` while `$eq:$null:` works.
+`OpenFacadeGenerator.UnfilterableFields` and `UnsortableFields` curate those out, separately, so a
+field broken one way keeps the other — and an entry that stops being needed fails the run.
+
+Service versions are pinned in `EconomicOpenApi.Services` and checked against the specifications'
+`servers` URL by a unit test, so a refresh that bumps a version fails the build rather than
+addressing an endpoint the generated client no longer matches.
+
 ### Adding a resource
 
 New resources are gated by `SchemaRegistry.PublishedEntities`, which the filter, sort and facade
@@ -170,7 +240,14 @@ reports a pass while testing nothing.
 | `EveryResourceTests` (integration) | Fetches a page from every resource. An empty page passes: the claim is that the call round-trips and maps. |
 | `FacadeMappingTests` (unit) | Fills a generated response in property by property and asserts every property the public record declares comes out populated. This is the only cover the resources with no live data have — sent and archived orders and quotes cannot be created through this API at all, since e-conomic publishes no endpoint that promotes a draft into them. |
 | `WriteRequestTests` (unit) | Sends every write and asserts nothing appears in the body that the caller did not put there. |
-| `FilterSurfaceTests` (integration) | Checks every filterable and sortable property against the server. A filter naming a field e-conomic does not accept comes back with `allowedFilteringFields`, its own list for that resource, so one bad filter per resource checks a whole surface. Sorting has no such list, so the entire sort surface goes into one request and a rejection is bisected to name the field. |
+| `FilterSurfaceTests` (integration) | Checks every filterable and sortable property, and every operator offered on it, against the server. A filter naming a field e-conomic does not accept comes back with `allowedFilteringFields`, its own list for that resource, so one bad filter per resource checks a whole surface. Sorting has no such list, so the entire sort surface goes into one request and a rejection is bisected to name the field. Operators get a request each — see below. |
+
+One clause per request in that last test is deliberate, and cost five minutes of wall clock to
+learn. Batching the clauses with `$and:`, the way the sort check batches its fields, produces false
+passes: e-conomic short-circuits a conjunction, so a clause that answers `500` alone comes back
+`200` once another clause ahead of it has already excluded every row. A twenty-clause filter
+containing `assetGroupNumber$eq:` passed while the same clause on its own failed. Sorting cannot
+hide a field that way, because ordering has to touch every field named.
 
 That last one earns its keep. A live test can only report that e-conomic accepted the request, not
 what was in it, and unset value types kept leaking their defaults into requests: first numbers as

@@ -40,7 +40,7 @@ internal static class FacadeTransport
         {
             return await call().ConfigureAwait(false);
         }
-        catch (Generated.EconomicGeneratedApiException exception)
+        catch (EconomicGeneratedApiException exception)
         {
             throw Translate(exception, description);
         }
@@ -221,7 +221,7 @@ internal static class FacadeTransport
     }
 
     private static EconomicApiException Translate(
-        Generated.EconomicGeneratedApiException exception,
+        EconomicGeneratedApiException exception,
         string description)
     {
         var status = (HttpStatusCode)exception.StatusCode;

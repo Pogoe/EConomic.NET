@@ -99,7 +99,7 @@ public class WriteRequestTests
 
         // A guard against the reflection silently matching nothing, which would make this pass
         // while sending no writes at all.
-        Assert.True(sent.Count >= 35, $"Expected every write; only sent {sent.Count}.");
+        Assert.True(sent.Count >= 74, $"Expected every write; only sent {sent.Count}.");
     }
 
     /// <summary>
@@ -147,14 +147,41 @@ public class WriteRequestTests
     };
 
     /// <summary>Every resource on the client, including those reached through a parent.</summary>
+    /// <remarks>
+    /// Starting from the API surfaces rather than the client itself, so the OpenAPI services are
+    /// covered the moment they hang off <c>client.Open</c>, without this being touched.
+    /// </remarks>
     private static IEnumerable<(string Name, Func<Recorder, object> Open)> Resources()
     {
-        foreach (var property in typeof(EconomicClient)
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.PropertyType.Name.EndsWith("Resource", StringComparison.Ordinal))
-            .OrderBy(p => p.Name, StringComparer.Ordinal))
+        // A collection scoped by a path parameter hangs off the surface itself rather than off a
+        // parent resource — /pricegroups/{n}/specialprices has no price-group resource to reach it
+        // through on this surface, so it is a method on the API taking that identifier.
+        foreach (var (surface, scoped) in Surfaces()
+            .SelectMany(s => s.PropertyType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Select(m => (Surface: s, Method: m)))
+            .Where(x => x.Method.ReturnType.Name.EndsWith("Resource", StringComparison.Ordinal)
+                && x.Method.GetParameters().Length == 1)
+            .OrderBy(x => x.Method.Name, StringComparer.Ordinal))
         {
-            yield return (property.Name, recorder => property.GetValue(Client(recorder))!);
+            var host = surface;
+            var opener = scoped;
+
+            yield return (
+                $"{surface.Name}.{scoped.Name}",
+                recorder => opener.Invoke(
+                    host.GetValue(Client(recorder)),
+                    [Scalar(opener.GetParameters()[0].ParameterType)])!);
+        }
+
+        foreach (var (surface, property) in Surfaces()
+            .SelectMany(s => s.PropertyType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Select(p => (Surface: s, Property: p)))
+            .Where(x => x.Property.PropertyType.Name.EndsWith("Resource", StringComparison.Ordinal))
+            .OrderBy(x => x.Property.Name, StringComparer.Ordinal))
+        {
+            yield return ($"{surface.Name}.{property.Name}", recorder => property.GetValue(surface.GetValue(Client(recorder)))!);
 
             // A nested collection hangs off its parent rather than off the client — the contacts of
             // a customer, the vouchers of a journal — so it is reached by calling the parent with an
@@ -167,15 +194,23 @@ public class WriteRequestTests
             {
                 var owner = property;
                 var opener = nested;
+                var host = surface;
 
                 yield return (
-                    $"{property.Name}.{nested.Name}",
+                    $"{surface.Name}.{property.Name}.{nested.Name}",
                     recorder => opener.Invoke(
-                        owner.GetValue(Client(recorder)),
+                        owner.GetValue(host.GetValue(Client(recorder))),
                         [Scalar(opener.GetParameters()[0].ParameterType)])!);
             }
         }
     }
+
+    /// <summary>The API surfaces the client exposes — <c>Rest</c> today, <c>Open</c> as it lands.</summary>
+    private static IEnumerable<PropertyInfo> Surfaces() =>
+        typeof(EconomicClient)
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(p => p.PropertyType.Name.EndsWith("Api", StringComparison.Ordinal))
+            .OrderBy(p => p.Name, StringComparer.Ordinal);
 
     /// <summary>The writes a resource offers.</summary>
     private static IEnumerable<MethodInfo> Writes(Type resource) =>
@@ -202,7 +237,7 @@ public class WriteRequestTests
             {
                 arguments.Add(Scalar(parameter.ParameterType));
             }
-            else if (parameter.ParameterType.Namespace == "EConomic.Rest" && parameter.ParameterType.IsClass)
+            else if (IsPayload(parameter.ParameterType))
             {
                 arguments.Add(Structured(
                     parameter.ParameterType,
@@ -288,10 +323,15 @@ public class WriteRequestTests
     private static Type? Element(Type? collection) =>
         collection?.IsGenericType == true && collection.GetGenericArguments() is [var element] ? element : null;
 
-    /// <summary>Whether this is one of the library's own payload records.</summary>
+    /// <summary>Whether this is one of the library's own payload records, on either surface.</summary>
+    /// <remarks>
+    /// Both namespaces, deliberately. Matching only <c>EConomic.Rest</c> silently skipped every
+    /// create and update on the OpenAPI services — they were counted as covered because their
+    /// deletes, which take no payload, still ran.
+    /// </remarks>
     private static bool IsPayload(Type type) =>
         type.IsClass && type != typeof(string) && type != typeof(Uri)
-        && type.Namespace == "EConomic.Rest";
+        && type.Namespace is "EConomic.Rest" or "EConomic.Open";
 
     /// <summary>A value the generated payload will accept, and that no caller could have left unset.</summary>
     private static object Scalar(Type type, Type? generated) =>

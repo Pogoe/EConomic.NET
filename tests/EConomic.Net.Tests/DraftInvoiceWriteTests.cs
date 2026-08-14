@@ -64,7 +64,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
+        await client.Rest.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
 
         // The collection sits one segment below a namespace, so the path is easy to get wrong.
         Assert.Equal(HttpMethod.Post, handler.LastMethod);
@@ -77,7 +77,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
+        await client.Rest.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
 
         using var body = JsonDocument.Parse(handler.LastBody!);
         var root = body.RootElement;
@@ -96,7 +96,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
+        await client.Rest.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
 
         using var body = JsonDocument.Parse(handler.LastBody!);
         var line = body.RootElement.GetProperty("lines")[0];
@@ -115,7 +115,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
+        await client.Rest.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
 
         using var body = JsonDocument.Parse(handler.LastBody!);
         var line = body.RootElement.GetProperty("lines")[0];
@@ -134,7 +134,7 @@ public class DraftInvoiceWriteTests
         var client = CreateClient(handler);
 
         var invoice = NewInvoice() with { Lines = [] };
-        await client.DraftInvoices.CreateAsync(invoice, TestContext.Current.CancellationToken);
+        await client.Rest.DraftInvoices.CreateAsync(invoice, TestContext.Current.CancellationToken);
 
         using var body = JsonDocument.Parse(handler.LastBody!);
         Assert.Empty(body.RootElement.GetProperty("lines").EnumerateArray());
@@ -146,7 +146,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, CreatedResponse);
         var client = CreateClient(handler);
 
-        var created = await client.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
+        var created = await client.Rest.DraftInvoices.CreateAsync(NewInvoice(), TestContext.Current.CancellationToken);
 
         Assert.Equal(7, created.DraftInvoiceNumber);
         Assert.Equal(new Uri("https://restapi.e-conomic.com/invoices/drafts/7"), created.Self);
@@ -165,7 +165,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.OK, CreatedResponse);
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.UpdateAsync(
+        await client.Rest.DraftInvoices.UpdateAsync(
             7,
             new DraftInvoiceUpdate
             {
@@ -191,7 +191,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.OK, """{ "message": "Deleted" }""");
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.DeleteAsync(7, TestContext.Current.CancellationToken);
+        await client.Rest.DraftInvoices.DeleteAsync(7, TestContext.Current.CancellationToken);
 
         // Unlike the other resources this answers 200 with a body rather than 204 — verified live —
         // so the delete must accept any success status, not just No Content.
@@ -218,7 +218,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, bookedResponse);
         var client = CreateClient(handler);
 
-        var booked = await client.DraftInvoices.BookAsync(7, cancellationToken: TestContext.Current.CancellationToken);
+        var booked = await client.Rest.DraftInvoices.BookAsync(7, cancellationToken: TestContext.Current.CancellationToken);
 
         // Booking is a POST to the booked collection carrying the draft's number — not a PUT on the
         // draft, and not a create from anything describing a booked invoice.
@@ -246,7 +246,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.Created, """{ "bookedInvoiceNumber": 101 }""");
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.BookAsync(
+        await client.Rest.DraftInvoices.BookAsync(
             7, bookWithNumber: 500, sendBy: delivery, cancellationToken: TestContext.Current.CancellationToken);
 
         // "none", "EAN", "Email" — inconsistently cased on the wire, and the server is strict about
@@ -262,7 +262,7 @@ public class DraftInvoiceWriteTests
         var handler = new RecordingHandler(HttpStatusCode.OK, """{ "message": "Deleted" }""");
         var client = CreateClient(handler);
 
-        await client.DraftInvoices.DeleteEveryDraftAsync(
+        await client.Rest.DraftInvoices.DeleteEveryDraftAsync(
             DraftInvoiceBulkDelete.EveryDraft, TestContext.Current.CancellationToken);
 
         // No identifier: the delete addresses the collection, which is what makes it dangerous.
@@ -279,7 +279,7 @@ public class DraftInvoiceWriteTests
         // default(DraftInvoiceBulkDelete) is Unspecified, so an uninitialised field or a stray
         // `default` cannot reach the server. Nothing is sent.
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(
-            () => client.DraftInvoices.DeleteEveryDraftAsync(default, TestContext.Current.CancellationToken));
+            () => client.Rest.DraftInvoices.DeleteEveryDraftAsync(default, TestContext.Current.CancellationToken));
 
         Assert.Null(handler.LastMethod);
     }

@@ -1,0 +1,41 @@
+{
+  "runtime": "Net100",
+  "documentGenerator": {
+    "fromDocument": {
+      "json": "",
+      "url": "../../specs/openapi-prepared/openapi-Customers.json"
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "className": "{controller}Client",
+      "namespace": "EConomic.Open.Generated.Customers",
+      "typeAccessModifier": "internal",
+      "clientClassAccessModifier": "internal",
+      "classStyle": "Poco",
+      "jsonLibrary": "SystemTextJson",
+      "generateClientClasses": true,
+      "generateClientInterfaces": false,
+      "generateDtoTypes": true,
+      "generateExceptionClasses": false,
+      "exceptionClass": "EconomicGeneratedApiException",
+      "injectHttpClient": true,
+      "disposeHttpClient": false,
+      "useBaseUrl": true,
+      "generateBaseUrlProperty": true,
+      "generateOptionalParameters": true,
+      "generateNullableReferenceTypes": true,
+      "generateNativeRecords": false,
+      "requiredPropertiesMustBeDefined": true,
+      "dateType": "System.DateOnly",
+      "dateTimeType": "System.DateTimeOffset",
+      "arrayType": "System.Collections.Generic.IReadOnlyList",
+      "arrayInstanceType": "System.Collections.Generic.List",
+      "dictionaryType": "System.Collections.Generic.IReadOnlyDictionary",
+      "dictionaryInstanceType": "System.Collections.Generic.Dictionary",
+      "generateUpdateJsonSerializerSettingsMethod": true,
+      "operationGenerationMode": "MultipleClientsFromFirstTagAndOperationId",
+      "output": "../../src/EConomic.Net/Open/Generated/CustomersService.g.cs"
+    }
+  }
+}

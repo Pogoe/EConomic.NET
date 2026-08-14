@@ -32,9 +32,9 @@ public class EveryResourceTests
         var probed = new List<string>();
         var failures = new List<string>();
 
-        foreach (var property in Collections())
+        foreach (var (surface, property) in Collections(client))
         {
-            var resource = property.GetValue(client)!;
+            var resource = property.GetValue(surface)!;
             var getPage = resource.GetType().GetMethod(
                 "GetPageAsync",
                 [typeof(int), typeof(CancellationToken)])!;
@@ -57,12 +57,23 @@ public class EveryResourceTests
         Assert.True(probed.Count >= 30, $"Expected to probe every resource; only found {probed.Count}.");
     }
 
-    /// <summary>Every client property that exposes a page — a query or a resource, alike.</summary>
-    private static IEnumerable<PropertyInfo> Collections() =>
+    /// <summary>
+    /// Every property that exposes a page — a query or a resource, alike — on every API surface.
+    /// </summary>
+    /// <remarks>
+    /// Walking the surfaces rather than the client means the OpenAPI services are swept the moment
+    /// they hang off <c>client.Open</c>, with nothing here to remember to change.
+    /// </remarks>
+    private static IEnumerable<(object Surface, PropertyInfo Property)> Collections(EconomicClient client) =>
         typeof(EconomicClient)
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.GetMethod is not null
-                && p.GetIndexParameters().Length == 0
-                && p.PropertyType.GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)]) is not null)
-            .OrderBy(p => p.Name, StringComparer.Ordinal);
+            .Where(p => p.PropertyType.Name.EndsWith("Api", StringComparison.Ordinal))
+            .OrderBy(p => p.Name, StringComparer.Ordinal)
+            .SelectMany(surface => surface.PropertyType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.GetMethod is not null
+                    && p.GetIndexParameters().Length == 0
+                    && p.PropertyType.GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)]) is not null)
+                .OrderBy(p => p.Name, StringComparer.Ordinal)
+                .Select(p => (Surface: surface.GetValue(client)!, Property: p)));
 }

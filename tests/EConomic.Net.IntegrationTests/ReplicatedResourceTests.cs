@@ -18,7 +18,7 @@ public class ReplicatedResourceTests
         TestClients.SkipUnlessConfigured();
 
         // The chart of accounts is seeded by e-conomic, so this needs nothing of its own.
-        var accounts = await FirstPageAsync(CreateClient().Accounts);
+        var accounts = await FirstPageAsync(CreateClient().Rest.Accounts);
 
         Assert.NotEmpty(accounts);
         Assert.All(accounts, a => Assert.True(a.AccountNumber > 0));
@@ -30,7 +30,7 @@ public class ReplicatedResourceTests
     {
         TestClients.SkipUnlessConfigured();
 
-        var suppliers = await FirstPageAsync(CreateClient().Suppliers.AsQuery());
+        var suppliers = await FirstPageAsync(CreateClient().Rest.Suppliers.AsQuery());
 
         Assert.All(suppliers, s => Assert.True(s.SupplierNumber > 0));
     }
@@ -44,7 +44,7 @@ public class ReplicatedResourceTests
         // confirms the generator wired the whole chain rather than just the one it was modelled on.
         var client = CreateClient();
 
-        var page = await client.Accounts
+        var page = await client.Rest.Accounts
             .Where(a => a.AccountNumber >= 1000)
             .OrderBy(a => a.AccountNumber)
             .GetPageAsync(0, TestContext.Current.CancellationToken);
@@ -63,7 +63,7 @@ public class ReplicatedResourceTests
 
         // An empty filter surface is a real answer, not a gap: this resource simply cannot be
         // filtered. Enumeration must still work.
-        var currencies = await FirstPageAsync(CreateClient().Currencies);
+        var currencies = await FirstPageAsync(CreateClient().Rest.Currencies);
 
         Assert.NotEmpty(currencies);
     }
@@ -82,7 +82,7 @@ public class ReplicatedResourceTests
         var customer = await seed.CustomerAsync();
         var created = await seed.DraftInvoiceAsync(customer);
 
-        var drafts = await FirstPageAsync(client.DraftInvoices.AsQuery());
+        var drafts = await FirstPageAsync(client.Rest.DraftInvoices.AsQuery());
 
         Assert.Contains(drafts, i => i.DraftInvoiceNumber == created.DraftInvoiceNumber);
         Assert.All(drafts, i => Assert.True(i.DraftInvoiceNumber > 0));
@@ -90,10 +90,10 @@ public class ReplicatedResourceTests
 
         // The order and quote collections come from the same templates, so an empty page still
         // proves the client, method and envelope were wired correctly.
-        var orders = await FirstPageAsync(client.DraftOrders.AsQuery());
+        var orders = await FirstPageAsync(client.Rest.DraftOrders.AsQuery());
         Assert.All(orders, o => Assert.True(o.OrderNumber > 0));
 
-        var quotes = await FirstPageAsync(client.DraftQuotes.AsQuery());
+        var quotes = await FirstPageAsync(client.Rest.DraftQuotes.AsQuery());
         Assert.All(quotes, q => Assert.True(q.QuoteNumber > 0));
     }
 
@@ -134,7 +134,7 @@ public class ReplicatedResourceTests
         // and address in full. Until the facade could express one, these properties were absent
         // from the public model altogether — the worst kind of gap, because nothing failed.
         var invoice = Assert.Single(
-            await FirstPageAsync(client.DraftInvoices.AsQuery()),
+            await FirstPageAsync(client.Rest.DraftInvoices.AsQuery()),
             i => i.DraftInvoiceNumber == created.DraftInvoiceNumber);
 
         Assert.Equal("ZZ Probe Composite", invoice.Recipient?.Name);
@@ -158,7 +158,7 @@ public class ReplicatedResourceTests
         // A summing account is defined by the intervals it sums, so a model without them describes
         // almost nothing about it. These are part of the chart of accounts e-conomic seeds, which
         // is why this needs no fixture of its own.
-        var accounts = await CreateClient().Accounts
+        var accounts = await CreateClient().Rest.Accounts
             .Where(a => a.AccountNumber > 0)
             .WithPageSize(1000)
             .GetPageAsync(0, TestContext.Current.CancellationToken);
@@ -177,7 +177,7 @@ public class ReplicatedResourceTests
 
         // An array whose items are the {number, self} reference shape collapses to a list of
         // references rather than to a record per element.
-        var roles = await FirstPageAsync(CreateClient().AppRoles);
+        var roles = await FirstPageAsync(CreateClient().Rest.AppRoles);
 
         var withModules = Assert.Single(roles.Where(r => r.RequiredModules.Count > 0).Take(1));
 
@@ -199,7 +199,7 @@ public class ReplicatedResourceTests
         // productGroup has more than the three properties a reference has, so it was skipped
         // entirely rather than flattened. It is the property that says what a product *is*.
         var product = Assert.Single(
-            await FirstPageAsync(client.Products.AsQuery()),
+            await FirstPageAsync(client.Rest.Products.AsQuery()),
             p => p.ProductNumber == created.ProductNumber);
 
         Assert.NotNull(product.ProductGroup);

@@ -36,7 +36,7 @@ public class WriteRoundTripTests
 
         try
         {
-            created = await client.Customers.CreateAsync(
+            created = await client.Rest.Customers.CreateAsync(
                 new CustomerCreate
                 {
                     Name = "ZZ Probe Round Trip",
@@ -54,7 +54,7 @@ public class WriteRoundTripTests
             Assert.Equal("ZZ Probe Round Trip", created.Name);
             Assert.Equal("Ringsted", created.City);
 
-            var updated = await client.Customers.UpdateAsync(
+            var updated = await client.Rest.Customers.UpdateAsync(
                 created.CustomerNumber,
                 new CustomerUpdate
                 {
@@ -75,14 +75,14 @@ public class WriteRoundTripTests
         {
             if (created is not null)
             {
-                await client.Customers.DeleteAsync(created.CustomerNumber, token);
+                await client.Rest.Customers.DeleteAsync(created.CustomerNumber, token);
             }
         }
 
         // Deleting twice is what reports the record as gone. Updating it would not: PUT is an
         // upsert, covered separately below.
         var gone = await Assert.ThrowsAsync<EconomicApiException>(
-            () => client.Customers.DeleteAsync(created!.CustomerNumber, token));
+            () => client.Rest.Customers.DeleteAsync(created!.CustomerNumber, token));
 
         Assert.Equal(System.Net.HttpStatusCode.NotFound, gone.StatusCode);
     }
@@ -100,7 +100,7 @@ public class WriteRoundTripTests
         // Anything relying on PUT to fail for a missing record is therefore wrong.
         const int number = 999;
 
-        var upserted = await client.Customers.UpdateAsync(
+        var upserted = await client.Rest.Customers.UpdateAsync(
             number,
             new CustomerUpdate
             {
@@ -119,7 +119,7 @@ public class WriteRoundTripTests
         }
         finally
         {
-            await client.Customers.DeleteAsync(number, token);
+            await client.Rest.Customers.DeleteAsync(number, token);
         }
     }
 
@@ -136,13 +136,13 @@ public class WriteRoundTripTests
         {
             // UnitsCreate declares only `name`. The server returns unitNumber and self as well,
             // which is why this method exists at all.
-            created = await client.Units.CreateAsync(new UnitCreate { Name = "ZZ Probe Unit" }, token);
+            created = await client.Rest.Units.CreateAsync(new UnitCreate { Name = "ZZ Probe Unit" }, token);
 
             Assert.True(created.UnitNumber > 0);
             Assert.NotNull(created.Self);
             Assert.Equal("ZZ Probe Unit", created.Name);
 
-            var renamed = await client.Units.UpdateAsync(
+            var renamed = await client.Rest.Units.UpdateAsync(
                 created.UnitNumber,
                 new UnitUpdate { Name = "ZZ Probe Unit (updated)" },
                 token);
@@ -154,7 +154,7 @@ public class WriteRoundTripTests
         {
             if (created is not null)
             {
-                await client.Units.DeleteAsync(created.UnitNumber, token);
+                await client.Rest.Units.DeleteAsync(created.UnitNumber, token);
             }
         }
     }
@@ -173,14 +173,14 @@ public class WriteRoundTripTests
         {
             // The path parameter used to be typed as an integer, which would have made this
             // unrepresentable. Product numbers are strings, and the server accepts them in the path.
-            var product = await client.Products.CreateAsync(
+            var product = await client.Rest.Products.CreateAsync(
                 new ProductCreate { ProductNumber = number, Name = "ZZ Probe Product", ProductGroupNumber = 1 },
                 token);
 
             created = true;
             Assert.Equal(number, product.ProductNumber);
 
-            var updated = await client.Products.UpdateAsync(
+            var updated = await client.Rest.Products.UpdateAsync(
                 number,
                 new ProductUpdate { Name = "ZZ Probe Product (updated)", ProductGroupNumber = 1 },
                 token);
@@ -192,7 +192,7 @@ public class WriteRoundTripTests
         {
             if (created)
             {
-                await client.Products.DeleteAsync(number, token);
+                await client.Rest.Products.DeleteAsync(number, token);
             }
         }
     }
@@ -205,13 +205,13 @@ public class WriteRoundTripTests
         var client = CreateClient();
         var token = TestContext.Current.CancellationToken;
 
-        var created = await client.Units.CreateAsync(new UnitCreate { Name = "ZZ Probe Delete Twice" }, token);
-        await client.Units.DeleteAsync(created.UnitNumber, token);
+        var created = await client.Rest.Units.CreateAsync(new UnitCreate { Name = "ZZ Probe Delete Twice" }, token);
+        await client.Rest.Units.DeleteAsync(created.UnitNumber, token);
 
         // e-conomic documents delete as non-idempotent, and identifiers are reused, which together
         // are why the retry handler refuses to repeat a delete that carries no idempotency key.
         var second = await Assert.ThrowsAsync<EconomicApiException>(
-            () => client.Units.DeleteAsync(created.UnitNumber, token));
+            () => client.Rest.Units.DeleteAsync(created.UnitNumber, token));
 
         Assert.Equal(System.Net.HttpStatusCode.NotFound, second.StatusCode);
     }
@@ -229,7 +229,7 @@ public class WriteRoundTripTests
         {
             // paymentTermsType is an enum in the generated layer and required by e-conomic, so a
             // create is impossible without it. The public model takes the string the API uses.
-            created = await client.PaymentTerms.CreateAsync(
+            created = await client.Rest.PaymentTerms.CreateAsync(
                 new PaymentTermsCreate { Name = "ZZ Probe Terms", PaymentTermsType = "net", DaysOfCredit = 14 },
                 token);
 
@@ -241,7 +241,7 @@ public class WriteRoundTripTests
             // survive conversion — in the opposite direction from the create's response. Both it
             // and daysOfCredit have to be sent back unchanged: the payload accepts them, but the
             // server rejects the whole request with E06151 if either differs from what it stored.
-            var updated = await client.PaymentTerms.UpdateAsync(
+            var updated = await client.Rest.PaymentTerms.UpdateAsync(
                 created.PaymentTermsNumber,
                 new PaymentTermsUpdate
                 {
@@ -255,7 +255,7 @@ public class WriteRoundTripTests
             Assert.Equal(14, updated.DaysOfCredit);
 
             var rejected = await Assert.ThrowsAsync<EconomicApiException>(
-                () => client.PaymentTerms.UpdateAsync(
+                () => client.Rest.PaymentTerms.UpdateAsync(
                     created.PaymentTermsNumber,
                     new PaymentTermsUpdate
                     {
@@ -271,7 +271,7 @@ public class WriteRoundTripTests
         {
             if (created is not null)
             {
-                await client.PaymentTerms.DeleteAsync(created.PaymentTermsNumber, token);
+                await client.Rest.PaymentTerms.DeleteAsync(created.PaymentTermsNumber, token);
             }
         }
     }
@@ -287,7 +287,7 @@ public class WriteRoundTripTests
 
         // Unlike customers, whose number the server assigns, a customer group create is rejected
         // without one — which is why the number is required on the create model.
-        var created = await client.CustomerGroups.CreateAsync(
+        var created = await client.Rest.CustomerGroups.CreateAsync(
             new CustomerGroupCreate { CustomerGroupNumber = number, Name = "ZZ Probe Group", AccountNumber = 5600 },
             token);
 
@@ -296,7 +296,7 @@ public class WriteRoundTripTests
             Assert.Equal(number, created.CustomerGroupNumber);
             Assert.Equal("ZZ Probe Group", created.Name);
 
-            var updated = await client.CustomerGroups.UpdateAsync(
+            var updated = await client.Rest.CustomerGroups.UpdateAsync(
                 number,
                 new CustomerGroupUpdate { Name = "ZZ Probe Group (updated)", AccountNumber = 5600 },
                 token);
@@ -306,7 +306,7 @@ public class WriteRoundTripTests
         }
         finally
         {
-            await client.CustomerGroups.DeleteAsync(number, token);
+            await client.Rest.CustomerGroups.DeleteAsync(number, token);
         }
     }
 
@@ -321,7 +321,7 @@ public class WriteRoundTripTests
 
         try
         {
-            created = await client.Suppliers.CreateAsync(
+            created = await client.Rest.Suppliers.CreateAsync(
                 new SupplierCreate
                 {
                     Name = "ZZ Probe Supplier",
@@ -335,7 +335,7 @@ public class WriteRoundTripTests
             Assert.True(created.SupplierNumber > 0);
             Assert.NotNull(created.Self);
 
-            var updated = await client.Suppliers.UpdateAsync(
+            var updated = await client.Rest.Suppliers.UpdateAsync(
                 created.SupplierNumber,
                 new SupplierUpdate
                 {
@@ -353,7 +353,7 @@ public class WriteRoundTripTests
         {
             if (created is not null)
             {
-                await client.Suppliers.DeleteAsync(created.SupplierNumber, token);
+                await client.Rest.Suppliers.DeleteAsync(created.SupplierNumber, token);
             }
         }
     }
@@ -369,7 +369,7 @@ public class WriteRoundTripTests
 
         try
         {
-            customer = await client.Customers.CreateAsync(
+            customer = await client.Rest.Customers.CreateAsync(
                 new CustomerCreate
                 {
                     Name = "ZZ Probe Nested Host",
@@ -382,7 +382,7 @@ public class WriteRoundTripTests
 
             // A nested collection is reached through its parent rather than off the client, because
             // it cannot be addressed without the parent's identifier.
-            var contacts = client.Customers.Contacts(customer.CustomerNumber);
+            var contacts = client.Rest.Customers.Contacts(customer.CustomerNumber);
 
             var contact = await contacts.CreateAsync(
                 new CustomerContactCreate { Name = "ZZ Probe Contact", Email = "contact@example.com" },
@@ -403,7 +403,7 @@ public class WriteRoundTripTests
 
             await contacts.DeleteAsync(contact.CustomerContactNumber, token);
 
-            var locations = client.Customers.DeliveryLocations(customer.CustomerNumber);
+            var locations = client.Rest.Customers.DeliveryLocations(customer.CustomerNumber);
             var location = await locations.CreateAsync(
                 new DeliveryLocationCreate { Address = "Odinsparken 4", City = "Ringsted", PostalCode = "4100" },
                 token);
@@ -424,7 +424,7 @@ public class WriteRoundTripTests
         {
             if (customer is not null)
             {
-                await client.Customers.DeleteAsync(customer.CustomerNumber, token);
+                await client.Rest.Customers.DeleteAsync(customer.CustomerNumber, token);
             }
         }
     }
@@ -445,10 +445,10 @@ public class WriteRoundTripTests
             // A draft invoice needs a customer, a product and a layout to point at, and a fresh
             // agreement has none of the first two. Creating them here keeps the test independent of
             // whatever happens to be in the agreement.
-            var layouts = await client.Layouts.GetPageAsync(0, token);
+            var layouts = await client.Rest.Layouts.GetPageAsync(0, token);
             var layout = layouts.Items[0].LayoutNumber;
 
-            customer = await client.Customers.CreateAsync(
+            customer = await client.Rest.Customers.CreateAsync(
                 new CustomerCreate
                 {
                     Name = "ZZ Probe Invoice Customer",
@@ -459,7 +459,7 @@ public class WriteRoundTripTests
                 },
                 token);
 
-            product = await client.Products.CreateAsync(
+            product = await client.Rest.Products.CreateAsync(
                 new ProductCreate
                 {
                     ProductNumber = "ZZ-PROBE-INV",
@@ -468,7 +468,7 @@ public class WriteRoundTripTests
                 },
                 token);
 
-            created = await client.DraftInvoices.CreateAsync(
+            created = await client.Rest.DraftInvoices.CreateAsync(
                 new DraftInvoiceCreate
                 {
                     Date = new DateOnly(2026, 8, 14),
@@ -505,7 +505,7 @@ public class WriteRoundTripTests
             Assert.Equal(200m, created.NetAmount);
             Assert.True(created.GrossAmount > created.NetAmount);
 
-            var updated = await client.DraftInvoices.UpdateAsync(
+            var updated = await client.Rest.DraftInvoices.UpdateAsync(
                 created.DraftInvoiceNumber,
                 new DraftInvoiceUpdate
                 {
@@ -540,17 +540,17 @@ public class WriteRoundTripTests
             // The invoice first: a customer or product still referenced by one cannot be deleted.
             if (created is not null)
             {
-                await client.DraftInvoices.DeleteAsync(created.DraftInvoiceNumber, token);
+                await client.Rest.DraftInvoices.DeleteAsync(created.DraftInvoiceNumber, token);
             }
 
             if (product is not null)
             {
-                await client.Products.DeleteAsync(product.ProductNumber, token);
+                await client.Rest.Products.DeleteAsync(product.ProductNumber, token);
             }
 
             if (customer is not null)
             {
-                await client.Customers.DeleteAsync(customer.CustomerNumber, token);
+                await client.Rest.Customers.DeleteAsync(customer.CustomerNumber, token);
             }
         }
     }
@@ -568,10 +568,10 @@ public class WriteRoundTripTests
 
         try
         {
-            var layout = (await client.Layouts.GetPageAsync(0, token)).Items[0].LayoutNumber;
-            var vatZone = (await client.VatZones.GetPageAsync(0, token)).Items[0].VatZoneNumber;
+            var layout = (await client.Rest.Layouts.GetPageAsync(0, token)).Items[0].LayoutNumber;
+            var vatZone = (await client.Rest.VatZones.GetPageAsync(0, token)).Items[0].VatZoneNumber;
 
-            customer = await client.Customers.CreateAsync(
+            customer = await client.Rest.Customers.CreateAsync(
                 new CustomerCreate
                 {
                     Name = "ZZ Probe Documents Customer",
@@ -584,7 +584,7 @@ public class WriteRoundTripTests
 
             // Orders and quotes are generated from the same templates as invoices, which is exactly
             // why they are worth sending: a mistake in those templates repeats itself three times.
-            order = await client.DraftOrders.CreateAsync(
+            order = await client.Rest.DraftOrders.CreateAsync(
                 new DraftOrderCreate
                 {
                     Date = new DateOnly(2026, 8, 14),
@@ -599,7 +599,7 @@ public class WriteRoundTripTests
             Assert.True(order.OrderNumber > 0);
             Assert.Equal("ZZ Probe Order", order.Recipient?.Name);
 
-            quote = await client.DraftQuotes.CreateAsync(
+            quote = await client.Rest.DraftQuotes.CreateAsync(
                 new DraftQuoteCreate
                 {
                     Date = new DateOnly(2026, 8, 14),
@@ -616,7 +616,7 @@ public class WriteRoundTripTests
 
             // The updates are a separate generated template from the creates — different payload
             // type, different required set — so sending them is what confirms they work.
-            var updatedOrder = await client.DraftOrders.UpdateAsync(
+            var updatedOrder = await client.Rest.DraftOrders.UpdateAsync(
                 order.OrderNumber,
                 new DraftOrderUpdate
                 {
@@ -634,7 +634,7 @@ public class WriteRoundTripTests
             Assert.Equal(order.OrderNumber, updatedOrder.OrderNumber);
             Assert.Equal("ZZ Probe Order (updated)", updatedOrder.Recipient?.Name);
 
-            var updatedQuote = await client.DraftQuotes.UpdateAsync(
+            var updatedQuote = await client.Rest.DraftQuotes.UpdateAsync(
                 quote.QuoteNumber,
                 new DraftQuoteUpdate
                 {
@@ -656,17 +656,17 @@ public class WriteRoundTripTests
         {
             if (quote is not null)
             {
-                await client.DraftQuotes.DeleteAsync(quote.QuoteNumber, token);
+                await client.Rest.DraftQuotes.DeleteAsync(quote.QuoteNumber, token);
             }
 
             if (order is not null)
             {
-                await client.DraftOrders.DeleteAsync(order.OrderNumber, token);
+                await client.Rest.DraftOrders.DeleteAsync(order.OrderNumber, token);
             }
 
             if (customer is not null)
             {
-                await client.Customers.DeleteAsync(customer.CustomerNumber, token);
+                await client.Rest.Customers.DeleteAsync(customer.CustomerNumber, token);
             }
         }
     }
@@ -681,7 +681,7 @@ public class WriteRoundTripTests
 
         // This one deletes drafts it did not create, so it insists on starting from an empty
         // collection. On a throwaway agreement that is true; anywhere else the skip is the point.
-        var before = await client.DraftInvoices.GetPageAsync(0, token);
+        var before = await client.Rest.DraftInvoices.GetPageAsync(0, token);
         Assert.SkipWhen(
             before.Items.Count > 0,
             "The agreement already has draft invoices, and this test would delete them.");
@@ -691,11 +691,11 @@ public class WriteRoundTripTests
         await seed.DraftInvoiceAsync(customer, recipientName: "ZZ Probe Bulk A");
         await seed.DraftInvoiceAsync(customer, recipientName: "ZZ Probe Bulk B");
 
-        Assert.Equal(2, (await client.DraftInvoices.GetPageAsync(0, token)).Items.Count);
+        Assert.Equal(2, (await client.Rest.DraftInvoices.GetPageAsync(0, token)).Items.Count);
 
-        await client.DraftInvoices.DeleteEveryDraftAsync(DraftInvoiceBulkDelete.EveryDraft, token);
+        await client.Rest.DraftInvoices.DeleteEveryDraftAsync(DraftInvoiceBulkDelete.EveryDraft, token);
 
-        Assert.Empty((await client.DraftInvoices.GetPageAsync(0, token)).Items);
+        Assert.Empty((await client.Rest.DraftInvoices.GetPageAsync(0, token)).Items);
 
         // Both drafts are already gone, so the seed must not try to delete them again.
         seed.Forget();
@@ -710,13 +710,13 @@ public class WriteRoundTripTests
         var client = CreateClient();
         var token = TestContext.Current.CancellationToken;
 
-        var journal = (await client.Journals.GetPageAsync(0, token)).Items[0];
-        var year = (await client.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
+        var journal = (await client.Rest.Journals.GetPageAsync(0, token)).Items[0];
+        var year = (await client.Rest.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
             .First(y => y.Closed == false);
 
         // Two accounts to move an amount between. A finance voucher entry posts to `account` and
         // balances against `contraAccount`, so both have to accept direct entries.
-        var accounts = await client.Accounts
+        var accounts = await client.Rest.Accounts
             .Where(a => a.AccountType == "profitAndLoss")
             .WithPageSize(50)
             .GetPageAsync(0, token);
@@ -724,7 +724,7 @@ public class WriteRoundTripTests
         var usable = accounts.Items.Where(a => !a.BlockDirectEntries).Take(2).ToList();
         Assert.SkipWhen(usable.Count < 2, "The agreement has fewer than two accounts that accept direct entries.");
 
-        var created = await client.Journals.Vouchers(journal.JournalNumber).CreateAsync(
+        var created = await client.Rest.Journals.Vouchers(journal.JournalNumber).CreateAsync(
             new JournalVoucherCreate
             {
                 AccountingYear = new JournalVoucherCreateAccountingYear { Year = year.Year },
@@ -756,7 +756,7 @@ public class WriteRoundTripTests
         Assert.NotNull(voucher.Entries);
 
         // Reading vouchers back, which is a different generated method from the create.
-        var listed = await client.Journals.Vouchers(journal.JournalNumber).GetPageAsync(0, token);
+        var listed = await client.Rest.Journals.Vouchers(journal.JournalNumber).GetPageAsync(0, token);
         Assert.Contains(listed.Items, v => v.VoucherNumber == voucher.VoucherNumber);
 
         var posted = Assert.Single(voucher.Entries!.FinanceVouchers);
@@ -773,7 +773,7 @@ public class WriteRoundTripTests
         // The entry number is read back from the entries collection rather than from the voucher:
         // the server sends `journalEntryNumber` on a voucher's entries, but the schema does not
         // declare it, so the mapped model does not carry it.
-        var entries = client.Journals.Entries(journal.JournalNumber);
+        var entries = client.Rest.Journals.Entries(journal.JournalNumber);
         var mine = (await entries.GetPageAsync(0, token)).Items
             .Where(e => e.Voucher?.VoucherNumber == voucher.VoucherNumber)
             .ToList();
@@ -801,13 +801,13 @@ public class WriteRoundTripTests
         var client = CreateClient();
         var token = TestContext.Current.CancellationToken;
 
-        var existing = (await client.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
+        var existing = (await client.Rest.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
             .Select(y => y.Year)
             .ToHashSet(StringComparer.Ordinal);
 
         var year = Enumerable.Range(2030, 20).First(y => !existing.Contains(y.ToString(CultureInfo.InvariantCulture)));
 
-        var created = await client.AccountingYears.CreateAsync(
+        var created = await client.Rest.AccountingYears.CreateAsync(
             new AccountingYearCreate
             {
                 FromDate = new DateOnly(year, 1, 1),
@@ -843,9 +843,9 @@ public class WriteRoundTripTests
 
         try
         {
-            var layouts = await client.Layouts.GetPageAsync(0, token);
+            var layouts = await client.Rest.Layouts.GetPageAsync(0, token);
 
-            customer = await client.Customers.CreateAsync(
+            customer = await client.Rest.Customers.CreateAsync(
                 new CustomerCreate
                 {
                     Name = "ZZ Probe Booking Customer",
@@ -859,7 +859,7 @@ public class WriteRoundTripTests
             // Unique per run, and it has to be: a product on a booked invoice cannot be deleted, so
             // a fixed number makes this test pass exactly once per agreement and fail with "already
             // exists" forever after. Everything else here is numbered by the server.
-            product = await client.Products.CreateAsync(
+            product = await client.Rest.Products.CreateAsync(
                 new ProductCreate
                 {
                     ProductNumber = "ZZ-BOOK-" + DateTime.UtcNow.ToString("yyMMddHHmmss", CultureInfo.InvariantCulture),
@@ -868,7 +868,7 @@ public class WriteRoundTripTests
                 },
                 token);
 
-            draft = await client.DraftInvoices.CreateAsync(
+            draft = await client.Rest.DraftInvoices.CreateAsync(
                 new DraftInvoiceCreate
                 {
                     Date = new DateOnly(2026, 8, 14),
@@ -894,7 +894,7 @@ public class WriteRoundTripTests
                 },
                 token);
 
-            var invoice = await client.DraftInvoices.BookAsync(draft.DraftInvoiceNumber, cancellationToken: token);
+            var invoice = await client.Rest.DraftInvoices.BookAsync(draft.DraftInvoiceNumber, cancellationToken: token);
             booked = true;
 
             // Booking answers with the booked invoice, which has its own number and carries the
@@ -903,7 +903,7 @@ public class WriteRoundTripTests
             Assert.Equal(50m, invoice.NetAmount);
             Assert.Equal("ZZ Probe Recipient", invoice.Recipient?.Name);
 
-            var remaining = await client.DraftInvoices
+            var remaining = await client.Rest.DraftInvoices
                 .Where(i => i.DraftInvoiceNumber == draft.DraftInvoiceNumber)
                 .GetPageAsync(0, token);
 
@@ -912,13 +912,13 @@ public class WriteRoundTripTests
             // Booking is the only way this library can put anything into the derived views, and
             // this is the only test that reaches them with data. They are separate endpoints with
             // separate models, so an empty page from each says nothing about whether they map.
-            var booking = await client.BookedInvoices
+            var booking = await client.Rest.BookedInvoices
                 .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
                 .GetPageAsync(0, token);
 
             Assert.Equal(50m, Assert.Single(booking.Items).NetAmount);
 
-            var unpaid = await client.UnpaidInvoices
+            var unpaid = await client.Rest.UnpaidInvoices
                 .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
                 .GetPageAsync(0, token);
 
@@ -930,11 +930,11 @@ public class WriteRoundTripTests
 
             // Which of not-due and overdue it lands in depends on the due date against today, so
             // the assertion is that it is in exactly one of them, whichever that is.
-            var notDue = await client.NotDueInvoices
+            var notDue = await client.Rest.NotDueInvoices
                 .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
                 .GetPageAsync(0, token);
 
-            var overdue = await client.OverdueInvoices
+            var overdue = await client.Rest.OverdueInvoices
                 .Where(i => i.BookedInvoiceNumber == invoice.BookedInvoiceNumber)
                 .GetPageAsync(0, token);
 
@@ -948,17 +948,17 @@ public class WriteRoundTripTests
             {
                 if (draft is not null)
                 {
-                    await client.DraftInvoices.DeleteAsync(draft.DraftInvoiceNumber, token);
+                    await client.Rest.DraftInvoices.DeleteAsync(draft.DraftInvoiceNumber, token);
                 }
 
                 if (product is not null)
                 {
-                    await client.Products.DeleteAsync(product.ProductNumber, token);
+                    await client.Rest.Products.DeleteAsync(product.ProductNumber, token);
                 }
 
                 if (customer is not null)
                 {
-                    await client.Customers.DeleteAsync(customer.CustomerNumber, token);
+                    await client.Rest.Customers.DeleteAsync(customer.CustomerNumber, token);
                 }
             }
         }
@@ -991,14 +991,14 @@ public class WriteRoundTripTests
 
         await using var seed = new AgreementSeed(client, token);
         var customer = await seed.CustomerAsync("ZZ Probe Due Date");
-        var layouts = await client.Layouts.GetPageAsync(0, token);
+        var layouts = await client.Rest.Layouts.GetPageAsync(0, token);
 
         PaymentTerms? terms = null;
         DraftInvoice? created = null;
 
         try
         {
-            terms = await client.PaymentTerms.CreateAsync(
+            terms = await client.Rest.PaymentTerms.CreateAsync(
                 new PaymentTermsCreate { Name = "ZZ Probe Due Date Terms", PaymentTermsType = "dueDate" },
                 token);
 
@@ -1018,7 +1018,7 @@ public class WriteRoundTripTests
             };
 
             var rejected = await Assert.ThrowsAsync<EconomicApiException>(
-                () => client.DraftInvoices.CreateAsync(Draft(dueDate: null), token));
+                () => client.Rest.DraftInvoices.CreateAsync(Draft(dueDate: null), token));
 
             // E04042 is "dueDate is missing a value", which is only reachable if the property was
             // left out of the request. The year-one value produced E04760 instead — a complaint
@@ -1029,7 +1029,7 @@ public class WriteRoundTripTests
 
             // And a date that was supplied still arrives, so nothing was lost making it optional.
             var due = new DateOnly(2026, 12, 24);
-            created = await client.DraftInvoices.CreateAsync(Draft(due), token);
+            created = await client.Rest.DraftInvoices.CreateAsync(Draft(due), token);
 
             Assert.Equal(due, created.DueDate);
         }
@@ -1037,12 +1037,12 @@ public class WriteRoundTripTests
         {
             if (created is not null)
             {
-                await client.DraftInvoices.DeleteAsync(created.DraftInvoiceNumber, token);
+                await client.Rest.DraftInvoices.DeleteAsync(created.DraftInvoiceNumber, token);
             }
 
             if (terms is not null)
             {
-                await client.PaymentTerms.DeleteAsync(terms.PaymentTermsNumber, token);
+                await client.Rest.PaymentTerms.DeleteAsync(terms.PaymentTermsNumber, token);
             }
         }
     }

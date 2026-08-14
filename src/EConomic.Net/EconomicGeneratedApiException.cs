@@ -1,4 +1,4 @@
-namespace EConomic.Rest.Generated;
+namespace EConomic;
 
 /// <summary>
 /// The failure type the generated clients throw.
@@ -8,6 +8,12 @@ namespace EConomic.Rest.Generated;
 /// setting for the access modifier of its exception classes, and the layering rule is that nothing
 /// generated reaches the public surface. The shape must match what NSwag emits — it constructs this
 /// type by name — so change it only alongside a regeneration.
+/// <para>
+/// It sits in the root namespace rather than beside either set of generated clients because both
+/// throw it. C# resolves the unqualified name outwards, so <c>EConomic.Rest.Generated</c> and
+/// <c>EConomic.Open.Generated</c> each find this one type without either referring to the other —
+/// the surfaces stay separate, and there is still only one of these.
+/// </para>
 /// <para>
 /// This never escapes the library. The facade catches it and rethrows
 /// <see cref="Exceptions.EconomicApiException"/>, which carries the parsed error body.
