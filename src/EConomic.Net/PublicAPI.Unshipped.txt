@@ -18,7 +18,7 @@ EConomic.Authentication.EconomicOptions.SendIdempotencyKeys.set -> void
 EConomic.Authentication.EconomicOptions.Validate() -> void
 EConomic.DependencyInjection.EconomicClientServiceCollectionExtensions
 EConomic.EconomicClient
-EConomic.EconomicClient.AccountingYears.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.EconomicClient.AccountingYears.get -> EConomic.Rest.AccountingYearResource!
 EConomic.EconomicClient.Accounts.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.Account!, EConomic.Rest.AccountFilter!, EConomic.Rest.AccountSort!>!
 EConomic.EconomicClient.AppRoles.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.AppRole!, EConomic.Rest.AppRoleFilter!, EConomic.Rest.AppRoleSort!>!
 EConomic.EconomicClient.ArchivedOrders.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.ArchivedOrder!, EConomic.Rest.ArchivedOrderFilter!, EConomic.Rest.ArchivedOrderSort!>!
@@ -35,7 +35,7 @@ EConomic.EconomicClient.DraftQuotes.get -> EConomic.Rest.DraftQuoteResource!
 EConomic.EconomicClient.EconomicClient(System.Net.Http.HttpClient! httpClient) -> void
 EConomic.EconomicClient.EconomicClient(System.Net.Http.HttpClient! httpClient, EConomic.Authentication.EconomicOptions! options) -> void
 EConomic.EconomicClient.Employees.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
-EConomic.EconomicClient.Journals.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
+EConomic.EconomicClient.Journals.get -> EConomic.Rest.JournalResource!
 EConomic.EconomicClient.Layouts.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.Layout!, EConomic.Rest.LayoutFilter!, EConomic.Rest.LayoutSort!>!
 EConomic.EconomicClient.NotDueInvoices.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.NotDueInvoice!, EConomic.Rest.NotDueInvoiceFilter!, EConomic.Rest.NotDueInvoiceSort!>!
 EConomic.EconomicClient.OverdueInvoices.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.OverdueInvoice!, EConomic.Rest.OverdueInvoiceFilter!, EConomic.Rest.OverdueInvoiceSort!>!
@@ -318,12 +318,31 @@ EConomic.Rest.AccountingYear.Vouchers.get -> System.Uri?
 EConomic.Rest.AccountingYear.Vouchers.init -> void
 EConomic.Rest.AccountingYear.Year.get -> string?
 EConomic.Rest.AccountingYear.Year.init -> void
+EConomic.Rest.AccountingYearCreate
+EConomic.Rest.AccountingYearCreate.<Clone>$() -> EConomic.Rest.AccountingYearCreate!
+EConomic.Rest.AccountingYearCreate.AccountingYearCreate() -> void
+EConomic.Rest.AccountingYearCreate.Equals(EConomic.Rest.AccountingYearCreate? other) -> bool
+EConomic.Rest.AccountingYearCreate.FromDate.get -> System.DateOnly
+EConomic.Rest.AccountingYearCreate.FromDate.init -> void
+EConomic.Rest.AccountingYearCreate.ToDate.get -> System.DateOnly
+EConomic.Rest.AccountingYearCreate.ToDate.init -> void
 EConomic.Rest.AccountingYearFilter
 EConomic.Rest.AccountingYearFilter.AccountingYearFilter() -> void
 EConomic.Rest.AccountingYearFilter.Closed.get -> EConomic.Querying.BooleanField!
 EConomic.Rest.AccountingYearFilter.FromDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
 EConomic.Rest.AccountingYearFilter.ToDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
 EConomic.Rest.AccountingYearFilter.Year.get -> EConomic.Querying.TextField!
+EConomic.Rest.AccountingYearResource
+EConomic.Rest.AccountingYearResource.AccountingYearResource(System.Net.Http.HttpClient! httpClient) -> void
+EConomic.Rest.AccountingYearResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.AccountingYear!>!
+EConomic.Rest.AccountingYearResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.Rest.AccountingYearResource.CreateAsync(EConomic.Rest.AccountingYearCreate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.AccountingYear!>!
+EConomic.Rest.AccountingYearResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.AccountingYear!>!>!
+EConomic.Rest.AccountingYearResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.Rest.AccountingYearResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.Rest.AccountingYearResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.Rest.AccountingYearResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.Rest.AccountingYearResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
 EConomic.Rest.AccountingYearSort
 EConomic.Rest.AccountingYearSort.AccountingYearSort() -> void
 EConomic.Rest.AccountingYearSort.Closed.get -> EConomic.Querying.EconomicSortField!
@@ -3292,10 +3311,187 @@ EConomic.Rest.Journal.Templates.get -> EConomic.Rest.JournalTemplates?
 EConomic.Rest.Journal.Templates.init -> void
 EConomic.Rest.Journal.Vouchers.get -> System.Uri?
 EConomic.Rest.Journal.Vouchers.init -> void
+EConomic.Rest.JournalEntry
+EConomic.Rest.JournalEntry.<Clone>$() -> EConomic.Rest.JournalEntry!
+EConomic.Rest.JournalEntry.Account.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Account.init -> void
+EConomic.Rest.JournalEntry.Amount.get -> decimal
+EConomic.Rest.JournalEntry.Amount.init -> void
+EConomic.Rest.JournalEntry.AmountDefaultCurrency.get -> decimal
+EConomic.Rest.JournalEntry.AmountDefaultCurrency.init -> void
+EConomic.Rest.JournalEntry.ContraAccount.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.ContraAccount.init -> void
+EConomic.Rest.JournalEntry.ContraVatAccount.get -> EConomic.Rest.JournalEntryContraVatAccount?
+EConomic.Rest.JournalEntry.ContraVatAccount.init -> void
+EConomic.Rest.JournalEntry.ContraVatAmount.get -> decimal
+EConomic.Rest.JournalEntry.ContraVatAmount.init -> void
+EConomic.Rest.JournalEntry.ContraVatAmountInBaseCurrency.get -> decimal
+EConomic.Rest.JournalEntry.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalEntry.CostType.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.CostType.init -> void
+EConomic.Rest.JournalEntry.Currency.get -> EConomic.Rest.JournalEntryCurrency?
+EConomic.Rest.JournalEntry.Currency.init -> void
+EConomic.Rest.JournalEntry.Customer.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Customer.init -> void
+EConomic.Rest.JournalEntry.CustomerInvoice.get -> int
+EConomic.Rest.JournalEntry.CustomerInvoice.init -> void
+EConomic.Rest.JournalEntry.Date.get -> System.DateOnly?
+EConomic.Rest.JournalEntry.Date.init -> void
+EConomic.Rest.JournalEntry.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.DepartmentalDistribution.init -> void
+EConomic.Rest.JournalEntry.DueDate.get -> System.DateOnly?
+EConomic.Rest.JournalEntry.DueDate.init -> void
+EConomic.Rest.JournalEntry.Employee.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Employee.init -> void
+EConomic.Rest.JournalEntry.EntryType.get -> string?
+EConomic.Rest.JournalEntry.EntryType.init -> void
+EConomic.Rest.JournalEntry.Equals(EConomic.Rest.JournalEntry? other) -> bool
+EConomic.Rest.JournalEntry.ExchangeRate.get -> decimal
+EConomic.Rest.JournalEntry.ExchangeRate.init -> void
+EConomic.Rest.JournalEntry.Journal.get -> EConomic.Rest.JournalEntryJournal?
+EConomic.Rest.JournalEntry.Journal.init -> void
+EConomic.Rest.JournalEntry.JournalEntry() -> void
+EConomic.Rest.JournalEntry.JournalEntryNumber.get -> int
+EConomic.Rest.JournalEntry.JournalEntryNumber.init -> void
+EConomic.Rest.JournalEntry.Project.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Project.init -> void
+EConomic.Rest.JournalEntry.Quantity1.get -> decimal
+EConomic.Rest.JournalEntry.Quantity1.init -> void
+EConomic.Rest.JournalEntry.Quantity2.get -> decimal
+EConomic.Rest.JournalEntry.Quantity2.init -> void
+EConomic.Rest.JournalEntry.Remainder.get -> decimal
+EConomic.Rest.JournalEntry.Remainder.init -> void
+EConomic.Rest.JournalEntry.RemainderInDefaultCurrency.get -> decimal
+EConomic.Rest.JournalEntry.RemainderInDefaultCurrency.init -> void
+EConomic.Rest.JournalEntry.Self.get -> System.Uri!
+EConomic.Rest.JournalEntry.Self.init -> void
+EConomic.Rest.JournalEntry.Supplier.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Supplier.init -> void
+EConomic.Rest.JournalEntry.SupplierInvoiceNumber.get -> string?
+EConomic.Rest.JournalEntry.SupplierInvoiceNumber.init -> void
+EConomic.Rest.JournalEntry.Templates.get -> EConomic.Rest.JournalEntryTemplates?
+EConomic.Rest.JournalEntry.Templates.init -> void
+EConomic.Rest.JournalEntry.Text.get -> string?
+EConomic.Rest.JournalEntry.Text.init -> void
+EConomic.Rest.JournalEntry.Unit1.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Unit1.init -> void
+EConomic.Rest.JournalEntry.Unit2.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalEntry.Unit2.init -> void
+EConomic.Rest.JournalEntry.Voucher.get -> EConomic.Rest.JournalEntryVoucher?
+EConomic.Rest.JournalEntry.Voucher.init -> void
+EConomic.Rest.JournalEntryContraVatAccount
+EConomic.Rest.JournalEntryContraVatAccount.<Clone>$() -> EConomic.Rest.JournalEntryContraVatAccount!
+EConomic.Rest.JournalEntryContraVatAccount.Equals(EConomic.Rest.JournalEntryContraVatAccount? other) -> bool
+EConomic.Rest.JournalEntryContraVatAccount.JournalEntryContraVatAccount() -> void
+EConomic.Rest.JournalEntryContraVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalEntryContraVatAccount.Self.init -> void
+EConomic.Rest.JournalEntryContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalEntryContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalEntryCurrency
+EConomic.Rest.JournalEntryCurrency.<Clone>$() -> EConomic.Rest.JournalEntryCurrency!
+EConomic.Rest.JournalEntryCurrency.Code.get -> string?
+EConomic.Rest.JournalEntryCurrency.Code.init -> void
+EConomic.Rest.JournalEntryCurrency.Equals(EConomic.Rest.JournalEntryCurrency? other) -> bool
+EConomic.Rest.JournalEntryCurrency.JournalEntryCurrency() -> void
+EConomic.Rest.JournalEntryCurrency.Self.get -> System.Uri!
+EConomic.Rest.JournalEntryCurrency.Self.init -> void
+EConomic.Rest.JournalEntryFilter
+EConomic.Rest.JournalEntryFilter.AccountNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.JournalEntryFilter.Amount.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.JournalEntryFilter.AmountDefaultCurrency.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.JournalEntryFilter.ContraAccountAccountNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.JournalEntryFilter.ContraVatAccountVatCode.get -> EConomic.Querying.TextField!
+EConomic.Rest.JournalEntryFilter.ContraVatAmount.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.JournalEntryFilter.CurrencyCode.get -> EConomic.Querying.TextField!
+EConomic.Rest.JournalEntryFilter.CustomerNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.JournalEntryFilter.Date.get -> EConomic.Querying.ComparableField<System.DateOnly>!
+EConomic.Rest.JournalEntryFilter.EmployeeNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.JournalEntryFilter.EntryType.get -> EConomic.Querying.TextField!
+EConomic.Rest.JournalEntryFilter.ExchangeRate.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.JournalEntryFilter.JournalEntryFilter() -> void
+EConomic.Rest.JournalEntryFilter.JournalEntryNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.JournalEntryFilter.SupplierNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.JournalEntryFilter.Text.get -> EConomic.Querying.TextField!
+EConomic.Rest.JournalEntryFilter.VoucherNumber.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.JournalEntryJournal
+EConomic.Rest.JournalEntryJournal.<Clone>$() -> EConomic.Rest.JournalEntryJournal!
+EConomic.Rest.JournalEntryJournal.Equals(EConomic.Rest.JournalEntryJournal? other) -> bool
+EConomic.Rest.JournalEntryJournal.JournalEntryJournal() -> void
+EConomic.Rest.JournalEntryJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalEntryJournal.JournalNumber.init -> void
+EConomic.Rest.JournalEntryJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalEntryJournal.Self.init -> void
+EConomic.Rest.JournalEntryResource
+EConomic.Rest.JournalEntryResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.JournalEntry!>!
+EConomic.Rest.JournalEntryResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
+EConomic.Rest.JournalEntryResource.DeleteAsync(int journalEntryNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+EConomic.Rest.JournalEntryResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.JournalEntry!>!>!
+EConomic.Rest.JournalEntryResource.JournalEntryResource(System.Net.Http.HttpClient! httpClient, int journalNumber) -> void
+EConomic.Rest.JournalEntryResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalEntryFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
+EConomic.Rest.JournalEntrySort
+EConomic.Rest.JournalEntrySort.AccountNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.Amount.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.AmountDefaultCurrency.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.ContraAccountAccountNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.ContraVatAccountVatCode.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.ContraVatAmount.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.CurrencyCode.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.CustomerNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.Date.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.EmployeeNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.EntryType.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.ExchangeRate.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.JournalEntryNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.JournalEntrySort() -> void
+EConomic.Rest.JournalEntrySort.SupplierNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.Text.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntrySort.VoucherNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.JournalEntryTemplates
+EConomic.Rest.JournalEntryTemplates.<Clone>$() -> EConomic.Rest.JournalEntryTemplates!
+EConomic.Rest.JournalEntryTemplates.Account.get -> System.Uri?
+EConomic.Rest.JournalEntryTemplates.Account.init -> void
+EConomic.Rest.JournalEntryTemplates.AccountAndContraAccount.get -> System.Uri?
+EConomic.Rest.JournalEntryTemplates.AccountAndContraAccount.init -> void
+EConomic.Rest.JournalEntryTemplates.ContraAccount.get -> System.Uri?
+EConomic.Rest.JournalEntryTemplates.ContraAccount.init -> void
+EConomic.Rest.JournalEntryTemplates.CustomerPayment.get -> System.Uri?
+EConomic.Rest.JournalEntryTemplates.CustomerPayment.init -> void
+EConomic.Rest.JournalEntryTemplates.Equals(EConomic.Rest.JournalEntryTemplates? other) -> bool
+EConomic.Rest.JournalEntryTemplates.JournalEntryTemplates() -> void
+EConomic.Rest.JournalEntryVoucher
+EConomic.Rest.JournalEntryVoucher.<Clone>$() -> EConomic.Rest.JournalEntryVoucher!
+EConomic.Rest.JournalEntryVoucher.AccountingYear.get -> EConomic.Rest.JournalEntryVoucherAccountingYear?
+EConomic.Rest.JournalEntryVoucher.AccountingYear.init -> void
+EConomic.Rest.JournalEntryVoucher.Equals(EConomic.Rest.JournalEntryVoucher? other) -> bool
+EConomic.Rest.JournalEntryVoucher.JournalEntryVoucher() -> void
+EConomic.Rest.JournalEntryVoucher.Self.get -> System.Uri!
+EConomic.Rest.JournalEntryVoucher.Self.init -> void
+EConomic.Rest.JournalEntryVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalEntryVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalEntryVoucherAccountingYear
+EConomic.Rest.JournalEntryVoucherAccountingYear.<Clone>$() -> EConomic.Rest.JournalEntryVoucherAccountingYear!
+EConomic.Rest.JournalEntryVoucherAccountingYear.Equals(EConomic.Rest.JournalEntryVoucherAccountingYear? other) -> bool
+EConomic.Rest.JournalEntryVoucherAccountingYear.JournalEntryVoucherAccountingYear() -> void
+EConomic.Rest.JournalEntryVoucherAccountingYear.Self.get -> System.Uri!
+EConomic.Rest.JournalEntryVoucherAccountingYear.Self.init -> void
+EConomic.Rest.JournalEntryVoucherAccountingYear.Year.get -> string?
+EConomic.Rest.JournalEntryVoucherAccountingYear.Year.init -> void
 EConomic.Rest.JournalFilter
 EConomic.Rest.JournalFilter.JournalFilter() -> void
 EConomic.Rest.JournalFilter.JournalNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.JournalFilter.Name.get -> EConomic.Querying.TextField!
+EConomic.Rest.JournalResource
+EConomic.Rest.JournalResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.Journal!>!
+EConomic.Rest.JournalResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
+EConomic.Rest.JournalResource.Entries(int journalNumber) -> EConomic.Rest.JournalEntryResource!
+EConomic.Rest.JournalResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.Journal!>!>!
+EConomic.Rest.JournalResource.JournalResource(System.Net.Http.HttpClient! httpClient) -> void
+EConomic.Rest.JournalResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
+EConomic.Rest.JournalResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
+EConomic.Rest.JournalResource.Vouchers(int journalNumber) -> EConomic.Rest.JournalVoucherResource!
+EConomic.Rest.JournalResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
+EConomic.Rest.JournalResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
+EConomic.Rest.JournalResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Journal!, EConomic.Rest.JournalFilter!, EConomic.Rest.JournalSort!>!
 EConomic.Rest.JournalSettings
 EConomic.Rest.JournalSettings.<Clone>$() -> EConomic.Rest.JournalSettings!
 EConomic.Rest.JournalSettings.ContraAccounts.get -> EConomic.Rest.JournalSettingsContraAccounts?
@@ -3338,6 +3534,855 @@ EConomic.Rest.JournalTemplates.ManualCustomerInvoice.get -> System.Uri?
 EConomic.Rest.JournalTemplates.ManualCustomerInvoice.init -> void
 EConomic.Rest.JournalTemplates.Self.get -> System.Uri!
 EConomic.Rest.JournalTemplates.Self.init -> void
+EConomic.Rest.JournalVoucher
+EConomic.Rest.JournalVoucher.<Clone>$() -> EConomic.Rest.JournalVoucher!
+EConomic.Rest.JournalVoucher.AccountingYear.get -> EConomic.Rest.JournalVoucherAccountingYear?
+EConomic.Rest.JournalVoucher.AccountingYear.init -> void
+EConomic.Rest.JournalVoucher.Entries.get -> EConomic.Rest.JournalVoucherEntries?
+EConomic.Rest.JournalVoucher.Entries.init -> void
+EConomic.Rest.JournalVoucher.Equals(EConomic.Rest.JournalVoucher? other) -> bool
+EConomic.Rest.JournalVoucher.Journal.get -> EConomic.Rest.JournalVoucherJournal?
+EConomic.Rest.JournalVoucher.Journal.init -> void
+EConomic.Rest.JournalVoucher.JournalVoucher() -> void
+EConomic.Rest.JournalVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherAccountingYear
+EConomic.Rest.JournalVoucherAccountingYear.<Clone>$() -> EConomic.Rest.JournalVoucherAccountingYear!
+EConomic.Rest.JournalVoucherAccountingYear.Equals(EConomic.Rest.JournalVoucherAccountingYear? other) -> bool
+EConomic.Rest.JournalVoucherAccountingYear.JournalVoucherAccountingYear() -> void
+EConomic.Rest.JournalVoucherAccountingYear.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherAccountingYear.Self.init -> void
+EConomic.Rest.JournalVoucherAccountingYear.Year.get -> string?
+EConomic.Rest.JournalVoucherAccountingYear.Year.init -> void
+EConomic.Rest.JournalVoucherCreate
+EConomic.Rest.JournalVoucherCreate.<Clone>$() -> EConomic.Rest.JournalVoucherCreate!
+EConomic.Rest.JournalVoucherCreate.AccountingYear.get -> EConomic.Rest.JournalVoucherCreateAccountingYear!
+EConomic.Rest.JournalVoucherCreate.AccountingYear.init -> void
+EConomic.Rest.JournalVoucherCreate.Entries.get -> EConomic.Rest.JournalVoucherCreateEntries?
+EConomic.Rest.JournalVoucherCreate.Entries.init -> void
+EConomic.Rest.JournalVoucherCreate.Equals(EConomic.Rest.JournalVoucherCreate? other) -> bool
+EConomic.Rest.JournalVoucherCreate.Journal.get -> EConomic.Rest.JournalVoucherCreateJournal?
+EConomic.Rest.JournalVoucherCreate.Journal.init -> void
+EConomic.Rest.JournalVoucherCreate.JournalVoucherCreate() -> void
+EConomic.Rest.JournalVoucherCreate.VoucherNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreate.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherCreateAccountingYear
+EConomic.Rest.JournalVoucherCreateAccountingYear.<Clone>$() -> EConomic.Rest.JournalVoucherCreateAccountingYear!
+EConomic.Rest.JournalVoucherCreateAccountingYear.Equals(EConomic.Rest.JournalVoucherCreateAccountingYear? other) -> bool
+EConomic.Rest.JournalVoucherCreateAccountingYear.JournalVoucherCreateAccountingYear() -> void
+EConomic.Rest.JournalVoucherCreateAccountingYear.Year.get -> string?
+EConomic.Rest.JournalVoucherCreateAccountingYear.Year.init -> void
+EConomic.Rest.JournalVoucherCreateEntries
+EConomic.Rest.JournalVoucherCreateEntries.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntries!
+EConomic.Rest.JournalVoucherCreateEntries.CustomerPayments.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment!>!
+EConomic.Rest.JournalVoucherCreateEntries.CustomerPayments.init -> void
+EConomic.Rest.JournalVoucherCreateEntries.Equals(EConomic.Rest.JournalVoucherCreateEntries? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntries.FinanceVouchers.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher!>!
+EConomic.Rest.JournalVoucherCreateEntries.FinanceVouchers.init -> void
+EConomic.Rest.JournalVoucherCreateEntries.JournalVoucherCreateEntries() -> void
+EConomic.Rest.JournalVoucherCreateEntries.ManualCustomerInvoices.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice!>!
+EConomic.Rest.JournalVoucherCreateEntries.ManualCustomerInvoices.init -> void
+EConomic.Rest.JournalVoucherCreateEntries.SupplierInvoices.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice!>!
+EConomic.Rest.JournalVoucherCreateEntries.SupplierInvoices.init -> void
+EConomic.Rest.JournalVoucherCreateEntries.SupplierPayments.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment!>!
+EConomic.Rest.JournalVoucherCreateEntries.SupplierPayments.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment!
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Amount.get -> decimal
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Amount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.AmountBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraAccountNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraAccountNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraVatAccount.get -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraVatAmount.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraVatAmountInBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Currency.get -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Currency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.CustomerInvoice.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.CustomerInvoice.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.CustomerNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.CustomerNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Date.get -> System.DateOnly
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Date.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.DepartmentalDistributionNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.DepartmentalDistributionNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.EmployeeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.EmployeeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.EntryType.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.EntryType.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Equals(EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ExchangeRate.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Journal.get -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Journal.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.JournalVoucherCreateEntriesCustomerPayment() -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Text.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Text.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Voucher.get -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Voucher.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount!
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.Equals(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount() -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency!
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.Equals(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.JournalVoucherCreateEntriesCustomerPaymentCurrency() -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal!
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.Equals(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.JournalNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.JournalVoucherCreateEntriesCustomerPaymentJournal() -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher!
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.Equals(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.JournalVoucherCreateEntriesCustomerPaymentVoucher() -> void
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.VoucherNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher!
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.AccountNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.AccountNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Amount.get -> decimal
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Amount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.AmountBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraAccountNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraAccountNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraVatAccount.get -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraVatAmount.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraVatAmountInBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.CostTypeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.CostTypeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Currency.get -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Currency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Date.get -> System.DateOnly
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Date.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.DepartmentalDistributionNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.DepartmentalDistributionNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.EmployeeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.EmployeeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.EntryType.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.EntryType.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Equals(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ExchangeRate.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Journal.get -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Journal.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.JournalVoucherCreateEntriesFinanceVoucher() -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ProjectNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ProjectNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Quantity1.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Quantity1.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Quantity2.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Quantity2.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Text.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Text.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Unit1Number.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Unit1Number.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Unit2Number.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Unit2Number.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.VatAccount.get -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.VatAccount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.VatAmount.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.VatAmount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.VatAmountBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.VatAmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Voucher.get -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Voucher.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount!
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.Equals(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount() -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency!
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.Equals(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.JournalVoucherCreateEntriesFinanceVoucherCurrency() -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal!
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.Equals(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.JournalNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.JournalVoucherCreateEntriesFinanceVoucherJournal() -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount!
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.Equals(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.JournalVoucherCreateEntriesFinanceVoucherVatAccount() -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher!
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.Equals(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.JournalVoucherCreateEntriesFinanceVoucherVoucher() -> void
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.VoucherNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice!
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Amount.get -> decimal
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Amount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.AmountBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraAccountNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraAccountNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraVatAccount.get -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraVatAmount.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraVatAmountInBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Currency.get -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Currency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.CustomerInvoice.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.CustomerInvoice.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.CustomerNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.CustomerNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Date.get -> System.DateOnly
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Date.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.DepartmentalDistributionNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.DepartmentalDistributionNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.DueDate.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.DueDate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.EmployeeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.EmployeeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.EntryType.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.EntryType.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Equals(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ExchangeRate.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Journal.get -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Journal.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.JournalVoucherCreateEntriesManualCustomerInvoice() -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Text.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Text.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Voucher.get -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Voucher.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount!
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.Equals(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount() -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency!
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.Equals(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency() -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal!
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.Equals(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.JournalNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.JournalVoucherCreateEntriesManualCustomerInvoiceJournal() -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher!
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.Equals(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher() -> void
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.VoucherNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Amount.get -> decimal
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Amount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.AmountBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraAccountNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraAccountNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraVatAccount.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraVatAmount.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraVatAmountInBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.CostTypeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.CostTypeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Currency.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Currency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Date.get -> System.DateOnly
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Date.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.DepartmentalDistributionNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.DepartmentalDistributionNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.DueDate.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.DueDate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.EmployeeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.EmployeeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.EntryType.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.EntryType.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ExchangeRate.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Journal.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Journal.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.JournalVoucherCreateEntriesSupplierInvoice() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ProjectNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ProjectNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Quantity1.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Quantity1.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Quantity2.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Quantity2.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.SupplierInvoiceNumber.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.SupplierInvoiceNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.SupplierNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.SupplierNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Text.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Text.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Unit1Number.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Unit1Number.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Unit2Number.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Unit2Number.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Voucher.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Voucher.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.JournalVoucherCreateEntriesSupplierInvoiceCurrency() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.JournalNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.JournalVoucherCreateEntriesSupplierInvoiceJournal() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.JournalVoucherCreateEntriesSupplierInvoiceVoucher() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.VoucherNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Amount.get -> decimal
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Amount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.AmountBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraAccountNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraAccountNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraVatAccount.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraVatAmount.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraVatAmountInBaseCurrency.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Currency.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Currency.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Date.get -> System.DateOnly
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Date.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.DepartmentalDistributionNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.DepartmentalDistributionNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.EmployeeNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.EmployeeNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.EntryType.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.EntryType.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ExchangeRate.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Journal.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Journal.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.JournalVoucherCreateEntriesSupplierPayment() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.SupplierInvoiceNumber.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.SupplierInvoiceNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.SupplierNumber.get -> int?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.SupplierNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Text.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Text.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Voucher.get -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Voucher.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.JournalVoucherCreateEntriesSupplierPaymentCurrency() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.JournalNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.JournalVoucherCreateEntriesSupplierPaymentJournal() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher!
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.Equals(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher? other) -> bool
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.JournalVoucherCreateEntriesSupplierPaymentVoucher() -> void
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.VoucherNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherCreateJournal
+EConomic.Rest.JournalVoucherCreateJournal.<Clone>$() -> EConomic.Rest.JournalVoucherCreateJournal!
+EConomic.Rest.JournalVoucherCreateJournal.Equals(EConomic.Rest.JournalVoucherCreateJournal? other) -> bool
+EConomic.Rest.JournalVoucherCreateJournal.JournalNumber.get -> decimal?
+EConomic.Rest.JournalVoucherCreateJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherCreateJournal.JournalVoucherCreateJournal() -> void
+EConomic.Rest.JournalVoucherEntries
+EConomic.Rest.JournalVoucherEntries.<Clone>$() -> EConomic.Rest.JournalVoucherEntries!
+EConomic.Rest.JournalVoucherEntries.CustomerPayments.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherEntriesCustomerPayment!>!
+EConomic.Rest.JournalVoucherEntries.CustomerPayments.init -> void
+EConomic.Rest.JournalVoucherEntries.Equals(EConomic.Rest.JournalVoucherEntries? other) -> bool
+EConomic.Rest.JournalVoucherEntries.FinanceVouchers.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherEntriesFinanceVoucher!>!
+EConomic.Rest.JournalVoucherEntries.FinanceVouchers.init -> void
+EConomic.Rest.JournalVoucherEntries.JournalVoucherEntries() -> void
+EConomic.Rest.JournalVoucherEntries.ManualCustomerInvoices.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice!>!
+EConomic.Rest.JournalVoucherEntries.ManualCustomerInvoices.init -> void
+EConomic.Rest.JournalVoucherEntries.SupplierInvoices.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherEntriesSupplierInvoice!>!
+EConomic.Rest.JournalVoucherEntries.SupplierInvoices.init -> void
+EConomic.Rest.JournalVoucherEntries.SupplierPayments.get -> System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucherEntriesSupplierPayment!>!
+EConomic.Rest.JournalVoucherEntries.SupplierPayments.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesCustomerPayment!
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Amount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Amount.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.AmountBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraAccount.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraVatAccount.get -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraVatAmount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraVatAmountInBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Currency.get -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Currency.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Customer.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Customer.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.CustomerInvoice.get -> int
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.CustomerInvoice.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Date.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Date.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.DepartmentalDistribution.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Employee.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Employee.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.EntryType.get -> string?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.EntryType.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Equals(EConomic.Rest.JournalVoucherEntriesCustomerPayment? other) -> bool
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ExchangeRate.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Journal.get -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Journal.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.JournalVoucherEntriesCustomerPayment() -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Remainder.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Remainder.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.RemainderInDefaultCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.RemainderInDefaultCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Text.get -> string?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Text.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Voucher.get -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher?
+EConomic.Rest.JournalVoucherEntriesCustomerPayment.Voucher.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.Equals(EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.JournalVoucherEntriesCustomerPaymentContraVatAccount() -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.Equals(EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency? other) -> bool
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.JournalVoucherEntriesCustomerPaymentCurrency() -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.Equals(EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal? other) -> bool
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.JournalVoucherEntriesCustomerPaymentJournal() -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.Equals(EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher? other) -> bool
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.JournalVoucherEntriesCustomerPaymentVoucher() -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesFinanceVoucher!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Account.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Account.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Amount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Amount.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.AmountBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraAccount.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraVatAccount.get -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraVatAmount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraVatAmountInBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.CostType.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.CostType.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Currency.get -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Currency.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Date.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Date.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.DepartmentalDistribution.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Employee.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Employee.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.EntryType.get -> string?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.EntryType.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Equals(EConomic.Rest.JournalVoucherEntriesFinanceVoucher? other) -> bool
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ExchangeRate.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Journal.get -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Journal.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.JournalVoucherEntriesFinanceVoucher() -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Project.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Project.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Quantity1.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Quantity1.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Quantity2.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Quantity2.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Remainder.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Remainder.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.RemainderInDefaultCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.RemainderInDefaultCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Text.get -> string?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Text.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Unit1.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Unit1.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Unit2.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Unit2.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.VatAccount.get -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.VatAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.VatAmount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.VatAmount.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.VatAmountBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.VatAmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Voucher.get -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Voucher.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.Equals(EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.JournalVoucherEntriesFinanceVoucherContraVatAccount() -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.Equals(EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency? other) -> bool
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.JournalVoucherEntriesFinanceVoucherCurrency() -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.Equals(EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal? other) -> bool
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.JournalVoucherEntriesFinanceVoucherJournal() -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.Equals(EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.JournalVoucherEntriesFinanceVoucherVatAccount() -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.Equals(EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher? other) -> bool
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.JournalVoucherEntriesFinanceVoucherVoucher() -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Amount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Amount.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.AmountBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraAccount.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraVatAccount.get -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraVatAmount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraVatAmountInBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Currency.get -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Currency.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Customer.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Customer.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.CustomerInvoice.get -> int
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.CustomerInvoice.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Date.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Date.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.DepartmentalDistribution.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.DueDate.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.DueDate.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Employee.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Employee.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.EntryType.get -> string?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.EntryType.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Equals(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice? other) -> bool
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ExchangeRate.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Journal.get -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Journal.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.JournalVoucherEntriesManualCustomerInvoice() -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Remainder.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Remainder.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.RemainderInDefaultCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.RemainderInDefaultCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Text.get -> string?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Text.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Voucher.get -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Voucher.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.Equals(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount() -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.Equals(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency? other) -> bool
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.JournalVoucherEntriesManualCustomerInvoiceCurrency() -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.Equals(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal? other) -> bool
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.JournalVoucherEntriesManualCustomerInvoiceJournal() -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.Equals(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher? other) -> bool
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.JournalVoucherEntriesManualCustomerInvoiceVoucher() -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierInvoice!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Amount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Amount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.AmountBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraAccount.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraVatAccount.get -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraVatAmount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraVatAmountInBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.CostType.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.CostType.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Currency.get -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Currency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Date.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Date.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.DepartmentalDistribution.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.DueDate.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.DueDate.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Employee.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Employee.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.EntryType.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.EntryType.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Equals(EConomic.Rest.JournalVoucherEntriesSupplierInvoice? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ExchangeRate.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Journal.get -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Journal.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.JournalVoucherEntriesSupplierInvoice() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Project.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Project.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Quantity1.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Quantity1.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Quantity2.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Quantity2.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Remainder.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Remainder.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.RemainderInDefaultCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.RemainderInDefaultCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Supplier.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Supplier.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.SupplierInvoiceNumber.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.SupplierInvoiceNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Text.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Text.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Unit1.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Unit1.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Unit2.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Unit2.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Voucher.get -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Voucher.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.Equals(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.JournalVoucherEntriesSupplierInvoiceContraVatAccount() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.Equals(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.JournalVoucherEntriesSupplierInvoiceCurrency() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.Equals(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.JournalVoucherEntriesSupplierInvoiceJournal() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.Equals(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.JournalVoucherEntriesSupplierInvoiceVoucher() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierPayment!
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Amount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Amount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.AmountBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.AmountBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraAccount.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraVatAccount.get -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraVatAccount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraVatAmount.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraVatAmount.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraVatAmountInBaseCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ContraVatAmountInBaseCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Currency.get -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Currency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Date.get -> System.DateOnly?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Date.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.DepartmentalDistribution.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Employee.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Employee.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.EntryType.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.EntryType.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Equals(EConomic.Rest.JournalVoucherEntriesSupplierPayment? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ExchangeRate.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.ExchangeRate.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Journal.get -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Journal.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.JournalVoucherEntriesSupplierPayment() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Remainder.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Remainder.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.RemainderInDefaultCurrency.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.RemainderInDefaultCurrency.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Supplier.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Supplier.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.SupplierInvoiceNumber.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.SupplierInvoiceNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Text.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Text.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Voucher.get -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher?
+EConomic.Rest.JournalVoucherEntriesSupplierPayment.Voucher.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.Equals(EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.JournalVoucherEntriesSupplierPaymentContraVatAccount() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.VatCode.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.VatCode.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.Code.get -> string?
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.Code.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.Equals(EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.JournalVoucherEntriesSupplierPaymentCurrency() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.Equals(EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.JournalVoucherEntriesSupplierPaymentJournal() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.<Clone>$() -> EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.Equals(EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher? other) -> bool
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.JournalVoucherEntriesSupplierPaymentVoucher() -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.Self.init -> void
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.VoucherNumber.get -> decimal
+EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.VoucherNumber.init -> void
+EConomic.Rest.JournalVoucherFilter
+EConomic.Rest.JournalVoucherFilter.JournalVoucherFilter() -> void
+EConomic.Rest.JournalVoucherJournal
+EConomic.Rest.JournalVoucherJournal.<Clone>$() -> EConomic.Rest.JournalVoucherJournal!
+EConomic.Rest.JournalVoucherJournal.Equals(EConomic.Rest.JournalVoucherJournal? other) -> bool
+EConomic.Rest.JournalVoucherJournal.JournalNumber.get -> decimal
+EConomic.Rest.JournalVoucherJournal.JournalNumber.init -> void
+EConomic.Rest.JournalVoucherJournal.JournalVoucherJournal() -> void
+EConomic.Rest.JournalVoucherJournal.Self.get -> System.Uri!
+EConomic.Rest.JournalVoucherJournal.Self.init -> void
+EConomic.Rest.JournalVoucherResource
+EConomic.Rest.JournalVoucherResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.JournalVoucher!>!
+EConomic.Rest.JournalVoucherResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
+EConomic.Rest.JournalVoucherResource.CreateAsync(EConomic.Rest.JournalVoucherCreate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucher!>!>!
+EConomic.Rest.JournalVoucherResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.JournalVoucher!>!>!
+EConomic.Rest.JournalVoucherResource.JournalVoucherResource(System.Net.Http.HttpClient! httpClient, int journalNumber) -> void
+EConomic.Rest.JournalVoucherResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalVoucherFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
+EConomic.Rest.JournalVoucherSort
+EConomic.Rest.JournalVoucherSort.JournalVoucherSort() -> void
 EConomic.Rest.Layout
 EConomic.Rest.Layout.<Clone>$() -> EConomic.Rest.Layout!
 EConomic.Rest.Layout.Deleted.get -> bool
@@ -5353,6 +6398,9 @@ override EConomic.Rest.AccountVatAccount.ToString() -> string!
 override EConomic.Rest.AccountingYear.Equals(object? obj) -> bool
 override EConomic.Rest.AccountingYear.GetHashCode() -> int
 override EConomic.Rest.AccountingYear.ToString() -> string!
+override EConomic.Rest.AccountingYearCreate.Equals(object? obj) -> bool
+override EConomic.Rest.AccountingYearCreate.GetHashCode() -> int
+override EConomic.Rest.AccountingYearCreate.ToString() -> string!
 override EConomic.Rest.AppRole.Equals(object? obj) -> bool
 override EConomic.Rest.AppRole.GetHashCode() -> int
 override EConomic.Rest.AppRole.ToString() -> string!
@@ -5767,6 +6815,27 @@ override EConomic.Rest.Employee.ToString() -> string!
 override EConomic.Rest.Journal.Equals(object? obj) -> bool
 override EConomic.Rest.Journal.GetHashCode() -> int
 override EConomic.Rest.Journal.ToString() -> string!
+override EConomic.Rest.JournalEntry.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntry.GetHashCode() -> int
+override EConomic.Rest.JournalEntry.ToString() -> string!
+override EConomic.Rest.JournalEntryContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntryContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalEntryContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalEntryCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntryCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalEntryCurrency.ToString() -> string!
+override EConomic.Rest.JournalEntryJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntryJournal.GetHashCode() -> int
+override EConomic.Rest.JournalEntryJournal.ToString() -> string!
+override EConomic.Rest.JournalEntryTemplates.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntryTemplates.GetHashCode() -> int
+override EConomic.Rest.JournalEntryTemplates.ToString() -> string!
+override EConomic.Rest.JournalEntryVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntryVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalEntryVoucher.ToString() -> string!
+override EConomic.Rest.JournalEntryVoucherAccountingYear.Equals(object? obj) -> bool
+override EConomic.Rest.JournalEntryVoucherAccountingYear.GetHashCode() -> int
+override EConomic.Rest.JournalEntryVoucherAccountingYear.ToString() -> string!
 override EConomic.Rest.JournalSettings.Equals(object? obj) -> bool
 override EConomic.Rest.JournalSettings.GetHashCode() -> int
 override EConomic.Rest.JournalSettings.ToString() -> string!
@@ -5779,6 +6848,186 @@ override EConomic.Rest.JournalSettingsVoucherNumbers.ToString() -> string!
 override EConomic.Rest.JournalTemplates.Equals(object? obj) -> bool
 override EConomic.Rest.JournalTemplates.GetHashCode() -> int
 override EConomic.Rest.JournalTemplates.ToString() -> string!
+override EConomic.Rest.JournalVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherAccountingYear.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherAccountingYear.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherAccountingYear.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreate.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreate.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreate.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateAccountingYear.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateAccountingYear.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateAccountingYear.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntries.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntries.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntries.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherCreateJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherCreateJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherCreateJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntries.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntries.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntries.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesCustomerPayment.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesCustomerPayment.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesCustomerPayment.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoice.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoice.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoice.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierPayment.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierPayment.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierPayment.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.ToString() -> string!
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.ToString() -> string!
+override EConomic.Rest.JournalVoucherJournal.Equals(object? obj) -> bool
+override EConomic.Rest.JournalVoucherJournal.GetHashCode() -> int
+override EConomic.Rest.JournalVoucherJournal.ToString() -> string!
 override EConomic.Rest.Layout.Equals(object? obj) -> bool
 override EConomic.Rest.Layout.GetHashCode() -> int
 override EConomic.Rest.Layout.ToString() -> string!
@@ -6076,6 +7325,8 @@ static EConomic.Rest.AccountVatAccount.operator !=(EConomic.Rest.AccountVatAccou
 static EConomic.Rest.AccountVatAccount.operator ==(EConomic.Rest.AccountVatAccount? left, EConomic.Rest.AccountVatAccount? right) -> bool
 static EConomic.Rest.AccountingYear.operator !=(EConomic.Rest.AccountingYear? left, EConomic.Rest.AccountingYear? right) -> bool
 static EConomic.Rest.AccountingYear.operator ==(EConomic.Rest.AccountingYear? left, EConomic.Rest.AccountingYear? right) -> bool
+static EConomic.Rest.AccountingYearCreate.operator !=(EConomic.Rest.AccountingYearCreate? left, EConomic.Rest.AccountingYearCreate? right) -> bool
+static EConomic.Rest.AccountingYearCreate.operator ==(EConomic.Rest.AccountingYearCreate? left, EConomic.Rest.AccountingYearCreate? right) -> bool
 static EConomic.Rest.AppRole.operator !=(EConomic.Rest.AppRole? left, EConomic.Rest.AppRole? right) -> bool
 static EConomic.Rest.AppRole.operator ==(EConomic.Rest.AppRole? left, EConomic.Rest.AppRole? right) -> bool
 static EConomic.Rest.ArchivedOrder.operator !=(EConomic.Rest.ArchivedOrder? left, EConomic.Rest.ArchivedOrder? right) -> bool
@@ -6352,6 +7603,20 @@ static EConomic.Rest.Employee.operator !=(EConomic.Rest.Employee? left, EConomic
 static EConomic.Rest.Employee.operator ==(EConomic.Rest.Employee? left, EConomic.Rest.Employee? right) -> bool
 static EConomic.Rest.Journal.operator !=(EConomic.Rest.Journal? left, EConomic.Rest.Journal? right) -> bool
 static EConomic.Rest.Journal.operator ==(EConomic.Rest.Journal? left, EConomic.Rest.Journal? right) -> bool
+static EConomic.Rest.JournalEntry.operator !=(EConomic.Rest.JournalEntry? left, EConomic.Rest.JournalEntry? right) -> bool
+static EConomic.Rest.JournalEntry.operator ==(EConomic.Rest.JournalEntry? left, EConomic.Rest.JournalEntry? right) -> bool
+static EConomic.Rest.JournalEntryContraVatAccount.operator !=(EConomic.Rest.JournalEntryContraVatAccount? left, EConomic.Rest.JournalEntryContraVatAccount? right) -> bool
+static EConomic.Rest.JournalEntryContraVatAccount.operator ==(EConomic.Rest.JournalEntryContraVatAccount? left, EConomic.Rest.JournalEntryContraVatAccount? right) -> bool
+static EConomic.Rest.JournalEntryCurrency.operator !=(EConomic.Rest.JournalEntryCurrency? left, EConomic.Rest.JournalEntryCurrency? right) -> bool
+static EConomic.Rest.JournalEntryCurrency.operator ==(EConomic.Rest.JournalEntryCurrency? left, EConomic.Rest.JournalEntryCurrency? right) -> bool
+static EConomic.Rest.JournalEntryJournal.operator !=(EConomic.Rest.JournalEntryJournal? left, EConomic.Rest.JournalEntryJournal? right) -> bool
+static EConomic.Rest.JournalEntryJournal.operator ==(EConomic.Rest.JournalEntryJournal? left, EConomic.Rest.JournalEntryJournal? right) -> bool
+static EConomic.Rest.JournalEntryTemplates.operator !=(EConomic.Rest.JournalEntryTemplates? left, EConomic.Rest.JournalEntryTemplates? right) -> bool
+static EConomic.Rest.JournalEntryTemplates.operator ==(EConomic.Rest.JournalEntryTemplates? left, EConomic.Rest.JournalEntryTemplates? right) -> bool
+static EConomic.Rest.JournalEntryVoucher.operator !=(EConomic.Rest.JournalEntryVoucher? left, EConomic.Rest.JournalEntryVoucher? right) -> bool
+static EConomic.Rest.JournalEntryVoucher.operator ==(EConomic.Rest.JournalEntryVoucher? left, EConomic.Rest.JournalEntryVoucher? right) -> bool
+static EConomic.Rest.JournalEntryVoucherAccountingYear.operator !=(EConomic.Rest.JournalEntryVoucherAccountingYear? left, EConomic.Rest.JournalEntryVoucherAccountingYear? right) -> bool
+static EConomic.Rest.JournalEntryVoucherAccountingYear.operator ==(EConomic.Rest.JournalEntryVoucherAccountingYear? left, EConomic.Rest.JournalEntryVoucherAccountingYear? right) -> bool
 static EConomic.Rest.JournalSettings.operator !=(EConomic.Rest.JournalSettings? left, EConomic.Rest.JournalSettings? right) -> bool
 static EConomic.Rest.JournalSettings.operator ==(EConomic.Rest.JournalSettings? left, EConomic.Rest.JournalSettings? right) -> bool
 static EConomic.Rest.JournalSettingsContraAccounts.operator !=(EConomic.Rest.JournalSettingsContraAccounts? left, EConomic.Rest.JournalSettingsContraAccounts? right) -> bool
@@ -6360,6 +7625,126 @@ static EConomic.Rest.JournalSettingsVoucherNumbers.operator !=(EConomic.Rest.Jou
 static EConomic.Rest.JournalSettingsVoucherNumbers.operator ==(EConomic.Rest.JournalSettingsVoucherNumbers? left, EConomic.Rest.JournalSettingsVoucherNumbers? right) -> bool
 static EConomic.Rest.JournalTemplates.operator !=(EConomic.Rest.JournalTemplates? left, EConomic.Rest.JournalTemplates? right) -> bool
 static EConomic.Rest.JournalTemplates.operator ==(EConomic.Rest.JournalTemplates? left, EConomic.Rest.JournalTemplates? right) -> bool
+static EConomic.Rest.JournalVoucher.operator !=(EConomic.Rest.JournalVoucher? left, EConomic.Rest.JournalVoucher? right) -> bool
+static EConomic.Rest.JournalVoucher.operator ==(EConomic.Rest.JournalVoucher? left, EConomic.Rest.JournalVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherAccountingYear.operator !=(EConomic.Rest.JournalVoucherAccountingYear? left, EConomic.Rest.JournalVoucherAccountingYear? right) -> bool
+static EConomic.Rest.JournalVoucherAccountingYear.operator ==(EConomic.Rest.JournalVoucherAccountingYear? left, EConomic.Rest.JournalVoucherAccountingYear? right) -> bool
+static EConomic.Rest.JournalVoucherCreate.operator !=(EConomic.Rest.JournalVoucherCreate? left, EConomic.Rest.JournalVoucherCreate? right) -> bool
+static EConomic.Rest.JournalVoucherCreate.operator ==(EConomic.Rest.JournalVoucherCreate? left, EConomic.Rest.JournalVoucherCreate? right) -> bool
+static EConomic.Rest.JournalVoucherCreateAccountingYear.operator !=(EConomic.Rest.JournalVoucherCreateAccountingYear? left, EConomic.Rest.JournalVoucherCreateAccountingYear? right) -> bool
+static EConomic.Rest.JournalVoucherCreateAccountingYear.operator ==(EConomic.Rest.JournalVoucherCreateAccountingYear? left, EConomic.Rest.JournalVoucherCreateAccountingYear? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntries.operator !=(EConomic.Rest.JournalVoucherCreateEntries? left, EConomic.Rest.JournalVoucherCreateEntries? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntries.operator ==(EConomic.Rest.JournalVoucherCreateEntries? left, EConomic.Rest.JournalVoucherCreateEntries? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.operator !=(EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment.operator ==(EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPayment? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.operator !=(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount.operator ==(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.operator !=(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency.operator ==(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.operator !=(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal.operator ==(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.operator !=(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher.operator ==(EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesCustomerPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.operator !=(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher.operator ==(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.operator !=(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount.operator ==(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.operator !=(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency.operator ==(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.operator !=(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal.operator ==(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.operator !=(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount.operator ==(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.operator !=(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher.operator ==(EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesFinanceVoucherVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.operator !=(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice.operator ==(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.operator !=(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount.operator ==(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.operator !=(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency.operator ==(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.operator !=(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal.operator ==(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.operator !=(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher.operator ==(EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesManualCustomerInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPayment? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.operator !=(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher.operator ==(EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher? left, EConomic.Rest.JournalVoucherCreateEntriesSupplierPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherCreateJournal.operator !=(EConomic.Rest.JournalVoucherCreateJournal? left, EConomic.Rest.JournalVoucherCreateJournal? right) -> bool
+static EConomic.Rest.JournalVoucherCreateJournal.operator ==(EConomic.Rest.JournalVoucherCreateJournal? left, EConomic.Rest.JournalVoucherCreateJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntries.operator !=(EConomic.Rest.JournalVoucherEntries? left, EConomic.Rest.JournalVoucherEntries? right) -> bool
+static EConomic.Rest.JournalVoucherEntries.operator ==(EConomic.Rest.JournalVoucherEntries? left, EConomic.Rest.JournalVoucherEntries? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPayment.operator !=(EConomic.Rest.JournalVoucherEntriesCustomerPayment? left, EConomic.Rest.JournalVoucherEntriesCustomerPayment? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPayment.operator ==(EConomic.Rest.JournalVoucherEntriesCustomerPayment? left, EConomic.Rest.JournalVoucherEntriesCustomerPayment? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.operator !=(EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount.operator ==(EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.operator !=(EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency.operator ==(EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.operator !=(EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal.operator ==(EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.operator !=(EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher.operator ==(EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher? left, EConomic.Rest.JournalVoucherEntriesCustomerPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucher.operator !=(EConomic.Rest.JournalVoucherEntriesFinanceVoucher? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucher.operator ==(EConomic.Rest.JournalVoucherEntriesFinanceVoucher? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.operator !=(EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount.operator ==(EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.operator !=(EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency.operator ==(EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.operator !=(EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal.operator ==(EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.operator !=(EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount.operator ==(EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.operator !=(EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher.operator ==(EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher? left, EConomic.Rest.JournalVoucherEntriesFinanceVoucherVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.operator !=(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice.operator ==(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.operator !=(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount.operator ==(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.operator !=(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency.operator ==(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.operator !=(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal.operator ==(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.operator !=(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher.operator ==(EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher? left, EConomic.Rest.JournalVoucherEntriesManualCustomerInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoice.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierInvoice? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoice.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierInvoice? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoice? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher? left, EConomic.Rest.JournalVoucherEntriesSupplierInvoiceVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPayment.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierPayment? left, EConomic.Rest.JournalVoucherEntriesSupplierPayment? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPayment.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierPayment? left, EConomic.Rest.JournalVoucherEntriesSupplierPayment? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentContraVatAccount? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentCurrency? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentJournal? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.operator !=(EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher.operator ==(EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher? left, EConomic.Rest.JournalVoucherEntriesSupplierPaymentVoucher? right) -> bool
+static EConomic.Rest.JournalVoucherJournal.operator !=(EConomic.Rest.JournalVoucherJournal? left, EConomic.Rest.JournalVoucherJournal? right) -> bool
+static EConomic.Rest.JournalVoucherJournal.operator ==(EConomic.Rest.JournalVoucherJournal? left, EConomic.Rest.JournalVoucherJournal? right) -> bool
 static EConomic.Rest.Layout.operator !=(EConomic.Rest.Layout? left, EConomic.Rest.Layout? right) -> bool
 static EConomic.Rest.Layout.operator ==(EConomic.Rest.Layout? left, EConomic.Rest.Layout? right) -> bool
 static EConomic.Rest.NotDueInvoice.operator !=(EConomic.Rest.NotDueInvoice? left, EConomic.Rest.NotDueInvoice? right) -> bool

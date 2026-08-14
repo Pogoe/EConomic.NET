@@ -84,6 +84,127 @@ internal sealed class AccountingYearPageSource(Generated.AccountingYearsClient c
 }
 
 /// <summary>
+/// The <c>AccountingYear</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record AccountingYearCreate
+{
+    /// <summary>The <c>fromDate</c> field.</summary>
+    public required DateOnly FromDate { get; init; }
+
+    /// <summary>The <c>toDate</c> field.</summary>
+    public required DateOnly ToDate { get; init; }
+}
+
+/// <summary>
+/// The <c>/accounting-years</c> resource: a composable query, plus the writes e-conomic supports.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class AccountingYearResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountingYearsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public AccountingYearResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountingYearsClient(httpClient);
+    }
+
+    private EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> Query => new(new AccountingYearPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> Where(System.Linq.Expressions.Expression<System.Func<AccountingYearFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountingYearSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountingYearSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountingYear> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountingYear>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a accountingYear.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<AccountingYear> CreateAsync(AccountingYearCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostAccountingYearsAsync(ToGenerated(item), cancellationToken),
+            "POST /accounting-years").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    private static Generated.AccountingYearsPOST ToGenerated(AccountingYearCreate source)
+    {
+        var target = new Generated.AccountingYearsPOST();
+        target.FromDate = source.FromDate;
+        target.ToDate = source.ToDate;
+
+        return target;
+    }
+
+    private static AccountingYear FromGenerated(Generated.AccountingYear source) => new()
+    {
+        FromDate = source.FromDate == default ? null : source.FromDate,
+        ToDate = source.ToDate == default ? null : source.ToDate,
+        Closed = source.Closed,
+        Year = source.Year,
+        Periods = source.Periods,
+        Entries = source.Entries,
+        Totals = source.Totals,
+        Vouchers = source.Vouchers,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// The <c>department</c> of a <see cref="Account"/>.
 /// </summary>
 public sealed record AccountDepartment
@@ -4596,6 +4717,83 @@ internal sealed class JournalPageSource(Generated.JournalsClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/journals</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class JournalResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.JournalsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public JournalResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.JournalsClient(httpClient);
+    }
+
+    private EconomicQuery<Journal, JournalFilter, JournalSort> Query => new(new JournalPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Journal, JournalFilter, JournalSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Journal, JournalFilter, JournalSort> Where(System.Linq.Expressions.Expression<System.Func<JournalFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Journal, JournalFilter, JournalSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Journal, JournalFilter, JournalSort> OrderBy(System.Linq.Expressions.Expression<System.Func<JournalSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Journal, JournalFilter, JournalSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<JournalSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Journal, JournalFilter, JournalSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Journal> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Journal>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>The <c>entries</c> belonging to one journal.</summary>
+    /// <param name="journalNumber">The owning journal.</param>
+    /// <returns>The nested collection, scoped to that journal.</returns>
+    public JournalEntryResource Entries(int journalNumber) =>
+        new(_httpClient, journalNumber);
+
+    /// <summary>The <c>vouchers</c> belonging to one journal.</summary>
+    /// <param name="journalNumber">The owning journal.</param>
+    /// <returns>The nested collection, scoped to that journal.</returns>
+    public JournalVoucherResource Vouchers(int journalNumber) =>
+        new(_httpClient, journalNumber);
 }
 
 /// <summary>
@@ -11584,6 +11782,2568 @@ public sealed partial class DeliveryLocationResource
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="JournalEntry"/>.
+/// </summary>
+public sealed record JournalEntryTemplates
+{
+    /// <summary>The <c>customerPayment</c> field.</summary>
+    public System.Uri? CustomerPayment { get; init; }
+
+    /// <summary>The <c>account</c> field.</summary>
+    public System.Uri? Account { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public System.Uri? ContraAccount { get; init; }
+
+    /// <summary>The <c>accountAndContraAccount</c> field.</summary>
+    public System.Uri? AccountAndContraAccount { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalEntry"/>.
+/// </summary>
+public sealed record JournalEntryJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalEntry"/>.
+/// </summary>
+public sealed record JournalEntryContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalEntry"/>.
+/// </summary>
+public sealed record JournalEntryCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>accountingYear</c> of a <see cref="JournalEntryVoucher"/>.
+/// </summary>
+public sealed record JournalEntryVoucherAccountingYear
+{
+    /// <summary>The <c>year</c> field.</summary>
+    public string? Year { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalEntry"/>.
+/// </summary>
+public sealed record JournalEntryVoucher
+{
+    /// <summary>The <c>accountingYear</c> field.</summary>
+    public JournalEntryVoucherAccountingYear? AccountingYear { get; init; }
+
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/journals/{journalNumber}/entries</c>.
+/// </summary>
+public sealed record JournalEntry
+{
+    /// <summary>The <c>account</c> field.</summary>
+    public EconomicReference? Account { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public JournalEntryTemplates? Templates { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalEntryJournal? Journal { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>customerInvoice</c> field.</summary>
+    public int CustomerInvoice { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public EconomicReference? Supplier { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalEntryContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public EconomicReference? CostType { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalEntryCurrency? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public EconomicReference? Employee { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalEntryVoucher? Voucher { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>amountDefaultCurrency</c> field.</summary>
+    public decimal AmountDefaultCurrency { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInDefaultCurrency</c> field.</summary>
+    public decimal RemainderInDefaultCurrency { get; init; }
+
+    /// <summary>The <c>journalEntryNumber</c> field.</summary>
+    public int JournalEntryNumber { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal Quantity2 { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public EconomicReference? Unit1 { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public EconomicReference? Unit2 { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/journals/{journalNumber}/entries</c> and maps them to <see cref="JournalEntry"/>.</summary>
+internal sealed class JournalEntryPageSource(Generated.JournalsClient client, int journalNumber)
+    : IEconomicPageSource<JournalEntry>
+{
+    public async Task<EconomicPage<JournalEntry>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetJournalsByjournalNumberEntriesAsync(
+                journalNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /journals/{journalNumber}/entries").ConfigureAwait(false);
+
+        var items = new List<JournalEntry>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<JournalEntry>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static JournalEntry Map(Generated.JournalEntry source) => new()
+    {
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        Templates = source.Templates is null ? null : new JournalEntryTemplates
+        {
+            CustomerPayment = source.Templates.CustomerPayment,
+            Account = source.Templates.Account,
+            ContraAccount = source.Templates.ContraAccount,
+            AccountAndContraAccount = source.Templates.AccountAndContraAccount,
+        },
+        Journal = source.Journal is null ? null : new JournalEntryJournal
+        {
+            JournalNumber = (decimal)source.Journal.JournalNumber,
+            Self = source.Journal.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        CustomerInvoice = source.CustomerInvoice,
+        Supplier = Reference(source.Supplier?.SupplierNumber, source.Supplier?.Self),
+        SupplierInvoiceNumber = source.SupplierInvoiceNumber,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Text = source.Text,
+        Amount = (decimal)source.Amount,
+        ContraAccount = Reference(source.ContraAccount?.AccountNumber, source.ContraAccount?.Self),
+        ContraVatAccount = source.ContraVatAccount is null ? null : new JournalEntryContraVatAccount
+        {
+            VatCode = source.ContraVatAccount.VatCode,
+            Self = source.ContraVatAccount.Self,
+        },
+        ContraVatAmount = (decimal)source.ContraVatAmount,
+        ContraVatAmountInBaseCurrency = (decimal)source.ContraVatAmountInBaseCurrency,
+        CostType = Reference(source.CostType?.CostTypeNumber, source.CostType?.Self),
+        Currency = source.Currency is null ? null : new JournalEntryCurrency
+        {
+            Code = source.Currency.Code,
+            Self = source.Currency.Self,
+        },
+        Date = source.Date == default ? null : source.Date,
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Employee = Reference(source.Employee?.EmployeeNumber, source.Employee?.Self),
+        ExchangeRate = (decimal)source.ExchangeRate,
+        EntryType = source.EntryType.ToString(),
+        Voucher = source.Voucher is null ? null : new JournalEntryVoucher
+        {
+            AccountingYear = source.Voucher.AccountingYear is null ? null : new JournalEntryVoucherAccountingYear
+            {
+                Year = source.Voucher.AccountingYear.Year,
+                Self = source.Voucher.AccountingYear.Self,
+            },
+            VoucherNumber = (decimal)source.Voucher.VoucherNumber,
+            Self = source.Voucher.Self,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        AmountDefaultCurrency = (decimal)source.AmountDefaultCurrency,
+        Remainder = (decimal)source.Remainder,
+        RemainderInDefaultCurrency = (decimal)source.RemainderInDefaultCurrency,
+        JournalEntryNumber = source.JournalEntryNumber,
+        Quantity1 = (decimal)source.Quantity1,
+        Quantity2 = (decimal)source.Quantity2,
+        Unit1 = Reference(source.Unit1?.UnitNumber, source.Unit1?.Self),
+        Unit2 = Reference(source.Unit2?.UnitNumber, source.Unit2?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/journals/{journalNumber}/entries</c> collection, scoped to one journal.
+/// </summary>
+public sealed partial class JournalEntryResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.JournalsClient _client;
+    private readonly int _journalNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="journalNumber">The owning journal.</param>
+    public JournalEntryResource(System.Net.Http.HttpClient httpClient, int journalNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.JournalsClient(httpClient);
+        _journalNumber = journalNumber;
+    }
+
+    private EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> Query => new(new JournalEntryPageSource(_client, _journalNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> Where(System.Linq.Expressions.Expression<System.Func<JournalEntryFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<JournalEntry> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<JournalEntry>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Deletes a journalEntry.</summary>
+    /// <param name="journalEntryNumber">The item to delete.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes once the item is deleted.</returns>
+    public System.Threading.Tasks.Task DeleteAsync(int journalEntryNumber, System.Threading.CancellationToken cancellationToken = default) =>
+        FacadeTransport.DeleteAsync(
+            _httpClient,
+            string.Create(System.Globalization.CultureInfo.InvariantCulture, $"journals/{_journalNumber}/entries/{journalEntryNumber}"),
+            cancellationToken);
+}
+
+/// <summary>
+/// The <c>accountingYear</c> of a <see cref="JournalVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherAccountingYear
+{
+    /// <summary>The <c>year</c> field.</summary>
+    public string? Year { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesFinanceVoucherJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesFinanceVoucherContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesFinanceVoucherCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesFinanceVoucherVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>vatAccount</c> of a <see cref="JournalVoucherEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesFinanceVoucherVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>financeVouchers</c> of a <see cref="JournalVoucherEntries"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesFinanceVoucher
+{
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherEntriesFinanceVoucherJournal? Journal { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherEntriesFinanceVoucherContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public EconomicReference? CostType { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherEntriesFinanceVoucherCurrency? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public EconomicReference? Employee { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherEntriesFinanceVoucherVoucher? Voucher { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInDefaultCurrency</c> field.</summary>
+    public decimal RemainderInDefaultCurrency { get; init; }
+
+    /// <summary>The <c>account</c> field.</summary>
+    public EconomicReference? Account { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>vatAccount</c> field.</summary>
+    public JournalVoucherEntriesFinanceVoucherVatAccount? VatAccount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>vatAmountBaseCurrency</c> field.</summary>
+    public decimal VatAmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal Quantity2 { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public EconomicReference? Unit1 { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public EconomicReference? Unit2 { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesCustomerPaymentJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesCustomerPaymentContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesCustomerPaymentCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesCustomerPaymentVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>customerPayments</c> of a <see cref="JournalVoucherEntries"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesCustomerPayment
+{
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherEntriesCustomerPaymentJournal? Journal { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherEntriesCustomerPaymentContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherEntriesCustomerPaymentCurrency? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public EconomicReference? Employee { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherEntriesCustomerPaymentVoucher? Voucher { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInDefaultCurrency</c> field.</summary>
+    public decimal RemainderInDefaultCurrency { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>customerInvoice</c> field.</summary>
+    public int CustomerInvoice { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierInvoiceJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierInvoiceContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierInvoiceCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierInvoiceVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>supplierInvoices</c> of a <see cref="JournalVoucherEntries"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierInvoice
+{
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherEntriesSupplierInvoiceJournal? Journal { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherEntriesSupplierInvoiceContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public EconomicReference? CostType { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherEntriesSupplierInvoiceCurrency? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public EconomicReference? Employee { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherEntriesSupplierInvoiceVoucher? Voucher { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInDefaultCurrency</c> field.</summary>
+    public decimal RemainderInDefaultCurrency { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public EconomicReference? Supplier { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal Quantity2 { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public EconomicReference? Unit1 { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public EconomicReference? Unit2 { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierPaymentJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierPaymentContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierPaymentCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierPaymentVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>supplierPayments</c> of a <see cref="JournalVoucherEntries"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierPayment
+{
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherEntriesSupplierPaymentJournal? Journal { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherEntriesSupplierPaymentContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherEntriesSupplierPaymentCurrency? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public EconomicReference? Employee { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherEntriesSupplierPaymentVoucher? Voucher { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInDefaultCurrency</c> field.</summary>
+    public decimal RemainderInDefaultCurrency { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public EconomicReference? Supplier { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesManualCustomerInvoiceJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesManualCustomerInvoiceContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesManualCustomerInvoiceCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesManualCustomerInvoiceVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>manualCustomerInvoices</c> of a <see cref="JournalVoucherEntries"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesManualCustomerInvoice
+{
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherEntriesManualCustomerInvoiceJournal? Journal { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherEntriesManualCustomerInvoiceContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherEntriesManualCustomerInvoiceCurrency? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public EconomicReference? Employee { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherEntriesManualCustomerInvoiceVoucher? Voucher { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInDefaultCurrency</c> field.</summary>
+    public decimal RemainderInDefaultCurrency { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>customerInvoice</c> field.</summary>
+    public int CustomerInvoice { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+}
+
+/// <summary>
+/// The <c>entries</c> of a <see cref="JournalVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherEntries
+{
+    /// <summary>The <c>financeVouchers</c> field.</summary>
+    public IReadOnlyList<JournalVoucherEntriesFinanceVoucher> FinanceVouchers { get; init; } = [];
+
+    /// <summary>The <c>customerPayments</c> field.</summary>
+    public IReadOnlyList<JournalVoucherEntriesCustomerPayment> CustomerPayments { get; init; } = [];
+
+    /// <summary>The <c>supplierInvoices</c> field.</summary>
+    public IReadOnlyList<JournalVoucherEntriesSupplierInvoice> SupplierInvoices { get; init; } = [];
+
+    /// <summary>The <c>supplierPayments</c> field.</summary>
+    public IReadOnlyList<JournalVoucherEntriesSupplierPayment> SupplierPayments { get; init; } = [];
+
+    /// <summary>The <c>manualCustomerInvoices</c> field.</summary>
+    public IReadOnlyList<JournalVoucherEntriesManualCustomerInvoice> ManualCustomerInvoices { get; init; } = [];
+}
+
+/// <summary>
+/// A resource from <c>/journals/{journalNumber}/vouchers</c>.
+/// </summary>
+public sealed record JournalVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal VoucherNumber { get; init; }
+
+    /// <summary>The <c>accountingYear</c> field.</summary>
+    public JournalVoucherAccountingYear? AccountingYear { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherJournal? Journal { get; init; }
+
+    /// <summary>The <c>entries</c> field.</summary>
+    public JournalVoucherEntries? Entries { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/journals/{journalNumber}/vouchers</c> and maps them to <see cref="JournalVoucher"/>.</summary>
+internal sealed class JournalVoucherPageSource(Generated.JournalsClient client, int journalNumber)
+    : IEconomicPageSource<JournalVoucher>
+{
+    public async Task<EconomicPage<JournalVoucher>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetJournalsByjournalNumberVouchersAsync(
+                journalNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /journals/{journalNumber}/vouchers").ConfigureAwait(false);
+
+        var items = new List<JournalVoucher>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<JournalVoucher>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static JournalVoucher Map(Generated.VoucherEntry source) => new()
+    {
+        VoucherNumber = (decimal)source.VoucherNumber,
+        AccountingYear = source.AccountingYear is null ? null : new JournalVoucherAccountingYear
+        {
+            Year = source.AccountingYear.Year,
+            Self = source.AccountingYear.Self,
+        },
+        Journal = source.Journal is null ? null : new JournalVoucherJournal
+        {
+            JournalNumber = (decimal)source.Journal.JournalNumber,
+            Self = source.Journal.Self,
+        },
+        Entries = source.Entries is null ? null : new JournalVoucherEntries
+        {
+            FinanceVouchers = FacadeTransport.MapList(source.Entries.FinanceVouchers, item1 => new JournalVoucherEntriesFinanceVoucher
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesFinanceVoucherJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesFinanceVoucherContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                CostType = Reference(item1.CostType?.CostTypeNumber, item1.CostType?.Self),
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesFinanceVoucherCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesFinanceVoucherVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Account = Reference(item1.Account?.AccountNumber, item1.Account?.Self),
+                Project = Reference(item1.Project?.ProjectNumber, item1.Project?.Self),
+                VatAccount = item1.VatAccount is null ? null : new JournalVoucherEntriesFinanceVoucherVatAccount
+                {
+                    VatCode = item1.VatAccount.VatCode,
+                    Self = item1.VatAccount.Self,
+                },
+                VatAmount = (decimal)item1.VatAmount,
+                VatAmountBaseCurrency = (decimal)item1.VatAmountBaseCurrency,
+                Quantity1 = (decimal)item1.Quantity1,
+                Quantity2 = (decimal)item1.Quantity2,
+                Unit1 = Reference(item1.Unit1?.UnitNumber, item1.Unit1?.Self),
+                Unit2 = Reference(item1.Unit2?.UnitNumber, item1.Unit2?.Self),
+            }),
+            CustomerPayments = FacadeTransport.MapList(source.Entries.CustomerPayments, item1 => new JournalVoucherEntriesCustomerPayment
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesCustomerPaymentJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesCustomerPaymentContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesCustomerPaymentCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesCustomerPaymentVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Customer = Reference(item1.Customer?.CustomerNumber, item1.Customer?.Self),
+                CustomerInvoice = item1.CustomerInvoice,
+            }),
+            SupplierInvoices = FacadeTransport.MapList(source.Entries.SupplierInvoices, item1 => new JournalVoucherEntriesSupplierInvoice
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesSupplierInvoiceJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesSupplierInvoiceContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                CostType = Reference(item1.CostType?.CostTypeNumber, item1.CostType?.Self),
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesSupplierInvoiceCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesSupplierInvoiceVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Supplier = Reference(item1.Supplier?.SupplierNumber, item1.Supplier?.Self),
+                SupplierInvoiceNumber = item1.SupplierInvoiceNumber,
+                DueDate = item1.DueDate == default ? null : item1.DueDate,
+                Project = Reference(item1.Project?.ProjectNumber, item1.Project?.Self),
+                Quantity1 = (decimal)item1.Quantity1,
+                Quantity2 = (decimal)item1.Quantity2,
+                Unit1 = Reference(item1.Unit1?.UnitNumber, item1.Unit1?.Self),
+                Unit2 = Reference(item1.Unit2?.UnitNumber, item1.Unit2?.Self),
+            }),
+            SupplierPayments = FacadeTransport.MapList(source.Entries.SupplierPayments, item1 => new JournalVoucherEntriesSupplierPayment
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesSupplierPaymentJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesSupplierPaymentContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesSupplierPaymentCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesSupplierPaymentVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Supplier = Reference(item1.Supplier?.SupplierNumber, item1.Supplier?.Self),
+                SupplierInvoiceNumber = item1.SupplierInvoiceNumber,
+            }),
+            ManualCustomerInvoices = FacadeTransport.MapList(source.Entries.ManualCustomerInvoices, item1 => new JournalVoucherEntriesManualCustomerInvoice
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesManualCustomerInvoiceJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesManualCustomerInvoiceContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesManualCustomerInvoiceCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesManualCustomerInvoiceVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Customer = Reference(item1.Customer?.CustomerNumber, item1.Customer?.Self),
+                CustomerInvoice = item1.CustomerInvoice,
+                DueDate = item1.DueDate == default ? null : item1.DueDate,
+            }),
+        },
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>accountingYear</c> of a <see cref="JournalVoucherCreate"/>.
+/// </summary>
+public sealed record JournalVoucherCreateAccountingYear
+{
+    /// <summary>The <c>year</c> field.</summary>
+    public string? Year { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherCreate"/>.
+/// </summary>
+public sealed record JournalVoucherCreateJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal? JournalNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherCreateEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesFinanceVoucherJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal? JournalNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherCreateEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesFinanceVoucherContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherCreateEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesFinanceVoucherCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherCreateEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesFinanceVoucherVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal? VoucherNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>vatAccount</c> of a <see cref="JournalVoucherCreateEntriesFinanceVoucher"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesFinanceVoucherVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>financeVouchers</c> of a <see cref="JournalVoucherCreateEntries"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesFinanceVoucher
+{
+    /// <summary>The <c>amount</c> field.</summary>
+    public required decimal Amount { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public required DateOnly Date { get; init; }
+
+    /// <summary>The <c>account</c> field.</summary>
+    public int? AccountNumber { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal? AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public int? ContraAccountNumber { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherCreateEntriesFinanceVoucherContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal? ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal? ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public int? CostTypeNumber { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherCreateEntriesFinanceVoucherCurrency? Currency { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public int? EmployeeNumber { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal? ExchangeRate { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherCreateEntriesFinanceVoucherJournal? Journal { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public int? ProjectNumber { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal? Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal? Quantity2 { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public int? Unit1Number { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public int? Unit2Number { get; init; }
+
+    /// <summary>The <c>vatAccount</c> field.</summary>
+    public JournalVoucherCreateEntriesFinanceVoucherVatAccount? VatAccount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal? VatAmount { get; init; }
+
+    /// <summary>The <c>vatAmountBaseCurrency</c> field.</summary>
+    public decimal? VatAmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherCreateEntriesFinanceVoucherVoucher? Voucher { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherCreateEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesCustomerPaymentJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal? JournalNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherCreateEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesCustomerPaymentContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherCreateEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesCustomerPaymentCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherCreateEntriesCustomerPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesCustomerPaymentVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal? VoucherNumber { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>customerPayments</c> of a <see cref="JournalVoucherCreateEntries"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesCustomerPayment
+{
+    /// <summary>The <c>amount</c> field.</summary>
+    public required decimal Amount { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public required DateOnly Date { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal? AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public int? ContraAccountNumber { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherCreateEntriesCustomerPaymentContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal? ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal? ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherCreateEntriesCustomerPaymentCurrency? Currency { get; init; }
+
+    /// <summary>The <c>customerInvoice</c> field.</summary>
+    public int? CustomerInvoice { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public int? EmployeeNumber { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal? ExchangeRate { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherCreateEntriesCustomerPaymentJournal? Journal { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherCreateEntriesCustomerPaymentVoucher? Voucher { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherCreateEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierInvoiceJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal? JournalNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherCreateEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherCreateEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierInvoiceCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherCreateEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierInvoiceVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal? VoucherNumber { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>supplierInvoices</c> of a <see cref="JournalVoucherCreateEntries"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierInvoice
+{
+    /// <summary>The <c>amount</c> field.</summary>
+    public required decimal Amount { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public required DateOnly Date { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal? AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public int? ContraAccountNumber { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierInvoiceContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal? ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal? ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public int? CostTypeNumber { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierInvoiceCurrency? Currency { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public int? EmployeeNumber { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal? ExchangeRate { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierInvoiceJournal? Journal { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public int? ProjectNumber { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal? Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal? Quantity2 { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public int? SupplierNumber { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public int? Unit1Number { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public int? Unit2Number { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierInvoiceVoucher? Voucher { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherCreateEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierPaymentJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal? JournalNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherCreateEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierPaymentContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherCreateEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierPaymentCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherCreateEntriesSupplierPayment"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierPaymentVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal? VoucherNumber { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>supplierPayments</c> of a <see cref="JournalVoucherCreateEntries"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierPayment
+{
+    /// <summary>The <c>amount</c> field.</summary>
+    public required decimal Amount { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public required DateOnly Date { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal? AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public int? ContraAccountNumber { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierPaymentContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal? ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal? ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierPaymentCurrency? Currency { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public int? EmployeeNumber { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal? ExchangeRate { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierPaymentJournal? Journal { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public int? SupplierNumber { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierPaymentVoucher? Voucher { get; init; }
+}
+
+/// <summary>
+/// The <c>journal</c> of a <see cref="JournalVoucherCreateEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesManualCustomerInvoiceJournal
+{
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public decimal? JournalNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>contraVatAccount</c> of a <see cref="JournalVoucherCreateEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="JournalVoucherCreateEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesManualCustomerInvoiceCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public string? Code { get; init; }
+}
+
+/// <summary>
+/// The <c>voucher</c> of a <see cref="JournalVoucherCreateEntriesManualCustomerInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesManualCustomerInvoiceVoucher
+{
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal? VoucherNumber { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>manualCustomerInvoices</c> of a <see cref="JournalVoucherCreateEntries"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesManualCustomerInvoice
+{
+    /// <summary>The <c>amount</c> field.</summary>
+    public required decimal Amount { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public required DateOnly Date { get; init; }
+
+    /// <summary>The <c>amountBaseCurrency</c> field.</summary>
+    public decimal? AmountBaseCurrency { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public int? ContraAccountNumber { get; init; }
+
+    /// <summary>The <c>contraVatAccount</c> field.</summary>
+    public JournalVoucherCreateEntriesManualCustomerInvoiceContraVatAccount? ContraVatAccount { get; init; }
+
+    /// <summary>The <c>contraVatAmount</c> field.</summary>
+    public decimal? ContraVatAmount { get; init; }
+
+    /// <summary>The <c>contraVatAmountInBaseCurrency</c> field.</summary>
+    public decimal? ContraVatAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public JournalVoucherCreateEntriesManualCustomerInvoiceCurrency? Currency { get; init; }
+
+    /// <summary>The <c>customerInvoice</c> field.</summary>
+    public int? CustomerInvoice { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public int? CustomerNumber { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public int? DepartmentalDistributionNumber { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>employee</c> field.</summary>
+    public int? EmployeeNumber { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal? ExchangeRate { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherCreateEntriesManualCustomerInvoiceJournal? Journal { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>voucher</c> field.</summary>
+    public JournalVoucherCreateEntriesManualCustomerInvoiceVoucher? Voucher { get; init; }
+}
+
+/// <summary>
+/// The <c>entries</c> of a <see cref="JournalVoucherCreate"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntries
+{
+    /// <summary>The <c>customerPayments</c> field.</summary>
+    public IReadOnlyList<JournalVoucherCreateEntriesCustomerPayment> CustomerPayments { get; init; } = [];
+
+    /// <summary>The <c>financeVouchers</c> field.</summary>
+    public IReadOnlyList<JournalVoucherCreateEntriesFinanceVoucher> FinanceVouchers { get; init; } = [];
+
+    /// <summary>The <c>manualCustomerInvoices</c> field.</summary>
+    public IReadOnlyList<JournalVoucherCreateEntriesManualCustomerInvoice> ManualCustomerInvoices { get; init; } = [];
+
+    /// <summary>The <c>supplierInvoices</c> field.</summary>
+    public IReadOnlyList<JournalVoucherCreateEntriesSupplierInvoice> SupplierInvoices { get; init; } = [];
+
+    /// <summary>The <c>supplierPayments</c> field.</summary>
+    public IReadOnlyList<JournalVoucherCreateEntriesSupplierPayment> SupplierPayments { get; init; } = [];
+}
+
+/// <summary>
+/// The <c>JournalVoucher</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record JournalVoucherCreate
+{
+    /// <summary>The <c>accountingYear</c> field.</summary>
+    public required JournalVoucherCreateAccountingYear AccountingYear { get; init; }
+
+    /// <summary>The <c>entries</c> field.</summary>
+    public JournalVoucherCreateEntries? Entries { get; init; }
+
+    /// <summary>The <c>journal</c> field.</summary>
+    public JournalVoucherCreateJournal? Journal { get; init; }
+
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public decimal? VoucherNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>/journals/{journalNumber}/vouchers</c> collection, scoped to one journal.
+/// </summary>
+public sealed partial class JournalVoucherResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.JournalsClient _client;
+    private readonly int _journalNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="journalNumber">The owning journal.</param>
+    public JournalVoucherResource(System.Net.Http.HttpClient httpClient, int journalNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.JournalsClient(httpClient);
+        _journalNumber = journalNumber;
+    }
+
+    private EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> Query => new(new JournalVoucherPageSource(_client, _journalNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> Where(System.Linq.Expressions.Expression<System.Func<JournalVoucherFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<JournalVoucher> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<JournalVoucher>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a journalVoucher.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created items, as e-conomic stored them.</returns>
+    /// <remarks>
+    /// This answers with a collection because e-conomic may split the entries it was sent
+    /// across more than one record. Verified against a live agreement.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<JournalVoucher>> CreateAsync(JournalVoucherCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostJournalsByjournalNumberVouchersAsync(_journalNumber, ToGenerated(item), cancellationToken),
+            "POST /journals/{journalNumber}/vouchers").ConfigureAwait(false);
+
+        return FacadeTransport.MapList(response, FromGenerated);
+    }
+
+    private static Generated.JournalVoucherPost ToGenerated(JournalVoucherCreate source)
+    {
+        var target = new Generated.JournalVoucherPost();
+        if (source.VoucherNumber is { } voucherNumber0)
+        {
+            target.VoucherNumber = (double)voucherNumber0;
+        }
+        target.AccountingYear = new();
+        target.AccountingYear.Year = source.AccountingYear.Year!;
+        if (source.Journal is { } journal0)
+        {
+            target.Journal = new();
+            if (journal0.JournalNumber is { } journalNumber1)
+            {
+                target.Journal.JournalNumber = (double)journalNumber1;
+            }
+        }
+        if (source.Entries is { } entries0)
+        {
+            target.Entries = new();
+            target.Entries.FinanceVouchers = FacadeTransport.BuildList(entries0.FinanceVouchers, target.Entries.FinanceVouchers, (item1, element1) =>
+            {
+                element1.Text = item1.Text!;
+                if (item1.Journal is { } journal2)
+                {
+                    element1.Journal = new();
+                    if (journal2.JournalNumber is { } journalNumber3)
+                    {
+                        element1.Journal.JournalNumber = (double)journalNumber3;
+                    }
+                }
+                element1.Amount = (double)item1.Amount;
+                if (item1.ContraAccountNumber is { } contraAccountNumber2)
+                {
+                    element1.ContraAccount = new() { AccountNumber = contraAccountNumber2 };
+                }
+                if (item1.ContraVatAccount is { } contraVatAccount2)
+                {
+                    element1.ContraVatAccount = new();
+                    element1.ContraVatAccount.VatCode = contraVatAccount2.VatCode!;
+                }
+                if (item1.CostTypeNumber is { } costTypeNumber2)
+                {
+                    element1.CostType = new() { CostTypeNumber = costTypeNumber2 };
+                }
+                if (item1.Currency is { } currency2)
+                {
+                    element1.Currency = new();
+                    element1.Currency.Code = currency2.Code!;
+                }
+                element1.Date = item1.Date;
+                if (item1.DepartmentalDistributionNumber is { } departmentalDistributionNumber2)
+                {
+                    element1.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber2 };
+                }
+                if (item1.EmployeeNumber is { } employeeNumber2)
+                {
+                    element1.Employee = new() { EmployeeNumber = employeeNumber2 };
+                }
+                if (item1.ExchangeRate is { } exchangeRate2)
+                {
+                    element1.ExchangeRate = (double)exchangeRate2;
+                }
+                element1.EntryType = FacadeTransport.ParseEnum(item1.EntryType, element1.EntryType);
+                if (item1.Voucher is { } voucher2)
+                {
+                    element1.Voucher = new();
+                    if (voucher2.VoucherNumber is { } voucherNumber3)
+                    {
+                        element1.Voucher.VoucherNumber = (double)voucherNumber3;
+                    }
+                }
+                if (item1.ContraVatAmount is { } contraVatAmount2)
+                {
+                    element1.ContraVatAmount = (double)contraVatAmount2;
+                }
+                if (item1.ContraVatAmountInBaseCurrency is { } contraVatAmountInBaseCurrency2)
+                {
+                    element1.ContraVatAmountInBaseCurrency = (double)contraVatAmountInBaseCurrency2;
+                }
+                if (item1.AmountBaseCurrency is { } amountBaseCurrency2)
+                {
+                    element1.AmountBaseCurrency = (double)amountBaseCurrency2;
+                }
+                if (item1.AccountNumber is { } accountNumber2)
+                {
+                    element1.Account = new() { AccountNumber = accountNumber2 };
+                }
+                if (item1.ProjectNumber is { } projectNumber2)
+                {
+                    element1.Project = new() { ProjectNumber = projectNumber2 };
+                }
+                if (item1.VatAccount is { } vatAccount2)
+                {
+                    element1.VatAccount = new();
+                    element1.VatAccount.VatCode = vatAccount2.VatCode!;
+                }
+                if (item1.VatAmount is { } vatAmount2)
+                {
+                    element1.VatAmount = (double)vatAmount2;
+                }
+                if (item1.VatAmountBaseCurrency is { } vatAmountBaseCurrency2)
+                {
+                    element1.VatAmountBaseCurrency = (double)vatAmountBaseCurrency2;
+                }
+                if (item1.Quantity1 is { } quantity12)
+                {
+                    element1.Quantity1 = (double)quantity12;
+                }
+                if (item1.Quantity2 is { } quantity22)
+                {
+                    element1.Quantity2 = (double)quantity22;
+                }
+                if (item1.Unit1Number is { } unit1Number2)
+                {
+                    element1.Unit1 = new() { UnitNumber = unit1Number2 };
+                }
+                if (item1.Unit2Number is { } unit2Number2)
+                {
+                    element1.Unit2 = new() { UnitNumber = unit2Number2 };
+                }
+            });
+            target.Entries.CustomerPayments = FacadeTransport.BuildList(entries0.CustomerPayments, target.Entries.CustomerPayments, (item1, element1) =>
+            {
+                element1.Text = item1.Text!;
+                if (item1.Journal is { } journal2)
+                {
+                    element1.Journal = new();
+                    if (journal2.JournalNumber is { } journalNumber3)
+                    {
+                        element1.Journal.JournalNumber = (double)journalNumber3;
+                    }
+                }
+                element1.Amount = (double)item1.Amount;
+                if (item1.ContraAccountNumber is { } contraAccountNumber2)
+                {
+                    element1.ContraAccount = new() { AccountNumber = contraAccountNumber2 };
+                }
+                if (item1.ContraVatAccount is { } contraVatAccount2)
+                {
+                    element1.ContraVatAccount = new();
+                    element1.ContraVatAccount.VatCode = contraVatAccount2.VatCode!;
+                }
+                if (item1.Currency is { } currency2)
+                {
+                    element1.Currency = new();
+                    element1.Currency.Code = currency2.Code!;
+                }
+                element1.Date = item1.Date;
+                if (item1.DepartmentalDistributionNumber is { } departmentalDistributionNumber2)
+                {
+                    element1.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber2 };
+                }
+                if (item1.EmployeeNumber is { } employeeNumber2)
+                {
+                    element1.Employee = new() { EmployeeNumber = employeeNumber2 };
+                }
+                if (item1.ExchangeRate is { } exchangeRate2)
+                {
+                    element1.ExchangeRate = (double)exchangeRate2;
+                }
+                element1.EntryType = FacadeTransport.ParseEnum(item1.EntryType, element1.EntryType);
+                if (item1.Voucher is { } voucher2)
+                {
+                    element1.Voucher = new();
+                    if (voucher2.VoucherNumber is { } voucherNumber3)
+                    {
+                        element1.Voucher.VoucherNumber = (double)voucherNumber3;
+                    }
+                }
+                if (item1.ContraVatAmount is { } contraVatAmount2)
+                {
+                    element1.ContraVatAmount = (double)contraVatAmount2;
+                }
+                if (item1.ContraVatAmountInBaseCurrency is { } contraVatAmountInBaseCurrency2)
+                {
+                    element1.ContraVatAmountInBaseCurrency = (double)contraVatAmountInBaseCurrency2;
+                }
+                if (item1.AmountBaseCurrency is { } amountBaseCurrency2)
+                {
+                    element1.AmountBaseCurrency = (double)amountBaseCurrency2;
+                }
+                if (item1.CustomerNumber is { } customerNumber2)
+                {
+                    element1.Customer = new() { CustomerNumber = customerNumber2 };
+                }
+                if (item1.CustomerInvoice is { } customerInvoice2)
+                {
+                    element1.CustomerInvoice = customerInvoice2;
+                }
+            });
+            target.Entries.SupplierInvoices = FacadeTransport.BuildList(entries0.SupplierInvoices, target.Entries.SupplierInvoices, (item1, element1) =>
+            {
+                element1.Text = item1.Text!;
+                if (item1.Journal is { } journal2)
+                {
+                    element1.Journal = new();
+                    if (journal2.JournalNumber is { } journalNumber3)
+                    {
+                        element1.Journal.JournalNumber = (double)journalNumber3;
+                    }
+                }
+                element1.Amount = (double)item1.Amount;
+                if (item1.ContraAccountNumber is { } contraAccountNumber2)
+                {
+                    element1.ContraAccount = new() { AccountNumber = contraAccountNumber2 };
+                }
+                if (item1.ContraVatAccount is { } contraVatAccount2)
+                {
+                    element1.ContraVatAccount = new();
+                    element1.ContraVatAccount.VatCode = contraVatAccount2.VatCode!;
+                }
+                if (item1.CostTypeNumber is { } costTypeNumber2)
+                {
+                    element1.CostType = new() { CostTypeNumber = costTypeNumber2 };
+                }
+                if (item1.Currency is { } currency2)
+                {
+                    element1.Currency = new();
+                    element1.Currency.Code = currency2.Code!;
+                }
+                element1.Date = item1.Date;
+                if (item1.DepartmentalDistributionNumber is { } departmentalDistributionNumber2)
+                {
+                    element1.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber2 };
+                }
+                if (item1.EmployeeNumber is { } employeeNumber2)
+                {
+                    element1.Employee = new() { EmployeeNumber = employeeNumber2 };
+                }
+                if (item1.ExchangeRate is { } exchangeRate2)
+                {
+                    element1.ExchangeRate = (double)exchangeRate2;
+                }
+                element1.EntryType = FacadeTransport.ParseEnum(item1.EntryType, element1.EntryType);
+                if (item1.Voucher is { } voucher2)
+                {
+                    element1.Voucher = new();
+                    if (voucher2.VoucherNumber is { } voucherNumber3)
+                    {
+                        element1.Voucher.VoucherNumber = (double)voucherNumber3;
+                    }
+                }
+                if (item1.ContraVatAmount is { } contraVatAmount2)
+                {
+                    element1.ContraVatAmount = (double)contraVatAmount2;
+                }
+                if (item1.ContraVatAmountInBaseCurrency is { } contraVatAmountInBaseCurrency2)
+                {
+                    element1.ContraVatAmountInBaseCurrency = (double)contraVatAmountInBaseCurrency2;
+                }
+                if (item1.AmountBaseCurrency is { } amountBaseCurrency2)
+                {
+                    element1.AmountBaseCurrency = (double)amountBaseCurrency2;
+                }
+                if (item1.SupplierNumber is { } supplierNumber2)
+                {
+                    element1.Supplier = new() { SupplierNumber = supplierNumber2 };
+                }
+                element1.SupplierInvoiceNumber = item1.SupplierInvoiceNumber!;
+                if (item1.DueDate is { } dueDate2)
+                {
+                    element1.DueDate = dueDate2;
+                }
+                if (item1.ProjectNumber is { } projectNumber2)
+                {
+                    element1.Project = new() { ProjectNumber = projectNumber2 };
+                }
+                if (item1.Quantity1 is { } quantity12)
+                {
+                    element1.Quantity1 = (double)quantity12;
+                }
+                if (item1.Quantity2 is { } quantity22)
+                {
+                    element1.Quantity2 = (double)quantity22;
+                }
+                if (item1.Unit1Number is { } unit1Number2)
+                {
+                    element1.Unit1 = new() { UnitNumber = unit1Number2 };
+                }
+                if (item1.Unit2Number is { } unit2Number2)
+                {
+                    element1.Unit2 = new() { UnitNumber = unit2Number2 };
+                }
+            });
+            target.Entries.SupplierPayments = FacadeTransport.BuildList(entries0.SupplierPayments, target.Entries.SupplierPayments, (item1, element1) =>
+            {
+                element1.Text = item1.Text!;
+                if (item1.Journal is { } journal2)
+                {
+                    element1.Journal = new();
+                    if (journal2.JournalNumber is { } journalNumber3)
+                    {
+                        element1.Journal.JournalNumber = (double)journalNumber3;
+                    }
+                }
+                element1.Amount = (double)item1.Amount;
+                if (item1.ContraAccountNumber is { } contraAccountNumber2)
+                {
+                    element1.ContraAccount = new() { AccountNumber = contraAccountNumber2 };
+                }
+                if (item1.ContraVatAccount is { } contraVatAccount2)
+                {
+                    element1.ContraVatAccount = new();
+                    element1.ContraVatAccount.VatCode = contraVatAccount2.VatCode!;
+                }
+                if (item1.Currency is { } currency2)
+                {
+                    element1.Currency = new();
+                    element1.Currency.Code = currency2.Code!;
+                }
+                element1.Date = item1.Date;
+                if (item1.DepartmentalDistributionNumber is { } departmentalDistributionNumber2)
+                {
+                    element1.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber2 };
+                }
+                if (item1.EmployeeNumber is { } employeeNumber2)
+                {
+                    element1.Employee = new() { EmployeeNumber = employeeNumber2 };
+                }
+                if (item1.ExchangeRate is { } exchangeRate2)
+                {
+                    element1.ExchangeRate = (double)exchangeRate2;
+                }
+                element1.EntryType = FacadeTransport.ParseEnum(item1.EntryType, element1.EntryType);
+                if (item1.Voucher is { } voucher2)
+                {
+                    element1.Voucher = new();
+                    if (voucher2.VoucherNumber is { } voucherNumber3)
+                    {
+                        element1.Voucher.VoucherNumber = (double)voucherNumber3;
+                    }
+                }
+                if (item1.ContraVatAmount is { } contraVatAmount2)
+                {
+                    element1.ContraVatAmount = (double)contraVatAmount2;
+                }
+                if (item1.ContraVatAmountInBaseCurrency is { } contraVatAmountInBaseCurrency2)
+                {
+                    element1.ContraVatAmountInBaseCurrency = (double)contraVatAmountInBaseCurrency2;
+                }
+                if (item1.AmountBaseCurrency is { } amountBaseCurrency2)
+                {
+                    element1.AmountBaseCurrency = (double)amountBaseCurrency2;
+                }
+                if (item1.SupplierNumber is { } supplierNumber2)
+                {
+                    element1.Supplier = new() { SupplierNumber = supplierNumber2 };
+                }
+                element1.SupplierInvoiceNumber = item1.SupplierInvoiceNumber!;
+            });
+            target.Entries.ManualCustomerInvoices = FacadeTransport.BuildList(entries0.ManualCustomerInvoices, target.Entries.ManualCustomerInvoices, (item1, element1) =>
+            {
+                element1.Text = item1.Text!;
+                if (item1.Journal is { } journal2)
+                {
+                    element1.Journal = new();
+                    if (journal2.JournalNumber is { } journalNumber3)
+                    {
+                        element1.Journal.JournalNumber = (double)journalNumber3;
+                    }
+                }
+                element1.Amount = (double)item1.Amount;
+                if (item1.ContraAccountNumber is { } contraAccountNumber2)
+                {
+                    element1.ContraAccount = new() { AccountNumber = contraAccountNumber2 };
+                }
+                if (item1.ContraVatAccount is { } contraVatAccount2)
+                {
+                    element1.ContraVatAccount = new();
+                    element1.ContraVatAccount.VatCode = contraVatAccount2.VatCode!;
+                }
+                if (item1.Currency is { } currency2)
+                {
+                    element1.Currency = new();
+                    element1.Currency.Code = currency2.Code!;
+                }
+                element1.Date = item1.Date;
+                if (item1.DepartmentalDistributionNumber is { } departmentalDistributionNumber2)
+                {
+                    element1.DepartmentalDistribution = new() { DepartmentalDistributionNumber = departmentalDistributionNumber2 };
+                }
+                if (item1.EmployeeNumber is { } employeeNumber2)
+                {
+                    element1.Employee = new() { EmployeeNumber = employeeNumber2 };
+                }
+                if (item1.ExchangeRate is { } exchangeRate2)
+                {
+                    element1.ExchangeRate = (double)exchangeRate2;
+                }
+                element1.EntryType = FacadeTransport.ParseEnum(item1.EntryType, element1.EntryType);
+                if (item1.Voucher is { } voucher2)
+                {
+                    element1.Voucher = new();
+                    if (voucher2.VoucherNumber is { } voucherNumber3)
+                    {
+                        element1.Voucher.VoucherNumber = (double)voucherNumber3;
+                    }
+                }
+                if (item1.ContraVatAmount is { } contraVatAmount2)
+                {
+                    element1.ContraVatAmount = (double)contraVatAmount2;
+                }
+                if (item1.ContraVatAmountInBaseCurrency is { } contraVatAmountInBaseCurrency2)
+                {
+                    element1.ContraVatAmountInBaseCurrency = (double)contraVatAmountInBaseCurrency2;
+                }
+                if (item1.AmountBaseCurrency is { } amountBaseCurrency2)
+                {
+                    element1.AmountBaseCurrency = (double)amountBaseCurrency2;
+                }
+                if (item1.CustomerNumber is { } customerNumber2)
+                {
+                    element1.Customer = new() { CustomerNumber = customerNumber2 };
+                }
+                if (item1.CustomerInvoice is { } customerInvoice2)
+                {
+                    element1.CustomerInvoice = customerInvoice2;
+                }
+                if (item1.DueDate is { } dueDate2)
+                {
+                    element1.DueDate = dueDate2;
+                }
+            });
+        }
+
+        return target;
+    }
+
+    private static JournalVoucher FromGenerated(Generated.VoucherEntry source) => new()
+    {
+        VoucherNumber = (decimal)source.VoucherNumber,
+        AccountingYear = source.AccountingYear is null ? null : new JournalVoucherAccountingYear
+        {
+            Year = source.AccountingYear.Year,
+            Self = source.AccountingYear.Self,
+        },
+        Journal = source.Journal is null ? null : new JournalVoucherJournal
+        {
+            JournalNumber = (decimal)source.Journal.JournalNumber,
+            Self = source.Journal.Self,
+        },
+        Entries = source.Entries is null ? null : new JournalVoucherEntries
+        {
+            FinanceVouchers = FacadeTransport.MapList(source.Entries.FinanceVouchers, item1 => new JournalVoucherEntriesFinanceVoucher
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesFinanceVoucherJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesFinanceVoucherContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                CostType = Reference(item1.CostType?.CostTypeNumber, item1.CostType?.Self),
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesFinanceVoucherCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesFinanceVoucherVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Account = Reference(item1.Account?.AccountNumber, item1.Account?.Self),
+                Project = Reference(item1.Project?.ProjectNumber, item1.Project?.Self),
+                VatAccount = item1.VatAccount is null ? null : new JournalVoucherEntriesFinanceVoucherVatAccount
+                {
+                    VatCode = item1.VatAccount.VatCode,
+                    Self = item1.VatAccount.Self,
+                },
+                VatAmount = (decimal)item1.VatAmount,
+                VatAmountBaseCurrency = (decimal)item1.VatAmountBaseCurrency,
+                Quantity1 = (decimal)item1.Quantity1,
+                Quantity2 = (decimal)item1.Quantity2,
+                Unit1 = Reference(item1.Unit1?.UnitNumber, item1.Unit1?.Self),
+                Unit2 = Reference(item1.Unit2?.UnitNumber, item1.Unit2?.Self),
+            }),
+            CustomerPayments = FacadeTransport.MapList(source.Entries.CustomerPayments, item1 => new JournalVoucherEntriesCustomerPayment
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesCustomerPaymentJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesCustomerPaymentContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesCustomerPaymentCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesCustomerPaymentVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Customer = Reference(item1.Customer?.CustomerNumber, item1.Customer?.Self),
+                CustomerInvoice = item1.CustomerInvoice,
+            }),
+            SupplierInvoices = FacadeTransport.MapList(source.Entries.SupplierInvoices, item1 => new JournalVoucherEntriesSupplierInvoice
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesSupplierInvoiceJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesSupplierInvoiceContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                CostType = Reference(item1.CostType?.CostTypeNumber, item1.CostType?.Self),
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesSupplierInvoiceCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesSupplierInvoiceVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Supplier = Reference(item1.Supplier?.SupplierNumber, item1.Supplier?.Self),
+                SupplierInvoiceNumber = item1.SupplierInvoiceNumber,
+                DueDate = item1.DueDate == default ? null : item1.DueDate,
+                Project = Reference(item1.Project?.ProjectNumber, item1.Project?.Self),
+                Quantity1 = (decimal)item1.Quantity1,
+                Quantity2 = (decimal)item1.Quantity2,
+                Unit1 = Reference(item1.Unit1?.UnitNumber, item1.Unit1?.Self),
+                Unit2 = Reference(item1.Unit2?.UnitNumber, item1.Unit2?.Self),
+            }),
+            SupplierPayments = FacadeTransport.MapList(source.Entries.SupplierPayments, item1 => new JournalVoucherEntriesSupplierPayment
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesSupplierPaymentJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesSupplierPaymentContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesSupplierPaymentCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesSupplierPaymentVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Supplier = Reference(item1.Supplier?.SupplierNumber, item1.Supplier?.Self),
+                SupplierInvoiceNumber = item1.SupplierInvoiceNumber,
+            }),
+            ManualCustomerInvoices = FacadeTransport.MapList(source.Entries.ManualCustomerInvoices, item1 => new JournalVoucherEntriesManualCustomerInvoice
+            {
+                Text = item1.Text,
+                Journal = item1.Journal is null ? null : new JournalVoucherEntriesManualCustomerInvoiceJournal
+                {
+                    JournalNumber = (decimal)item1.Journal.JournalNumber,
+                    Self = item1.Journal.Self,
+                },
+                Amount = (decimal)item1.Amount,
+                ContraAccount = Reference(item1.ContraAccount?.AccountNumber, item1.ContraAccount?.Self),
+                ContraVatAccount = item1.ContraVatAccount is null ? null : new JournalVoucherEntriesManualCustomerInvoiceContraVatAccount
+                {
+                    VatCode = item1.ContraVatAccount.VatCode,
+                    Self = item1.ContraVatAccount.Self,
+                },
+                Currency = item1.Currency is null ? null : new JournalVoucherEntriesManualCustomerInvoiceCurrency
+                {
+                    Code = item1.Currency.Code,
+                    Self = item1.Currency.Self,
+                },
+                Date = item1.Date == default ? null : item1.Date,
+                DepartmentalDistribution = Reference(item1.DepartmentalDistribution?.DepartmentalDistributionNumber, item1.DepartmentalDistribution?.Self),
+                Employee = Reference(item1.Employee?.EmployeeNumber, item1.Employee?.Self),
+                ExchangeRate = (decimal)item1.ExchangeRate,
+                EntryType = item1.EntryType.ToString(),
+                Voucher = item1.Voucher is null ? null : new JournalVoucherEntriesManualCustomerInvoiceVoucher
+                {
+                    VoucherNumber = (decimal)item1.Voucher.VoucherNumber,
+                    Self = item1.Voucher.Self,
+                },
+                ContraVatAmount = (decimal)item1.ContraVatAmount,
+                ContraVatAmountInBaseCurrency = (decimal)item1.ContraVatAmountInBaseCurrency,
+                AmountBaseCurrency = (decimal)item1.AmountBaseCurrency,
+                Remainder = (decimal)item1.Remainder,
+                RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
+                Customer = Reference(item1.Customer?.CustomerNumber, item1.Customer?.Self),
+                CustomerInvoice = item1.CustomerInvoice,
+                DueDate = item1.DueDate == default ? null : item1.DueDate,
+            }),
+        },
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
 }
 
 namespace EConomic
@@ -11592,9 +14352,9 @@ namespace EConomic
 
     public sealed partial class EconomicClient
     {
-        /// <summary><c>/accounting-years</c>, as a composable query.</summary>
-        public EconomicQuery<AccountingYear, AccountingYearFilter, AccountingYearSort> AccountingYears =>
-            new(new AccountingYearPageSource(new Generated.AccountingYearsClient(HttpClient)));
+        /// <summary><c>/accounting-years</c>, as a queryable and writable resource.</summary>
+        public AccountingYearResource AccountingYears =>
+            new(HttpClient);
 
         /// <summary><c>/accounts</c>, as a composable query.</summary>
         public EconomicQuery<Account, AccountFilter, AccountSort> Accounts =>
@@ -11656,9 +14416,9 @@ namespace EConomic
         public EconomicQuery<UnpaidInvoice, UnpaidInvoiceFilter, UnpaidInvoiceSort> UnpaidInvoices =>
             new(new UnpaidInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
 
-        /// <summary><c>/journals</c>, as a composable query.</summary>
-        public EconomicQuery<Journal, JournalFilter, JournalSort> Journals =>
-            new(new JournalPageSource(new Generated.JournalsClient(HttpClient)));
+        /// <summary><c>/journals</c>, as a query plus its nested collections.</summary>
+        public JournalResource Journals =>
+            new(HttpClient);
 
         /// <summary><c>/layouts</c>, as a composable query.</summary>
         public EconomicQuery<Layout, LayoutFilter, LayoutSort> Layouts =>

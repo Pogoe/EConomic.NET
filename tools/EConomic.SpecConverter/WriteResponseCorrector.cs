@@ -60,14 +60,31 @@ public static class WriteResponseCorrector
                     continue;
                 }
 
+                var isCollection = SchemaRegistry.CollectionWriteResponses.Contains(entity);
+
                 foreach (var (_, response) in responses)
                 {
-                    if (response?["content"]?["application/json"]?["schema"] is JsonObject schema)
+                    if (response?["content"]?["application/json"]?["schema"] is not JsonObject schema)
                     {
-                        schema.Clear();
-                        schema["$ref"] = RefPrefix + entity;
-                        corrected++;
+                        continue;
                     }
+
+                    schema.Clear();
+
+                    // A voucher create answers with an array, because e-conomic may split the
+                    // entries it was sent across several vouchers. Declaring the single shape there
+                    // produced a client that posted successfully and then failed to read the reply.
+                    if (isCollection)
+                    {
+                        schema["type"] = "array";
+                        schema["items"] = new JsonObject { ["$ref"] = RefPrefix + entity };
+                    }
+                    else
+                    {
+                        schema["$ref"] = RefPrefix + entity;
+                    }
+
+                    corrected++;
                 }
             }
         }

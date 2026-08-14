@@ -115,6 +115,12 @@ public sealed class SchemaRegistry
     {
         ["DraftInvoiceSummary"] = "DraftInvoice",
         ["BookedInvoiceSummary"] = "BookedInvoice",
+
+        // A voucher, not an entry: `VoucherEntry` is the title e-conomic gave the item of
+        // /journals/{n}/vouchers, and it describes the collection rather than the type. The plain
+        // name is free on the public surface — `JournalVoucher` is the collection envelope, which
+        // is internal.
+        ["VoucherEntry"] = "JournalVoucher",
     };
 
     /// <summary>The name an entity is published under, which is its component name unless renamed.</summary>
@@ -136,6 +142,10 @@ public sealed class SchemaRegistry
 
         // Nested collections, reached through their parent rather than off the client.
         "CustomerContact", "DeliveryLocation",
+
+        // Vouchers hang off a journal, which is itself read-only, and so do the entries they
+        // produce — deleting one of those is how a mis-posted voucher is undone.
+        "VoucherEntry", "JournalEntry",
 
         // The invoice, order and quote families. Each is a collection in its own right under a
         // namespace segment — /invoices/drafts, /orders/sent — rather than a nested collection.
@@ -163,6 +173,12 @@ public sealed class SchemaRegistry
         ["DraftInvoiceSummary"] = "DraftInvoiceNumber",
         ["DraftOrder"] = "OrderNumber",
         ["DraftQuote"] = "QuoteNumber",
+
+        // An accounting year is identified by the year itself, as a string: `"year": "2027"`,
+        // verified live. Nothing addresses one by number. It reaches no method signature today
+        // because the resource has neither an update nor a delete, but recording it here keeps the
+        // create model honest and is what a future PUT would need.
+        ["AccountingYear"] = "Year",
     };
 
     /// <summary>The property that identifies one instance of an entity.</summary>
@@ -178,14 +194,35 @@ public sealed class SchemaRegistry
     /// </summary>
     public static readonly IReadOnlySet<string> WriteEnabledEntities = new HashSet<string>(StringComparer.Ordinal)
     {
-        // AccountingYear is absent: it is keyed by `year`, a string, rather than by a number, and
-        // the resource template assumes a numeric identifier throughout. Its create otherwise works
-        // — verified live, returning `"year": "2027"` and a self link.
         "Customer", "CustomerGroup", "PaymentTerms", "Product", "Supplier", "Unit",
+
+        // Create only. e-conomic publishes no update or delete for an accounting year, so the
+        // string key never reaches a method signature — which is what had kept this off the list.
+        "AccountingYear",
 
         // The drafts of the three document families. Only drafts: a booked invoice is immutable,
         // and a sent order or quote is written by transitioning a draft rather than by a PUT.
         "DraftInvoiceSummary", "DraftOrder", "DraftQuote",
+
+        // Not from restdocs but from the API itself: every journal entry carries a `metaData.delete`
+        // link to DELETE /journals/{journalNumber}/entries/{journalEntryNumber}. Hypermedia the
+        // server publishes about its own records is better evidence than the documentation.
+        "JournalEntry",
+    };
+
+    /// <summary>
+    /// Entities whose create answers with an array rather than with the single resource.
+    /// </summary>
+    /// <remarks>
+    /// <strong>Verified live, and contradicted by the specification.</strong> Posting one voucher to
+    /// <c>/journals/{journalNumber}/vouchers</c> answers <c>201</c> with a JSON array, because
+    /// e-conomic may split the entries it was sent across more than one voucher. Every other create
+    /// in the API answers with a single object, so this is the one place the response shape depends
+    /// on the endpoint rather than on the rule.
+    /// </remarks>
+    public static readonly IReadOnlySet<string> CollectionWriteResponses = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "VoucherEntry",
     };
 
     /// <summary>
@@ -216,6 +253,11 @@ public sealed class SchemaRegistry
         // idempotency key. Note the drafts collection also accepts a delete of its own, which
         // removes every draft at once; that one is deliberately not exposed here.
         "DraftInvoiceSummary", "DraftOrder", "DraftQuote",
+
+        // Not from restdocs but from the API itself: every journal entry carries a `metaData.delete`
+        // link to DELETE /journals/{journalNumber}/entries/{journalEntryNumber}. Hypermedia the
+        // server publishes about its own records is better evidence than the documentation.
+        "JournalEntry",
     };
 
     private readonly Dictionary<string, string> _namesByStructure = new(StringComparer.Ordinal);

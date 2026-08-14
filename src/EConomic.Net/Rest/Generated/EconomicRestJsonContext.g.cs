@@ -173,6 +173,7 @@ namespace EConomic.Rest.Generated;
 [JsonSerializable(typeof(SuppliersCollection))]
 [JsonSerializable(typeof(SuppliersPostResponse))]
 [JsonSerializable(typeof(SuppliersPutResponse))]
+[JsonSerializable(typeof(System.Collections.Generic.ICollection<VoucherEntry>))]
 [JsonSerializable(typeof(Unit))]
 [JsonSerializable(typeof(UnitDetails))]
 [JsonSerializable(typeof(UnitUpdate))]
@@ -186,7 +187,6 @@ namespace EConomic.Rest.Generated;
 [JsonSerializable(typeof(VatTypesCollection))]
 [JsonSerializable(typeof(VatZone))]
 [JsonSerializable(typeof(VatZoneCollection))]
-[JsonSerializable(typeof(VoucherEntry))]
 [JsonSerializable(typeof(object))]
 internal sealed partial class EconomicRestJsonContext : JsonSerializerContext;
 

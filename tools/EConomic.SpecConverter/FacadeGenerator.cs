@@ -126,6 +126,7 @@ public sealed record FacadeWrite(
 /// <param name="ListMethod">The generated method that fetches the collection.</param>
 /// <param name="AccessorName">The method exposed on the parent resource, e.g. <c>Contacts</c>.</param>
 /// <param name="Write">The write operations, when the collection accepts any.</param>
+/// <param name="PublicName">The name the entity is published under, usually <paramref name="Entity"/>.</param>
 public sealed record FacadeNested(
     string Path,
     string ParentEntity,
@@ -137,7 +138,8 @@ public sealed record FacadeNested(
     string ClientClass,
     string ListMethod,
     string AccessorName,
-    FacadeWrite? Write);
+    FacadeWrite? Write,
+    string PublicName);
 
 /// <summary>
 /// Generates the public models, transports and client properties for whole resources.
@@ -245,6 +247,11 @@ public static class FacadeGenerator
 
         var nested = NestedResources(document, resources);
 
+        // A resource type is emitted for anything that offers more than a query — writes, nested
+        // collections, or both. Journals are the case that forced the distinction: they are
+        // read-only, but their vouchers hang off them and need something to hang from.
+        var withResourceType = new HashSet<string>(StringComparer.Ordinal);
+
         foreach (var resource in resources)
         {
             var nestedTypes = new List<FacadeNestedType>();
@@ -256,10 +263,15 @@ public static class FacadeGenerator
             AppendModel(builder, resource, properties);
             AppendPageSource(builder, resource, properties);
 
-            if (SchemaRegistry.WriteEnabledEntities.Contains(resource.Entity)
-                && WriteFor(document, resource) is { } write)
+            var write = SchemaRegistry.WriteEnabledEntities.Contains(resource.Entity)
+                ? WriteFor(document, resource)
+                : null;
+
+            var children = nested.Where(n => n.ParentEntity == resource.Entity).ToList();
+
+            if (write is not null || children.Count > 0)
             {
-                var children = nested.Where(n => n.ParentEntity == resource.Entity).ToList();
+                withResourceType.Add(resource.Entity);
                 AppendResource(builder, resource, write, properties, schemas, children, skipped);
             }
         }
@@ -270,7 +282,7 @@ public static class FacadeGenerator
         }
 
         builder.AppendLine("}");
-        AppendClientProperties(builder, resources);
+        AppendClientProperties(builder, resources, withResourceType);
         return builder.ToString();
     }
 
@@ -325,6 +337,13 @@ public static class FacadeGenerator
             var propertyName = Pascal(name);
             var member = $"{accessor}.{propertyName}";
             var resolved = Resolve(property, schemas);
+
+            if (Composition(resolved) is { } composition)
+            {
+                skipped.Add($"{reportName}.{name} ({composition}, no single shape)");
+                continue;
+            }
+
             var type = resolved["type"]?.GetValue<string>();
             var format = resolved["format"]?.GetValue<string>();
 
@@ -468,6 +487,22 @@ public static class FacadeGenerator
             $"IReadOnlyList<{elementName}>",
             $"FacadeTransport.MapList({member}, {variable} => {Initializer(elementName, properties, Indent(depth))})");
     }
+
+    /// <summary>
+    /// The composition keyword a schema uses, when it has one.
+    /// </summary>
+    /// <remarks>
+    /// A property described by <c>oneOf</c> has no single shape, and NSwag picks one branch to
+    /// generate from. Mapping the property's own <c>properties</c> instead would produce code
+    /// referring to members the generated type does not have — which is exactly what
+    /// <c>paymentDetails.paymentType</c> did: its six alternatives cover different payment forms,
+    /// and NSwag emitted the first. Reporting it is the honest answer; guessing compiled to nothing.
+    /// </remarks>
+    private static string? Composition(JsonObject schema) =>
+        schema["oneOf"] is not null ? "oneOf"
+        : schema["anyOf"] is not null ? "anyOf"
+        : schema["allOf"] is not null ? "allOf"
+        : null;
 
     private static string? ScalarType(string? type, string? format) => (type, format) switch
     {
@@ -642,7 +677,10 @@ public static class FacadeGenerator
         builder.AppendLine("}");
     }
 
-    private static void AppendClientProperties(StringBuilder builder, IReadOnlyList<FacadeResource> resources)
+    private static void AppendClientProperties(
+        StringBuilder builder,
+        IReadOnlyList<FacadeResource> resources,
+        HashSet<string> withResourceType)
     {
         builder.AppendLine();
         builder.AppendLine("namespace EConomic");
@@ -654,12 +692,14 @@ public static class FacadeGenerator
 
         foreach (var resource in resources)
         {
-            // A write-enabled entity gets its resource type, which composes the same query and adds
-            // the write methods. The query itself never gains them: a filtered query is not a
-            // sensible place to create from.
-            if (SchemaRegistry.WriteEnabledEntities.Contains(resource.Entity))
+            // A resource type composes the same query and adds whatever else the resource offers.
+            // The query itself never gains those: a filtered query is not a sensible place to
+            // create from, nor to reach a nested collection through.
+            if (withResourceType.Contains(resource.Entity))
             {
-                builder.AppendLine($"        /// <summary><c>{resource.Path}</c>, as a queryable and writable resource.</summary>");
+                builder.AppendLine(SchemaRegistry.WriteEnabledEntities.Contains(resource.Entity)
+                    ? $"        /// <summary><c>{resource.Path}</c>, as a queryable and writable resource.</summary>"
+                    : $"        /// <summary><c>{resource.Path}</c>, as a query plus its nested collections.</summary>");
                 // The resource takes the HttpClient rather than the generated client: DELETE has no
                 // schema and therefore no generated method, so it is issued directly.
                 builder.AppendLine($"        public {resource.PublicName}Resource {resource.PropertyName} =>");
@@ -684,7 +724,7 @@ public static class FacadeGenerator
     private static void AppendResource(
         StringBuilder builder,
         FacadeResource resource,
-        FacadeWrite write,
+        FacadeWrite? write,
         IReadOnlyList<FacadeProperty> readProperties,
         JsonObject schemas,
         IReadOnlyList<FacadeNested> children,
@@ -696,9 +736,9 @@ public static class FacadeGenerator
         // Both writes return the whole resource — WriteResponseCorrector points their responses at
         // the read entity — so the response always carries the identifier and `self`, whatever the
         // request schema happens to describe.
-        var createPayload = write.CreateBody is null ? null : schemas[write.CreateBody] as JsonObject;
+        var createPayload = write?.CreateBody is null ? null : schemas[write.CreateBody] as JsonObject;
         var canCreate = createPayload is not null;
-        var updatePayload = write.UpdateBody is null ? null : schemas[write.UpdateBody] as JsonObject;
+        var updatePayload = write?.UpdateBody is null ? null : schemas[write.UpdateBody] as JsonObject;
 
         List<WriteProperty>? createProperties = null;
         List<WriteProperty>? updateProperties = null;
@@ -711,7 +751,7 @@ public static class FacadeGenerator
             // required follows the schema, which distinguishes the two correctly.
             var nestedWrites = new List<FacadeNestedWriteType>();
             createProperties = MapWriteProperties(
-                createPayload!, write.CreateBody!, $"{entity}Create", schemas,
+                createPayload!, write!.CreateBody!, $"{entity}Create", schemas,
                 write.KeyProperty, includeKey: true, skipped, nestedWrites);
 
             AppendNestedWriteTypes(builder, nestedWrites);
@@ -722,7 +762,7 @@ public static class FacadeGenerator
         {
             var nestedWrites = new List<FacadeNestedWriteType>();
             updateProperties = MapWriteProperties(
-                updatePayload, write.UpdateBody!, $"{entity}Update", schemas,
+                updatePayload, write!.UpdateBody!, $"{entity}Update", schemas,
                 write.KeyProperty, includeKey: false, skipped, nestedWrites);
 
             AppendNestedWriteTypes(builder, nestedWrites);
@@ -731,7 +771,9 @@ public static class FacadeGenerator
 
         builder.AppendLine();
         builder.AppendLine("/// <summary>");
-        builder.AppendLine($"/// The <c>{resource.Path}</c> resource: a composable query, plus the writes e-conomic supports.");
+        builder.AppendLine(write is null
+            ? $"/// The <c>{resource.Path}</c> resource: a composable query, plus its nested collections."
+            : $"/// The <c>{resource.Path}</c> resource: a composable query, plus the writes e-conomic supports.");
         builder.AppendLine("/// </summary>");
         builder.AppendLine("/// <remarks>");
         builder.AppendLine("/// The query-building methods each return a query and composition continues from there.");
@@ -808,7 +850,7 @@ public static class FacadeGenerator
             builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(item);");
             builder.AppendLine();
             builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
-            builder.AppendLine($"            () => _client.{write.CreateMethod}(ToGenerated(item), cancellationToken),");
+            builder.AppendLine($"            () => _client.{write!.CreateMethod}(ToGenerated(item), cancellationToken),");
             builder.AppendLine($"            \"POST {resource.Path}\").ConfigureAwait(false);");
             builder.AppendLine();
             builder.AppendLine("        return FromGenerated(response);");
@@ -819,7 +861,7 @@ public static class FacadeGenerator
         {
             builder.AppendLine();
             builder.AppendLine($"    /// <summary>Replaces an existing {Camel(entity)}.</summary>");
-            builder.AppendLine($"    /// <param name=\"{write.KeyName}\">The item to replace.</param>");
+            builder.AppendLine($"    /// <param name=\"{write!.KeyName}\">The item to replace.</param>");
             builder.AppendLine("    /// <param name=\"item\">The replacement state.</param>");
             builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
             builder.AppendLine("    /// <returns>The updated item, as e-conomic stored it.</returns>");
@@ -843,7 +885,7 @@ public static class FacadeGenerator
             builder.AppendLine("    }");
         }
 
-        if (write.SupportsDelete)
+        if (write is { SupportsDelete: true })
         {
             builder.AppendLine();
             builder.AppendLine($"    /// <summary>Deletes a {Camel(entity)}.</summary>");
@@ -863,16 +905,16 @@ public static class FacadeGenerator
 
         if (canCreate)
         {
-            AppendToGenerated(builder, write.CreateBody!, $"{entity}Create", createProperties!, keyProperty: null, keyType: null);
+            AppendToGenerated(builder, write!.CreateBody!, $"{entity}Create", createProperties!, keyProperty: null, keyType: null);
         }
 
         if (updateProperties is not null)
         {
             var updateDeclaresKey =
-                updatePayload!["properties"]?.AsObject().Any(p => Pascal(p.Key) == write.KeyProperty) ?? false;
+                updatePayload!["properties"]?.AsObject().Any(p => Pascal(p.Key) == write!.KeyProperty) ?? false;
 
             AppendToGenerated(
-                builder, write.UpdateBody!, $"{entity}Update", updateProperties,
+                builder, write!.UpdateBody!, $"{entity}Update", updateProperties,
                 write.KeyProperty, write.KeyType, updateDeclaresKey);
         }
 
@@ -883,25 +925,30 @@ public static class FacadeGenerator
             builder.AppendLine($"    /// <param name=\"{child.ParentKeyName}\">The owning {Camel(entity)}.</param>");
             builder.AppendLine($"    /// <returns>The nested collection, scoped to that {Camel(entity)}.</returns>");
             builder.AppendLine(
-                $"    public {child.Entity}Resource {child.AccessorName}({child.ParentKeyType} {child.ParentKeyName}) =>");
+                $"    public {child.PublicName}Resource {child.AccessorName}({child.ParentKeyType} {child.ParentKeyName}) =>");
             builder.AppendLine($"        new(_httpClient, {child.ParentKeyName});");
         }
 
         // One mapper serves both writes: each returns the whole resource, so the response is the
-        // same generated type the read path already maps.
-        builder.AppendLine();
-        builder.AppendLine($"    private static {entity} FromGenerated(Generated.{resource.Entity} source) => new()");
-        builder.AppendLine("    {");
-
-        foreach (var property in readProperties)
+        // same generated type the read path already maps. A resource with no writes has nothing to
+        // map, and emitting it unused would not compile cleanly.
+        if (write is not null)
         {
-            builder.AppendLine($"        {property.Name} = {property.Mapping},");
+            builder.AppendLine();
+            builder.AppendLine($"    private static {entity} FromGenerated(Generated.{resource.Entity} source) => new()");
+            builder.AppendLine("    {");
+
+            foreach (var property in readProperties)
+            {
+                builder.AppendLine($"        {property.Name} = {property.Mapping},");
+            }
+
+            builder.AppendLine("    };");
+            builder.AppendLine();
+            builder.AppendLine("    private static EconomicReference? Reference(int? number, System.Uri? self) =>");
+            builder.AppendLine("        number is { } value ? new EconomicReference(value, self) : null;");
         }
 
-        builder.AppendLine("    };");
-        builder.AppendLine();
-        builder.AppendLine("    private static EconomicReference? Reference(int? number, System.Uri? self) =>");
-        builder.AppendLine("        number is { } value ? new EconomicReference(value, self) : null;");
         builder.AppendLine("}");
     }
 
@@ -911,10 +958,11 @@ public static class FacadeGenerator
         JsonObject schemas,
         IList<string> skipped)
     {
-        var entity = nested.Entity;
+        var entity = nested.PublicName;
         var write = nested.Write!;
         var nestedTypes = new List<FacadeNestedType>();
-        var properties = MapProperties(schemas[entity]!.AsObject(), entity, entity, schemas, skipped, nestedTypes);
+        var properties = MapProperties(
+            schemas[nested.Entity]!.AsObject(), entity, nested.Entity, schemas, skipped, nestedTypes);
 
         AppendNestedTypes(builder, nestedTypes);
 
@@ -950,7 +998,7 @@ public static class FacadeGenerator
         builder.AppendLine($"        return new EconomicPage<{entity}>(items, request.PageIndex, request.PageSize);");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    internal static {entity} Map(Generated.{entity} source) => new()");
+        builder.AppendLine($"    internal static {entity} Map(Generated.{nested.Entity} source) => new()");
         builder.AppendLine("    {");
 
         foreach (var property in properties)
@@ -964,16 +1012,20 @@ public static class FacadeGenerator
         builder.AppendLine("        number is null ? null : new EconomicReference(number.Value, self);");
         builder.AppendLine("}");
 
-        var createPayload = schemas[write.CreateBody!] as JsonObject;
+        var createPayload = write.CreateBody is null ? null : schemas[write.CreateBody] as JsonObject;
         var updatePayload = write.UpdateBody is null ? null : schemas[write.UpdateBody] as JsonObject;
 
-        var nestedCreateTypes = new List<FacadeNestedWriteType>();
-        var createProperties = MapWriteProperties(
-            createPayload!, write.CreateBody!, $"{entity}Create", schemas,
-            write.KeyProperty, includeKey: true, skipped, nestedCreateTypes);
+        List<WriteProperty>? createProperties = null;
+        if (createPayload is not null)
+        {
+            var nestedCreateTypes = new List<FacadeNestedWriteType>();
+            createProperties = MapWriteProperties(
+                createPayload, write.CreateBody!, $"{entity}Create", schemas,
+                write.KeyProperty, includeKey: true, skipped, nestedCreateTypes);
 
-        AppendNestedWriteTypes(builder, nestedCreateTypes);
-        AppendWriteModel(builder, $"{entity}Create", entity, "create", createProperties);
+            AppendNestedWriteTypes(builder, nestedCreateTypes);
+            AppendWriteModel(builder, $"{entity}Create", entity, "create", createProperties);
+        }
 
         List<WriteProperty>? updateProperties = null;
         if (updatePayload is not null)
@@ -1032,27 +1084,49 @@ public static class FacadeGenerator
         builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
         builder.AppendLine("    /// <returns>The page.</returns>");
         builder.AppendLine($"    public System.Threading.Tasks.Task<EconomicPage<{entity}>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);");
-        builder.AppendLine();
-        builder.AppendLine($"    /// <summary>Creates a {Camel(entity)}.</summary>");
-        builder.AppendLine("    /// <param name=\"item\">The item to create.</param>");
-        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
-        builder.AppendLine("    /// <returns>The created item, as e-conomic stored it.</returns>");
-        builder.AppendLine($"    public async System.Threading.Tasks.Task<{entity}> CreateAsync({entity}Create item, System.Threading.CancellationToken cancellationToken = default)");
-        builder.AppendLine("    {");
-        builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(item);");
-        builder.AppendLine();
-        builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
-        builder.AppendLine($"            () => _client.{write.CreateMethod}(_{nested.ParentKeyName}, ToGenerated(item), cancellationToken),");
-        builder.AppendLine($"            \"POST {nested.Path}\").ConfigureAwait(false);");
-        builder.AppendLine();
-        builder.AppendLine("        return FromGenerated(response);");
-        builder.AppendLine("    }");
+        if (createProperties is not null)
+        {
+            builder.AppendLine();
+            builder.AppendLine($"    /// <summary>Creates a {Camel(entity)}.</summary>");
+            builder.AppendLine("    /// <param name=\"item\">The item to create.</param>");
+            builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
+
+            var createReturnsCollection = SchemaRegistry.CollectionWriteResponses.Contains(nested.Entity);
+            var createReturns = createReturnsCollection
+                ? $"System.Collections.Generic.IReadOnlyList<{entity}>"
+                : entity;
+
+            builder.AppendLine(createReturnsCollection
+                ? "    /// <returns>The created items, as e-conomic stored them.</returns>"
+                : "    /// <returns>The created item, as e-conomic stored it.</returns>");
+
+            if (createReturnsCollection)
+            {
+                builder.AppendLine("    /// <remarks>");
+                builder.AppendLine("    /// This answers with a collection because e-conomic may split the entries it was sent");
+                builder.AppendLine("    /// across more than one record. Verified against a live agreement.");
+                builder.AppendLine("    /// </remarks>");
+            }
+
+            builder.AppendLine($"    public async System.Threading.Tasks.Task<{createReturns}> CreateAsync({entity}Create item, System.Threading.CancellationToken cancellationToken = default)");
+            builder.AppendLine("    {");
+            builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(item);");
+            builder.AppendLine();
+            builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
+            builder.AppendLine($"            () => _client.{write.CreateMethod}(_{nested.ParentKeyName}, ToGenerated(item), cancellationToken),");
+            builder.AppendLine($"            \"POST {nested.Path}\").ConfigureAwait(false);");
+            builder.AppendLine();
+            builder.AppendLine(createReturnsCollection
+                ? "        return FacadeTransport.MapList(response, FromGenerated);"
+                : "        return FromGenerated(response);");
+            builder.AppendLine("    }");
+        }
 
         if (updateProperties is not null)
         {
             builder.AppendLine();
             builder.AppendLine($"    /// <summary>Replaces an existing {Camel(entity)}.</summary>");
-            builder.AppendLine($"    /// <param name=\"{write.KeyName}\">The item to replace.</param>");
+            builder.AppendLine($"    /// <param name=\"{write!.KeyName}\">The item to replace.</param>");
             builder.AppendLine("    /// <param name=\"item\">The replacement state.</param>");
             builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
             builder.AppendLine("    /// <returns>The updated item, as e-conomic stored it.</returns>");
@@ -1069,7 +1143,7 @@ public static class FacadeGenerator
             builder.AppendLine("    }");
         }
 
-        if (write.SupportsDelete)
+        if (write is { SupportsDelete: true })
         {
             builder.AppendLine();
             builder.AppendLine($"    /// <summary>Deletes a {Camel(entity)}.</summary>");
@@ -1085,7 +1159,12 @@ public static class FacadeGenerator
             builder.AppendLine("            cancellationToken);");
         }
 
-        AppendToGenerated(builder, write.CreateBody!, $"{entity}Create", createProperties, keyProperty: null, keyType: null);
+        if (createProperties is not null)
+        {
+            AppendToGenerated(
+                builder, write.CreateBody!, $"{entity}Create", createProperties,
+                keyProperty: null, keyType: null);
+        }
 
         if (updateProperties is not null)
         {
@@ -1095,30 +1174,34 @@ public static class FacadeGenerator
                 write.KeyProperty, write.KeyType, declaresKey);
         }
 
-        builder.AppendLine();
-        builder.AppendLine($"    private static {entity} FromGenerated(Generated.{entity} source) => new()");
-        builder.AppendLine("    {");
-
-        foreach (var property in properties)
+        if (createProperties is not null || updateProperties is not null)
         {
-            builder.AppendLine($"        {property.Name} = {property.Mapping},");
+            builder.AppendLine();
+            builder.AppendLine($"    private static {entity} FromGenerated(Generated.{nested.Entity} source) => new()");
+            builder.AppendLine("    {");
+
+            foreach (var property in properties)
+            {
+                builder.AppendLine($"        {property.Name} = {property.Mapping},");
+            }
+
+            builder.AppendLine("    };");
+            builder.AppendLine();
+            builder.AppendLine("    private static EconomicReference? Reference(int? number, System.Uri? self) =>");
+            builder.AppendLine("        number is { } value ? new EconomicReference(value, self) : null;");
         }
 
-        builder.AppendLine("    };");
-        builder.AppendLine();
-        builder.AppendLine("    private static EconomicReference? Reference(int? number, System.Uri? self) =>");
-        builder.AppendLine("        number is { } value ? new EconomicReference(value, self) : null;");
         builder.AppendLine("}");
     }
 
-    /// <summary>Finds the collections that hang off a write-enabled resource.</summary>
+    /// <summary>Finds the collections that hang off another resource.</summary>
     /// <param name="document">The merged OpenAPI document.</param>
     /// <param name="resources">The top-level resources already discovered.</param>
     /// <returns>The nested collections, in path order.</returns>
     /// <remarks>
-    /// Only collections whose parent is itself exposed as a resource are emitted, because the
-    /// accessor has to hang off something. That defers the journal vouchers, whose parent is not
-    /// write-enabled and whose item is addressed by a composite key.
+    /// The parent has to be a published collection, because the accessor hangs off it — but it need
+    /// not be writable itself. Journals are the case: they are read-only, and their vouchers are
+    /// how entries are posted.
     /// </remarks>
     public static IReadOnlyList<FacadeNested> NestedResources(
         JsonObject document,
@@ -1140,8 +1223,7 @@ public static class FacadeGenerator
                 || !segments[1].StartsWith('{')
                 || segments[2].StartsWith('{')
                 || item?["get"] is not JsonObject get
-                || !byCollection.TryGetValue(segments[0], out var parent)
-                || !SchemaRegistry.WriteEnabledEntities.Contains(parent.Entity))
+                || !byCollection.TryGetValue(segments[0], out var parent))
             {
                 continue;
             }
@@ -1154,8 +1236,17 @@ public static class FacadeGenerator
                 continue;
             }
 
-            // Nothing to add for a read-only nested collection: the parent's own query already
-            // reaches its contents through the link on the model.
+            // A collection whose item is already a top-level resource is a view of it, not a
+            // resource of its own: /product-groups/{n}/products returns products, which
+            // client.Products already creates, deletes and filters. Emitting it again would
+            // redeclare every one of that entity's records.
+            if (resources.Any(r => r.Entity == entity))
+            {
+                continue;
+            }
+
+            // Nothing to add for a nested collection with neither a create nor a delete: the
+            // parent's own query already reaches its contents through the link on the model.
             var write = NestedWriteFor(paths, path, entity);
             if (write is null)
             {
@@ -1178,16 +1269,30 @@ public static class FacadeGenerator
                 parent.ClientClass,
                 MethodName(get),
                 SchemaRegistry.Identifier(segments[2]),
-                write));
+                write,
+                SchemaRegistry.PublicName(entity)));
         }
 
         return nested;
     }
 
+    /// <summary>The write operations a nested collection supports, if any.</summary>
+    /// <remarks>
+    /// A collection with neither a create nor a delete is left out: its contents are already
+    /// reachable through the link on the parent's model, so a resource type would add nothing.
+    /// A delete on its own is enough, though — journal entries have no create of their own, and
+    /// deleting one is how a mis-posted voucher is undone.
+    /// </remarks>
     private static FacadeWrite? NestedWriteFor(JsonObject paths, string path, string entity)
     {
-        if (paths[path]?["post"] is not JsonObject post
-            || Reference(post["requestBody"]?["content"]?["application/json"]?["schema"]) is not { } createBody)
+        var post = paths[path]?["post"] as JsonObject;
+        var createBody = post is null
+            ? null
+            : Reference(post["requestBody"]?["content"]?["application/json"]?["schema"]);
+
+        var canDelete = SchemaRegistry.DeletableEntities.Contains(entity);
+
+        if (createBody is null && !canDelete)
         {
             return null;
         }
@@ -1215,13 +1320,13 @@ public static class FacadeGenerator
 
         return new FacadeWrite(
             createBody,
-            MethodName(post),
+            post is null ? null : MethodName(post),
             updateBody,
             updateMethod,
             Camel(keyProperty),
             keyType,
             keyProperty,
-            SchemaRegistry.DeletableEntities.Contains(entity));
+            canDelete);
     }
 
     /// <summary>Finds the write operations a resource supports, when it is write-enabled.</summary>
@@ -1333,6 +1438,12 @@ public static class FacadeGenerator
 
             var propertyName = Pascal(name);
             var resolved = Resolve(property, schemas);
+
+            if (Composition(resolved) is { } composition)
+            {
+                skipped.Add($"{payloadName}.{name} ({composition}, no single shape)");
+                continue;
+            }
 
             // A server-maintained value cannot be set, so offering it would be a lie.
             if (resolved["readOnly"]?.GetValue<bool>() == true)

@@ -154,7 +154,12 @@ public static partial class JsonContextGenerator
     private static bool IsGenericParameter(string name) =>
         name.Length <= 2 && name[0] is 'T' or 'U' or 'V';
 
-    [GeneratedRegex(@"ReadObjectResponseAsync<(?<type>[A-Za-z_][A-Za-z0-9_]*)>", RegexOptions.ExplicitCapture)]
+    // The response type is not always a bare name: a voucher create answers with a collection, so
+    // NSwag emits ReadObjectResponseAsync<System.Collections.Generic.ICollection<VoucherEntry>>.
+    // Anchoring on the `response_` argument keeps the generic declaration of the helper itself out.
+    [GeneratedRegex(
+        @"ReadObjectResponseAsync<(?<type>[\w.]+(?:<[\w.]+>)?)>\(response_",
+        RegexOptions.ExplicitCapture)]
     private static partial Regex ResponseTypePattern();
 
     // The body is not always the first parameter: an update takes its identifier first, as in

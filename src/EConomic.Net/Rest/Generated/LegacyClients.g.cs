@@ -10181,7 +10181,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<VoucherEntry> PostJournalsByjournalNumberVouchersAsync(int journalNumber, JournalVoucherPost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<VoucherEntry>> PostJournalsByjournalNumberVouchersAsync(int journalNumber, JournalVoucherPost body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (journalNumber == null)
                 throw new System.ArgumentNullException("journalNumber");
@@ -10234,7 +10234,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<VoucherEntry>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<VoucherEntry>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -10244,7 +10244,7 @@ namespace EConomic.Rest.Generated
                         else
                         if (status_ == 201)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<VoucherEntry>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<VoucherEntry>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);

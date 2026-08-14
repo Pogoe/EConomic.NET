@@ -2229,6 +2229,153 @@ public sealed class JournalSort
 }
 
 /// <summary>
+/// The properties e-conomic will filter <c>JournalEntry</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class JournalEntryFilter
+{
+    /// <summary>Maps to <c>account.accountNumber</c>.</summary>
+    [EconomicField("account.accountNumber")]
+    public NumericField<int> AccountNumber { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public NumericField<int> CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>supplier.supplierNumber</c>.</summary>
+    [EconomicField("supplier.supplierNumber")]
+    public NumericField<int> SupplierNumber { get; } = null!;
+
+    /// <summary>Maps to <c>text</c>.</summary>
+    [EconomicField("text")]
+    public TextField Text { get; } = null!;
+
+    /// <summary>Maps to <c>amount</c>.</summary>
+    [EconomicField("amount")]
+    public NumericField<decimal> Amount { get; } = null!;
+
+    /// <summary>Maps to <c>contraAccount.accountNumber</c>.</summary>
+    [EconomicField("contraAccount.accountNumber")]
+    public NumericField<int> ContraAccountAccountNumber { get; } = null!;
+
+    /// <summary>Maps to <c>contraVatAccount.vatCode</c>.</summary>
+    [EconomicField("contraVatAccount.vatCode")]
+    public TextField ContraVatAccountVatCode { get; } = null!;
+
+    /// <summary>Maps to <c>contraVatAmount</c>.</summary>
+    [EconomicField("contraVatAmount")]
+    public NumericField<decimal> ContraVatAmount { get; } = null!;
+
+    /// <summary>Maps to <c>currency.code</c>.</summary>
+    [EconomicField("currency.code")]
+    public TextField CurrencyCode { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public ComparableField<System.DateOnly> Date { get; } = null!;
+
+    /// <summary>Maps to <c>employee.employeeNumber</c>.</summary>
+    [EconomicField("employee.employeeNumber")]
+    public NumericField<int> EmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>exchangeRate</c>.</summary>
+    [EconomicField("exchangeRate")]
+    public NumericField<decimal> ExchangeRate { get; } = null!;
+
+    /// <summary>Maps to <c>entryType</c>.</summary>
+    [EconomicField("entryType")]
+    public TextField EntryType { get; } = null!;
+
+    /// <summary>Maps to <c>voucher.voucherNumber</c>.</summary>
+    [EconomicField("voucher.voucherNumber")]
+    public NumericField<decimal> VoucherNumber { get; } = null!;
+
+    /// <summary>Maps to <c>amountDefaultCurrency</c>.</summary>
+    [EconomicField("amountDefaultCurrency")]
+    public NumericField<decimal> AmountDefaultCurrency { get; } = null!;
+
+    /// <summary>Maps to <c>journalEntryNumber</c>.</summary>
+    [EconomicField("journalEntryNumber")]
+    public NumericField<int> JournalEntryNumber { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>JournalEntry</c> by.
+/// </summary>
+public sealed class JournalEntrySort
+{
+    /// <summary>Maps to <c>account.accountNumber</c>.</summary>
+    [EconomicField("account.accountNumber")]
+    public EconomicSortField AccountNumber { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public EconomicSortField CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>supplier.supplierNumber</c>.</summary>
+    [EconomicField("supplier.supplierNumber")]
+    public EconomicSortField SupplierNumber { get; } = null!;
+
+    /// <summary>Maps to <c>text</c>.</summary>
+    [EconomicField("text")]
+    public EconomicSortField Text { get; } = null!;
+
+    /// <summary>Maps to <c>amount</c>.</summary>
+    [EconomicField("amount")]
+    public EconomicSortField Amount { get; } = null!;
+
+    /// <summary>Maps to <c>contraAccount.accountNumber</c>.</summary>
+    [EconomicField("contraAccount.accountNumber")]
+    public EconomicSortField ContraAccountAccountNumber { get; } = null!;
+
+    /// <summary>Maps to <c>contraVatAccount.vatCode</c>.</summary>
+    [EconomicField("contraVatAccount.vatCode")]
+    public EconomicSortField ContraVatAccountVatCode { get; } = null!;
+
+    /// <summary>Maps to <c>contraVatAmount</c>.</summary>
+    [EconomicField("contraVatAmount")]
+    public EconomicSortField ContraVatAmount { get; } = null!;
+
+    /// <summary>Maps to <c>currency.code</c>.</summary>
+    [EconomicField("currency.code")]
+    public EconomicSortField CurrencyCode { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public EconomicSortField Date { get; } = null!;
+
+    /// <summary>Maps to <c>employee.employeeNumber</c>.</summary>
+    [EconomicField("employee.employeeNumber")]
+    public EconomicSortField EmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>exchangeRate</c>.</summary>
+    [EconomicField("exchangeRate")]
+    public EconomicSortField ExchangeRate { get; } = null!;
+
+    /// <summary>Maps to <c>entryType</c>.</summary>
+    [EconomicField("entryType")]
+    public EconomicSortField EntryType { get; } = null!;
+
+    /// <summary>Maps to <c>voucher.voucherNumber</c>.</summary>
+    [EconomicField("voucher.voucherNumber")]
+    public EconomicSortField VoucherNumber { get; } = null!;
+
+    /// <summary>Maps to <c>amountDefaultCurrency</c>.</summary>
+    [EconomicField("amountDefaultCurrency")]
+    public EconomicSortField AmountDefaultCurrency { get; } = null!;
+
+    /// <summary>Maps to <c>journalEntryNumber</c>.</summary>
+    [EconomicField("journalEntryNumber")]
+    public EconomicSortField JournalEntryNumber { get; } = null!;
+}
+
+/// <summary>
 /// The properties e-conomic will filter <c>Layout</c> on, each typed to the
 /// operators it accepts. Anything absent here is not filterable.
 /// </summary>
@@ -4051,5 +4198,26 @@ public sealed class VatZoneFilter
 /// The properties e-conomic will sort <c>VatZone</c> by.
 /// </summary>
 public sealed class VatZoneSort
+{
+}
+
+/// <summary>
+/// The properties e-conomic will filter <c>VoucherEntry</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class JournalVoucherFilter
+{
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>VoucherEntry</c> by.
+/// </summary>
+public sealed class JournalVoucherSort
 {
 }

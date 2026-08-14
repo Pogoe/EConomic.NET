@@ -32,10 +32,11 @@ is a mapping change inside the facade, not automatically a major release here.
   `x-filterable` and `x-sortable` annotations. Filtering on a property e-conomic will not filter, or
   applying an operator it does not accept, is a compile error rather than a runtime `400`. Filter
   values are escaped using the table the server itself publishes.
-- Twenty read-only resources on the legacy REST API, exposed as properties on `EconomicClient`:
+- Twenty collection resources on the legacy REST API, exposed as properties on `EconomicClient`:
   accounting years, accounts, app roles, currencies, customer groups, customers, departmental
   distributions, departments, employees, journals, layouts, payment terms, payment types, product
-  groups, products, suppliers, units, VAT accounts, VAT types and VAT zones.
+  groups, products, suppliers, units, VAT accounts, VAT types and VAT zones. Thirteen more, and
+  writes, are listed below.
 - Transparent paging through `AsAsyncEnumerable`, which fetches a page at a time as results are
   consumed, plus `GetPageAsync` for callers who want to manage paging themselves. There is
   deliberately no method that loads every page into a list.
@@ -54,7 +55,8 @@ is a mapping change inside the facade, not automatically a major release here.
   customer's contacts and delivery locations, and the invoice, order and quote drafts. Each is now
   a `{Entity}Resource` exposing the writes e-conomic supports alongside the query methods, which
   continue to return a query, so existing read code is unaffected apart from the property's type.
-  Eleven resources, each with a create, an update and a delete.
+  Twelve resources, each offering exactly the operations e-conomic documents for it — accounting
+  years get a create and nothing else, and no booked invoice can be deleted.
 - `{Entity}Create` and `{Entity}Update` write models, carrying only the properties e-conomic
   accepts. Server-maintained values such as `balance` are absent, and references to other resources
   are flattened to their numbers.
@@ -85,6 +87,18 @@ is a mapping change inside the facade, not automatically a major release here.
   this as a `POST` to `/invoices/booked` carrying a reference to the draft, which is an action on a
   draft rather than the creation of a booked invoice, so it is hand-written rather than generated.
   Booking is not reversible, and the documentation says so.
+- `AccountingYears.CreateAsync` — an accounting year is created from two dates and nothing else,
+  and e-conomic publishes neither an update nor a delete for one, so the resource offers only a
+  create. It is identified by the year as a string rather than by a number, which is why it had
+  been held back.
+- Journal vouchers — `client.Journals.Vouchers(journalNumber)`, with querying, paging and a create.
+  This is how entries are posted, and it needed two things the facade did not have: a resource type
+  for a parent that is itself read-only, and a create whose response is a collection. Its payload is
+  also the deepest in the API, an object of five arrays of entries, one array per entry kind.
+- Journal entries — `client.Journals.Entries(journalNumber)`, with a delete. That endpoint appears
+  in no schema and on no documentation page; every entry carries it as a `metaData.delete` link,
+  which is the server describing its own records. Deleting an entry is how a mis-posted voucher is
+  undone, since a voucher itself has no delete.
 - `AsQuery()` on each resource, for obtaining an unfiltered query.
 - `DELETE` support, from the 21 endpoints described in the published documentation. e-conomic
   publishes no schema for `DELETE` — it has neither request nor response body — so these are issued
@@ -121,6 +135,12 @@ is a mapping change inside the facade, not automatically a major release here.
   `System.Text.Json` defaults to numbers. The generated context now applies a string enum converter.
 - `$null:` is a value rather than an operator, so an absent property is filtered with
   `field$eq:$null:`. The previously generated `field$null:` was a syntax error the server rejected.
+- A property described by `oneOf` was mapped from its own `properties`, which produced code
+  referring to members the generated type did not have. NSwag picks one branch to generate from,
+  and there is no way to know which, so these are now reported rather than guessed —
+  `paymentDetails.paymentType`, whose six alternatives cover different payment forms, is the case.
+- Posting a journal voucher succeeded and then failed to read the reply: e-conomic answers with an
+  array of vouchers, while the specification describes a single one.
 - Unset optional numbers were only made nullable at the top level of a write payload, so one nested
   inside an object or an array item was still serialized as `0`. A draft invoice whose line did not
   set `lineNumber` and `sortKey` — neither of which a caller has any reason to set — was rejected

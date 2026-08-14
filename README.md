@@ -18,9 +18,8 @@ await foreach (var customer in client.Customers
 ```
 
 > **Status: pre-release.** Thirty-three collection resources on the legacy REST API are covered,
-> with filtering, sorting and transparent paging. Eleven of them also support creating, updating
-> and deleting. The newer OpenAPI services are not implemented yet, and the public API may change
-> before 1.0.
+> with filtering, sorting and transparent paging. Twelve of them also support writing. The newer
+> OpenAPI services are not implemented yet, and the public API may change before 1.0.
 
 > **Unofficial.** This project is not affiliated with, endorsed by, or supported by Visma or
 > e-conomic. For API support, contact <api@e-conomic.com>.
@@ -244,6 +243,39 @@ var contacts = client.Customers.Contacts(customer.CustomerNumber);
 await contacts.CreateAsync(new CustomerContactCreate { Name = "Jane Doe" }, cancellationToken);
 ```
 
+Journal vouchers work the same way, and are how entries are posted:
+
+```csharp
+var vouchers = await client.Journals.Vouchers(journalNumber).CreateAsync(
+    new JournalVoucherCreate
+    {
+        AccountingYear = new JournalVoucherCreateAccountingYear { Year = "2026" },
+        Entries = new JournalVoucherCreateEntries
+        {
+            FinanceVouchers =
+            [
+                new JournalVoucherCreateEntriesFinanceVoucher
+                {
+                    Date = DateOnly.FromDateTime(DateTime.Today),
+                    Amount = 100m,
+                    AccountNumber = 1010,
+                    ContraAccountNumber = 1020,
+                    Text = "Consulting",
+                },
+            ],
+        },
+    },
+    cancellationToken);
+```
+
+That one returns a **list**: e-conomic may split the entries it was sent across several vouchers.
+
+A voucher has no delete, but the entries it produced do, which is how a mis-posted one is undone:
+
+```csharp
+await client.Journals.Entries(journalNumber).DeleteAsync(journalEntryNumber, cancellationToken);
+```
+
 Deletes are **not** retried without an `Idempotency-Key`. e-conomic reuses identifiers, so a
 repeated delete can land on a different record than the one you meant — see
 [Retries and idempotency](#retries-and-idempotency).
@@ -257,8 +289,12 @@ Queryable: `AccountingYears`, `Accounts`, `AppRoles`, `ArchivedOrders`, `Archive
 `ProductGroups`, `Products`, `SentInvoices`, `SentOrders`, `SentQuotes`, `Suppliers`,
 `UnpaidInvoices`, `Units`, `VatAccounts`, `VatTypes`, `VatZones`.
 
-Also writable: `Customers` (and its `Contacts` and `DeliveryLocations`), `CustomerGroups`,
-`DraftInvoices`, `DraftOrders`, `DraftQuotes`, `PaymentTerms`, `Products`, `Suppliers`, `Units`.
+Also writable: `AccountingYears`, `Customers` (and its `Contacts` and `DeliveryLocations`),
+`CustomerGroups`, `DraftInvoices`, `DraftOrders`, `DraftQuotes`, `Journals.Vouchers`,
+`PaymentTerms`, `Products`, `Suppliers`, `Units`.
+
+Each offers exactly the operations e-conomic documents for it, no more: an accounting year can be
+created but never updated or deleted, and a booked invoice cannot be deleted at all.
 
 Danish domain terms keep their e-conomic names — `vatZone`, `paymentTerms`, `bookedEntries` — so
 that everything maps back to the official docs without a translation step.

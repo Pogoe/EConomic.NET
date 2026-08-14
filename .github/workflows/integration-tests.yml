@@ -34,9 +34,14 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      # Read through the environment rather than interpolating ${{ secrets.* }} into the script.
+      # An expression is substituted into the shell body before it runs, which writes the value
+      # into a file on the runner; an environment variable is only ever read here.
       - name: Report whether an agreement is configured
+        env:
+          ECONOMIC_APP_SECRET_TOKEN: ${{ secrets.ECONOMIC_APP_SECRET_TOKEN }}
         run: |
-          if [ -z "${{ secrets.ECONOMIC_APP_SECRET_TOKEN }}" ]; then
+          if [ -z "$ECONOMIC_APP_SECRET_TOKEN" ]; then
             echo "::warning::No agreement configured; every integration test will skip."
           fi
 

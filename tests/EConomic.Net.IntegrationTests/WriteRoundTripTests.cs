@@ -512,6 +512,7 @@ public class WriteRoundTripTests
         try
         {
             var layout = (await client.Layouts.GetPageAsync(0, token)).Items[0].LayoutNumber;
+            var vatZone = (await client.VatZones.GetPageAsync(0, token)).Items[0].VatZoneNumber;
 
             customer = await client.Customers.CreateAsync(
                 new CustomerCreate
@@ -520,7 +521,7 @@ public class WriteRoundTripTests
                     Currency = "DKK",
                     CustomerGroupNumber = 1,
                     PaymentTermsNumber = 1,
-                    VatZoneNumber = 1,
+                    VatZoneNumber = vatZone,
                 },
                 token);
 
@@ -534,7 +535,7 @@ public class WriteRoundTripTests
                     LayoutNumber = layout,
                     CustomerNumber = customer.CustomerNumber,
                     PaymentTerms = new DraftOrderCreatePaymentTerms { PaymentTermsNumber = 1 },
-                    Recipient = new DraftOrderCreateRecipient { Name = "ZZ Probe Order", VatZoneNumber = 1 },
+                    Recipient = new DraftOrderCreateRecipient { Name = "ZZ Probe Order", VatZoneNumber = vatZone },
                 },
                 token);
 
@@ -549,12 +550,50 @@ public class WriteRoundTripTests
                     LayoutNumber = layout,
                     CustomerNumber = customer.CustomerNumber,
                     PaymentTerms = new DraftQuoteCreatePaymentTerms { PaymentTermsNumber = 1 },
-                    Recipient = new DraftQuoteCreateRecipient { Name = "ZZ Probe Quote", VatZoneNumber = 1 },
+                    Recipient = new DraftQuoteCreateRecipient { Name = "ZZ Probe Quote", VatZoneNumber = vatZone },
                 },
                 token);
 
             Assert.True(quote.QuoteNumber > 0);
             Assert.Equal("ZZ Probe Quote", quote.Recipient?.Name);
+
+            // The updates are a separate generated template from the creates — different payload
+            // type, different required set — so sending them is what confirms they work.
+            var updatedOrder = await client.DraftOrders.UpdateAsync(
+                order.OrderNumber,
+                new DraftOrderUpdate
+                {
+                    Date = new DateOnly(2026, 8, 15),
+                    Currency = "DKK",
+                    CustomerNumber = customer.CustomerNumber,
+                    Recipient = new DraftOrderUpdateRecipient
+                    {
+                        Name = "ZZ Probe Order (updated)",
+                        VatZoneNumber = vatZone,
+                    },
+                },
+                token);
+
+            Assert.Equal(order.OrderNumber, updatedOrder.OrderNumber);
+            Assert.Equal("ZZ Probe Order (updated)", updatedOrder.Recipient?.Name);
+
+            var updatedQuote = await client.DraftQuotes.UpdateAsync(
+                quote.QuoteNumber,
+                new DraftQuoteUpdate
+                {
+                    Date = new DateOnly(2026, 8, 15),
+                    Currency = "DKK",
+                    CustomerNumber = customer.CustomerNumber,
+                    Recipient = new DraftQuoteUpdateRecipient
+                    {
+                        Name = "ZZ Probe Quote (updated)",
+                        VatZoneNumber = vatZone,
+                    },
+                },
+                token);
+
+            Assert.Equal(quote.QuoteNumber, updatedQuote.QuoteNumber);
+            Assert.Equal("ZZ Probe Quote (updated)", updatedQuote.Recipient?.Name);
         }
         finally
         {
@@ -573,6 +612,87 @@ public class WriteRoundTripTests
                 await client.Customers.DeleteAsync(customer.CustomerNumber, token);
             }
         }
+    }
+
+    [Fact]
+    public async Task A_journal_voucher_is_posted_with_its_entries()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
+
+        var journal = (await client.Journals.GetPageAsync(0, token)).Items[0];
+        var year = (await client.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
+            .First(y => y.Closed == false);
+
+        // Two accounts to move an amount between. A finance voucher entry posts to `account` and
+        // balances against `contraAccount`, so both have to accept direct entries.
+        var accounts = await client.Accounts
+            .Where(a => a.AccountType == "profitAndLoss")
+            .WithPageSize(50)
+            .GetPageAsync(0, token);
+
+        var usable = accounts.Items.Where(a => !a.BlockDirectEntries).Take(2).ToList();
+        Assert.SkipWhen(usable.Count < 2, "The agreement has fewer than two accounts that accept direct entries.");
+
+        var created = await client.Journals.Vouchers(journal.JournalNumber).CreateAsync(
+            new JournalVoucherCreate
+            {
+                AccountingYear = new JournalVoucherCreateAccountingYear { Year = year.Year },
+                Entries = new JournalVoucherCreateEntries
+                {
+                    FinanceVouchers =
+                    [
+                        new JournalVoucherCreateEntriesFinanceVoucher
+                        {
+                            Date = new DateOnly(2026, 8, 14),
+                            Amount = 100m,
+                            AccountNumber = usable[0].AccountNumber,
+                            ContraAccountNumber = usable[1].AccountNumber,
+                            Text = "ZZ Probe voucher",
+                        },
+                    ],
+                },
+            },
+            token);
+
+        // A voucher create answers with an array, not a single voucher: e-conomic may split the
+        // entries it was sent across several. The specification describes one object, and a client
+        // built from it posted successfully and then failed to read the reply.
+        var voucher = Assert.Single(created);
+
+        // The voucher is also the one shape whose entries are an object of five arrays, one per
+        // entry kind. Nothing else in the API nests that deeply.
+        Assert.True(voucher.VoucherNumber > 0);
+        Assert.NotNull(voucher.Entries);
+
+        var posted = Assert.Single(voucher.Entries!.FinanceVouchers);
+        Assert.Equal(100m, posted.Amount);
+        Assert.Equal("ZZ Probe voucher", posted.Text);
+        Assert.Equal(usable[0].AccountNumber, posted.Account?.Number);
+        Assert.Equal(usable[1].AccountNumber, posted.ContraAccount?.Number);
+
+        // Unposting it again. e-conomic publishes no delete for a voucher, but every entry carries
+        // a metaData.delete link to /journals/{n}/entries/{k} — hypermedia about its own records,
+        // which is better evidence than the documentation, and the only way this test does not
+        // leave a voucher behind on every run.
+        //
+        // The entry number is read back from the entries collection rather than from the voucher:
+        // the server sends `journalEntryNumber` on a voucher's entries, but the schema does not
+        // declare it, so the mapped model does not carry it.
+        var entries = client.Journals.Entries(journal.JournalNumber);
+        var mine = (await entries.GetPageAsync(0, token)).Items
+            .Where(e => e.Voucher?.VoucherNumber == voucher.VoucherNumber)
+            .ToList();
+
+        var entry = Assert.Single(mine);
+        Assert.Equal(100m, entry.Amount);
+
+        await entries.DeleteAsync(entry.JournalEntryNumber, token);
+
+        var remaining = await entries.GetPageAsync(0, token);
+        Assert.DoesNotContain(remaining.Items, e => e.JournalEntryNumber == entry.JournalEntryNumber);
     }
 
     [Fact]

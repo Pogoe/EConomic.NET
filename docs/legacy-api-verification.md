@@ -78,6 +78,11 @@ these should be re-checked on at least one other resource before being treated a
 | booking is irreversible | a booked invoice cannot be deleted, and neither can the customer or product it references |
 | `sendBy` casing | the three values are `none`, `EAN` and `Email` — inconsistently cased, and the server is strict about it |
 | draft orders and quotes | create and delete behave exactly as draft invoices do, from the same generated templates |
+| **a voucher create answers with an array** | `POST /journals/{n}/vouchers` returns `201` with a JSON **array**, not the single voucher the schema describes — e-conomic may split the entries it was sent across several vouchers. Every other create in the API answers with one object |
+| voucher entries | a finance voucher entry needs `date`, `amount`, `account` and `contraAccount`; both accounts must accept direct entries |
+| voucher key | a voucher is addressed as `{accountingYear}-{voucherNumber}`, e.g. `/journals/1/vouchers/2026-2` |
+| **a journal entry can be deleted** | `DELETE /journals/{n}/entries/{k}` answers `204`. It appears in no schema and in no documentation page — every entry carries it as a `metaData.delete` link, which is the server describing its own records |
+| `journalEntryNumber` under-reported | the server sends it on a voucher's entries; the schema for those does not declare it, so it has to be read back from `/journals/{n}/entries` |
 | **the public demo agreement is shared** | its token bucket is spent by everyone reading e-conomic's documentation: `X-RateLimiting` moved between 58 and 352 of 10 000 with no calls of our own in between. A `429` from it says nothing about the caller. The integration tests were moved onto an agreement of their own for this reason, and because reading a shared agreement means asserting on records nobody controls |
 
 Two of these change the design:
@@ -147,7 +152,7 @@ One row per endpoint. Fill in as each is exercised.
 
 | Resource | GET | POST | PUT | DELETE | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `/accounting-years` | ✅ live | ⬜ | — | — | create payload has no key |
+| `/accounting-years` | ✅ live | ✅ live | — | — | create takes two dates and no key; the response carries `"year": "2027"`. e-conomic publishes no update or delete |
 | `/accounts` | ✅ live | — | — | — | string enums confirmed |
 | `/app-roles` | ✅ live | — | — | — | |
 | `/currencies` | ✅ live | — | — | — | no filterable properties |
@@ -160,16 +165,17 @@ One row per endpoint. Fill in as each is exercised.
 | `/employees` | ✅ live | — | — | — | |
 | `/invoices/booked` | ✅ live | ✅ live | ⬜ | — | the `POST` books a draft, exposed as `DraftInvoices.BookAsync`. No delete: a booked invoice is part of the accounting record |
 | `/invoices/drafts` | ✅ live | ✅ live | ✅ live | ✅ live | delete answers **200**, not 204. The collection also accepts a delete of its own, which **removes every draft** — deliberately not exposed |
-| `/journals` | ✅ live | — | — | — | |
-| `/journals/{n}/vouchers` | ⬜ | ⬜ | — | — | composite key |
+| `/journals` | ✅ live | — | — | — | read-only, but exposed as a resource so its vouchers can hang off it |
+| `/journals/{n}/vouchers` | ✅ live | ✅ live | — | — | reached through the journal, which is itself read-only. The create answers with an **array** |
+| `/journals/{n}/entries` | ✅ live | — | — | ✅ live | the delete is hypermedia-derived: it is in no schema and no documentation page |
 | `/layouts` | ✅ live | — | — | — | |
-| `/orders/drafts` | ✅ live | ✅ live | ⬜ | ✅ live | |
+| `/orders/drafts` | ✅ live | ✅ live | ✅ live | ✅ live | |
 | `/orders/sent` | ✅ live | — | — | ⬜ | |
 | `/payment-terms` | ✅ live | ✅ live | ✅ live | ✅ live | `paymentTermsType` is required on create |
 | `/payment-types` | ✅ live | — | — | — | |
 | `/product-groups` | ✅ live | — | — | — | |
 | `/products` | ✅ live | ✅ live | ✅ live | ✅ live | |
-| `/quotes/drafts` | ✅ live | ✅ live | ⬜ | ✅ live | |
+| `/quotes/drafts` | ✅ live | ✅ live | ✅ live | ✅ live | |
 | `/quotes/sent` | ✅ live | — | — | ⬜ | |
 | `/suppliers` | ✅ live | ✅ live | ✅ live | ✅ live | |
 | `/units` | ✅ live | ✅ live | ✅ live | ✅ live | create payload declares no key; the response carries one |
