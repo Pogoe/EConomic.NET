@@ -96,9 +96,11 @@ public class FilterSurfaceTests
         Assert.True(failures.Count == 0, string.Join(Environment.NewLine, failures));
 
         // Guards against the probe quietly covering nothing: neither the reflection finding no
-        // resources, nor every server answer arriving without a list.
-        Assert.True(checkedSurfaces >= 20, $"Only {checkedSurfaces} surfaces were checked.");
-        Assert.True(checkedFields >= 200, $"Only {checkedFields} fields were checked.");
+        // resources, nor every server answer arriving without a list. Set to what the suite actually
+        // covers rather than to a round number, so coverage shrinking fails here too — a service
+        // dropping out of the reflection would otherwise leave a green run that checked less.
+        Assert.True(checkedSurfaces >= 23, $"Only {checkedSurfaces} surfaces were checked.");
+        Assert.True(checkedFields >= 391, $"Only {checkedFields} fields were checked.");
         // Only the legacy API publishes the list, so only it can be checked this way. Asserting
         // where the silence comes from keeps that honest: a legacy resource that stopped publishing
         // one would land here and fail, rather than quietly dropping out of the check.
@@ -158,7 +160,7 @@ public class FilterSurfaceTests
         }
 
         Assert.True(failures.Count == 0, string.Join(Environment.NewLine, failures));
-        Assert.True(checkedFields >= 200, $"Only {checkedFields} sort fields were checked.");
+        Assert.True(checkedFields >= 519, $"Only {checkedFields} sort fields were checked.");
     }
 
     /// <summary>
@@ -201,7 +203,7 @@ public class FilterSurfaceTests
 
         foreach (var (name, query) in await QueryablesAsync(client, token))
         {
-            var clauses = Clauses(FilterType(query.GetType()));
+            var clauses = Clauses(FilterType(query.GetType()), Generated(query.GetType()));
             if (clauses.Count == 0)
             {
                 continue;
@@ -220,7 +222,7 @@ public class FilterSurfaceTests
         }
 
         Assert.True(failures.Count == 0, string.Join(Environment.NewLine, failures));
-        Assert.True(checkedClauses >= 400, $"Only {checkedClauses} filter clauses were checked.");
+        Assert.True(checkedClauses >= 4636, $"Only {checkedClauses} filter clauses were checked.");
     }
 
     /// <summary>Whether the server accepts a filter made of exactly this clause.</summary>
@@ -237,17 +239,37 @@ public class FilterSurfaceTests
 
         var where = query.GetType().GetMethod("Where", BindingFlags.Public | BindingFlags.Instance)!;
         var filtered = where.Invoke(query, [predicate])!;
-        var getPage = filtered.GetType().GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)])!;
 
         try
         {
-            await (Task)getPage.Invoke(filtered, [0, token])!;
+            await OnePageAsync(query, filtered, token);
             return true;
         }
         catch (EconomicApiException)
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// Fetches one page of a filtered query, by whichever listing the collection publishes.
+    /// </summary>
+    /// <remarks>
+    /// Not every collection has both. The matched booked-entry pairs publish a cursor and nothing
+    /// else, so the resource offers no <c>GetPageAsync</c> to call — which is the surface being
+    /// honest, and the reason this asks the resource what it has rather than assuming.
+    /// </remarks>
+    private static async Task OnePageAsync(object resource, object filtered, CancellationToken token)
+    {
+        if (resource.GetType().GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)]) is not null)
+        {
+            var page = filtered.GetType().GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)])!;
+            await (Task)page.Invoke(filtered, [0, token])!;
+            return;
+        }
+
+        var cursor = filtered.GetType().GetMethod("GetCursorPageAsync", [typeof(string), typeof(CancellationToken)])!;
+        await (Task)cursor.Invoke(filtered, [null, token])!;
     }
 
     /// <summary>The expression a consumer would write for one clause.</summary>
@@ -260,10 +282,14 @@ public class FilterSurfaceTests
         {
             var operand = parameters[1].ParameterType;
 
+            var value = clause.Text is not null && operand == typeof(string)
+                ? clause.Text
+                : Sample(operand);
+
             return Expression.MakeBinary(
                 Kind(clause.Method.Name),
                 field,
-                Expression.Constant(Sample(operand), operand),
+                Expression.Constant(value, operand),
                 liftToNull: false,
                 clause.Method);
         }
@@ -271,7 +297,8 @@ public class FilterSurfaceTests
         return clause.Method.Name switch
         {
             nameof(EconomicFilterField.IsNull) => Expression.Call(field, clause.Method),
-            nameof(TextField.Like) => Expression.Call(field, clause.Method, Expression.Constant("zz")),
+            nameof(TextField.Like) => Expression.Call(
+                field, clause.Method, Expression.Constant(clause.Text ?? "zz")),
             // In and NotIn take a params array, which the translator reads as a NewArrayExpression.
             _ => Expression.Call(
                 field,
@@ -318,7 +345,7 @@ public class FilterSurfaceTests
     }
 
     /// <summary>Every clause a filter surface offers, as property and operator.</summary>
-    private static IReadOnlyList<Clause> Clauses(Type? filter) =>
+    private static IReadOnlyList<Clause> Clauses(Type? filter, Type? generated) =>
         filter is null
             ? []
             : [.. filter.GetProperties(BindingFlags.Public | BindingFlags.Instance)
@@ -329,7 +356,45 @@ public class FilterSurfaceTests
                     .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
                     .Where(m => Operators.ContainsKey(m.Name))
                     .OrderBy(m => m.Name, StringComparer.Ordinal)
-                    .Select(m => new Clause(p.Property, m, $"{p.Field}{Operators[m.Name]}")))];
+                    .Select(m => new Clause(
+                        p.Property, m, $"{p.Field}{Operators[m.Name]}", Member(generated, p.Property.Name))))];
+
+    /// <summary>
+    /// A value the property will accept, where the type alone does not say what that is.
+    /// </summary>
+    /// <remarks>
+    /// The public models carry an enumerated property as text, because the generated enum is
+    /// internal. The names are still reachable through the mapping the facade generates: a
+    /// resource's source class converts the public record back to the generated one, and that
+    /// record still declares the enum. Taking a real member from it is what keeps this probe asking
+    /// about the operator rather than about the value.
+    /// </remarks>
+    private static string? Member(Type? generated, string property) =>
+        generated?.GetProperty(property)?.PropertyType is { } type
+        && (Nullable.GetUnderlyingType(type) ?? type) is { IsEnum: true } enumeration
+            ? Enum.GetNames(enumeration).FirstOrDefault()
+            : null;
+
+    /// <summary>
+    /// The generated record a resource maps its public one to, if the facade generated one.
+    /// </summary>
+    /// <remarks>
+    /// Found by name rather than by a list, so a resource added later is covered. Returning
+    /// <see langword="null"/> is fine — it only means the synthetic values are used, which is
+    /// correct for every property whose type says what it accepts.
+    /// </remarks>
+    private static Type? Generated(Type queryable)
+    {
+        if (Surfaces(queryable) is not [{ } resource, ..])
+        {
+            return null;
+        }
+
+        return typeof(EconomicClient).Assembly
+            .GetType($"{resource.Namespace}.{resource.Name}Source")
+            ?.GetMethod("ToGenerated", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+            ?.ReturnType;
+    }
 
     private static ExpressionType Kind(string name) => name switch
     {
@@ -417,11 +482,10 @@ public class FilterSurfaceTests
     {
         var type = query.GetType();
         var rejected = type.GetMethod("WhereRaw", [typeof(string)])!.Invoke(query, ["zzzNoSuchField$eq:1"])!;
-        var getPage = rejected.GetType().GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)])!;
 
         try
         {
-            await (Task)getPage.Invoke(rejected, [0, token])!;
+            await OnePageAsync(query, rejected, token);
         }
         catch (EconomicApiException exception)
         {
@@ -434,13 +498,81 @@ public class FilterSurfaceTests
         return null;
     }
 
-    /// <summary>Every queryable the client exposes, nested collections included.</summary>
+    /// <summary>Every queryable the client can actually reach, nested collections included.</summary>
     /// <remarks>
+    /// <para>
     /// A nested collection needs a parent to hang off, and the parent has to exist on the
     /// agreement. Anything unrecognised fails rather than being skipped, so a nested resource added
     /// later cannot quietly drop out of this.
+    /// </para>
+    /// <para>
+    /// Each is then asked for one unfiltered page, because a collection belonging to a module the
+    /// agreement has not bought answers <c>403</c> to everything — and this probe reads a refusal as
+    /// "the server will not filter on that", which would report the whole projects service as broken.
+    /// Where the configured agreement cannot reach a collection, the same collection on the demo
+    /// agreement stands in, so it is verified rather than skipped. A collection neither can reach
+    /// fails the run: silently dropping one would leave a surface nothing had ever sent.
+    /// </para>
     /// </remarks>
     private static async Task<List<(string Name, object Query)>> QueryablesAsync(
+        EconomicClient client,
+        CancellationToken token)
+    {
+        var reachable = new List<(string Name, object Query)>();
+        List<(string Name, object Query)>? onDemo = null;
+
+        foreach (var candidate in await ExposedAsync(client, token))
+        {
+            if (await ModuleAsync(candidate.Query, token) is null)
+            {
+                reachable.Add(candidate);
+                continue;
+            }
+
+            onDemo ??= await ExposedAsync(TestClients.CreateDemo(), token);
+            var fallback = onDemo.FirstOrDefault(q => q.Name == candidate.Name);
+            var refused = fallback.Query is null ? "not exposed" : await ModuleAsync(fallback.Query, token);
+
+            if (refused is not null)
+            {
+                throw new InvalidOperationException(
+                    $"{candidate.Name} is out of reach on the configured agreement and on the demo "
+                    + $"agreement too ({refused}), so its filter and sort surfaces cannot be checked "
+                    + "against a server. Point the tests at an agreement that has the module.");
+            }
+
+            reachable.Add(fallback);
+        }
+
+        return reachable;
+    }
+
+    /// <summary>The module a collection needs and the agreement lacks, if that is why it refuses.</summary>
+    /// <remarks>
+    /// Through <c>AsQuery()</c> where the queryable is a resource, rather than the resource itself:
+    /// a cursor-only collection publishes no <c>GetPageAsync</c> on its resource, and only the query
+    /// offers the cursor call <see cref="OnePageAsync"/> falls back to. Some surfaces expose a query
+    /// directly, which has no <c>AsQuery</c> and needs none.
+    /// </remarks>
+    private static async Task<string?> ModuleAsync(object query, CancellationToken token)
+    {
+        var unfiltered = query.GetType()
+            .GetMethod("AsQuery", BindingFlags.Public | BindingFlags.Instance)
+            ?.Invoke(query, []) ?? query;
+
+        try
+        {
+            await OnePageAsync(query, unfiltered, token);
+            return null;
+        }
+        catch (EconomicApiException exception) when (TestClients.MissingModule(exception) is { } module)
+        {
+            return module;
+        }
+    }
+
+    /// <summary>Every queryable one client exposes, whether or not the agreement can reach it.</summary>
+    private static async Task<List<(string Name, object Query)>> ExposedAsync(
         EconomicClient client,
         CancellationToken token)
     {
@@ -553,7 +685,14 @@ public class FilterSurfaceTests
     /// <param name="Field">The filter surface property.</param>
     /// <param name="Method">The operator, comparison or method, that property exposes.</param>
     /// <param name="Description">How the clause reads in e-conomic's own syntax.</param>
-    private sealed record Clause(PropertyInfo Field, MethodInfo Method, string Description);
+    /// <param name="Text">
+    /// A value the server will recognise, where an arbitrary one will not do. An enumerated property
+    /// is text on the public model, and e-conomic rejects a name outside the set: <c>type$ne:zz</c>
+    /// answers "Requested value 'zz' was not found" while <c>type$eq:zz</c> is tolerated and matches
+    /// nothing. Probing with a synthetic value therefore reported an operator as broken that works
+    /// perfectly well.
+    /// </param>
+    private sealed record Clause(PropertyInfo Field, MethodInfo Method, string Description, string? Text = null);
 
     /// <summary>The field names a filter surface offers, as e-conomic spells them.</summary>
     private static IReadOnlyList<string> Fields(Type? filter) =>

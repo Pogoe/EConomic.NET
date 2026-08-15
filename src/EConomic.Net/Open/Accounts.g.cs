@@ -169,6 +169,10 @@ public sealed class AccountSort
 internal sealed class AccountSource(Raw.AccountsClient client)
     : IEconomicOpenSource<Account>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<Account>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -472,6 +476,10 @@ public sealed class AccountKeyFigureCodeSort
 internal sealed class AccountKeyFigureCodeSource(Raw.KeyFigureCodesClient client)
     : IEconomicOpenSource<AccountKeyFigureCode>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<AccountKeyFigureCode>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -677,6 +685,10 @@ public sealed class AccountTotalIntervalSort
 internal sealed class AccountTotalIntervalSource(Raw.TotalIntervalsClient client)
     : IEconomicOpenSource<AccountTotalInterval>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<AccountTotalInterval>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {

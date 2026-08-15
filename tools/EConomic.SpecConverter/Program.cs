@@ -7,8 +7,9 @@ if (args.Length > 0 && args[0].Equals("open-facade", StringComparison.Ordinal))
 {
     var service = args.Length > 1 ? args[1] : "Customers";
     var specFile = Path.Combine("specs", "openapi-prepared", $"openapi-{service}.json");
-    var clientFile = Path.Combine("src", "EConomic.Net", "Open", "Generated", $"{service}Service.g.cs");
-    var outputFile = Path.Combine("src", "EConomic.Net", "Open", $"{service}.g.cs");
+    var generatedName = OpenFacadeGenerator.GeneratedNamespace(service);
+    var clientFile = Path.Combine("src", "EConomic.Net", "Open", "Generated", $"{generatedName}Service.g.cs");
+    var outputFile = Path.Combine("src", "EConomic.Net", "Open", $"{generatedName}.g.cs");
 
     foreach (var required in (string[])[specFile, clientFile])
     {
@@ -25,13 +26,17 @@ if (args.Length > 0 && args[0].Equals("open-facade", StringComparison.Ordinal))
         return 1;
     }
 
+    var openSkipped = new List<string>();
     var openSource = OpenFacadeGenerator.Generate(
-        openDocument, File.ReadAllText(clientFile), "EConomic.Open", service);
+        openDocument, File.ReadAllText(clientFile), "EConomic.Open", service, openSkipped);
     File.WriteAllText(outputFile, openSource.ReplaceLineEndings("\n"));
 
     var qualifier = OpenFacadeGenerator.ServiceNames[service];
+    var openSchemas = openDocument["components"]!["schemas"]!.AsObject();
     var collections = OpenFacadeGenerator
-        .Collections(openDocument["paths"]!.AsObject(), openDocument["components"]!["schemas"]!.AsObject())
+        .Deduplicated(
+            OpenFacadeGenerator.Collections(openDocument["paths"]!.AsObject(), openSchemas),
+            openSchemas)
         .Select(c => c.QualifiedBy(qualifier))
         .ToList();
 
@@ -54,6 +59,12 @@ if (args.Length > 0 && args[0].Equals("open-facade", StringComparison.Ordinal))
         Console.WriteLine($"  {uncounted.PublicName} publishes no count endpoint");
     }
 
+    foreach (var (omitted, kept) in OpenFacadeGenerator.DuplicateCollections
+        .Where(d => openDocument["paths"]![d.Key] is not null))
+    {
+        Console.WriteLine($"  {omitted} omitted: it answers with the same records as {kept}");
+    }
+
     // Everything the document declares that no emitted resource reaches. Reported rather than
     // dropped: an operation the facade cannot express is a gap someone has to decide about, and
     // the legacy facade generator reports its own the same way.
@@ -70,8 +81,17 @@ if (args.Length > 0 && args[0].Equals("open-facade", StringComparison.Ordinal))
                 Method: operation.Key.ToUpperInvariant(),
                 Id: operation.Value!["operationId"]!.GetValue<string>())))
         .Where(o => !reached.Contains(o.Id))
+        // A collection omitted as a duplicate is already reported, once, with the reason. Listing
+        // its seven operations again as gaps would bury the operations that genuinely are gaps.
+        .Where(o => !OpenFacadeGenerator.DuplicateCollections.Keys.Any(d =>
+            o.Path == d || o.Path.StartsWith($"{d}/", StringComparison.Ordinal)))
         .OrderBy(o => o.Path, StringComparer.Ordinal)
         .ToList();
+
+    foreach (var property in openSkipped)
+    {
+        Console.WriteLine($"  not expressed: {property}");
+    }
 
     foreach (var (path, method, id) in missed)
     {
@@ -97,6 +117,8 @@ if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
     var writeSettings = new JsonSerializerOptions { WriteIndented = true };
     var preparedCount = 0;
     var markedCount = 0;
+    var correctedTimestamps = new List<string>();
+    var flattenedEnums = new List<string>();
 
     foreach (var file in Directory.GetFiles(openInput, "*.json").OrderBy(f => f, StringComparer.Ordinal))
     {
@@ -106,16 +128,46 @@ if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
             return 1;
         }
 
-        markedCount += OpenSpecPreparer.Prepare(document);
+        markedCount += OpenSpecPreparer.Prepare(document, correctedTimestamps, flattenedEnums);
         File.WriteAllText(
             Path.Combine(openOutput, Path.GetFileName(file)),
             document.ToJsonString(writeSettings).ReplaceLineEndings("\n") + "\n");
         preparedCount++;
     }
 
+    // Every correction describes something the specification gets wrong. One that no longer applies
+    // is describing a specification that has changed, and this is the only moment anyone would see it.
+    var fixedUp = OpenSpecPreparer.Timestamps
+        .Except(correctedTimestamps, StringComparer.Ordinal)
+        .OrderBy(t => t, StringComparer.Ordinal)
+        .ToList();
+
+    if (fixedUp.Count > 0)
+    {
+        Console.Error.WriteLine(
+            $"These properties are corrected from a date to a timestamp, but no service declares "
+            + $"them as a date any more: {string.Join(", ", fixedUp)}. Remove them from "
+            + $"{nameof(OpenSpecPreparer)}.{nameof(OpenSpecPreparer.Timestamps)}.");
+        return 1;
+    }
+
+    // Dropping an inline path enumeration is only right while a reference is there to carry the
+    // type. If no service does this any more, the rule is describing nothing and should go rather
+    // than sit waiting to fire on something it was never written for.
+    if (flattenedEnums.Count == 0)
+    {
+        Console.Error.WriteLine(
+            "No path parameter declares an inline enumeration beside a reference any more. Remove "
+            + $"{nameof(OpenSpecPreparer)}.FlattenPathEnums — it is describing a shape no "
+            + "specification has.");
+        return 1;
+    }
+
     Console.WriteLine(
         $"Prepared {preparedCount} service specifications into {openOutput}: "
-        + $"{markedCount} optional value-typed properties marked nullable");
+        + $"{markedCount} optional value-typed properties marked nullable, "
+        + $"{correctedTimestamps.Count} mislabelled dates corrected, "
+        + $"{flattenedEnums.Count} inline path enumerations flattened");
 
     return 0;
 }
@@ -237,7 +289,10 @@ if (args.Length > 0 && args[0].Equals("json-context", StringComparison.Ordinal))
     var generated = File.ReadAllText(generatedFile);
     var contextNamespace = args.Length > 3 ? args[3] : "EConomic.Rest.Generated";
     var contextName = args.Length > 4 ? args[4] : "EconomicRestJsonContext";
-    var source = JsonContextGenerator.Generate(generated, contextNamespace, contextName);
+    // The OpenAPI services number their enums where the legacy API names them, and the converter
+    // that is right for one is wrong for the other.
+    var stringEnums = !contextNamespace.StartsWith("EConomic.Open", StringComparison.Ordinal);
+    var source = JsonContextGenerator.Generate(generated, contextNamespace, contextName, stringEnums);
     File.WriteAllText(contextFile, source.ReplaceLineEndings("\n"));
 
     Console.WriteLine(

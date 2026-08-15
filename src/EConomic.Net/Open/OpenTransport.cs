@@ -53,6 +53,45 @@ internal static class OpenTransport
         }
     }
 
+    /// <summary>Converts the name e-conomic sends into the generated enum it belongs to.</summary>
+    /// <typeparam name="TEnum">The generated enum.</typeparam>
+    /// <param name="value">The value from the public model.</param>
+    /// <returns>The parsed value.</returns>
+    /// <remarks>
+    /// The generated enums are internal, so the public models carry the name as text. Deliberately
+    /// its own copy rather than borrowing the legacy surface's: the two surfaces share a transport
+    /// and a query language, and nothing above that, and a shared helper is how that starts to slip.
+    /// </remarks>
+    /// <exception cref="ArgumentException"><paramref name="value"/> is not one of the values.</exception>
+    public static TEnum ParseEnum<TEnum>(string? value)
+        where TEnum : struct, Enum
+    {
+        if (value is null)
+        {
+            return default;
+        }
+
+        if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed))
+        {
+            return parsed;
+        }
+
+        // Defaulting silently would send a value the caller never chose.
+        throw new ArgumentException(
+            $"'{value}' is not a value this property accepts. Expected one of: "
+            + string.Join(", ", Enum.GetNames<TEnum>()) + ".",
+            nameof(value));
+    }
+
+    /// <summary>Converts an optional name into the generated enum it belongs to.</summary>
+    /// <typeparam name="TEnum">The generated enum.</typeparam>
+    /// <param name="value">The value from the public model, or <see langword="null"/>.</param>
+    /// <returns>The parsed value, or <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentException"><paramref name="value"/> is not one of the values.</exception>
+    public static TEnum? ParseOptionalEnum<TEnum>(string? value)
+        where TEnum : struct, Enum =>
+        value is null ? null : ParseEnum<TEnum>(value);
+
     private static EconomicApiException Translate(EconomicGeneratedApiException exception, string description)
     {
         var status = (HttpStatusCode)exception.StatusCode;

@@ -123,12 +123,18 @@ kinds of thing: these are already OpenAPI 3.0, they publish an operator list per
 entities are flat. Run from the repository root, per service:
 
 ```bash
-S=Customers   # or Accounts, Products, Suppliers
+S=Customers   # or AccountingYears, Accounts, BookedEntries, Budgets, Dimensions,
+              #    Documents, Journals, Products, Projects, Q2C, Subscriptions,
+              #    Suppliers, webhooks-api
 dotnet run --project tools/EConomic.SpecConverter -c Release -- open-specs      # specs/openapi -> openapi-prepared
 (cd tools/nswag && dotnet nswag run "open-${S,,}.nswag")                        # -> Open/Generated/${S}Service.g.cs
 dotnet run --project tools/EConomic.SpecConverter -c Release -- json-context   "src/EConomic.Net/Open/Generated/${S}Service.g.cs"   "src/EConomic.Net/Open/Generated/EconomicOpen${S}JsonContext.g.cs"   "EConomic.Open.Generated.${S}" "EconomicOpen${S}JsonContext"
 dotnet run --project tools/EConomic.SpecConverter -c Release -- open-facade "$S"
 ```
+
+`webhooks-api` is the one service that recipe does not fit: e-conomic's own name for it is not a C#
+identifier, so its configuration is `open-webhooks.nswag` and its namespace `…Generated.Webhooks`,
+recorded in `OpenFacadeGenerator.GeneratedNamespaces`.
 
 Each service gets its own generated namespace, `EConomic.Open.Generated.{Service}`, and its own
 serialization context. That is not tidiness: the services overlap, and two `Contact` classes in one
@@ -147,6 +153,16 @@ reaches its paged listing through `/productspaged/paged`; three of its collectio
 path parameter; and its create answers with a string product number rather than an integer. The
 generator handles each and says so, and lists the operations no resource reaches — nine across the
 four services — rather than dropping them quietly.
+
+Three further shapes each service may or may not have, all of which the generator reports: a
+collection with no cursor listing (`/AccountingYears`), one with no classic listing and so no
+sorting or counting (`/booked-entries/matched-pairs`), and a property whose type is a generated enum
+or another generated class. A named enum crosses as its member name; a *numbered* one — declared
+`type: integer` with no names, which NSwag renders as `_0`, `_1` — crosses as the number, because
+that is what the server sends. Every enumerated schema in every one of these services is numbered,
+which is why their serialization contexts do **not** apply the string enum converter the legacy
+pipeline needs: it would write `"_7"` where the server expects `7`. A property typed as another generated class has no public counterpart
+and is reported.
 
 Generated calls use **named arguments**. NSwag puts required path parameters first, so a scoped
 collection's positional order differs between its own operations — `GetZoneByIdAsync(number,
@@ -223,6 +239,20 @@ Each test now creates what it asserts on through `AgreementSeed`, which deletes 
 order — an invoice has to go before the customer and product it references. Everything is prefixed
 `ZZ Probe`, and a failed run can still leave a record behind.
 
+The demo agreement still has one use, and only one. e-conomic sells its modules separately, and the
+projects service answers `403` with `AccessDeniedAgreementMissingModules` for every collection but
+employees and employee groups unless the agreement has the Project module. Where the configured
+agreement cannot reach a collection, `EveryResourceTests` and `FilterSurfaceTests` retry that same
+collection against `demo`, which does have it, rather than skipping — sixteen collections shipping
+filter and sort surfaces nothing had ever sent to a server is exactly what those tests exist to
+prevent. Neither objection above applies: they assert that the server parses a query, never on what
+it returns. A collection neither agreement can reach fails the run, and a module going missing
+beyond the projects service fails it too, so this cannot quietly grow.
+
+That fallback found a real bug the first time it ran. `ProjectEmployeeDetails.CutOffDate` was a
+`DateOnly`, because e-conomic declares it `format: date`, and the server answers it with a
+timestamp.
+
 Booking is the exception and has its own opt-in, `ECONOMIC_RUN_BOOKING_TESTS=1`: a booked invoice
 cannot be deleted, and neither can the customer and product it references, so every run of that one
 leaves three records behind permanently. The scheduled workflow deliberately does not set it.
@@ -230,10 +260,18 @@ leaves three records behind permanently. The scheduled workflow deliberately doe
 Set the tokens through the environment rather than on the command line, or they end up in shell
 history. For CI they are repository secrets of the same names.
 
-Three tests are structural rather than per-resource. Each enumerates the client by reflection rather
+Four tests are structural rather than per-resource. Each enumerates the client by reflection rather
 than from a list, so a resource added later is covered without anyone remembering to add it, and
 each carries a guard asserting it found something — reflection that matches nothing otherwise
-reports a pass while testing nothing.
+reports a pass while testing nothing. Those guards hold the coverage the suite actually has — 95
+records mapped, 147 writes sent, 391 filter fields, 519 sort fields, 4 636 filter clauses — rather
+than a round number, so a service quietly dropping out of the reflection fails as loudly as one that
+never appeared. Raise them when coverage grows.
+
+Only 391 of those filter fields are checked against the server's own list, and they are all on the
+legacy surface: it answers a bad filter with `allowedFilteringFields`, and the OpenAPI services name
+the offending property and stop. The operator sweep is what covers the rest, one clause per
+request.
 
 | Test | What it pins |
 | --- | --- |
@@ -242,8 +280,8 @@ reports a pass while testing nothing.
 | `WriteRequestTests` (unit) | Sends every write and asserts nothing appears in the body that the caller did not put there. |
 | `FilterSurfaceTests` (integration) | Checks every filterable and sortable property, and every operator offered on it, against the server. A filter naming a field e-conomic does not accept comes back with `allowedFilteringFields`, its own list for that resource, so one bad filter per resource checks a whole surface. Sorting has no such list, so the entire sort surface goes into one request and a rejection is bisected to name the field. Operators get a request each — see below. |
 
-One clause per request in that last test is deliberate, and cost five minutes of wall clock to
-learn. Batching the clauses with `$and:`, the way the sort check batches its fields, produces false
+One clause per request in that last test is deliberate, and is most of why the suite takes about
+eight minutes. Batching the clauses with `$and:`, the way the sort check batches its fields, produces false
 passes: e-conomic short-circuits a conjunction, so a clause that answers `500` alone comes back
 `200` once another clause ahead of it has already excluded every row. A twenty-clause filter
 containing `assetGroupNumber$eq:` passed while the same clause on its own failed. Sorting cannot

@@ -120,6 +120,10 @@ public sealed class SupplierContactSort
 internal sealed class SupplierContactSource(Raw.ContactsClient client)
     : IEconomicOpenSource<SupplierContact>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<SupplierContact>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -380,6 +384,10 @@ public sealed class SupplierGroupSort
 internal sealed class SupplierGroupSource(Raw.GroupsClient client)
     : IEconomicOpenSource<SupplierGroup>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<SupplierGroup>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {

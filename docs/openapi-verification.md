@@ -89,6 +89,59 @@ a `404`. Verified on price groups, of which the test agreement has none:
 a scoped collection's filter surface on an agreement with no data in it — the question is whether
 the server parses the filter, not what the filter matches.
 
+**One enum is defined by number and has no names.** A booked entry's `type` is declared
+`type: integer` with the values 0 to 10 and nothing else, and the server really does send
+`"type": 1`. Filtering accepts either form — `type$eq:1` and `type$eq:financeVoucher` both answer
+`200` — but only the numbers are in the specification, so only the number is on the public model.
+`type$gt:0` is a `400`, matching its published `eq, ne`.
+
+**A filter value has to be one the property accepts, not merely one of the right type.** Probing an
+enumerated property with an arbitrary name reported an operator as broken that works: `type$ne:zz`
+answers "Requested value 'zz' was not found" while `type$eq:zz` is tolerated and matches nothing.
+The operator check resolves a real member through the generated mapping rather than inventing a
+value.
+
+**`/journals` cannot be filtered at all.** Every operator on every property it marks filterable
+answers `500`, and so do the cursor listing and the count. Sorting works, and `/draft-entries` and
+`/accruals` in the same service filter perfectly well, so it is that one endpoint rather than the
+service. Reproduced on the demo agreement.
+
+**Every enumerated schema these services declare is `type: integer`.** Not one is a string, across all fourteen.
+That is the opposite of the legacy API, which sends `"heading"` and `"debit"`, and it means the
+string enum converter the legacy pipeline requires is actively wrong here — it reads a number
+correctly and then writes the name, which for a nameless integer enum is whatever NSwag invented.
+
+**The projects service is gated behind a module the agreement has to have bought.** Every
+collection but `/Employees` and `/EmployeeGroups` answers `403` with
+`AccessDeniedAgreementMissingModules` and the title "Missing modules: Project". The demo agreement
+has the module, which is what makes the surface probes possible at all; the throwaway agreement the
+rest of the suite uses does not.
+
+**`ProjectEmployee.cutOffDate` is declared `format: date` and answered with a timestamp.**
+`2022-05-31T00:00:00`, which is what the eleven other date properties in that document return —
+and every one of those is already declared `date-time`. It is the only `date` in the whole
+projects specification, and it is wrong. NSwag maps `date` to `DateOnly`, so every page of project
+employees containing an employee with a cut-off date failed to deserialize. Corrected in
+`OpenSpecPreparer.Timestamps`. The same defect the legacy pipeline corrects, but arriving without
+the `pattern` that let the legacy converter settle it mechanically.
+
+**`/project-employees/paged` caps `pageSize` at 100**, like the rest of the classic listings —
+"The field PageSize must be between 1 and 100" — while a cursor listing takes 1000.
+
+**e-conomic publishes some collections twice.** `/EmployeeGroups` and `/project-employeegroups`
+answer with the same records, the same properties and the same `objectVersion` hash, and offer the
+same verbs. `/Employees` and `/project-employees` are the same records in two different
+projections: the first carries phone and email, the second rates, approval rights and an address,
+and neither is a superset. `/Activities` and `/project-activities`, despite the naming, are two
+genuinely different entities — a catalogue entry and an assignment of one to a project.
+
+**The quote-to-cash service declares its path enumeration in the wrong place.** Eight of its
+listings are scoped by `{documentStatus}`, whose schema carries an inline `enum` of `drafts`, `sent`
+and `archived` *beside* an `allOf` reference to `SalesDocumentStatusRoute` — which is itself nothing
+but `type: string`. NSwag reads each inline copy as its own anonymous schema and mints
+`DocumentStatus` through `DocumentStatus8`: eight mutually incompatible types for one path segment.
+The inline copy is dropped in preparation, leaving the reference.
+
 ## Still to verify
 
 - [ ] Whether `objectVersion` behaves the same on the other services, and whether `POST` accepts one
@@ -100,5 +153,7 @@ the server parses the filter, not what the filter matches.
 - [ ] Whether the `like` operator behaves as "contains" without wildcards here too
 - [ ] Whether the `500`s on `assetGroupNumber` and `isDepartmentMandatory` are fixed, which would
       make the curated exclusions fail the generator and prompt their removal
+- [ ] Whether any other `format: date` on these services is likewise answered with a timestamp; only
+      the projects one has been caught, and only because a page failed to deserialize
 - [ ] Whether `$or:` short-circuits the way `$and:` does, which would matter if the operator check
       is ever batched again

@@ -145,6 +145,10 @@ public sealed class CustomerContactSort
 internal sealed class CustomerContactSource(Raw.ContactsClient client)
     : IEconomicOpenSource<CustomerContact>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<CustomerContact>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -560,6 +564,10 @@ public sealed class CustomerSort
 internal sealed class CustomerSource(Raw.CustomersClient client)
     : IEconomicOpenSource<Customer>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<Customer>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -953,6 +961,10 @@ public sealed class CustomerDeliveryLocationSort
 internal sealed class CustomerDeliveryLocationSource(Raw.DeliveryLocationsClient client)
     : IEconomicOpenSource<CustomerDeliveryLocation>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<CustomerDeliveryLocation>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {

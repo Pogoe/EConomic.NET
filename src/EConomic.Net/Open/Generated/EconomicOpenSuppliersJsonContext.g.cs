@@ -13,16 +13,9 @@ namespace EConomic.Open.Generated.Suppliers;
 /// Source-generated serialization metadata for the generated legacy clients, so the
 /// package stays trim- and AOT-compatible despite NSwag emitting reflection-based calls.
 /// </summary>
-#if NET9_0_OR_GREATER
-[JsonSourceGenerationOptions(
-    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    PropertyNameCaseInsensitive = true,
-    UseStringEnumConverter = true)]
-#else
 [JsonSourceGenerationOptions(
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     PropertyNameCaseInsensitive = true)]
-#endif
 [JsonSerializable(typeof(Contact))]
 [JsonSerializable(typeof(ContactCursorResults))]
 [JsonSerializable(typeof(CreatedResult))]
@@ -42,10 +35,6 @@ internal partial class ContactsClient
 {
     static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
     {
-#if !NET9_0_OR_GREATER
-        settings.Converters.Add(new JsonStringEnumConverter());
-#endif
-
         // e-conomic rejects an explicit null: sending "address": null fails schema
         // validation with "Expected String but got Null", so an unset optional property
         // must be omitted rather than written. This has to be set on these settings, not
@@ -62,10 +51,6 @@ internal partial class GroupsClient
 {
     static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
     {
-#if !NET9_0_OR_GREATER
-        settings.Converters.Add(new JsonStringEnumConverter());
-#endif
-
         // e-conomic rejects an explicit null: sending "address": null fails schema
         // validation with "Expected String but got Null", so an unset optional property
         // must be omitted rather than written. This has to be set on these settings, not

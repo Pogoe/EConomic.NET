@@ -25,6 +25,24 @@ public sealed record EconomicCursorPage<T>(IReadOnlyList<T> Items, string? Curso
 /// </remarks>
 internal interface IEconomicOpenSource<T>
 {
+    /// <summary>
+    /// Whether the collection publishes a cursor listing.
+    /// </summary>
+    /// <remarks>
+    /// Most do, and it is the listing to prefer. A few publish only the classic one — the accounting
+    /// years collection among them — and enumerating those has to page instead.
+    /// </remarks>
+    bool CanCursor { get; }
+
+    /// <summary>
+    /// Whether the collection publishes the classic paged listing.
+    /// </summary>
+    /// <remarks>
+    /// Sorting exists only there, so a collection without it cannot be ordered at all — the sort
+    /// surface for one is empty, and the resource offers no <c>OrderBy</c>.
+    /// </remarks>
+    bool CanPage { get; }
+
     /// <summary>Fetches a cursor page. Sorting is not available here — the server ignores it.</summary>
     Task<EconomicCursorPage<T>> GetCursorPageAsync(string? cursor, string? filter, CancellationToken cancellationToken);
 
@@ -183,6 +201,11 @@ public sealed class EconomicOpenQuery<TResource, TFilter, TSort>
     /// against a live agreement. Issuing that would quietly return the wrong order.
     /// </para>
     /// <para>
+    /// A collection that publishes no cursor listing pages classically throughout, and one that
+    /// publishes no classic listing can only be enumerated unsorted — which is why neither offers
+    /// an ordering to apply in the first place.
+    /// </para>
+    /// <para>
     /// The switch has a cost worth knowing: classic paging stops after
     /// <see cref="ClassicPagingLimit"/> items, so a sorted enumeration of a larger collection ends
     /// there. Sorting a collection that big is better done by filtering it down first.
@@ -191,7 +214,7 @@ public sealed class EconomicOpenQuery<TResource, TFilter, TSort>
     public async IAsyncEnumerable<TResource> AsAsyncEnumerable(
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        if (_sort is null)
+        if (_sort is null && _source.CanCursor)
         {
             string? cursor = null;
 
@@ -267,6 +290,13 @@ public sealed class EconomicOpenQuery<TResource, TFilter, TSort>
                 "A cursor listing cannot be sorted: e-conomic ignores sort on a cursor request and "
                 + "answers with unordered data. Use GetPageAsync or AsAsyncEnumerable, which switch "
                 + "to the paged endpoint when an ordering is present.");
+        }
+
+        if (!_source.CanCursor)
+        {
+            throw new InvalidOperationException(
+                "This collection publishes no cursor listing, only the classic paged one. Use "
+                + "GetPageAsync, or AsAsyncEnumerable, which pages it for you.");
         }
 
         return _source.GetCursorPageAsync(cursor, _filter, cancellationToken);

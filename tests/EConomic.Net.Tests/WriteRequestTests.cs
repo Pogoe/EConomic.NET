@@ -99,7 +99,7 @@ public class WriteRequestTests
 
         // A guard against the reflection silently matching nothing, which would make this pass
         // while sending no writes at all.
-        Assert.True(sent.Count >= 74, $"Expected every write; only sent {sent.Count}.");
+        Assert.True(sent.Count >= 147, $"Expected every write; only sent {sent.Count}.");
     }
 
     /// <summary>

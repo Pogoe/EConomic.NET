@@ -23,8 +23,21 @@ public static partial class JsonContextGenerator
     /// <param name="generatedSource">Contents of the NSwag-generated file.</param>
     /// <param name="namespaceName">Namespace the generated code lives in.</param>
     /// <param name="contextName">Name to give the generated context class.</param>
+    /// <param name="stringEnums">
+    /// Whether the API sends enums as names rather than numbers. True for the legacy REST API, which
+    /// sends <c>"heading"</c> and <c>"debit"</c>; false for the OpenAPI services, where every
+    /// enumerated schema is declared <c>type: integer</c> and the server sends <c>"type": 1</c>.
+    /// Getting this wrong is silent in one direction and wrong in the other: the string converter
+    /// still reads a number, but it writes the member's name, and NSwag names the members of a
+    /// nameless integer enum <c>_0</c>, <c>_1</c> — so a subscription's interval went out as
+    /// <c>"_7"</c>.
+    /// </param>
     /// <returns>The C# source for the context and the client hooks.</returns>
-    public static string Generate(string generatedSource, string namespaceName, string contextName)
+    public static string Generate(
+        string generatedSource,
+        string namespaceName,
+        string contextName,
+        bool stringEnums = true)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(generatedSource);
         ArgumentException.ThrowIfNullOrWhiteSpace(namespaceName);
@@ -49,20 +62,32 @@ public static partial class JsonContextGenerator
         builder.AppendLine("/// Source-generated serialization metadata for the generated legacy clients, so the");
         builder.AppendLine("/// package stays trim- and AOT-compatible despite NSwag emitting reflection-based calls.");
         builder.AppendLine("/// </summary>");
-        // e-conomic sends enums as strings ("heading", "debit"). System.Text.Json defaults to
-        // numbers, so without a string converter every response carrying one fails to deserialize.
-        // UseStringEnumConverter is the source-generated, AOT-safe form but only exists on net9.0+;
-        // older targets add the reflection-based converter in the hook below instead.
-        builder.AppendLine("#if NET9_0_OR_GREATER");
-        builder.AppendLine("[JsonSourceGenerationOptions(");
-        builder.AppendLine("    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,");
-        builder.AppendLine("    PropertyNameCaseInsensitive = true,");
-        builder.AppendLine("    UseStringEnumConverter = true)]");
-        builder.AppendLine("#else");
-        builder.AppendLine("[JsonSourceGenerationOptions(");
-        builder.AppendLine("    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,");
-        builder.AppendLine("    PropertyNameCaseInsensitive = true)]");
-        builder.AppendLine("#endif");
+        if (stringEnums)
+        {
+            // The legacy API sends enums as strings ("heading", "debit"). System.Text.Json defaults
+            // to numbers, so without a string converter every response carrying one fails to
+            // deserialize. UseStringEnumConverter is the source-generated, AOT-safe form but only
+            // exists on net9.0+; older targets add the reflection-based converter in the hook below.
+            builder.AppendLine("#if NET9_0_OR_GREATER");
+            builder.AppendLine("[JsonSourceGenerationOptions(");
+            builder.AppendLine("    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,");
+            builder.AppendLine("    PropertyNameCaseInsensitive = true,");
+            builder.AppendLine("    UseStringEnumConverter = true)]");
+            builder.AppendLine("#else");
+            builder.AppendLine("[JsonSourceGenerationOptions(");
+            builder.AppendLine("    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,");
+            builder.AppendLine("    PropertyNameCaseInsensitive = true)]");
+            builder.AppendLine("#endif");
+        }
+        else
+        {
+            // The OpenAPI services declare every enumerated schema as type: integer, and the server
+            // sends and accepts the number. Converting to strings here would write the name NSwag
+            // invented for a nameless member.
+            builder.AppendLine("[JsonSourceGenerationOptions(");
+            builder.AppendLine("    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,");
+            builder.AppendLine("    PropertyNameCaseInsensitive = true)]");
+        }
 
         foreach (var root in roots)
         {
@@ -82,10 +107,14 @@ public static partial class JsonContextGenerator
             builder.AppendLine("{");
             builder.AppendLine("    static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)");
             builder.AppendLine("    {");
-            builder.AppendLine("#if !NET9_0_OR_GREATER");
-            builder.AppendLine("        settings.Converters.Add(new JsonStringEnumConverter());");
-            builder.AppendLine("#endif");
-            builder.AppendLine();
+            if (stringEnums)
+            {
+                builder.AppendLine("#if !NET9_0_OR_GREATER");
+                builder.AppendLine("        settings.Converters.Add(new JsonStringEnumConverter());");
+                builder.AppendLine("#endif");
+                builder.AppendLine();
+            }
+
             builder.AppendLine("        // e-conomic rejects an explicit null: sending \"address\": null fails schema");
             builder.AppendLine("        // validation with \"Expected String but got Null\", so an unset optional property");
             builder.AppendLine("        // must be omitted rather than written. This has to be set on these settings, not");

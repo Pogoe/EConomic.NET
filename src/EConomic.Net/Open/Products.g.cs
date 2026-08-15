@@ -72,6 +72,10 @@ public sealed class ProductPriceGroupSort
 internal sealed class ProductPriceGroupSource(Raw.PriceGroupsClient client)
     : IEconomicOpenSource<ProductPriceGroup>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<ProductPriceGroup>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -359,6 +363,10 @@ public sealed class ProductSort
 internal sealed class ProductSource(Raw.ProductsClient client)
     : IEconomicOpenSource<Product>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<Product>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -615,6 +623,10 @@ public sealed class ProductGroupSort
 internal sealed class ProductGroupSource(Raw.ProductGroupsClient client)
     : IEconomicOpenSource<ProductGroup>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<ProductGroup>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -857,6 +869,10 @@ public sealed class ProductSalesPriceInCurrencySort
 internal sealed class ProductSalesPriceInCurrencySource(Raw.ProductSalesPriceInCurrenciesClient client)
     : IEconomicOpenSource<ProductSalesPriceInCurrency>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<ProductSalesPriceInCurrency>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -1034,6 +1050,10 @@ public sealed class ProductSpecialPriceSort
 internal sealed class ProductSpecialPriceSource(Raw.ProductSpecialPricesClient client, int priceGroupNumber)
     : IEconomicOpenSource<ProductSpecialPrice>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<ProductSpecialPrice>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -1269,6 +1289,10 @@ public sealed class ProductSpecialPriceInCurrencySort
 internal sealed class ProductSpecialPriceInCurrencySource(Raw.ProductSpecialPricesInCurrencyClient client, int productSpecialPriceNumber)
     : IEconomicOpenSource<ProductSpecialPriceInCurrency>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<ProductSpecialPriceInCurrency>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {
@@ -1508,6 +1532,10 @@ public sealed class ProductZoneSort
 internal sealed class ProductZoneSource(Raw.ZonesClient client, int productGroupNumber)
     : IEconomicOpenSource<ProductZone>
 {
+    public bool CanCursor => true;
+
+    public bool CanPage => true;
+
     public async Task<EconomicCursorPage<ProductZone>> GetCursorPageAsync(
         string? cursor, string? filter, CancellationToken cancellationToken)
     {

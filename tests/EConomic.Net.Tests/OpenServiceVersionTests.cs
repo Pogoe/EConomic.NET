@@ -27,21 +27,37 @@ public class OpenServiceVersionTests
 
         Assert.NotEmpty(services);
 
+        var published = Published();
+
         foreach (var service in services)
         {
-            var pinned = (string)service.GetRawConstantValue()!;
-            var specification = Path.Combine(SpecificationDirectory(), $"openapi-{service.Name}.json");
+            var pinned = ((string)service.GetRawConstantValue()!).TrimEnd('/');
 
-            Assert.True(File.Exists(specification), $"No specification at {specification}.");
+            // Matched on the address rather than on a file name. e-conomic names one document
+            // webhooks-api, which is not an identifier and so cannot be the constant's name, and a
+            // second table mapping one to the other would be one more thing to keep in step. This
+            // asks the stronger question anyway: is there a published specification that serves
+            // exactly this address?
+            var matches = published.Where(p => p.Server.EndsWith(pinned, StringComparison.Ordinal)).ToList();
 
-            using var document = JsonDocument.Parse(File.ReadAllText(specification));
-            var server = document.RootElement.GetProperty("servers")[0].GetProperty("url").GetString();
-
-            // The pinned value is the path segment: everything after the host, with its trailing
-            // slash, e.g. "customersapi/v3.1.0/".
-            Assert.EndsWith(pinned.TrimEnd('/'), server?.TrimEnd('/') ?? string.Empty, StringComparison.Ordinal);
+            Assert.True(
+                matches.Count == 1,
+                $"{service.Name} is pinned to '{pinned}', which {matches.Count} published "
+                + $"specifications serve. Addresses found: {string.Join(", ", published.Select(p => p.Server))}");
         }
     }
+
+    /// <summary>The address each published specification serves.</summary>
+    private static List<(string File, string Server)> Published() =>
+        [.. Directory.GetFiles(SpecificationDirectory(), "openapi-*.json")
+            .OrderBy(f => f, StringComparer.Ordinal)
+            .Select(file =>
+            {
+                using var document = JsonDocument.Parse(File.ReadAllText(file));
+                return (
+                    Path.GetFileName(file),
+                    document.RootElement.GetProperty("servers")[0].GetProperty("url").GetString()!.TrimEnd('/'));
+            })];
 
     /// <summary>The specifications, found by walking up from the test binary to the repository.</summary>
     private static string SpecificationDirectory()

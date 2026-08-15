@@ -986,11 +986,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1070,11 +1065,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1129,11 +1119,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1197,11 +1182,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1247,11 +1227,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1307,11 +1282,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1391,11 +1361,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1450,11 +1415,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1518,11 +1478,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"
@@ -1568,11 +1523,6 @@
             "in": "path",
             "required": true,
             "schema": {
-              "enum": [
-                "drafts",
-                "sent",
-                "archived"
-              ],
               "allOf": [
                 {
                   "$ref": "#/components/schemas/SalesDocumentStatusRoute"

@@ -18,9 +18,11 @@ await foreach (var customer in client.Rest.Customers
 ```
 
 > **Status: pre-release.** Thirty-three collection resources on the legacy REST API are covered,
-> with filtering, sorting and transparent paging; twelve of them also support writing. The first of
-> four of the newer OpenAPI services — customers, accounts, products and suppliers, fifteen
-> collections in all — are covered under `client.Open`. The public API may change before 1.0.
+> with filtering, sorting and transparent paging; twelve of them also support writing. All
+> fourteen of the newer OpenAPI services — accounting years, accounts, booked entries, budgets,
+> customers, dimensions, documents, journals, products, projects, quote-to-cash, subscriptions,
+> suppliers and webhooks, fifty-seven collections in all — are covered under `client.Open`. The
+> public API may change before 1.0.
 
 > **Unofficial.** This project is not affiliated with, endorsed by, or supported by Visma or
 > e-conomic. For API support, contact <api@e-conomic.com>.
@@ -367,7 +369,7 @@ exercises the real deserialization path on every commit.
 | --- | --- | --- |
 | Reached through | `client.Rest` | `client.Open` |
 | Base address | `https://restapi.e-conomic.com` | `https://apis.e-conomic.com/{service}api/v{version}/` |
-| Status here | Implemented, reads and writes | 4 of 14 services |
+| Status here | Implemented, reads and writes | 14 of 14 services |
 | Coverage | Broadest | Newer, per-service versioned |
 | Paging | `skippages` + `pagesize` | `cursor` (preferred), or `skipPages` + `pageSize` |
 | Identifiers | assigned by the server | supplied by the caller |
@@ -452,12 +454,48 @@ methods rather than properties, taking the identifier they need:
 var zones = await client.Open.ProductZones(productGroupNumber).GetPageAsync(0, cancellationToken);
 ```
 
+**Not every collection publishes both listings**, and the surface reflects that rather than failing
+when you use it. `AccountingYears` has only the classic paged one, so it pages throughout and asking
+it for a cursor page throws. `MatchedBookedEntriesPairs` has only the cursor, so it offers no
+`OrderBy`, no `GetPageAsync` and no `CountAsync` — sorting exists only on the classic listing.
+
 Several collections offer less than the pattern suggests, because the service does.
 `AccountKeyFigureCodes` is read-only, and so is `ProductSalesPricesInCurrency` — e-conomic publishes
 its writes under a product, keyed by currency. `AccountTotalIntervals` has no delete: that one is
 addressed by account number and starting account together. `Products` has no `CountAsync`, because
-it is the one collection here that publishes no `/count`. The suppliers service publishes no
-suppliers at all; those remain at `client.Rest.Suppliers`.
+it is the one collection here that publishes no `/count`, and neither `ProjectMileagePrices` nor
+`ProjectTimeEntryPrices` does either. `SalesDraftInvoiceLines` is read-only for the same reason
+`ProductSalesPricesInCurrency` is — reading them is a collection of its own, writing them is
+published under the invoice they belong to — and all the order and quote lines are read-only
+outright. The suppliers service publishes no suppliers at all; those remain at
+`client.Rest.Suppliers`.
+
+**The quote-to-cash service is named `Sales` here.** e-conomic calls it `q2capi`, for the
+quote-to-cash process it covers, and `Q2C` in a type name tells a reader nothing. `Sales` is the
+service's own word for the same material — its status type is `SalesDocumentStatusRoute`, and the
+dimensions service publishes `/dimension-data/sales-document-lines` for these very records.
+
+Its order and quote lines are scoped by a document status in the path, and appear once per status
+rather than as a method taking one: `SalesDraftOrderLines`, `SalesSentOrderLines`,
+`SalesArchivedOrderLines`, and the same three for quotes. That is how the legacy surface already
+models the documents these lines belong to — `client.Rest.DraftOrders`, `SentOrders`,
+`ArchivedOrders`. All three carry the same `SalesOrderLine`.
+
+`SalesDraftInvoices` is the counterpart to `client.Rest.DraftInvoices` rather than a replacement:
+booking a draft is published only on the legacy surface.
+
+**The projects service needs the Project module.** e-conomic sells its modules separately, and an
+agreement without this one answers `403` to every projects collection except `ProjectEmployees` and
+`ProjectEmployeeGroups`. That surfaces as an ordinary `EconomicApiException` whose `ErrorCode` is
+`AccessDeniedAgreementMissingModules`; there is nothing the client can do about it but report it.
+
+Two of its collections carry longer names than e-conomic's own, because e-conomic gives two
+different things the same one. `ProjectActivities` is the catalogue of activities — what a time
+entry's `activityNumber` points at — while `ProjectActivityAssignments` (`/project-activities`) is
+one of those attached to a project, with its own number, a date range and a responsible employee.
+Likewise `ProjectEmployees` carries an employee's phone and email, and `ProjectEmployeeDetails`
+(`/project-employees`) the same employees' rates and approval rights; neither is a superset of the
+other.
 
 ## Building
 

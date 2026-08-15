@@ -28,33 +28,160 @@ namespace EConomic.SpecConverter;
 /// </remarks>
 public static class OpenSpecPreparer
 {
+    /// <summary>
+    /// Properties e-conomic declares as a date and then answers with a timestamp, keyed by
+    /// <c>{schema}.{property}</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The same defect the legacy pipeline corrects, arriving by a different route. There the label
+    /// said <c>full-date</c> while the pattern beside it said otherwise, so the pattern could settle
+    /// it mechanically. Here there is no pattern — the document simply says <c>format: date</c>, and
+    /// the server sends <c>2022-05-31T00:00:00</c>. NSwag maps <c>date</c> to <c>DateOnly</c>, which
+    /// cannot parse that, so every page of project employees carrying a cut-off date failed to
+    /// deserialize.
+    /// </para>
+    /// <para>
+    /// Curated rather than inferred, because the only evidence is what the server actually sends.
+    /// Note this is the single property in the whole projects document declared <c>date</c>: its
+    /// eleven siblings, <c>cutoffDate</c> on an activity included, are already <c>date-time</c> and
+    /// answer identically. An entry matching nothing fails the run, so a corrected specification
+    /// cannot leave a stale override behind.
+    /// </para>
+    /// </remarks>
+    public static IReadOnlySet<string> Timestamps { get; } = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "ProjectEmployee.cutOffDate",
+    };
+
     /// <summary>Marks every optional value-typed property nullable, throughout a document.</summary>
     /// <param name="document">An OpenAPI document, modified in place.</param>
+    /// <param name="corrected">Collects the <see cref="Timestamps"/> entries this document used.</param>
+    /// <param name="flattened">Collects the paths whose path-parameter enumeration was dropped.</param>
     /// <returns>The number of properties marked.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="document"/> is <see langword="null"/>.</exception>
-    public static int Prepare(JsonObject document)
+    public static int Prepare(
+        JsonObject document,
+        ICollection<string>? corrected = null,
+        ICollection<string>? flattened = null)
     {
         ArgumentNullException.ThrowIfNull(document);
 
-        if (document["components"]?["schemas"] is not JsonObject schemas)
-        {
-            return 0;
-        }
-
         var marked = 0;
 
-        foreach (var (_, schema) in schemas)
+        // The schema corrections need schemas; the path ones do not, and gating them on a
+        // `components` section would make a document without one silently skip work that has nothing
+        // to do with it.
+        if (document["components"]?["schemas"] is JsonObject schemas)
         {
-            if (schema is JsonObject definition)
+            foreach (var (_, schema) in schemas)
             {
-                marked += MarkObject(definition);
+                if (schema is JsonObject definition)
+                {
+                    marked += MarkObject(definition);
+                }
             }
+
+            marked += CorrectTimestamps(schemas, corrected);
         }
 
         marked += AllowEmptySuccess(document);
         marked += DropErrorResponses(document);
+        marked += FlattenPathEnums(document, flattened);
 
         return marked;
+    }
+
+    /// <summary>
+    /// Drops the inline enumeration from a path parameter that also references a component.
+    /// </summary>
+    /// <param name="document">An OpenAPI document, modified in place.</param>
+    /// <param name="flattened">Collects the paths affected, for the caller's report.</param>
+    /// <returns>The number of parameters flattened.</returns>
+    /// <remarks>
+    /// <para>
+    /// The quote-to-cash service scopes eight of its listings by <c>{documentStatus}</c>, and
+    /// declares that parameter with an inline <c>enum</c> of <c>drafts</c>, <c>sent</c> and
+    /// <c>archived</c> sitting <em>beside</em> an <c>allOf</c> reference to
+    /// <c>SalesDocumentStatusRoute</c> — which is itself nothing but <c>type: string</c>. The values
+    /// are therefore in the wrong place: the component that should carry them does not, and each
+    /// parameter carries its own copy.
+    /// </para>
+    /// <para>
+    /// NSwag reads each copy as a distinct anonymous schema and mints an enum per operation —
+    /// <c>DocumentStatus</c> through <c>DocumentStatus8</c>, eight mutually incompatible types for
+    /// one path segment. Dropping the inline copy leaves the reference, so the parameter generates as
+    /// the <c>string</c> it always was.
+    /// </para>
+    /// <para>
+    /// Nothing is lost at the public surface. The facade does not ask callers for the status at all:
+    /// it publishes one accessor per value — <c>SalesDraftOrderLines</c>, <c>SalesSentOrderLines</c>,
+    /// <c>SalesArchivedOrderLines</c> — which is how the legacy surface already models the documents
+    /// these lines belong to, and gives the caller the same compile-time choice an enum would.
+    /// </para>
+    /// </remarks>
+    private static int FlattenPathEnums(JsonObject document, ICollection<string>? flattened)
+    {
+        var dropped = 0;
+
+        foreach (var (path, item) in document["paths"]?.AsObject() ?? [])
+        {
+            foreach (var (_, node) in item?.AsObject() ?? [])
+            {
+                foreach (var parameter in (node as JsonObject)?["parameters"]?.AsArray() ?? [])
+                {
+                    // Only a path parameter, and only where the reference is already there to carry
+                    // the type: an inline enum with nothing beside it is the parameter's whole
+                    // definition and removing it would lose the type outright.
+                    if (parameter is not JsonObject declared
+                        || declared["in"]?.GetValue<string>() != "path"
+                        || declared["schema"] is not JsonObject schema
+                        || schema["enum"] is null
+                        || schema["allOf"] is null)
+                    {
+                        continue;
+                    }
+
+                    schema.Remove("enum");
+                    flattened?.Add(path);
+                    dropped++;
+                }
+            }
+        }
+
+        return dropped;
+    }
+
+    /// <summary>Promotes a mislabelled date to the timestamp the server actually sends.</summary>
+    /// <param name="schemas">The document's schemas, modified in place.</param>
+    /// <param name="applied">Collects the entries corrected, for the caller's rot guard.</param>
+    /// <returns>The number of properties corrected.</returns>
+    private static int CorrectTimestamps(JsonObject schemas, ICollection<string>? applied)
+    {
+        var corrected = 0;
+
+        foreach (var entry in Timestamps)
+        {
+            var separator = entry.IndexOf('.', StringComparison.Ordinal);
+            var schema = entry[..separator];
+            var property = entry[(separator + 1)..];
+
+            // Only the document that declares the schema can correct it, and Prepare runs over every
+            // service in turn, so finding nothing here is the norm rather than a problem. The rot
+            // guard belongs to the caller, which sees every document: an entry no document uses is
+            // describing a specification that has since been fixed.
+            if (schemas[schema]?["properties"]?[property] is not JsonObject declared
+                || declared["format"]?.GetValue<string>() != "date")
+            {
+                continue;
+            }
+
+            declared["format"] = "date-time";
+            applied?.Add(entry);
+            corrected++;
+        }
+
+        return corrected;
     }
 
     /// <summary>
