@@ -37,7 +37,6 @@ namespace EConomic.Rest.Generated;
 [JsonSerializable(typeof(AccountsAccountingYearPeriodsCollection))]
 [JsonSerializable(typeof(AccountsAccountingYearTotals))]
 [JsonSerializable(typeof(AccountsCollection))]
-[JsonSerializable(typeof(AccountsEntriesCollection))]
 [JsonSerializable(typeof(AppRoles))]
 [JsonSerializable(typeof(AppRolesCollection))]
 [JsonSerializable(typeof(ArchivedOrderCollection))]

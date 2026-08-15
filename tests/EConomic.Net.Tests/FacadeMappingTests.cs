@@ -61,7 +61,7 @@ public class FacadeMappingTests
 
         // A guard against the reflection silently matching nothing, which would make this pass
         // while mapping zero resources.
-        Assert.True(mapped.Count >= 95, $"Expected every resource; only mapped {mapped.Count}.");
+        Assert.True(mapped.Count >= 100, $"Expected every resource; only mapped {mapped.Count}.");
     }
 
     /// <summary>

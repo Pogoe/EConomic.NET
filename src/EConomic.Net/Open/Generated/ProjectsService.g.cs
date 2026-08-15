@@ -11782,7 +11782,7 @@ namespace EConomic.Open.Generated.Projects
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("number")]
         [System.ComponentModel.DataAnnotations.Range(0, 999999)]
-        public int? Number { get; set; } = default!;
+        public int Number { get; set; } = default!;
 
         /// <summary>
         /// The number of the employee group that the employee belongs.&lt;p style='font-style:italic;font-family:monospace;font-size:small;margin:0'&gt;Filterable: eq, ne, lt, lte, gt, gte, in, nin&lt;/p&gt;&lt;p style='font-style:italic;font-family:monospace;font-size:small;margin:0'&gt;Sortable: false&lt;/p&gt;

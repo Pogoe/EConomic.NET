@@ -1268,7 +1268,7 @@
             }
           },
           "invoiceNumber": {
-            "type": "string",
+            "type": "integer",
             "description": "Unique identifier for reminders and invoices."
           },
           "remainder": {
@@ -1785,7 +1785,7 @@
             }
           },
           "invoiceNumber": {
-            "type": "string",
+            "type": "integer",
             "description": "Unique identifier for reminders and invoices."
           },
           "remainder": {

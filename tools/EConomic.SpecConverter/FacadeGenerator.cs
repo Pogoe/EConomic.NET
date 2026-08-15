@@ -970,7 +970,7 @@ public static class FacadeGenerator
         IList<string> skipped)
     {
         var entity = nested.PublicName;
-        var write = nested.Write!;
+        var write = nested.Write;
         var nestedTypes = new List<FacadeNestedType>();
         var properties = MapProperties(
             schemas[nested.Entity]!.AsObject(), entity, nested.Entity, schemas, skipped, nestedTypes);
@@ -1023,15 +1023,15 @@ public static class FacadeGenerator
         builder.AppendLine("        number is null ? null : new EconomicReference(number.Value, self);");
         builder.AppendLine("}");
 
-        var createPayload = write.CreateBody is null ? null : schemas[write.CreateBody] as JsonObject;
-        var updatePayload = write.UpdateBody is null ? null : schemas[write.UpdateBody] as JsonObject;
+        var createPayload = write?.CreateBody is null ? null : schemas[write.CreateBody] as JsonObject;
+        var updatePayload = write?.UpdateBody is null ? null : schemas[write.UpdateBody] as JsonObject;
 
         List<WriteProperty>? createProperties = null;
         if (createPayload is not null)
         {
             var nestedCreateTypes = new List<FacadeNestedWriteType>();
             createProperties = MapWriteProperties(
-                createPayload, write.CreateBody!, $"{entity}Create", schemas,
+                createPayload, write!.CreateBody!, $"{entity}Create", schemas,
                 write.KeyProperty, includeKey: true, skipped, nestedCreateTypes);
 
             AppendNestedWriteTypes(builder, nestedCreateTypes);
@@ -1043,7 +1043,7 @@ public static class FacadeGenerator
         {
             var nestedUpdateTypes = new List<FacadeNestedWriteType>();
             updateProperties = MapWriteProperties(
-                updatePayload, write.UpdateBody!, $"{entity}Update", schemas,
+                updatePayload, write!.UpdateBody!, $"{entity}Update", schemas,
                 write.KeyProperty, includeKey: false, skipped, nestedUpdateTypes);
 
             AppendNestedWriteTypes(builder, nestedUpdateTypes);
@@ -1085,6 +1085,32 @@ public static class FacadeGenerator
         builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
         builder.AppendLine($"    public {queryType} Where(System.Linq.Expressions.Expression<System.Func<{entity}Filter, bool>> predicate) => Query.Where(predicate);");
         builder.AppendLine();
+
+        // The same composition a top-level resource offers. Leaving these off made a nested
+        // collection quietly less capable than the collection beside it — no raw filter for what the
+        // schema under-reports, and no sorting at all — and it also hid them from FilterSurfaceTests,
+        // which finds a queryable by looking for WhereRaw. Nine surfaces were never sent to a server
+        // as a result.
+        builder.AppendLine("    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>");
+        builder.AppendLine("    /// <param name=\"filter\">A filter expression.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
+        builder.AppendLine($"    public {queryType} WhereRaw(string filter) => Query.WhereRaw(filter);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Orders ascending.</summary>");
+        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
+        builder.AppendLine($"    public {queryType} OrderBy(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderBy(selector);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Orders descending.</summary>");
+        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
+        builder.AppendLine($"    public {queryType} OrderByDescending(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderByDescending(selector);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Sets how many items are fetched per request.</summary>");
+        builder.AppendLine("    /// <param name=\"pageSize\">Items per page, up to 1000.</param>");
+        builder.AppendLine("    /// <returns>A query using that page size.</returns>");
+        builder.AppendLine($"    public {queryType} WithPageSize(int pageSize) => Query.WithPageSize(pageSize);");
+        builder.AppendLine();
         builder.AppendLine("    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>");
         builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the enumeration.</param>");
         builder.AppendLine("    /// <returns>The items.</returns>");
@@ -1124,7 +1150,7 @@ public static class FacadeGenerator
             builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(item);");
             builder.AppendLine();
             builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
-            builder.AppendLine($"            () => _client.{write.CreateMethod}(_{nested.ParentKeyName}, ToGenerated(item), cancellationToken),");
+            builder.AppendLine($"            () => _client.{write!.CreateMethod}(_{nested.ParentKeyName}, ToGenerated(item), cancellationToken),");
             builder.AppendLine($"            \"POST {nested.Path}\").ConfigureAwait(false);");
             builder.AppendLine();
             builder.AppendLine(createReturnsCollection
@@ -1173,15 +1199,15 @@ public static class FacadeGenerator
         if (createProperties is not null)
         {
             AppendToGenerated(
-                builder, write.CreateBody!, $"{entity}Create", createProperties,
+                builder, write!.CreateBody!, $"{entity}Create", createProperties,
                 keyProperty: null, keyType: null);
         }
 
         if (updateProperties is not null)
         {
-            var declaresKey = updatePayload!["properties"]?.AsObject().Any(p => Pascal(p.Key) == write.KeyProperty) ?? false;
+            var declaresKey = updatePayload!["properties"]?.AsObject().Any(p => Pascal(p.Key) == write!.KeyProperty) ?? false;
             AppendToGenerated(
-                builder, write.UpdateBody!, $"{entity}Update", updateProperties,
+                builder, write!.UpdateBody!, $"{entity}Update", updateProperties,
                 write.KeyProperty, write.KeyType, declaresKey);
         }
 
@@ -1251,18 +1277,23 @@ public static class FacadeGenerator
             // resource of its own: /product-groups/{n}/products returns products, which
             // client.Products already creates, deletes and filters. Emitting it again would
             // redeclare every one of that entity's records.
+            //
+            // Two are skipped on this ground and are still unreachable — /accounts/{n}/accounting-years
+            // and /product-groups/{n}/products. Publishing them means reusing the existing model
+            // and page mapper under a name that does not collide with the top-level resource, and
+            // settling whether the nested endpoint filters on the same fields as the top-level one:
+            // x-filterable-fields is recorded per endpoint precisely because it differs, so reusing
+            // the parent's filter surface here would advertise fields the server may reject.
             if (resources.Any(r => r.Entity == entity))
             {
                 continue;
             }
 
-            // Nothing to add for a nested collection with neither a create nor a delete: the
-            // parent's own query already reaches its contents through the link on the model.
+            // A read-only nested collection is still worth publishing. It was skipped on the
+            // grounds that the parent's model already links to it, but a link is a URL, not a
+            // typed, filterable, paging query — and these are the collections an integration
+            // most needs: /accounting-years/{y}/entries is how a period is reconciled.
             var write = NestedWriteFor(paths, path, entity);
-            if (write is null)
-            {
-                continue;
-            }
 
             var parentKey = segments[1].Trim('{', '}');
             var parentKeyType = get["parameters"]?[0]?["schema"]?["type"]?.GetValue<string>() == "string"
@@ -1289,10 +1320,9 @@ public static class FacadeGenerator
 
     /// <summary>The write operations a nested collection supports, if any.</summary>
     /// <remarks>
-    /// A collection with neither a create nor a delete is left out: its contents are already
-    /// reachable through the link on the parent's model, so a resource type would add nothing.
-    /// A delete on its own is enough, though — journal entries have no create of their own, and
-    /// deleting one is how a mis-posted voucher is undone.
+    /// <see langword="null"/> for a collection with neither a create nor a delete, which publishes
+    /// as a query and nothing more. A delete on its own is enough to make it writable — journal
+    /// entries have no create of their own, and deleting one is how a mis-posted voucher is undone.
     /// </remarks>
     private static FacadeWrite? NestedWriteFor(JsonObject paths, string path, string entity)
     {

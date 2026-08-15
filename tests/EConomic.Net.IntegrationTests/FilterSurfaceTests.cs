@@ -99,8 +99,8 @@ public class FilterSurfaceTests
         // resources, nor every server answer arriving without a list. Set to what the suite actually
         // covers rather than to a round number, so coverage shrinking fails here too — a service
         // dropping out of the reflection would otherwise leave a green run that checked less.
-        Assert.True(checkedSurfaces >= 23, $"Only {checkedSurfaces} surfaces were checked.");
-        Assert.True(checkedFields >= 391, $"Only {checkedFields} fields were checked.");
+        Assert.True(checkedSurfaces >= 28, $"Only {checkedSurfaces} surfaces were checked.");
+        Assert.True(checkedFields >= 456, $"Only {checkedFields} fields were checked.");
         // Only the legacy API publishes the list, so only it can be checked this way. Asserting
         // where the silence comes from keeps that honest: a legacy resource that stopped publishing
         // one would land here and fail, rather than quietly dropping out of the check.
@@ -160,7 +160,7 @@ public class FilterSurfaceTests
         }
 
         Assert.True(failures.Count == 0, string.Join(Environment.NewLine, failures));
-        Assert.True(checkedFields >= 519, $"Only {checkedFields} sort fields were checked.");
+        Assert.True(checkedFields >= 582, $"Only {checkedFields} sort fields were checked.");
     }
 
     /// <summary>
@@ -222,7 +222,7 @@ public class FilterSurfaceTests
         }
 
         Assert.True(failures.Count == 0, string.Join(Environment.NewLine, failures));
-        Assert.True(checkedClauses >= 4636, $"Only {checkedClauses} filter clauses were checked.");
+        Assert.True(checkedClauses >= 5010, $"Only {checkedClauses} filter clauses were checked.");
     }
 
     /// <summary>Whether the server accepts a filter made of exactly this clause.</summary>
@@ -661,6 +661,17 @@ public class FilterSurfaceTests
         {
             "Customers" => (await client.Rest.Customers.GetPageAsync(0, token)).Items[0].CustomerNumber,
             "Journals" => (await client.Rest.Journals.GetPageAsync(0, token)).Items[0].JournalNumber,
+            "CustomerGroups" => (await client.Rest.CustomerGroups.GetPageAsync(0, token)).Items[0].CustomerGroupNumber,
+
+            // Nothing on the legacy surface creates an employee, so an agreement with no staff has
+            // no record to read. Falling back to a number is sound here for the same reason Scope
+            // uses one: a nested collection answers an empty listing for a parent that does not
+            // exist, and this check is about whether the server parses the filter, not about what
+            // the filter matches.
+            "Employees" => (await client.Rest.Employees.GetPageAsync(0, token)).Items is [var employee, ..]
+                ? employee.EmployeeNumber
+                : 1,
+
             _ => throw new InvalidOperationException(
                 $"{owner} has a nested collection this test does not know how to reach."),
         };

@@ -119,6 +119,7 @@ if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
     var markedCount = 0;
     var correctedTimestamps = new List<string>();
     var flattenedEnums = new List<string>();
+    var unnulledRequired = new List<string>();
 
     foreach (var file in Directory.GetFiles(openInput, "*.json").OrderBy(f => f, StringComparer.Ordinal))
     {
@@ -128,7 +129,8 @@ if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
             return 1;
         }
 
-        markedCount += OpenSpecPreparer.Prepare(document, correctedTimestamps, flattenedEnums);
+        markedCount += OpenSpecPreparer.Prepare(
+            document, correctedTimestamps, flattenedEnums, unnulledRequired);
         File.WriteAllText(
             Path.Combine(openOutput, Path.GetFileName(file)),
             document.ToJsonString(writeSettings).ReplaceLineEndings("\n") + "\n");
@@ -151,6 +153,20 @@ if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
         return 1;
     }
 
+    var stillNullable = OpenSpecPreparer.RequiredNotNullable
+        .Except(unnulledRequired, StringComparer.Ordinal)
+        .OrderBy(e => e, StringComparer.Ordinal)
+        .ToList();
+
+    if (stillNullable.Count > 0)
+    {
+        Console.Error.WriteLine(
+            "These properties are required and were also declared nullable, but no service "
+            + $"contradicts itself about them any more: {string.Join(", ", stillNullable)}. Remove "
+            + $"them from {nameof(OpenSpecPreparer)}.{nameof(OpenSpecPreparer.RequiredNotNullable)}.");
+        return 1;
+    }
+
     // Dropping an inline path enumeration is only right while a reference is there to carry the
     // type. If no service does this any more, the rule is describing nothing and should go rather
     // than sit waiting to fire on something it was never written for.
@@ -167,6 +183,7 @@ if (args.Length > 0 && args[0].Equals("open-specs", StringComparison.Ordinal))
         $"Prepared {preparedCount} service specifications into {openOutput}: "
         + $"{markedCount} optional value-typed properties marked nullable, "
         + $"{correctedTimestamps.Count} mislabelled dates corrected, "
+        + $"{unnulledRequired.Count} required properties un-nulled, "
         + $"{flattenedEnums.Count} inline path enumerations flattened");
 
     return 0;
@@ -344,6 +361,7 @@ var builder = new OpenApiDocumentBuilder(registry);
 var unhandledKeywords = new SortedSet<string>(StringComparer.Ordinal);
 var toleratedFiles = new List<string>();
 var correctedTitles = 0;
+var correctedNumericStrings = new List<string>();
 var byResource = new SortedDictionary<string, List<ConvertedEndpoint>>(StringComparer.Ordinal);
 var failures = new List<string>();
 
@@ -390,6 +408,7 @@ foreach (var file in files)
     }
 
     correctedTitles += Draft03Converter.CorrectTitles(source, name);
+    Draft03Converter.CorrectNumericStrings(source, name, correctedNumericStrings);
     var schema = Draft03Converter.Convert(source, unhandledKeywords);
     var restDocs = source["restdocs"]?.GetValue<string>();
 
@@ -410,6 +429,22 @@ if (failures.Count > 0)
         Console.Error.WriteLine($"  {failure}");
     }
 
+    return 1;
+}
+
+// Every correction describes something the specification gets wrong. One that no longer applies is
+// describing a specification that has changed, and this is the only moment anyone would see it.
+var staleNumericStrings = Draft03Converter.NumericStrings
+    .Except(correctedNumericStrings, StringComparer.Ordinal)
+    .OrderBy(e => e, StringComparer.Ordinal)
+    .ToList();
+
+if (staleNumericStrings.Count > 0)
+{
+    Console.Error.WriteLine(
+        "These properties are retyped from a string to a number, but no schema declares them as a "
+        + $"string any more: {string.Join(", ", staleNumericStrings)}. Remove them from "
+        + $"{nameof(Draft03Converter)}.{nameof(Draft03Converter.NumericStrings)}.");
     return 1;
 }
 

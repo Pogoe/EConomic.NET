@@ -1070,7 +1070,7 @@ public sealed class ProjectCostTypeGroupResource
 public sealed record ProjectEmployee
 {
     /// <summary>The <c>number</c> field.</summary>
-    public int? Number { get; init; }
+    public required int Number { get; init; }
 
     /// <summary>The <c>groupNumber</c> field.</summary>
     public required int GroupNumber { get; init; }

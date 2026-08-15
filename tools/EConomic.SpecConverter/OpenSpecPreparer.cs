@@ -54,16 +54,46 @@ public static class OpenSpecPreparer
         "ProjectEmployee.cutOffDate",
     };
 
+    /// <summary>
+    /// Properties e-conomic lists in <c>required</c> and also declares <c>nullable</c>, keyed by
+    /// <c>{schema}.{property}</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A contradiction in the specification, and the two halves disagree about the thing that
+    /// matters. <see cref="MarkObject"/> leaves any property carrying an explicit <c>nullable</c>
+    /// alone — that is the right default, since it is e-conomic stating the intent — so the property
+    /// is emitted optional and the compiler never asks the caller for it. The server then refuses the
+    /// create: <c>POST /Employees</c> without a number answers <c>400 InvalidInput</c>,
+    /// "Required property is missing", naming <c>Number</c>.
+    /// </para>
+    /// <para>
+    /// Dropping the <c>nullable</c> is safe in the reading direction too, and that was checked rather
+    /// than assumed: every employee the projects service returns carries a number. A property that is
+    /// genuinely absent sometimes must not be listed here, whatever the <c>required</c> array claims.
+    /// </para>
+    /// <para>
+    /// One entry across all fourteen services, so this is a defect in one document rather than a
+    /// shape worth inferring a rule from. An entry matching nothing fails the run.
+    /// </para>
+    /// </remarks>
+    public static IReadOnlySet<string> RequiredNotNullable { get; } = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "Employee.number",
+    };
+
     /// <summary>Marks every optional value-typed property nullable, throughout a document.</summary>
     /// <param name="document">An OpenAPI document, modified in place.</param>
     /// <param name="corrected">Collects the <see cref="Timestamps"/> entries this document used.</param>
     /// <param name="flattened">Collects the paths whose path-parameter enumeration was dropped.</param>
+    /// <param name="unnulled">Collects the <see cref="RequiredNotNullable"/> entries this document used.</param>
     /// <returns>The number of properties marked.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="document"/> is <see langword="null"/>.</exception>
     public static int Prepare(
         JsonObject document,
         ICollection<string>? corrected = null,
-        ICollection<string>? flattened = null)
+        ICollection<string>? flattened = null,
+        ICollection<string>? unnulled = null)
     {
         ArgumentNullException.ThrowIfNull(document);
 
@@ -74,6 +104,10 @@ public static class OpenSpecPreparer
         // to do with it.
         if (document["components"]?["schemas"] is JsonObject schemas)
         {
+            // Before MarkObject, which reads `nullable` to decide what to leave alone: resolving the
+            // contradiction first means the property is seen as the required one it is.
+            marked += DropContradictoryNullable(schemas, unnulled);
+
             foreach (var (_, schema) in schemas)
             {
                 if (schema is JsonObject definition)
@@ -150,6 +184,47 @@ public static class OpenSpecPreparer
         }
 
         return dropped;
+    }
+
+    /// <summary>Removes a <c>nullable</c> that contradicts the schema's own <c>required</c> array.</summary>
+    /// <param name="schemas">The document's schemas, modified in place.</param>
+    /// <param name="applied">Collects the entries corrected, for the caller's rot guard.</param>
+    /// <returns>The number of properties corrected.</returns>
+    private static int DropContradictoryNullable(JsonObject schemas, ICollection<string>? applied)
+    {
+        var corrected = 0;
+
+        foreach (var entry in RequiredNotNullable)
+        {
+            var separator = entry.IndexOf('.', StringComparison.Ordinal);
+            var schema = entry[..separator];
+            var property = entry[(separator + 1)..];
+
+            // Prepare runs over every service in turn, so finding nothing here is the norm. The rot
+            // guard belongs to the caller, which sees every document.
+            if (schemas[schema] is not JsonObject definition
+                || definition["properties"]?[property] is not JsonObject declared
+                || declared["nullable"] is null)
+            {
+                continue;
+            }
+
+            // Only where the schema really does contradict itself. A `nullable` on a property that
+            // is not required is e-conomic stating the intent, and must be left alone.
+            var required = definition["required"]?.AsArray()
+                .Any(r => r?.GetValue<string>() == property) ?? false;
+
+            if (!required)
+            {
+                continue;
+            }
+
+            declared.Remove("nullable");
+            applied?.Add(entry);
+            corrected++;
+        }
+
+        return corrected;
     }
 
     /// <summary>Promotes a mislabelled date to the timestamp the server actually sends.</summary>

@@ -121,6 +121,21 @@ public sealed class SchemaRegistry
         // name is free on the public surface — `JournalVoucher` is the collection envelope, which
         // is internal.
         ["VoucherEntry"] = "JournalVoucher",
+
+        // The read-only collections under an accounting year. `Entry` and `Period` are the titles
+        // e-conomic gave them, and both are far too general to put in a consumer's namespace: an
+        // `Entry` here is specifically a posting within one accounting year. `AccountTotalsEntry`
+        // is not an entry at all — it is one account's total over a date range.
+        ["Entry"] = "AccountingYearEntry",
+        ["Period"] = "AccountingYearPeriod",
+        ["AccountTotalsEntry"] = "AccountTotal",
+
+        // Customers seen through a group and through their salesperson. Neither is the `Customer`
+        // shape — the group's view drops `lastUpdated` and every nested collection link, and the
+        // employee's keeps them — so they are separate types, named for where they are reached
+        // rather than for the plural resource segment the title came from.
+        ["CustomerGroupsCustomer"] = "CustomerGroupCustomer",
+        ["EmployeesCustomer"] = "EmployeeCustomer",
     };
 
     /// <summary>The name an entity is published under, which is its component name unless renamed.</summary>
@@ -146,6 +161,11 @@ public sealed class SchemaRegistry
         // Vouchers hang off a journal, which is itself read-only, and so do the entries they
         // produce — deleting one of those is how a mis-posted voucher is undone.
         "VoucherEntry", "JournalEntry",
+
+        // Read-only nested collections. A link on the parent's model already reaches these, but a
+        // link is a URL: nothing about it filters, sorts or pages, which is what an integration
+        // reconciling a period actually needs.
+        "Entry", "Period", "AccountTotalsEntry", "CustomerGroupsCustomer", "EmployeesCustomer",
 
         // The invoice, order and quote families. Each is a collection in its own right under a
         // namespace segment — /invoices/drafts, /orders/sent — rather than a nested collection.

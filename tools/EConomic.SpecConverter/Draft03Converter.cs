@@ -80,6 +80,118 @@ public static class Draft03Converter
                 new(StringComparer.Ordinal) { ["Customer"] = "Delivery location" },
         };
 
+    /// <summary>
+    /// Properties e-conomic declares as a string and then answers with a number, keyed by
+    /// <c>{file}:{property}</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The same class of defect as the mislabelled dates, and found the same way: only the server
+    /// settles it. <c>Entry.invoiceNumber</c> is declared <c>"type": "string"</c> and the response
+    /// carries <c>"invoiceNumber":1</c>, so <c>System.Text.Json</c> refuses the token and every page
+    /// of <c>/accounting-years/{y}/entries</c> containing an invoice fails to deserialize.
+    /// </para>
+    /// <para>
+    /// Unusually, e-conomic's own files corroborate the correction rather than only contradicting
+    /// the server: four schemas describe this same entry, and
+    /// <c>accounts.accountNumber.accounting-years.accountingYear.entries.get.schema.json</c> already
+    /// declares <c>invoiceNumber</c> as <c>integer</c>. The three listed here are the ones that
+    /// disagree with it, so this is closer to reconciling the specification with itself than to
+    /// overriding it. Correcting them collapsed <c>AccountsEntry</c> and
+    /// <c>AccountsEntriesCollection</c> into their accounting-year twins — 201 components to 199 —
+    /// because the mistyped property was the only thing that made the shapes differ.
+    /// </para>
+    /// <para>
+    /// Scoped per file, and listing only what a live agreement actually demonstrated. Note
+    /// <c>supplierInvoiceNumber</c> sits beside it in these same schemas, declared a string in five
+    /// entry shapes, and is deliberately <em>not</em> here: no response yet seen carries one, so
+    /// there is no evidence either way and guessing would be inventing a specification rather than
+    /// correcting one.
+    /// </para>
+    /// <para>
+    /// An entry matching nothing fails the run, so a corrected specification cannot leave a stale
+    /// override behind.
+    /// </para>
+    /// </remarks>
+    public static IReadOnlySet<string> NumericStrings { get; } = new HashSet<string>(StringComparer.Ordinal)
+    {
+        // GET /accounting-years/{accountingYear}/entries -> Entry
+        "accounting-years.accountingYear.entries.get.schema.json:invoiceNumber",
+
+        // GET /accounting-years/{accountingYear}/periods/{p}/entries and the same collection reached
+        // through an account. Both files must be listed even though they dedup to one component:
+        // identity here is structural, so correcting one and not the other splits the entity into
+        // two near-identical types and reshuffles the names they were holding.
+        "accounting-years.accountingYear.periods.accountingYearPeriod.entries.get.schema.json:invoiceNumber",
+        "accounts.accountNumber.accounting-years.accountingYear.periods.accountingYearPeriod.entries.get.schema.json:invoiceNumber",
+    };
+
+    /// <summary>Retypes a property the server answers with a number, in place.</summary>
+    /// <param name="source">The parsed source schema.</param>
+    /// <param name="fileName">Name of the file it came from.</param>
+    /// <param name="applied">Collects the <see cref="NumericStrings"/> entries used, for the rot guard.</param>
+    /// <returns>The number of properties retyped.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
+    public static int CorrectNumericStrings(
+        JsonObject source,
+        string fileName,
+        ICollection<string>? applied = null)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+
+        var wanted = NumericStrings
+            .Where(e => e.StartsWith(fileName + ":", StringComparison.OrdinalIgnoreCase))
+            .ToDictionary(e => e[(fileName.Length + 1)..], StringComparer.Ordinal);
+
+        if (wanted.Count == 0)
+        {
+            return 0;
+        }
+
+        var corrected = 0;
+        Walk(source);
+        return corrected;
+
+        // The property sits inside the collection's item, so this walks rather than indexing: the
+        // draft-03 nesting to reach it differs between a collection and a single-resource GET, and
+        // hard-coding one path would silently skip the other.
+        void Walk(JsonNode? node)
+        {
+            switch (node)
+            {
+                case JsonObject obj:
+                    if (obj["properties"] is JsonObject properties)
+                    {
+                        foreach (var (name, entry) in wanted)
+                        {
+                            if (properties[name] is JsonObject declared
+                                && declared["type"]?.GetValue<string>() == "string")
+                            {
+                                declared["type"] = "integer";
+                                applied?.Add(entry);
+                                corrected++;
+                            }
+                        }
+                    }
+
+                    foreach (var (_, child) in obj)
+                    {
+                        Walk(child);
+                    }
+
+                    break;
+
+                case JsonArray array:
+                    foreach (var item in array)
+                    {
+                        Walk(item);
+                    }
+
+                    break;
+            }
+        }
+    }
+
     /// <summary>Applies any known title corrections for a source file, in place.</summary>
     /// <param name="source">The parsed source schema.</param>
     /// <param name="fileName">Name of the file it came from.</param>

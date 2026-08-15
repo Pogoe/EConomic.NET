@@ -2001,7 +2001,7 @@ EConomic.Open.ProjectEmployee.IsBarred.get -> bool
 EConomic.Open.ProjectEmployee.IsBarred.init -> void
 EConomic.Open.ProjectEmployee.Name.get -> string!
 EConomic.Open.ProjectEmployee.Name.init -> void
-EConomic.Open.ProjectEmployee.Number.get -> int?
+EConomic.Open.ProjectEmployee.Number.get -> int
 EConomic.Open.ProjectEmployee.Number.init -> void
 EConomic.Open.ProjectEmployee.ObjectVersion.get -> string?
 EConomic.Open.ProjectEmployee.ObjectVersion.init -> void
@@ -3306,6 +3306,34 @@ EConomic.Rest.AccountSort.Balance.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountSort.BlockDirectEntries.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountSort.DebitCredit.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountSort.Name.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountTotal
+EConomic.Rest.AccountTotal.<Clone>$() -> EConomic.Rest.AccountTotal!
+EConomic.Rest.AccountTotal.Account.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountTotal.Account.init -> void
+EConomic.Rest.AccountTotal.AccountTotal() -> void
+EConomic.Rest.AccountTotal.Equals(EConomic.Rest.AccountTotal? other) -> bool
+EConomic.Rest.AccountTotal.FromDate.get -> System.DateOnly?
+EConomic.Rest.AccountTotal.FromDate.init -> void
+EConomic.Rest.AccountTotal.Self.get -> System.Uri!
+EConomic.Rest.AccountTotal.Self.init -> void
+EConomic.Rest.AccountTotal.ToDate.get -> System.DateOnly?
+EConomic.Rest.AccountTotal.ToDate.init -> void
+EConomic.Rest.AccountTotal.TotalInBaseCurrency.get -> decimal
+EConomic.Rest.AccountTotal.TotalInBaseCurrency.init -> void
+EConomic.Rest.AccountTotalFilter
+EConomic.Rest.AccountTotalFilter.AccountTotalFilter() -> void
+EConomic.Rest.AccountTotalResource
+EConomic.Rest.AccountTotalResource.AccountTotalResource(System.Net.Http.HttpClient! httpClient, string! accountingYear) -> void
+EConomic.Rest.AccountTotalResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.AccountTotal!>!
+EConomic.Rest.AccountTotalResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountTotal!, EConomic.Rest.AccountTotalFilter!, EConomic.Rest.AccountTotalSort!>!
+EConomic.Rest.AccountTotalResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.AccountTotal!>!>!
+EConomic.Rest.AccountTotalResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountTotalSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountTotal!, EConomic.Rest.AccountTotalFilter!, EConomic.Rest.AccountTotalSort!>!
+EConomic.Rest.AccountTotalResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountTotalSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountTotal!, EConomic.Rest.AccountTotalFilter!, EConomic.Rest.AccountTotalSort!>!
+EConomic.Rest.AccountTotalResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountTotalFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountTotal!, EConomic.Rest.AccountTotalFilter!, EConomic.Rest.AccountTotalSort!>!
+EConomic.Rest.AccountTotalResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountTotal!, EConomic.Rest.AccountTotalFilter!, EConomic.Rest.AccountTotalSort!>!
+EConomic.Rest.AccountTotalResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountTotal!, EConomic.Rest.AccountTotalFilter!, EConomic.Rest.AccountTotalSort!>!
+EConomic.Rest.AccountTotalSort
+EConomic.Rest.AccountTotalSort.AccountTotalSort() -> void
 EConomic.Rest.AccountVatAccount
 EConomic.Rest.AccountVatAccount.<Clone>$() -> EConomic.Rest.AccountVatAccount!
 EConomic.Rest.AccountVatAccount.AccountVatAccount() -> void
@@ -3344,19 +3372,188 @@ EConomic.Rest.AccountingYearCreate.FromDate.get -> System.DateOnly
 EConomic.Rest.AccountingYearCreate.FromDate.init -> void
 EConomic.Rest.AccountingYearCreate.ToDate.get -> System.DateOnly
 EConomic.Rest.AccountingYearCreate.ToDate.init -> void
+EConomic.Rest.AccountingYearEntry
+EConomic.Rest.AccountingYearEntry.<Clone>$() -> EConomic.Rest.AccountingYearEntry!
+EConomic.Rest.AccountingYearEntry.Account.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.Account.init -> void
+EConomic.Rest.AccountingYearEntry.AccountingYearEntry() -> void
+EConomic.Rest.AccountingYearEntry.Amount.get -> decimal
+EConomic.Rest.AccountingYearEntry.Amount.init -> void
+EConomic.Rest.AccountingYearEntry.AmountInBaseCurrency.get -> decimal
+EConomic.Rest.AccountingYearEntry.AmountInBaseCurrency.init -> void
+EConomic.Rest.AccountingYearEntry.BookedInvoice.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.BookedInvoice.init -> void
+EConomic.Rest.AccountingYearEntry.CostType.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.CostType.init -> void
+EConomic.Rest.AccountingYearEntry.Currency.get -> string?
+EConomic.Rest.AccountingYearEntry.Currency.init -> void
+EConomic.Rest.AccountingYearEntry.Customer.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.Customer.init -> void
+EConomic.Rest.AccountingYearEntry.Date.get -> System.DateOnly?
+EConomic.Rest.AccountingYearEntry.Date.init -> void
+EConomic.Rest.AccountingYearEntry.DepartmentalDistribution.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.DepartmentalDistribution.init -> void
+EConomic.Rest.AccountingYearEntry.DueDate.get -> System.DateOnly?
+EConomic.Rest.AccountingYearEntry.DueDate.init -> void
+EConomic.Rest.AccountingYearEntry.EntryNumber.get -> int
+EConomic.Rest.AccountingYearEntry.EntryNumber.init -> void
+EConomic.Rest.AccountingYearEntry.EntryType.get -> string?
+EConomic.Rest.AccountingYearEntry.EntryType.init -> void
+EConomic.Rest.AccountingYearEntry.Equals(EConomic.Rest.AccountingYearEntry? other) -> bool
+EConomic.Rest.AccountingYearEntry.InvoiceNumber.get -> int
+EConomic.Rest.AccountingYearEntry.InvoiceNumber.init -> void
+EConomic.Rest.AccountingYearEntry.Project.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.Project.init -> void
+EConomic.Rest.AccountingYearEntry.Quantity1.get -> decimal
+EConomic.Rest.AccountingYearEntry.Quantity1.init -> void
+EConomic.Rest.AccountingYearEntry.Quantity2.get -> decimal
+EConomic.Rest.AccountingYearEntry.Quantity2.init -> void
+EConomic.Rest.AccountingYearEntry.Remainder.get -> decimal
+EConomic.Rest.AccountingYearEntry.Remainder.init -> void
+EConomic.Rest.AccountingYearEntry.RemainderInBaseCurrency.get -> decimal
+EConomic.Rest.AccountingYearEntry.RemainderInBaseCurrency.init -> void
+EConomic.Rest.AccountingYearEntry.Self.get -> System.Uri!
+EConomic.Rest.AccountingYearEntry.Self.init -> void
+EConomic.Rest.AccountingYearEntry.Supplier.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.Supplier.init -> void
+EConomic.Rest.AccountingYearEntry.SupplierInvoiceNumber.get -> string?
+EConomic.Rest.AccountingYearEntry.SupplierInvoiceNumber.init -> void
+EConomic.Rest.AccountingYearEntry.Text.get -> string?
+EConomic.Rest.AccountingYearEntry.Text.init -> void
+EConomic.Rest.AccountingYearEntry.Unit1.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.Unit1.init -> void
+EConomic.Rest.AccountingYearEntry.Unit2.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.AccountingYearEntry.Unit2.init -> void
+EConomic.Rest.AccountingYearEntry.VatAccount.get -> EConomic.Rest.AccountingYearEntryVatAccount?
+EConomic.Rest.AccountingYearEntry.VatAccount.init -> void
+EConomic.Rest.AccountingYearEntry.VoucherNumber.get -> int
+EConomic.Rest.AccountingYearEntry.VoucherNumber.init -> void
+EConomic.Rest.AccountingYearEntryFilter
+EConomic.Rest.AccountingYearEntryFilter.AccountingYearEntryFilter() -> void
+EConomic.Rest.AccountingYearEntryFilter.Amount.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.AccountingYearEntryFilter.AmountInBaseCurrency.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.AccountingYearEntryFilter.CostTypeNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.Currency.get -> EConomic.Querying.TextField!
+EConomic.Rest.AccountingYearEntryFilter.CustomerNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.Date.get -> EConomic.Querying.ComparableField<System.DateOnly>!
+EConomic.Rest.AccountingYearEntryFilter.DueDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
+EConomic.Rest.AccountingYearEntryFilter.EntryNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.EntryType.get -> EConomic.Querying.EqualityField<string!>!
+EConomic.Rest.AccountingYearEntryFilter.ProjectNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.Quantity1.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.AccountingYearEntryFilter.Quantity2.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.AccountingYearEntryFilter.Remainder.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.AccountingYearEntryFilter.RemainderInBaseCurrency.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.AccountingYearEntryFilter.SupplierGroupNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.SupplierInvoiceNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.AccountingYearEntryFilter.SupplierNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.Text.get -> EConomic.Querying.TextField!
+EConomic.Rest.AccountingYearEntryFilter.Unit1UnitNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.Unit2UnitNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryFilter.VoucherNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearEntryResource
+EConomic.Rest.AccountingYearEntryResource.AccountingYearEntryResource(System.Net.Http.HttpClient! httpClient, string! accountingYear) -> void
+EConomic.Rest.AccountingYearEntryResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.AccountingYearEntry!>!
+EConomic.Rest.AccountingYearEntryResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearEntry!, EConomic.Rest.AccountingYearEntryFilter!, EConomic.Rest.AccountingYearEntrySort!>!
+EConomic.Rest.AccountingYearEntryResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.AccountingYearEntry!>!>!
+EConomic.Rest.AccountingYearEntryResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearEntrySort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearEntry!, EConomic.Rest.AccountingYearEntryFilter!, EConomic.Rest.AccountingYearEntrySort!>!
+EConomic.Rest.AccountingYearEntryResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearEntrySort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearEntry!, EConomic.Rest.AccountingYearEntryFilter!, EConomic.Rest.AccountingYearEntrySort!>!
+EConomic.Rest.AccountingYearEntryResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearEntryFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearEntry!, EConomic.Rest.AccountingYearEntryFilter!, EConomic.Rest.AccountingYearEntrySort!>!
+EConomic.Rest.AccountingYearEntryResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearEntry!, EConomic.Rest.AccountingYearEntryFilter!, EConomic.Rest.AccountingYearEntrySort!>!
+EConomic.Rest.AccountingYearEntryResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearEntry!, EConomic.Rest.AccountingYearEntryFilter!, EConomic.Rest.AccountingYearEntrySort!>!
+EConomic.Rest.AccountingYearEntrySort
+EConomic.Rest.AccountingYearEntrySort.AccountingYearEntrySort() -> void
+EConomic.Rest.AccountingYearEntrySort.Amount.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.AmountInBaseCurrency.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.CostTypeNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Currency.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.CustomerNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Date.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.DueDate.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.EntryNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.EntryType.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Quantity1.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Quantity2.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Remainder.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.RemainderInBaseCurrency.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.SupplierInvoiceNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.SupplierNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Text.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Unit1UnitNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.Unit2UnitNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntrySort.VoucherNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearEntryVatAccount
+EConomic.Rest.AccountingYearEntryVatAccount.<Clone>$() -> EConomic.Rest.AccountingYearEntryVatAccount!
+EConomic.Rest.AccountingYearEntryVatAccount.AccountingYearEntryVatAccount() -> void
+EConomic.Rest.AccountingYearEntryVatAccount.Equals(EConomic.Rest.AccountingYearEntryVatAccount? other) -> bool
+EConomic.Rest.AccountingYearEntryVatAccount.Self.get -> System.Uri!
+EConomic.Rest.AccountingYearEntryVatAccount.Self.init -> void
+EConomic.Rest.AccountingYearEntryVatAccount.VatCode.get -> string?
+EConomic.Rest.AccountingYearEntryVatAccount.VatCode.init -> void
 EConomic.Rest.AccountingYearFilter
 EConomic.Rest.AccountingYearFilter.AccountingYearFilter() -> void
 EConomic.Rest.AccountingYearFilter.FromDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
 EConomic.Rest.AccountingYearFilter.ToDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
 EConomic.Rest.AccountingYearFilter.Year.get -> EConomic.Querying.TextField!
+EConomic.Rest.AccountingYearPeriod
+EConomic.Rest.AccountingYearPeriod.<Clone>$() -> EConomic.Rest.AccountingYearPeriod!
+EConomic.Rest.AccountingYearPeriod.AccountingYear.get -> EConomic.Rest.AccountingYearPeriodAccountingYear?
+EConomic.Rest.AccountingYearPeriod.AccountingYear.init -> void
+EConomic.Rest.AccountingYearPeriod.AccountingYearPeriod() -> void
+EConomic.Rest.AccountingYearPeriod.Closed.get -> bool
+EConomic.Rest.AccountingYearPeriod.Closed.init -> void
+EConomic.Rest.AccountingYearPeriod.Entries.get -> System.Uri?
+EConomic.Rest.AccountingYearPeriod.Entries.init -> void
+EConomic.Rest.AccountingYearPeriod.Equals(EConomic.Rest.AccountingYearPeriod? other) -> bool
+EConomic.Rest.AccountingYearPeriod.FromDate.get -> System.DateOnly?
+EConomic.Rest.AccountingYearPeriod.FromDate.init -> void
+EConomic.Rest.AccountingYearPeriod.PeriodNumber.get -> int
+EConomic.Rest.AccountingYearPeriod.PeriodNumber.init -> void
+EConomic.Rest.AccountingYearPeriod.Self.get -> System.Uri!
+EConomic.Rest.AccountingYearPeriod.Self.init -> void
+EConomic.Rest.AccountingYearPeriod.ToDate.get -> System.DateOnly?
+EConomic.Rest.AccountingYearPeriod.ToDate.init -> void
+EConomic.Rest.AccountingYearPeriod.Totals.get -> System.Uri?
+EConomic.Rest.AccountingYearPeriod.Totals.init -> void
+EConomic.Rest.AccountingYearPeriodAccountingYear
+EConomic.Rest.AccountingYearPeriodAccountingYear.<Clone>$() -> EConomic.Rest.AccountingYearPeriodAccountingYear!
+EConomic.Rest.AccountingYearPeriodAccountingYear.AccountingYearPeriodAccountingYear() -> void
+EConomic.Rest.AccountingYearPeriodAccountingYear.Equals(EConomic.Rest.AccountingYearPeriodAccountingYear? other) -> bool
+EConomic.Rest.AccountingYearPeriodAccountingYear.Self.get -> System.Uri!
+EConomic.Rest.AccountingYearPeriodAccountingYear.Self.init -> void
+EConomic.Rest.AccountingYearPeriodAccountingYear.Year.get -> string?
+EConomic.Rest.AccountingYearPeriodAccountingYear.Year.init -> void
+EConomic.Rest.AccountingYearPeriodFilter
+EConomic.Rest.AccountingYearPeriodFilter.AccountingYearPeriodFilter() -> void
+EConomic.Rest.AccountingYearPeriodFilter.FromDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
+EConomic.Rest.AccountingYearPeriodFilter.PeriodNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.AccountingYearPeriodFilter.ToDate.get -> EConomic.Querying.ComparableField<System.DateOnly>!
+EConomic.Rest.AccountingYearPeriodResource
+EConomic.Rest.AccountingYearPeriodResource.AccountingYearPeriodResource(System.Net.Http.HttpClient! httpClient, string! accountingYear) -> void
+EConomic.Rest.AccountingYearPeriodResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.AccountingYearPeriod!>!
+EConomic.Rest.AccountingYearPeriodResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearPeriod!, EConomic.Rest.AccountingYearPeriodFilter!, EConomic.Rest.AccountingYearPeriodSort!>!
+EConomic.Rest.AccountingYearPeriodResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.AccountingYearPeriod!>!>!
+EConomic.Rest.AccountingYearPeriodResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearPeriodSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearPeriod!, EConomic.Rest.AccountingYearPeriodFilter!, EConomic.Rest.AccountingYearPeriodSort!>!
+EConomic.Rest.AccountingYearPeriodResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearPeriodSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearPeriod!, EConomic.Rest.AccountingYearPeriodFilter!, EConomic.Rest.AccountingYearPeriodSort!>!
+EConomic.Rest.AccountingYearPeriodResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearPeriodFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearPeriod!, EConomic.Rest.AccountingYearPeriodFilter!, EConomic.Rest.AccountingYearPeriodSort!>!
+EConomic.Rest.AccountingYearPeriodResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearPeriod!, EConomic.Rest.AccountingYearPeriodFilter!, EConomic.Rest.AccountingYearPeriodSort!>!
+EConomic.Rest.AccountingYearPeriodResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYearPeriod!, EConomic.Rest.AccountingYearPeriodFilter!, EConomic.Rest.AccountingYearPeriodSort!>!
+EConomic.Rest.AccountingYearPeriodSort
+EConomic.Rest.AccountingYearPeriodSort.AccountingYearPeriodSort() -> void
+EConomic.Rest.AccountingYearPeriodSort.FromDate.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearPeriodSort.PeriodNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.AccountingYearPeriodSort.ToDate.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.AccountingYearResource
 EConomic.Rest.AccountingYearResource.AccountingYearResource(System.Net.Http.HttpClient! httpClient) -> void
 EConomic.Rest.AccountingYearResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.AccountingYear!>!
 EConomic.Rest.AccountingYearResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
 EConomic.Rest.AccountingYearResource.CreateAsync(EConomic.Rest.AccountingYearCreate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.AccountingYear!>!
+EConomic.Rest.AccountingYearResource.Entries(string! accountingYear) -> EConomic.Rest.AccountingYearEntryResource!
 EConomic.Rest.AccountingYearResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.AccountingYear!>!>!
 EConomic.Rest.AccountingYearResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
 EConomic.Rest.AccountingYearResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
+EConomic.Rest.AccountingYearResource.Periods(string! accountingYear) -> EConomic.Rest.AccountingYearPeriodResource!
+EConomic.Rest.AccountingYearResource.Totals(string! accountingYear) -> EConomic.Rest.AccountTotalResource!
 EConomic.Rest.AccountingYearResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.AccountingYearFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
 EConomic.Rest.AccountingYearResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
 EConomic.Rest.AccountingYearResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.AccountingYear!, EConomic.Rest.AccountingYearFilter!, EConomic.Rest.AccountingYearSort!>!
@@ -4126,7 +4323,6 @@ EConomic.Rest.CustomerContactCreate.Phone.init -> void
 EConomic.Rest.CustomerContactFilter
 EConomic.Rest.CustomerContactFilter.CustomerContactFilter() -> void
 EConomic.Rest.CustomerContactFilter.CustomerContactNumber.get -> EConomic.Querying.NumericField<int>!
-EConomic.Rest.CustomerContactFilter.CustomerNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.CustomerContactFilter.EInvoiceId.get -> EConomic.Querying.TextField!
 EConomic.Rest.CustomerContactFilter.Email.get -> EConomic.Querying.TextField!
 EConomic.Rest.CustomerContactFilter.Name.get -> EConomic.Querying.TextField!
@@ -4139,12 +4335,15 @@ EConomic.Rest.CustomerContactResource.CreateAsync(EConomic.Rest.CustomerContactC
 EConomic.Rest.CustomerContactResource.CustomerContactResource(System.Net.Http.HttpClient! httpClient, int customerNumber) -> void
 EConomic.Rest.CustomerContactResource.DeleteAsync(int customerContactNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 EConomic.Rest.CustomerContactResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.CustomerContact!>!>!
+EConomic.Rest.CustomerContactResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerContactSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerContact!, EConomic.Rest.CustomerContactFilter!, EConomic.Rest.CustomerContactSort!>!
+EConomic.Rest.CustomerContactResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerContactSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerContact!, EConomic.Rest.CustomerContactFilter!, EConomic.Rest.CustomerContactSort!>!
 EConomic.Rest.CustomerContactResource.UpdateAsync(int customerContactNumber, EConomic.Rest.CustomerContactUpdate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.CustomerContact!>!
 EConomic.Rest.CustomerContactResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerContactFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerContact!, EConomic.Rest.CustomerContactFilter!, EConomic.Rest.CustomerContactSort!>!
+EConomic.Rest.CustomerContactResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerContact!, EConomic.Rest.CustomerContactFilter!, EConomic.Rest.CustomerContactSort!>!
+EConomic.Rest.CustomerContactResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerContact!, EConomic.Rest.CustomerContactFilter!, EConomic.Rest.CustomerContactSort!>!
 EConomic.Rest.CustomerContactSort
 EConomic.Rest.CustomerContactSort.CustomerContactNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerContactSort.CustomerContactSort() -> void
-EConomic.Rest.CustomerContactSort.CustomerNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerContactSort.EInvoiceId.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerContactSort.Email.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerContactSort.Name.get -> EConomic.Querying.EconomicSortField!
@@ -4290,6 +4489,112 @@ EConomic.Rest.CustomerGroupCreate.LayoutNumber.get -> int?
 EConomic.Rest.CustomerGroupCreate.LayoutNumber.init -> void
 EConomic.Rest.CustomerGroupCreate.Name.get -> string?
 EConomic.Rest.CustomerGroupCreate.Name.init -> void
+EConomic.Rest.CustomerGroupCustomer
+EConomic.Rest.CustomerGroupCustomer.<Clone>$() -> EConomic.Rest.CustomerGroupCustomer!
+EConomic.Rest.CustomerGroupCustomer.Address.get -> string?
+EConomic.Rest.CustomerGroupCustomer.Address.init -> void
+EConomic.Rest.CustomerGroupCustomer.Attention.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.Attention.init -> void
+EConomic.Rest.CustomerGroupCustomer.Balance.get -> decimal
+EConomic.Rest.CustomerGroupCustomer.Balance.init -> void
+EConomic.Rest.CustomerGroupCustomer.Barred.get -> bool
+EConomic.Rest.CustomerGroupCustomer.Barred.init -> void
+EConomic.Rest.CustomerGroupCustomer.City.get -> string?
+EConomic.Rest.CustomerGroupCustomer.City.init -> void
+EConomic.Rest.CustomerGroupCustomer.CorporateIdentificationNumber.get -> string?
+EConomic.Rest.CustomerGroupCustomer.CorporateIdentificationNumber.init -> void
+EConomic.Rest.CustomerGroupCustomer.Country.get -> string?
+EConomic.Rest.CustomerGroupCustomer.Country.init -> void
+EConomic.Rest.CustomerGroupCustomer.CreditLimit.get -> decimal
+EConomic.Rest.CustomerGroupCustomer.CreditLimit.init -> void
+EConomic.Rest.CustomerGroupCustomer.Currency.get -> string!
+EConomic.Rest.CustomerGroupCustomer.Currency.init -> void
+EConomic.Rest.CustomerGroupCustomer.CustomerContact.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.CustomerContact.init -> void
+EConomic.Rest.CustomerGroupCustomer.CustomerGroup.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.CustomerGroup.init -> void
+EConomic.Rest.CustomerGroupCustomer.CustomerGroupCustomer() -> void
+EConomic.Rest.CustomerGroupCustomer.CustomerNumber.get -> int
+EConomic.Rest.CustomerGroupCustomer.CustomerNumber.init -> void
+EConomic.Rest.CustomerGroupCustomer.Ean.get -> string?
+EConomic.Rest.CustomerGroupCustomer.Ean.init -> void
+EConomic.Rest.CustomerGroupCustomer.Email.get -> string?
+EConomic.Rest.CustomerGroupCustomer.Email.init -> void
+EConomic.Rest.CustomerGroupCustomer.Equals(EConomic.Rest.CustomerGroupCustomer? other) -> bool
+EConomic.Rest.CustomerGroupCustomer.Layout.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.Layout.init -> void
+EConomic.Rest.CustomerGroupCustomer.MobilePhone.get -> string?
+EConomic.Rest.CustomerGroupCustomer.MobilePhone.init -> void
+EConomic.Rest.CustomerGroupCustomer.Name.get -> string!
+EConomic.Rest.CustomerGroupCustomer.Name.init -> void
+EConomic.Rest.CustomerGroupCustomer.PNumber.get -> string?
+EConomic.Rest.CustomerGroupCustomer.PNumber.init -> void
+EConomic.Rest.CustomerGroupCustomer.PaymentTerms.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.PaymentTerms.init -> void
+EConomic.Rest.CustomerGroupCustomer.PublicEntryNumber.get -> string?
+EConomic.Rest.CustomerGroupCustomer.PublicEntryNumber.init -> void
+EConomic.Rest.CustomerGroupCustomer.SalesPerson.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.SalesPerson.init -> void
+EConomic.Rest.CustomerGroupCustomer.Self.get -> System.Uri!
+EConomic.Rest.CustomerGroupCustomer.Self.init -> void
+EConomic.Rest.CustomerGroupCustomer.TelephoneAndFaxNumber.get -> string?
+EConomic.Rest.CustomerGroupCustomer.TelephoneAndFaxNumber.init -> void
+EConomic.Rest.CustomerGroupCustomer.VatNumber.get -> string?
+EConomic.Rest.CustomerGroupCustomer.VatNumber.init -> void
+EConomic.Rest.CustomerGroupCustomer.VatZone.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.CustomerGroupCustomer.VatZone.init -> void
+EConomic.Rest.CustomerGroupCustomer.Website.get -> string?
+EConomic.Rest.CustomerGroupCustomer.Website.init -> void
+EConomic.Rest.CustomerGroupCustomer.Zip.get -> string?
+EConomic.Rest.CustomerGroupCustomer.Zip.init -> void
+EConomic.Rest.CustomerGroupCustomerFilter
+EConomic.Rest.CustomerGroupCustomerFilter.Address.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.Balance.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.CustomerGroupCustomerFilter.City.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.CorporateIdentificationNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.Country.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.CreditLimit.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.CustomerGroupCustomerFilter.Currency.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.CustomerGroupCustomerFilter() -> void
+EConomic.Rest.CustomerGroupCustomerFilter.CustomerNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.CustomerGroupCustomerFilter.Ean.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.Email.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.MobilePhone.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.Name.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.PublicEntryNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.TelephoneAndFaxNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.VatNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.Website.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerFilter.Zip.get -> EConomic.Querying.TextField!
+EConomic.Rest.CustomerGroupCustomerResource
+EConomic.Rest.CustomerGroupCustomerResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.CustomerGroupCustomer!>!
+EConomic.Rest.CustomerGroupCustomerResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroupCustomer!, EConomic.Rest.CustomerGroupCustomerFilter!, EConomic.Rest.CustomerGroupCustomerSort!>!
+EConomic.Rest.CustomerGroupCustomerResource.CustomerGroupCustomerResource(System.Net.Http.HttpClient! httpClient, int customerGroupNumber) -> void
+EConomic.Rest.CustomerGroupCustomerResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.CustomerGroupCustomer!>!>!
+EConomic.Rest.CustomerGroupCustomerResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerGroupCustomerSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroupCustomer!, EConomic.Rest.CustomerGroupCustomerFilter!, EConomic.Rest.CustomerGroupCustomerSort!>!
+EConomic.Rest.CustomerGroupCustomerResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerGroupCustomerSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroupCustomer!, EConomic.Rest.CustomerGroupCustomerFilter!, EConomic.Rest.CustomerGroupCustomerSort!>!
+EConomic.Rest.CustomerGroupCustomerResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerGroupCustomerFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroupCustomer!, EConomic.Rest.CustomerGroupCustomerFilter!, EConomic.Rest.CustomerGroupCustomerSort!>!
+EConomic.Rest.CustomerGroupCustomerResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroupCustomer!, EConomic.Rest.CustomerGroupCustomerFilter!, EConomic.Rest.CustomerGroupCustomerSort!>!
+EConomic.Rest.CustomerGroupCustomerResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroupCustomer!, EConomic.Rest.CustomerGroupCustomerFilter!, EConomic.Rest.CustomerGroupCustomerSort!>!
+EConomic.Rest.CustomerGroupCustomerSort
+EConomic.Rest.CustomerGroupCustomerSort.Address.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Balance.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.City.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.CorporateIdentificationNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Country.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.CreditLimit.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Currency.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.CustomerGroupCustomerSort() -> void
+EConomic.Rest.CustomerGroupCustomerSort.CustomerNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Ean.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Email.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.MobilePhone.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Name.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.PublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.TelephoneAndFaxNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.VatNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Website.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.CustomerGroupCustomerSort.Zip.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.CustomerGroupFilter
 EConomic.Rest.CustomerGroupFilter.CustomerGroupFilter() -> void
 EConomic.Rest.CustomerGroupFilter.CustomerGroupNumber.get -> EConomic.Querying.NumericField<int>!
@@ -4311,6 +4616,7 @@ EConomic.Rest.CustomerGroupResource.AsAsyncEnumerable(System.Threading.Cancellat
 EConomic.Rest.CustomerGroupResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroup!, EConomic.Rest.CustomerGroupFilter!, EConomic.Rest.CustomerGroupSort!>!
 EConomic.Rest.CustomerGroupResource.CreateAsync(EConomic.Rest.CustomerGroupCreate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.CustomerGroup!>!
 EConomic.Rest.CustomerGroupResource.CustomerGroupResource(System.Net.Http.HttpClient! httpClient) -> void
+EConomic.Rest.CustomerGroupResource.Customers(int customerGroupNumber) -> EConomic.Rest.CustomerGroupCustomerResource!
 EConomic.Rest.CustomerGroupResource.DeleteAsync(int customerGroupNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 EConomic.Rest.CustomerGroupResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.CustomerGroup!>!>!
 EConomic.Rest.CustomerGroupResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.CustomerGroupSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.CustomerGroup!, EConomic.Rest.CustomerGroupFilter!, EConomic.Rest.CustomerGroupSort!>!
@@ -4514,8 +4820,12 @@ EConomic.Rest.DeliveryLocationResource.CreateAsync(EConomic.Rest.DeliveryLocatio
 EConomic.Rest.DeliveryLocationResource.DeleteAsync(int deliveryLocationNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 EConomic.Rest.DeliveryLocationResource.DeliveryLocationResource(System.Net.Http.HttpClient! httpClient, int customerNumber) -> void
 EConomic.Rest.DeliveryLocationResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.DeliveryLocation!>!>!
+EConomic.Rest.DeliveryLocationResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.DeliveryLocationSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.DeliveryLocation!, EConomic.Rest.DeliveryLocationFilter!, EConomic.Rest.DeliveryLocationSort!>!
+EConomic.Rest.DeliveryLocationResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.DeliveryLocationSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.DeliveryLocation!, EConomic.Rest.DeliveryLocationFilter!, EConomic.Rest.DeliveryLocationSort!>!
 EConomic.Rest.DeliveryLocationResource.UpdateAsync(int deliveryLocationNumber, EConomic.Rest.DeliveryLocationUpdate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Rest.DeliveryLocation!>!
 EConomic.Rest.DeliveryLocationResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.DeliveryLocationFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.DeliveryLocation!, EConomic.Rest.DeliveryLocationFilter!, EConomic.Rest.DeliveryLocationSort!>!
+EConomic.Rest.DeliveryLocationResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.DeliveryLocation!, EConomic.Rest.DeliveryLocationFilter!, EConomic.Rest.DeliveryLocationSort!>!
+EConomic.Rest.DeliveryLocationResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.DeliveryLocation!, EConomic.Rest.DeliveryLocationFilter!, EConomic.Rest.DeliveryLocationSort!>!
 EConomic.Rest.DeliveryLocationSort
 EConomic.Rest.DeliveryLocationSort.Address.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.DeliveryLocationSort.City.get -> EConomic.Querying.EconomicSortField!
@@ -6264,7 +6574,7 @@ EConomic.Rest.EconomicRestApi.DraftInvoices.get -> EConomic.Rest.DraftInvoiceRes
 EConomic.Rest.EconomicRestApi.DraftOrders.get -> EConomic.Rest.DraftOrderResource!
 EConomic.Rest.EconomicRestApi.DraftQuotes.get -> EConomic.Rest.DraftQuoteResource!
 EConomic.Rest.EconomicRestApi.EconomicRestApi(System.Net.Http.HttpClient! httpClient) -> void
-EConomic.Rest.EconomicRestApi.Employees.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
+EConomic.Rest.EconomicRestApi.Employees.get -> EConomic.Rest.EmployeeResource!
 EConomic.Rest.EconomicRestApi.Journals.get -> EConomic.Rest.JournalResource!
 EConomic.Rest.EconomicRestApi.Layouts.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.Layout!, EConomic.Rest.LayoutFilter!, EConomic.Rest.LayoutSort!>!
 EConomic.Rest.EconomicRestApi.NotDueInvoices.get -> EConomic.Querying.EconomicQuery<EConomic.Rest.NotDueInvoice!, EConomic.Rest.NotDueInvoiceFilter!, EConomic.Rest.NotDueInvoiceSort!>!
@@ -6307,11 +6617,181 @@ EConomic.Rest.Employee.Phone.get -> string?
 EConomic.Rest.Employee.Phone.init -> void
 EConomic.Rest.Employee.Self.get -> System.Uri!
 EConomic.Rest.Employee.Self.init -> void
+EConomic.Rest.EmployeeCustomer
+EConomic.Rest.EmployeeCustomer.<Clone>$() -> EConomic.Rest.EmployeeCustomer!
+EConomic.Rest.EmployeeCustomer.Address.get -> string?
+EConomic.Rest.EmployeeCustomer.Address.init -> void
+EConomic.Rest.EmployeeCustomer.Attention.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.EmployeeCustomer.Attention.init -> void
+EConomic.Rest.EmployeeCustomer.Balance.get -> decimal
+EConomic.Rest.EmployeeCustomer.Balance.init -> void
+EConomic.Rest.EmployeeCustomer.Barred.get -> bool
+EConomic.Rest.EmployeeCustomer.Barred.init -> void
+EConomic.Rest.EmployeeCustomer.City.get -> string?
+EConomic.Rest.EmployeeCustomer.City.init -> void
+EConomic.Rest.EmployeeCustomer.Contacts.get -> System.Uri?
+EConomic.Rest.EmployeeCustomer.Contacts.init -> void
+EConomic.Rest.EmployeeCustomer.CorporateIdentificationNumber.get -> string?
+EConomic.Rest.EmployeeCustomer.CorporateIdentificationNumber.init -> void
+EConomic.Rest.EmployeeCustomer.Country.get -> string?
+EConomic.Rest.EmployeeCustomer.Country.init -> void
+EConomic.Rest.EmployeeCustomer.CreditLimit.get -> decimal
+EConomic.Rest.EmployeeCustomer.CreditLimit.init -> void
+EConomic.Rest.EmployeeCustomer.Currency.get -> string!
+EConomic.Rest.EmployeeCustomer.Currency.init -> void
+EConomic.Rest.EmployeeCustomer.CustomerContact.get -> EConomic.Rest.EmployeeCustomerCustomerContact?
+EConomic.Rest.EmployeeCustomer.CustomerContact.init -> void
+EConomic.Rest.EmployeeCustomer.CustomerGroup.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.EmployeeCustomer.CustomerGroup.init -> void
+EConomic.Rest.EmployeeCustomer.CustomerNumber.get -> int
+EConomic.Rest.EmployeeCustomer.CustomerNumber.init -> void
+EConomic.Rest.EmployeeCustomer.DeliveryLocations.get -> System.Uri?
+EConomic.Rest.EmployeeCustomer.DeliveryLocations.init -> void
+EConomic.Rest.EmployeeCustomer.Ean.get -> string?
+EConomic.Rest.EmployeeCustomer.Ean.init -> void
+EConomic.Rest.EmployeeCustomer.Email.get -> string?
+EConomic.Rest.EmployeeCustomer.Email.init -> void
+EConomic.Rest.EmployeeCustomer.EmployeeCustomer() -> void
+EConomic.Rest.EmployeeCustomer.Equals(EConomic.Rest.EmployeeCustomer? other) -> bool
+EConomic.Rest.EmployeeCustomer.Invoices.get -> EConomic.Rest.EmployeeCustomerInvoices?
+EConomic.Rest.EmployeeCustomer.Invoices.init -> void
+EConomic.Rest.EmployeeCustomer.LastUpdated.get -> System.DateTimeOffset?
+EConomic.Rest.EmployeeCustomer.LastUpdated.init -> void
+EConomic.Rest.EmployeeCustomer.Layout.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.EmployeeCustomer.Layout.init -> void
+EConomic.Rest.EmployeeCustomer.MobilePhone.get -> string?
+EConomic.Rest.EmployeeCustomer.MobilePhone.init -> void
+EConomic.Rest.EmployeeCustomer.Name.get -> string!
+EConomic.Rest.EmployeeCustomer.Name.init -> void
+EConomic.Rest.EmployeeCustomer.PNumber.get -> string?
+EConomic.Rest.EmployeeCustomer.PNumber.init -> void
+EConomic.Rest.EmployeeCustomer.PaymentTerms.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.EmployeeCustomer.PaymentTerms.init -> void
+EConomic.Rest.EmployeeCustomer.PublicEntryNumber.get -> string?
+EConomic.Rest.EmployeeCustomer.PublicEntryNumber.init -> void
+EConomic.Rest.EmployeeCustomer.SalesPerson.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.EmployeeCustomer.SalesPerson.init -> void
+EConomic.Rest.EmployeeCustomer.Self.get -> System.Uri!
+EConomic.Rest.EmployeeCustomer.Self.init -> void
+EConomic.Rest.EmployeeCustomer.TelephoneAndFaxNumber.get -> string?
+EConomic.Rest.EmployeeCustomer.TelephoneAndFaxNumber.init -> void
+EConomic.Rest.EmployeeCustomer.Templates.get -> EConomic.Rest.EmployeeCustomerTemplates?
+EConomic.Rest.EmployeeCustomer.Templates.init -> void
+EConomic.Rest.EmployeeCustomer.Totals.get -> EConomic.Rest.EmployeeCustomerTotals?
+EConomic.Rest.EmployeeCustomer.Totals.init -> void
+EConomic.Rest.EmployeeCustomer.VatNumber.get -> string?
+EConomic.Rest.EmployeeCustomer.VatNumber.init -> void
+EConomic.Rest.EmployeeCustomer.VatZone.get -> EConomic.Rest.EconomicReference?
+EConomic.Rest.EmployeeCustomer.VatZone.init -> void
+EConomic.Rest.EmployeeCustomer.Website.get -> string?
+EConomic.Rest.EmployeeCustomer.Website.init -> void
+EConomic.Rest.EmployeeCustomer.Zip.get -> string?
+EConomic.Rest.EmployeeCustomer.Zip.init -> void
+EConomic.Rest.EmployeeCustomerCustomerContact
+EConomic.Rest.EmployeeCustomerCustomerContact.<Clone>$() -> EConomic.Rest.EmployeeCustomerCustomerContact!
+EConomic.Rest.EmployeeCustomerCustomerContact.CustomerContactnumber.get -> int
+EConomic.Rest.EmployeeCustomerCustomerContact.CustomerContactnumber.init -> void
+EConomic.Rest.EmployeeCustomerCustomerContact.EmployeeCustomerCustomerContact() -> void
+EConomic.Rest.EmployeeCustomerCustomerContact.Equals(EConomic.Rest.EmployeeCustomerCustomerContact? other) -> bool
+EConomic.Rest.EmployeeCustomerCustomerContact.Self.get -> System.Uri!
+EConomic.Rest.EmployeeCustomerCustomerContact.Self.init -> void
+EConomic.Rest.EmployeeCustomerFilter
+EConomic.Rest.EmployeeCustomerFilter.Address.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.Balance.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.EmployeeCustomerFilter.City.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.CorporateIdentificationNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.Country.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.CreditLimit.get -> EConomic.Querying.NumericField<decimal>!
+EConomic.Rest.EmployeeCustomerFilter.Currency.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.CustomerGroupNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.EmployeeCustomerFilter.CustomerNumber.get -> EConomic.Querying.NumericField<int>!
+EConomic.Rest.EmployeeCustomerFilter.Ean.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.Email.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.EmployeeCustomerFilter() -> void
+EConomic.Rest.EmployeeCustomerFilter.LastUpdated.get -> EConomic.Querying.ComparableField<System.DateTimeOffset>!
+EConomic.Rest.EmployeeCustomerFilter.MobilePhone.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.Name.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.PublicEntryNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.TelephoneAndFaxNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.VatNumber.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.Website.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerFilter.Zip.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeCustomerInvoices
+EConomic.Rest.EmployeeCustomerInvoices.<Clone>$() -> EConomic.Rest.EmployeeCustomerInvoices!
+EConomic.Rest.EmployeeCustomerInvoices.Booked.get -> System.Uri?
+EConomic.Rest.EmployeeCustomerInvoices.Booked.init -> void
+EConomic.Rest.EmployeeCustomerInvoices.Drafts.get -> System.Uri?
+EConomic.Rest.EmployeeCustomerInvoices.Drafts.init -> void
+EConomic.Rest.EmployeeCustomerInvoices.EmployeeCustomerInvoices() -> void
+EConomic.Rest.EmployeeCustomerInvoices.Equals(EConomic.Rest.EmployeeCustomerInvoices? other) -> bool
+EConomic.Rest.EmployeeCustomerInvoices.Self.get -> System.Uri!
+EConomic.Rest.EmployeeCustomerInvoices.Self.init -> void
+EConomic.Rest.EmployeeCustomerResource
+EConomic.Rest.EmployeeCustomerResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.EmployeeCustomer!>!
+EConomic.Rest.EmployeeCustomerResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.EmployeeCustomer!, EConomic.Rest.EmployeeCustomerFilter!, EConomic.Rest.EmployeeCustomerSort!>!
+EConomic.Rest.EmployeeCustomerResource.EmployeeCustomerResource(System.Net.Http.HttpClient! httpClient, int employeeNumber) -> void
+EConomic.Rest.EmployeeCustomerResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.EmployeeCustomer!>!>!
+EConomic.Rest.EmployeeCustomerResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.EmployeeCustomerSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.EmployeeCustomer!, EConomic.Rest.EmployeeCustomerFilter!, EConomic.Rest.EmployeeCustomerSort!>!
+EConomic.Rest.EmployeeCustomerResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.EmployeeCustomerSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.EmployeeCustomer!, EConomic.Rest.EmployeeCustomerFilter!, EConomic.Rest.EmployeeCustomerSort!>!
+EConomic.Rest.EmployeeCustomerResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.EmployeeCustomerFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.EmployeeCustomer!, EConomic.Rest.EmployeeCustomerFilter!, EConomic.Rest.EmployeeCustomerSort!>!
+EConomic.Rest.EmployeeCustomerResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.EmployeeCustomer!, EConomic.Rest.EmployeeCustomerFilter!, EConomic.Rest.EmployeeCustomerSort!>!
+EConomic.Rest.EmployeeCustomerResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.EmployeeCustomer!, EConomic.Rest.EmployeeCustomerFilter!, EConomic.Rest.EmployeeCustomerSort!>!
+EConomic.Rest.EmployeeCustomerSort
+EConomic.Rest.EmployeeCustomerSort.Address.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Balance.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.City.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.CorporateIdentificationNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Country.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.CreditLimit.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Currency.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.CustomerNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Ean.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Email.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.EmployeeCustomerSort() -> void
+EConomic.Rest.EmployeeCustomerSort.LastUpdated.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.MobilePhone.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Name.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.PublicEntryNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.TelephoneAndFaxNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.VatNumber.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Website.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerSort.Zip.get -> EConomic.Querying.EconomicSortField!
+EConomic.Rest.EmployeeCustomerTemplates
+EConomic.Rest.EmployeeCustomerTemplates.<Clone>$() -> EConomic.Rest.EmployeeCustomerTemplates!
+EConomic.Rest.EmployeeCustomerTemplates.EmployeeCustomerTemplates() -> void
+EConomic.Rest.EmployeeCustomerTemplates.Equals(EConomic.Rest.EmployeeCustomerTemplates? other) -> bool
+EConomic.Rest.EmployeeCustomerTemplates.Invoice.get -> System.Uri?
+EConomic.Rest.EmployeeCustomerTemplates.Invoice.init -> void
+EConomic.Rest.EmployeeCustomerTemplates.InvoiceLine.get -> System.Uri?
+EConomic.Rest.EmployeeCustomerTemplates.InvoiceLine.init -> void
+EConomic.Rest.EmployeeCustomerTemplates.Self.get -> System.Uri!
+EConomic.Rest.EmployeeCustomerTemplates.Self.init -> void
+EConomic.Rest.EmployeeCustomerTotals
+EConomic.Rest.EmployeeCustomerTotals.<Clone>$() -> EConomic.Rest.EmployeeCustomerTotals!
+EConomic.Rest.EmployeeCustomerTotals.Booked.get -> System.Uri?
+EConomic.Rest.EmployeeCustomerTotals.Booked.init -> void
+EConomic.Rest.EmployeeCustomerTotals.Drafts.get -> System.Uri?
+EConomic.Rest.EmployeeCustomerTotals.Drafts.init -> void
+EConomic.Rest.EmployeeCustomerTotals.EmployeeCustomerTotals() -> void
+EConomic.Rest.EmployeeCustomerTotals.Equals(EConomic.Rest.EmployeeCustomerTotals? other) -> bool
+EConomic.Rest.EmployeeCustomerTotals.Self.get -> System.Uri!
+EConomic.Rest.EmployeeCustomerTotals.Self.init -> void
 EConomic.Rest.EmployeeFilter
 EConomic.Rest.EmployeeFilter.Barred.get -> EConomic.Querying.BooleanField!
 EConomic.Rest.EmployeeFilter.EmployeeFilter() -> void
 EConomic.Rest.EmployeeFilter.EmployeeNumber.get -> EConomic.Querying.NumericField<int>!
 EConomic.Rest.EmployeeFilter.Name.get -> EConomic.Querying.TextField!
+EConomic.Rest.EmployeeResource
+EConomic.Rest.EmployeeResource.AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Collections.Generic.IAsyncEnumerable<EConomic.Rest.Employee!>!
+EConomic.Rest.EmployeeResource.AsQuery() -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
+EConomic.Rest.EmployeeResource.Customers(int employeeNumber) -> EConomic.Rest.EmployeeCustomerResource!
+EConomic.Rest.EmployeeResource.EmployeeResource(System.Net.Http.HttpClient! httpClient) -> void
+EConomic.Rest.EmployeeResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.Employee!>!>!
+EConomic.Rest.EmployeeResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.EmployeeSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
+EConomic.Rest.EmployeeResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.EmployeeSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
+EConomic.Rest.EmployeeResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.EmployeeFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
+EConomic.Rest.EmployeeResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
+EConomic.Rest.EmployeeResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.Employee!, EConomic.Rest.EmployeeFilter!, EConomic.Rest.EmployeeSort!>!
 EConomic.Rest.EmployeeSort
 EConomic.Rest.EmployeeSort.EmployeeNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.EmployeeSort.EmployeeSort() -> void
@@ -6450,7 +6930,11 @@ EConomic.Rest.JournalEntryResource.AsQuery() -> EConomic.Querying.EconomicQuery<
 EConomic.Rest.JournalEntryResource.DeleteAsync(int journalEntryNumber, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 EConomic.Rest.JournalEntryResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.JournalEntry!>!>!
 EConomic.Rest.JournalEntryResource.JournalEntryResource(System.Net.Http.HttpClient! httpClient, int journalNumber) -> void
+EConomic.Rest.JournalEntryResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalEntrySort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
+EConomic.Rest.JournalEntryResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalEntrySort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
 EConomic.Rest.JournalEntryResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalEntryFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
+EConomic.Rest.JournalEntryResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
+EConomic.Rest.JournalEntryResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalEntry!, EConomic.Rest.JournalEntryFilter!, EConomic.Rest.JournalEntrySort!>!
 EConomic.Rest.JournalEntrySort
 EConomic.Rest.JournalEntrySort.AccountNumber.get -> EConomic.Querying.EconomicSortField!
 EConomic.Rest.JournalEntrySort.Amount.get -> EConomic.Querying.EconomicSortField!
@@ -7403,7 +7887,11 @@ EConomic.Rest.JournalVoucherResource.AsQuery() -> EConomic.Querying.EconomicQuer
 EConomic.Rest.JournalVoucherResource.CreateAsync(EConomic.Rest.JournalVoucherCreate! item, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<EConomic.Rest.JournalVoucher!>!>!
 EConomic.Rest.JournalVoucherResource.GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<EConomic.Pagination.EconomicPage<EConomic.Rest.JournalVoucher!>!>!
 EConomic.Rest.JournalVoucherResource.JournalVoucherResource(System.Net.Http.HttpClient! httpClient, int journalNumber) -> void
+EConomic.Rest.JournalVoucherResource.OrderBy(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalVoucherSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
+EConomic.Rest.JournalVoucherResource.OrderByDescending(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalVoucherSort!, EConomic.Querying.EconomicSortField!>!>! selector) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
 EConomic.Rest.JournalVoucherResource.Where(System.Linq.Expressions.Expression<System.Func<EConomic.Rest.JournalVoucherFilter!, bool>!>! predicate) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
+EConomic.Rest.JournalVoucherResource.WhereRaw(string! filter) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
+EConomic.Rest.JournalVoucherResource.WithPageSize(int pageSize) -> EConomic.Querying.EconomicQuery<EConomic.Rest.JournalVoucher!, EConomic.Rest.JournalVoucherFilter!, EConomic.Rest.JournalVoucherSort!>!
 EConomic.Rest.JournalVoucherSort
 EConomic.Rest.JournalVoucherSort.JournalVoucherSort() -> void
 EConomic.Rest.Layout
@@ -9574,6 +10062,9 @@ override EConomic.Rest.AccountDepartmentalDistribution.ToString() -> string!
 override EConomic.Rest.AccountDepartmentalDistributionDistribution.Equals(object? obj) -> bool
 override EConomic.Rest.AccountDepartmentalDistributionDistribution.GetHashCode() -> int
 override EConomic.Rest.AccountDepartmentalDistributionDistribution.ToString() -> string!
+override EConomic.Rest.AccountTotal.Equals(object? obj) -> bool
+override EConomic.Rest.AccountTotal.GetHashCode() -> int
+override EConomic.Rest.AccountTotal.ToString() -> string!
 override EConomic.Rest.AccountVatAccount.Equals(object? obj) -> bool
 override EConomic.Rest.AccountVatAccount.GetHashCode() -> int
 override EConomic.Rest.AccountVatAccount.ToString() -> string!
@@ -9583,6 +10074,18 @@ override EConomic.Rest.AccountingYear.ToString() -> string!
 override EConomic.Rest.AccountingYearCreate.Equals(object? obj) -> bool
 override EConomic.Rest.AccountingYearCreate.GetHashCode() -> int
 override EConomic.Rest.AccountingYearCreate.ToString() -> string!
+override EConomic.Rest.AccountingYearEntry.Equals(object? obj) -> bool
+override EConomic.Rest.AccountingYearEntry.GetHashCode() -> int
+override EConomic.Rest.AccountingYearEntry.ToString() -> string!
+override EConomic.Rest.AccountingYearEntryVatAccount.Equals(object? obj) -> bool
+override EConomic.Rest.AccountingYearEntryVatAccount.GetHashCode() -> int
+override EConomic.Rest.AccountingYearEntryVatAccount.ToString() -> string!
+override EConomic.Rest.AccountingYearPeriod.Equals(object? obj) -> bool
+override EConomic.Rest.AccountingYearPeriod.GetHashCode() -> int
+override EConomic.Rest.AccountingYearPeriod.ToString() -> string!
+override EConomic.Rest.AccountingYearPeriodAccountingYear.Equals(object? obj) -> bool
+override EConomic.Rest.AccountingYearPeriodAccountingYear.GetHashCode() -> int
+override EConomic.Rest.AccountingYearPeriodAccountingYear.ToString() -> string!
 override EConomic.Rest.AppRole.Equals(object? obj) -> bool
 override EConomic.Rest.AppRole.GetHashCode() -> int
 override EConomic.Rest.AppRole.ToString() -> string!
@@ -9688,6 +10191,9 @@ override EConomic.Rest.CustomerGroupAccount.ToString() -> string!
 override EConomic.Rest.CustomerGroupCreate.Equals(object? obj) -> bool
 override EConomic.Rest.CustomerGroupCreate.GetHashCode() -> int
 override EConomic.Rest.CustomerGroupCreate.ToString() -> string!
+override EConomic.Rest.CustomerGroupCustomer.Equals(object? obj) -> bool
+override EConomic.Rest.CustomerGroupCustomer.GetHashCode() -> int
+override EConomic.Rest.CustomerGroupCustomer.ToString() -> string!
 override EConomic.Rest.CustomerGroupLayout.Equals(object? obj) -> bool
 override EConomic.Rest.CustomerGroupLayout.GetHashCode() -> int
 override EConomic.Rest.CustomerGroupLayout.ToString() -> string!
@@ -9994,6 +10500,21 @@ override EConomic.Rest.EconomicReference.ToString() -> string!
 override EConomic.Rest.Employee.Equals(object? obj) -> bool
 override EConomic.Rest.Employee.GetHashCode() -> int
 override EConomic.Rest.Employee.ToString() -> string!
+override EConomic.Rest.EmployeeCustomer.Equals(object? obj) -> bool
+override EConomic.Rest.EmployeeCustomer.GetHashCode() -> int
+override EConomic.Rest.EmployeeCustomer.ToString() -> string!
+override EConomic.Rest.EmployeeCustomerCustomerContact.Equals(object? obj) -> bool
+override EConomic.Rest.EmployeeCustomerCustomerContact.GetHashCode() -> int
+override EConomic.Rest.EmployeeCustomerCustomerContact.ToString() -> string!
+override EConomic.Rest.EmployeeCustomerInvoices.Equals(object? obj) -> bool
+override EConomic.Rest.EmployeeCustomerInvoices.GetHashCode() -> int
+override EConomic.Rest.EmployeeCustomerInvoices.ToString() -> string!
+override EConomic.Rest.EmployeeCustomerTemplates.Equals(object? obj) -> bool
+override EConomic.Rest.EmployeeCustomerTemplates.GetHashCode() -> int
+override EConomic.Rest.EmployeeCustomerTemplates.ToString() -> string!
+override EConomic.Rest.EmployeeCustomerTotals.Equals(object? obj) -> bool
+override EConomic.Rest.EmployeeCustomerTotals.GetHashCode() -> int
+override EConomic.Rest.EmployeeCustomerTotals.ToString() -> string!
 override EConomic.Rest.Journal.Equals(object? obj) -> bool
 override EConomic.Rest.Journal.GetHashCode() -> int
 override EConomic.Rest.Journal.ToString() -> string!
@@ -10623,12 +11144,22 @@ static EConomic.Rest.AccountDepartmentalDistribution.operator !=(EConomic.Rest.A
 static EConomic.Rest.AccountDepartmentalDistribution.operator ==(EConomic.Rest.AccountDepartmentalDistribution? left, EConomic.Rest.AccountDepartmentalDistribution? right) -> bool
 static EConomic.Rest.AccountDepartmentalDistributionDistribution.operator !=(EConomic.Rest.AccountDepartmentalDistributionDistribution? left, EConomic.Rest.AccountDepartmentalDistributionDistribution? right) -> bool
 static EConomic.Rest.AccountDepartmentalDistributionDistribution.operator ==(EConomic.Rest.AccountDepartmentalDistributionDistribution? left, EConomic.Rest.AccountDepartmentalDistributionDistribution? right) -> bool
+static EConomic.Rest.AccountTotal.operator !=(EConomic.Rest.AccountTotal? left, EConomic.Rest.AccountTotal? right) -> bool
+static EConomic.Rest.AccountTotal.operator ==(EConomic.Rest.AccountTotal? left, EConomic.Rest.AccountTotal? right) -> bool
 static EConomic.Rest.AccountVatAccount.operator !=(EConomic.Rest.AccountVatAccount? left, EConomic.Rest.AccountVatAccount? right) -> bool
 static EConomic.Rest.AccountVatAccount.operator ==(EConomic.Rest.AccountVatAccount? left, EConomic.Rest.AccountVatAccount? right) -> bool
 static EConomic.Rest.AccountingYear.operator !=(EConomic.Rest.AccountingYear? left, EConomic.Rest.AccountingYear? right) -> bool
 static EConomic.Rest.AccountingYear.operator ==(EConomic.Rest.AccountingYear? left, EConomic.Rest.AccountingYear? right) -> bool
 static EConomic.Rest.AccountingYearCreate.operator !=(EConomic.Rest.AccountingYearCreate? left, EConomic.Rest.AccountingYearCreate? right) -> bool
 static EConomic.Rest.AccountingYearCreate.operator ==(EConomic.Rest.AccountingYearCreate? left, EConomic.Rest.AccountingYearCreate? right) -> bool
+static EConomic.Rest.AccountingYearEntry.operator !=(EConomic.Rest.AccountingYearEntry? left, EConomic.Rest.AccountingYearEntry? right) -> bool
+static EConomic.Rest.AccountingYearEntry.operator ==(EConomic.Rest.AccountingYearEntry? left, EConomic.Rest.AccountingYearEntry? right) -> bool
+static EConomic.Rest.AccountingYearEntryVatAccount.operator !=(EConomic.Rest.AccountingYearEntryVatAccount? left, EConomic.Rest.AccountingYearEntryVatAccount? right) -> bool
+static EConomic.Rest.AccountingYearEntryVatAccount.operator ==(EConomic.Rest.AccountingYearEntryVatAccount? left, EConomic.Rest.AccountingYearEntryVatAccount? right) -> bool
+static EConomic.Rest.AccountingYearPeriod.operator !=(EConomic.Rest.AccountingYearPeriod? left, EConomic.Rest.AccountingYearPeriod? right) -> bool
+static EConomic.Rest.AccountingYearPeriod.operator ==(EConomic.Rest.AccountingYearPeriod? left, EConomic.Rest.AccountingYearPeriod? right) -> bool
+static EConomic.Rest.AccountingYearPeriodAccountingYear.operator !=(EConomic.Rest.AccountingYearPeriodAccountingYear? left, EConomic.Rest.AccountingYearPeriodAccountingYear? right) -> bool
+static EConomic.Rest.AccountingYearPeriodAccountingYear.operator ==(EConomic.Rest.AccountingYearPeriodAccountingYear? left, EConomic.Rest.AccountingYearPeriodAccountingYear? right) -> bool
 static EConomic.Rest.AppRole.operator !=(EConomic.Rest.AppRole? left, EConomic.Rest.AppRole? right) -> bool
 static EConomic.Rest.AppRole.operator ==(EConomic.Rest.AppRole? left, EConomic.Rest.AppRole? right) -> bool
 static EConomic.Rest.ArchivedOrder.operator !=(EConomic.Rest.ArchivedOrder? left, EConomic.Rest.ArchivedOrder? right) -> bool
@@ -10699,6 +11230,8 @@ static EConomic.Rest.CustomerGroupAccount.operator !=(EConomic.Rest.CustomerGrou
 static EConomic.Rest.CustomerGroupAccount.operator ==(EConomic.Rest.CustomerGroupAccount? left, EConomic.Rest.CustomerGroupAccount? right) -> bool
 static EConomic.Rest.CustomerGroupCreate.operator !=(EConomic.Rest.CustomerGroupCreate? left, EConomic.Rest.CustomerGroupCreate? right) -> bool
 static EConomic.Rest.CustomerGroupCreate.operator ==(EConomic.Rest.CustomerGroupCreate? left, EConomic.Rest.CustomerGroupCreate? right) -> bool
+static EConomic.Rest.CustomerGroupCustomer.operator !=(EConomic.Rest.CustomerGroupCustomer? left, EConomic.Rest.CustomerGroupCustomer? right) -> bool
+static EConomic.Rest.CustomerGroupCustomer.operator ==(EConomic.Rest.CustomerGroupCustomer? left, EConomic.Rest.CustomerGroupCustomer? right) -> bool
 static EConomic.Rest.CustomerGroupLayout.operator !=(EConomic.Rest.CustomerGroupLayout? left, EConomic.Rest.CustomerGroupLayout? right) -> bool
 static EConomic.Rest.CustomerGroupLayout.operator ==(EConomic.Rest.CustomerGroupLayout? left, EConomic.Rest.CustomerGroupLayout? right) -> bool
 static EConomic.Rest.CustomerGroupUpdate.operator !=(EConomic.Rest.CustomerGroupUpdate? left, EConomic.Rest.CustomerGroupUpdate? right) -> bool
@@ -10903,6 +11436,16 @@ static EConomic.Rest.EconomicReference.operator !=(EConomic.Rest.EconomicReferen
 static EConomic.Rest.EconomicReference.operator ==(EConomic.Rest.EconomicReference? left, EConomic.Rest.EconomicReference? right) -> bool
 static EConomic.Rest.Employee.operator !=(EConomic.Rest.Employee? left, EConomic.Rest.Employee? right) -> bool
 static EConomic.Rest.Employee.operator ==(EConomic.Rest.Employee? left, EConomic.Rest.Employee? right) -> bool
+static EConomic.Rest.EmployeeCustomer.operator !=(EConomic.Rest.EmployeeCustomer? left, EConomic.Rest.EmployeeCustomer? right) -> bool
+static EConomic.Rest.EmployeeCustomer.operator ==(EConomic.Rest.EmployeeCustomer? left, EConomic.Rest.EmployeeCustomer? right) -> bool
+static EConomic.Rest.EmployeeCustomerCustomerContact.operator !=(EConomic.Rest.EmployeeCustomerCustomerContact? left, EConomic.Rest.EmployeeCustomerCustomerContact? right) -> bool
+static EConomic.Rest.EmployeeCustomerCustomerContact.operator ==(EConomic.Rest.EmployeeCustomerCustomerContact? left, EConomic.Rest.EmployeeCustomerCustomerContact? right) -> bool
+static EConomic.Rest.EmployeeCustomerInvoices.operator !=(EConomic.Rest.EmployeeCustomerInvoices? left, EConomic.Rest.EmployeeCustomerInvoices? right) -> bool
+static EConomic.Rest.EmployeeCustomerInvoices.operator ==(EConomic.Rest.EmployeeCustomerInvoices? left, EConomic.Rest.EmployeeCustomerInvoices? right) -> bool
+static EConomic.Rest.EmployeeCustomerTemplates.operator !=(EConomic.Rest.EmployeeCustomerTemplates? left, EConomic.Rest.EmployeeCustomerTemplates? right) -> bool
+static EConomic.Rest.EmployeeCustomerTemplates.operator ==(EConomic.Rest.EmployeeCustomerTemplates? left, EConomic.Rest.EmployeeCustomerTemplates? right) -> bool
+static EConomic.Rest.EmployeeCustomerTotals.operator !=(EConomic.Rest.EmployeeCustomerTotals? left, EConomic.Rest.EmployeeCustomerTotals? right) -> bool
+static EConomic.Rest.EmployeeCustomerTotals.operator ==(EConomic.Rest.EmployeeCustomerTotals? left, EConomic.Rest.EmployeeCustomerTotals? right) -> bool
 static EConomic.Rest.Journal.operator !=(EConomic.Rest.Journal? left, EConomic.Rest.Journal? right) -> bool
 static EConomic.Rest.Journal.operator ==(EConomic.Rest.Journal? left, EConomic.Rest.Journal? right) -> bool
 static EConomic.Rest.JournalEntry.operator !=(EConomic.Rest.JournalEntry? left, EConomic.Rest.JournalEntry? right) -> bool

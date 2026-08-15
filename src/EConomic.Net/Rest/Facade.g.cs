@@ -187,6 +187,24 @@ public sealed partial class AccountingYearResource
         return target;
     }
 
+    /// <summary>The <c>entries</c> belonging to one accountingYear.</summary>
+    /// <param name="accountingYear">The owning accountingYear.</param>
+    /// <returns>The nested collection, scoped to that accountingYear.</returns>
+    public AccountingYearEntryResource Entries(string accountingYear) =>
+        new(_httpClient, accountingYear);
+
+    /// <summary>The <c>periods</c> belonging to one accountingYear.</summary>
+    /// <param name="accountingYear">The owning accountingYear.</param>
+    /// <returns>The nested collection, scoped to that accountingYear.</returns>
+    public AccountingYearPeriodResource Periods(string accountingYear) =>
+        new(_httpClient, accountingYear);
+
+    /// <summary>The <c>totals</c> belonging to one accountingYear.</summary>
+    /// <param name="accountingYear">The owning accountingYear.</param>
+    /// <returns>The nested collection, scoped to that accountingYear.</returns>
+    public AccountTotalResource Totals(string accountingYear) =>
+        new(_httpClient, accountingYear);
+
     private static AccountingYear FromGenerated(Generated.AccountingYear source) => new()
     {
         FromDate = source.FromDate == default ? null : source.FromDate,
@@ -819,6 +837,12 @@ public sealed partial class CustomerGroupResource
 
         return target;
     }
+
+    /// <summary>The <c>customers</c> belonging to one customerGroup.</summary>
+    /// <param name="customerGroupNumber">The owning customerGroup.</param>
+    /// <returns>The nested collection, scoped to that customerGroup.</returns>
+    public CustomerGroupCustomerResource Customers(int customerGroupNumber) =>
+        new(_httpClient, customerGroupNumber);
 
     private static CustomerGroup FromGenerated(Generated.CustomerGroup source) => new()
     {
@@ -1741,6 +1765,77 @@ internal sealed class EmployeePageSource(Generated.EmployeesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/employees</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class EmployeeResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.EmployeesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public EmployeeResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.EmployeesClient(httpClient);
+    }
+
+    private EconomicQuery<Employee, EmployeeFilter, EmployeeSort> Query => new(new EmployeePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> Where(System.Linq.Expressions.Expression<System.Func<EmployeeFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> OrderBy(System.Linq.Expressions.Expression<System.Func<EmployeeSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<EmployeeSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Employee> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Employee>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>The <c>customers</c> belonging to one employee.</summary>
+    /// <param name="employeeNumber">The owning employee.</param>
+    /// <returns>The nested collection, scoped to that employee.</returns>
+    public EmployeeCustomerResource Customers(int employeeNumber) =>
+        new(_httpClient, employeeNumber);
 }
 
 /// <summary>
@@ -11215,6 +11310,698 @@ internal sealed class VatZonePageSource(Generated.VatZonesClient client)
 }
 
 /// <summary>
+/// The <c>vatAccount</c> of a <see cref="AccountingYearEntry"/>.
+/// </summary>
+public sealed record AccountingYearEntryVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/accounting-years/{accountingYear}/entries</c>.
+/// </summary>
+public sealed record AccountingYearEntry
+{
+    /// <summary>The <c>account</c> field.</summary>
+    public EconomicReference? Account { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>amountInBaseCurrency</c> field.</summary>
+    public decimal AmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public EconomicReference? CostType { get; init; }
+
+    /// <summary>The <c>entryNumber</c> field.</summary>
+    public int EntryNumber { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>vatAccount</c> field.</summary>
+    public AccountingYearEntryVatAccount? VatAccount { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public EconomicReference? Supplier { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public EconomicReference? Unit1 { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public EconomicReference? Unit2 { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal Quantity2 { get; init; }
+
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public int VoucherNumber { get; init; }
+
+    /// <summary>The <c>bookedInvoice</c> field.</summary>
+    public EconomicReference? BookedInvoice { get; init; }
+
+    /// <summary>The <c>invoiceNumber</c> field.</summary>
+    public int InvoiceNumber { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/entries</c> and maps them to <see cref="AccountingYearEntry"/>.</summary>
+internal sealed class AccountingYearEntryPageSource(Generated.AccountingYearsClient client, string accountingYear)
+    : IEconomicPageSource<AccountingYearEntry>
+{
+    public async Task<EconomicPage<AccountingYearEntry>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountingYearsByaccountingYearEntriesAsync(
+                accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounting-years/{accountingYear}/entries").ConfigureAwait(false);
+
+        var items = new List<AccountingYearEntry>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountingYearEntry>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountingYearEntry Map(Generated.Entry source) => new()
+    {
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        Amount = (decimal)source.Amount,
+        SupplierInvoiceNumber = source.SupplierInvoiceNumber,
+        AmountInBaseCurrency = (decimal)source.AmountInBaseCurrency,
+        Currency = source.Currency,
+        Date = source.Date == default ? null : source.Date,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        CostType = Reference(source.CostType?.CostTypeNumber, source.CostType?.Self),
+        EntryNumber = source.EntryNumber,
+        Text = source.Text,
+        EntryType = source.EntryType.ToString(),
+        VatAccount = source.VatAccount is null ? null : new AccountingYearEntryVatAccount
+        {
+            VatCode = source.VatAccount.VatCode,
+            Self = source.VatAccount.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Supplier = Reference(source.Supplier?.SupplierNumber, source.Supplier?.Self),
+        Unit1 = Reference(source.Unit1?.UnitNumber, source.Unit1?.Self),
+        Unit2 = Reference(source.Unit2?.UnitNumber, source.Unit2?.Self),
+        Quantity1 = (decimal)source.Quantity1,
+        Quantity2 = (decimal)source.Quantity2,
+        VoucherNumber = source.VoucherNumber,
+        BookedInvoice = Reference(source.BookedInvoice?.BookedInvoiceNumber, source.BookedInvoice?.Self),
+        InvoiceNumber = source.InvoiceNumber,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounting-years/{accountingYear}/entries</c> collection, scoped to one accountingYear.
+/// </summary>
+public sealed partial class AccountingYearEntryResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountingYearsClient _client;
+    private readonly string _accountingYear;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountingYear">The owning accountingYear.</param>
+    public AccountingYearEntryResource(System.Net.Http.HttpClient httpClient, string accountingYear)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountingYearsClient(httpClient);
+        _accountingYear = accountingYear;
+    }
+
+    private EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> Query => new(new AccountingYearEntryPageSource(_client, _accountingYear));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> Where(System.Linq.Expressions.Expression<System.Func<AccountingYearEntryFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountingYearEntrySort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountingYearEntrySort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountingYearEntry, AccountingYearEntryFilter, AccountingYearEntrySort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountingYearEntry> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountingYearEntry>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// The <c>accountingYear</c> of a <see cref="AccountingYearPeriod"/>.
+/// </summary>
+public sealed record AccountingYearPeriodAccountingYear
+{
+    /// <summary>The <c>year</c> field.</summary>
+    public string? Year { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/accounting-years/{accountingYear}/periods</c>.
+/// </summary>
+public sealed record AccountingYearPeriod
+{
+    /// <summary>The <c>periodNumber</c> field.</summary>
+    public int PeriodNumber { get; init; }
+
+    /// <summary>The <c>accountingYear</c> field.</summary>
+    public AccountingYearPeriodAccountingYear? AccountingYear { get; init; }
+
+    /// <summary>The <c>fromDate</c> field.</summary>
+    public DateOnly? FromDate { get; init; }
+
+    /// <summary>The <c>toDate</c> field.</summary>
+    public DateOnly? ToDate { get; init; }
+
+    /// <summary>The <c>closed</c> field.</summary>
+    public bool Closed { get; init; }
+
+    /// <summary>The <c>entries</c> field.</summary>
+    public System.Uri? Entries { get; init; }
+
+    /// <summary>The <c>totals</c> field.</summary>
+    public System.Uri? Totals { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/periods</c> and maps them to <see cref="AccountingYearPeriod"/>.</summary>
+internal sealed class AccountingYearPeriodPageSource(Generated.AccountingYearsClient client, string accountingYear)
+    : IEconomicPageSource<AccountingYearPeriod>
+{
+    public async Task<EconomicPage<AccountingYearPeriod>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountingYearsByaccountingYearPeriodsAsync(
+                accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounting-years/{accountingYear}/periods").ConfigureAwait(false);
+
+        var items = new List<AccountingYearPeriod>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountingYearPeriod>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountingYearPeriod Map(Generated.Period source) => new()
+    {
+        PeriodNumber = source.PeriodNumber,
+        AccountingYear = source.AccountingYear is null ? null : new AccountingYearPeriodAccountingYear
+        {
+            Year = source.AccountingYear.Year,
+            Self = source.AccountingYear.Self,
+        },
+        FromDate = source.FromDate == default ? null : source.FromDate,
+        ToDate = source.ToDate == default ? null : source.ToDate,
+        Closed = source.Closed,
+        Entries = source.Entries,
+        Totals = source.Totals,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounting-years/{accountingYear}/periods</c> collection, scoped to one accountingYear.
+/// </summary>
+public sealed partial class AccountingYearPeriodResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountingYearsClient _client;
+    private readonly string _accountingYear;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountingYear">The owning accountingYear.</param>
+    public AccountingYearPeriodResource(System.Net.Http.HttpClient httpClient, string accountingYear)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountingYearsClient(httpClient);
+        _accountingYear = accountingYear;
+    }
+
+    private EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> Query => new(new AccountingYearPeriodPageSource(_client, _accountingYear));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> Where(System.Linq.Expressions.Expression<System.Func<AccountingYearPeriodFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountingYearPeriodSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountingYearPeriodSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountingYearPeriod, AccountingYearPeriodFilter, AccountingYearPeriodSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountingYearPeriod> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountingYearPeriod>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// A resource from <c>/accounting-years/{accountingYear}/totals</c>.
+/// </summary>
+public sealed record AccountTotal
+{
+    /// <summary>The <c>totalInBaseCurrency</c> field.</summary>
+    public decimal TotalInBaseCurrency { get; init; }
+
+    /// <summary>The <c>account</c> field.</summary>
+    public EconomicReference? Account { get; init; }
+
+    /// <summary>The <c>fromDate</c> field.</summary>
+    public DateOnly? FromDate { get; init; }
+
+    /// <summary>The <c>toDate</c> field.</summary>
+    public DateOnly? ToDate { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/totals</c> and maps them to <see cref="AccountTotal"/>.</summary>
+internal sealed class AccountTotalPageSource(Generated.AccountingYearsClient client, string accountingYear)
+    : IEconomicPageSource<AccountTotal>
+{
+    public async Task<EconomicPage<AccountTotal>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountingYearsByaccountingYearTotalsAsync(
+                accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounting-years/{accountingYear}/totals").ConfigureAwait(false);
+
+        var items = new List<AccountTotal>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountTotal>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountTotal Map(Generated.AccountTotalsEntry source) => new()
+    {
+        TotalInBaseCurrency = (decimal)source.TotalInBaseCurrency,
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        FromDate = source.FromDate == default ? null : source.FromDate,
+        ToDate = source.ToDate == default ? null : source.ToDate,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounting-years/{accountingYear}/totals</c> collection, scoped to one accountingYear.
+/// </summary>
+public sealed partial class AccountTotalResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountingYearsClient _client;
+    private readonly string _accountingYear;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountingYear">The owning accountingYear.</param>
+    public AccountTotalResource(System.Net.Http.HttpClient httpClient, string accountingYear)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountingYearsClient(httpClient);
+        _accountingYear = accountingYear;
+    }
+
+    private EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> Query => new(new AccountTotalPageSource(_client, _accountingYear));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> Where(System.Linq.Expressions.Expression<System.Func<AccountTotalFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountTotalSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountTotalSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountTotal> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountTotal>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// A resource from <c>/customer-groups/{customerGroupNumber}/customers</c>.
+/// </summary>
+public sealed record CustomerGroupCustomer
+{
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>balance</c> field.</summary>
+    public decimal Balance { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>pNumber</c> field.</summary>
+    public string? PNumber { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>creditLimit</c> field.</summary>
+    public decimal CreditLimit { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>customerGroup</c> field.</summary>
+    public EconomicReference? CustomerGroup { get; init; }
+
+    /// <summary>The <c>customerNumber</c> field.</summary>
+    public int CustomerNumber { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public EconomicReference? PaymentTerms { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>telephoneAndFaxNumber</c> field.</summary>
+    public string? TelephoneAndFaxNumber { get; init; }
+
+    /// <summary>The <c>mobilePhone</c> field.</summary>
+    public string? MobilePhone { get; init; }
+
+    /// <summary>The <c>vatNumber</c> field.</summary>
+    public string? VatNumber { get; init; }
+
+    /// <summary>The <c>website</c> field.</summary>
+    public string? Website { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/customer-groups/{customerGroupNumber}/customers</c> and maps them to <see cref="CustomerGroupCustomer"/>.</summary>
+internal sealed class CustomerGroupCustomerPageSource(Generated.CustomerGroupsClient client, int customerGroupNumber)
+    : IEconomicPageSource<CustomerGroupCustomer>
+{
+    public async Task<EconomicPage<CustomerGroupCustomer>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetCustomerGroupsBycustomerGroupNumberCustomersAsync(
+                customerGroupNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /customer-groups/{customerGroupNumber}/customers").ConfigureAwait(false);
+
+        var items = new List<CustomerGroupCustomer>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<CustomerGroupCustomer>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static CustomerGroupCustomer Map(Generated.CustomerGroupsCustomer source) => new()
+    {
+        Barred = source.Barred,
+        Address = source.Address,
+        Balance = (decimal)source.Balance,
+        CorporateIdentificationNumber = source.CorporateIdentificationNumber,
+        PNumber = source.PNumber,
+        City = source.City,
+        Country = source.Country,
+        CreditLimit = (decimal)source.CreditLimit,
+        Currency = source.Currency ?? string.Empty,
+        CustomerGroup = Reference(source.CustomerGroup?.CustomerGroupNumber, source.CustomerGroup?.Self),
+        CustomerNumber = source.CustomerNumber,
+        Ean = source.Ean,
+        Email = source.Email,
+        VatZone = Reference(source.VatZone?.VatZoneNumber, source.VatZone?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Name = source.Name ?? string.Empty,
+        PaymentTerms = Reference(source.PaymentTerms?.PaymentTermsNumber, source.PaymentTerms?.Self),
+        Zip = source.Zip,
+        PublicEntryNumber = source.PublicEntryNumber,
+        TelephoneAndFaxNumber = source.TelephoneAndFaxNumber,
+        MobilePhone = source.MobilePhone,
+        VatNumber = source.VatNumber,
+        Website = source.Website,
+        Attention = Reference(source.Attention?.CustomerContactNumber, source.Attention?.Self),
+        CustomerContact = Reference(source.CustomerContact?.CustomerContactNumber, source.CustomerContact?.Self),
+        SalesPerson = Reference(source.SalesPerson?.EmployeeNumber, source.SalesPerson?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/customer-groups/{customerGroupNumber}/customers</c> collection, scoped to one customerGroup.
+/// </summary>
+public sealed partial class CustomerGroupCustomerResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomerGroupsClient _client;
+    private readonly int _customerGroupNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="customerGroupNumber">The owning customerGroup.</param>
+    public CustomerGroupCustomerResource(System.Net.Http.HttpClient httpClient, int customerGroupNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomerGroupsClient(httpClient);
+        _customerGroupNumber = customerGroupNumber;
+    }
+
+    private EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> Query => new(new CustomerGroupCustomerPageSource(_client, _customerGroupNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerGroupCustomerFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> OrderBy(System.Linq.Expressions.Expression<System.Func<CustomerGroupCustomerSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CustomerGroupCustomerSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<CustomerGroupCustomer, CustomerGroupCustomerFilter, CustomerGroupCustomerSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<CustomerGroupCustomer> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<CustomerGroupCustomer>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
 /// A resource from <c>/customers/{customerNumber}/contacts</c>.
 /// </summary>
 public sealed record CustomerContact
@@ -11386,6 +12173,26 @@ public sealed partial class CustomerContactResource
     /// <param name="predicate">A filter over the filterable properties.</param>
     /// <returns>A query carrying the filter.</returns>
     public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerContactFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> OrderBy(System.Linq.Expressions.Expression<System.Func<CustomerContactSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CustomerContactSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<CustomerContact, CustomerContactFilter, CustomerContactSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
 
     /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
     /// <param name="cancellationToken">Cancels the enumeration.</param>
@@ -11669,6 +12476,26 @@ public sealed partial class DeliveryLocationResource
     /// <returns>A query carrying the filter.</returns>
     public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> Where(System.Linq.Expressions.Expression<System.Func<DeliveryLocationFilter, bool>> predicate) => Query.Where(predicate);
 
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> OrderBy(System.Linq.Expressions.Expression<System.Func<DeliveryLocationSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<DeliveryLocationSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<DeliveryLocation, DeliveryLocationFilter, DeliveryLocationSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
     /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
     /// <param name="cancellationToken">Cancels the enumeration.</param>
     /// <returns>The items.</returns>
@@ -11781,6 +12608,313 @@ public sealed partial class DeliveryLocationResource
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
+/// The <c>customerContact</c> of a <see cref="EmployeeCustomer"/>.
+/// </summary>
+public sealed record EmployeeCustomerCustomerContact
+{
+    /// <summary>The <c>customerContactnumber</c> field.</summary>
+    public int CustomerContactnumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="EmployeeCustomer"/>.
+/// </summary>
+public sealed record EmployeeCustomerTemplates
+{
+    /// <summary>The <c>invoice</c> field.</summary>
+    public System.Uri? Invoice { get; init; }
+
+    /// <summary>The <c>invoiceLine</c> field.</summary>
+    public System.Uri? InvoiceLine { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>totals</c> of a <see cref="EmployeeCustomer"/>.
+/// </summary>
+public sealed record EmployeeCustomerTotals
+{
+    /// <summary>The <c>drafts</c> field.</summary>
+    public System.Uri? Drafts { get; init; }
+
+    /// <summary>The <c>booked</c> field.</summary>
+    public System.Uri? Booked { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>invoices</c> of a <see cref="EmployeeCustomer"/>.
+/// </summary>
+public sealed record EmployeeCustomerInvoices
+{
+    /// <summary>The <c>drafts</c> field.</summary>
+    public System.Uri? Drafts { get; init; }
+
+    /// <summary>The <c>booked</c> field.</summary>
+    public System.Uri? Booked { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/employees/{employeeNumber}/customers</c>.
+/// </summary>
+public sealed record EmployeeCustomer
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>balance</c> field.</summary>
+    public decimal Balance { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>pNumber</c> field.</summary>
+    public string? PNumber { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>creditLimit</c> field.</summary>
+    public decimal CreditLimit { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>customerNumber</c> field.</summary>
+    public int CustomerNumber { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>telephoneAndFaxNumber</c> field.</summary>
+    public string? TelephoneAndFaxNumber { get; init; }
+
+    /// <summary>The <c>mobilePhone</c> field.</summary>
+    public string? MobilePhone { get; init; }
+
+    /// <summary>The <c>vatNumber</c> field.</summary>
+    public string? VatNumber { get; init; }
+
+    /// <summary>The <c>website</c> field.</summary>
+    public string? Website { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>contacts</c> field.</summary>
+    public System.Uri? Contacts { get; init; }
+
+    /// <summary>The <c>deliveryLocations</c> field.</summary>
+    public System.Uri? DeliveryLocations { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EmployeeCustomerCustomerContact? CustomerContact { get; init; }
+
+    /// <summary>The <c>customerGroup</c> field.</summary>
+    public EconomicReference? CustomerGroup { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public EconomicReference? PaymentTerms { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public EmployeeCustomerTemplates? Templates { get; init; }
+
+    /// <summary>The <c>totals</c> field.</summary>
+    public EmployeeCustomerTotals? Totals { get; init; }
+
+    /// <summary>The <c>invoices</c> field.</summary>
+    public EmployeeCustomerInvoices? Invoices { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/employees/{employeeNumber}/customers</c> and maps them to <see cref="EmployeeCustomer"/>.</summary>
+internal sealed class EmployeeCustomerPageSource(Generated.EmployeesClient client, int employeeNumber)
+    : IEconomicPageSource<EmployeeCustomer>
+{
+    public async Task<EconomicPage<EmployeeCustomer>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetEmployeesByemployeeNumberCustomersAsync(
+                employeeNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /employees/{employeeNumber}/customers").ConfigureAwait(false);
+
+        var items = new List<EmployeeCustomer>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<EmployeeCustomer>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static EmployeeCustomer Map(Generated.EmployeesCustomer source) => new()
+    {
+        Address = source.Address,
+        Balance = (decimal)source.Balance,
+        Barred = source.Barred,
+        City = source.City,
+        CorporateIdentificationNumber = source.CorporateIdentificationNumber,
+        PNumber = source.PNumber,
+        Country = source.Country,
+        CreditLimit = (decimal)source.CreditLimit,
+        Currency = source.Currency ?? string.Empty,
+        CustomerNumber = source.CustomerNumber,
+        Ean = source.Ean,
+        Email = source.Email,
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Name = source.Name ?? string.Empty,
+        PublicEntryNumber = source.PublicEntryNumber,
+        TelephoneAndFaxNumber = source.TelephoneAndFaxNumber,
+        MobilePhone = source.MobilePhone,
+        VatNumber = source.VatNumber,
+        Website = source.Website,
+        Zip = source.Zip,
+        Contacts = source.Contacts,
+        DeliveryLocations = source.DeliveryLocations,
+        Attention = Reference(source.Attention?.CustomerContactNumber, source.Attention?.Self),
+        CustomerContact = source.CustomerContact is null ? null : new EmployeeCustomerCustomerContact
+        {
+            CustomerContactnumber = source.CustomerContact.CustomerContactnumber,
+            Self = source.CustomerContact.Self,
+        },
+        CustomerGroup = Reference(source.CustomerGroup?.CustomerGroupNumber, source.CustomerGroup?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        PaymentTerms = Reference(source.PaymentTerms?.PaymentTermsNumber, source.PaymentTerms?.Self),
+        SalesPerson = Reference(source.SalesPerson?.EmployeeNumber, source.SalesPerson?.Self),
+        VatZone = Reference(source.VatZone?.VatZoneNumber, source.VatZone?.Self),
+        Templates = source.Templates is null ? null : new EmployeeCustomerTemplates
+        {
+            Invoice = source.Templates.Invoice,
+            InvoiceLine = source.Templates.InvoiceLine,
+            Self = source.Templates.Self,
+        },
+        Totals = source.Totals is null ? null : new EmployeeCustomerTotals
+        {
+            Drafts = source.Totals.Drafts,
+            Booked = source.Totals.Booked,
+            Self = source.Totals.Self,
+        },
+        Invoices = source.Invoices is null ? null : new EmployeeCustomerInvoices
+        {
+            Drafts = source.Invoices.Drafts,
+            Booked = source.Invoices.Booked,
+            Self = source.Invoices.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/employees/{employeeNumber}/customers</c> collection, scoped to one employee.
+/// </summary>
+public sealed partial class EmployeeCustomerResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.EmployeesClient _client;
+    private readonly int _employeeNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="employeeNumber">The owning employee.</param>
+    public EmployeeCustomerResource(System.Net.Http.HttpClient httpClient, int employeeNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.EmployeesClient(httpClient);
+        _employeeNumber = employeeNumber;
+    }
+
+    private EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> Query => new(new EmployeeCustomerPageSource(_client, _employeeNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> Where(System.Linq.Expressions.Expression<System.Func<EmployeeCustomerFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> OrderBy(System.Linq.Expressions.Expression<System.Func<EmployeeCustomerSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<EmployeeCustomerSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<EmployeeCustomer, EmployeeCustomerFilter, EmployeeCustomerSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<EmployeeCustomer> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<EmployeeCustomer>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 }
 
 /// <summary>
@@ -12085,6 +13219,26 @@ public sealed partial class JournalEntryResource
     /// <param name="predicate">A filter over the filterable properties.</param>
     /// <returns>A query carrying the filter.</returns>
     public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> Where(System.Linq.Expressions.Expression<System.Func<JournalEntryFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> OrderBy(System.Linq.Expressions.Expression<System.Func<JournalEntrySort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<JournalEntrySort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<JournalEntry, JournalEntryFilter, JournalEntrySort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
 
     /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
     /// <param name="cancellationToken">Cancels the enumeration.</param>
@@ -13654,6 +14808,26 @@ public sealed partial class JournalVoucherResource
     /// <returns>A query carrying the filter.</returns>
     public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> Where(System.Linq.Expressions.Expression<System.Func<JournalVoucherFilter, bool>> predicate) => Query.Where(predicate);
 
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> OrderBy(System.Linq.Expressions.Expression<System.Func<JournalVoucherSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<JournalVoucherSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<JournalVoucher, JournalVoucherFilter, JournalVoucherSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
     /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
     /// <param name="cancellationToken">Cancels the enumeration.</param>
     /// <returns>The items.</returns>
@@ -14395,9 +15569,9 @@ namespace EConomic.Rest
         public EconomicQuery<Department, DepartmentFilter, DepartmentSort> Departments =>
             new(new DepartmentPageSource(new Generated.DepartmentsClient(HttpClient)));
 
-        /// <summary><c>/employees</c>, as a composable query.</summary>
-        public EconomicQuery<Employee, EmployeeFilter, EmployeeSort> Employees =>
-            new(new EmployeePageSource(new Generated.EmployeesClient(HttpClient)));
+        /// <summary><c>/employees</c>, as a query plus its nested collections.</summary>
+        public EmployeeResource Employees =>
+            new(HttpClient);
 
         /// <summary><c>/invoices/booked</c>, as a composable query.</summary>
         public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> BookedInvoices =>

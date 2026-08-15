@@ -74,6 +74,12 @@ public static class FilterSurfaceGenerator
         "CustomerGroup.account.debitCredit",
         "CustomerGroup.account.name",
 
+        // The same field on the contact itself, and refused for the same reason: the server's list
+        // for /customers/{n}/contacts is customerContactNumber, name, email, eInvoiceId, phone,
+        // comments and sortKey. Found only once nested collections were swept — they were invisible
+        // to this check until they gained WhereRaw, which is what it recognises a queryable by.
+        "CustomerContact.customer.customerNumber",
+
         // The server filters invoices on customer.customerNumber, but not on the same number
         // reached through the customer contact.
         "BookedInvoice.references.customerContact.customer.customerNumber",
@@ -137,6 +143,8 @@ public static class FilterSurfaceGenerator
         "CustomerGroup.account.blockDirectEntries",
         "CustomerGroup.account.debitCredit",
         "CustomerGroup.account.name",
+
+        "CustomerContact.customer.customerNumber",
 
         "BookedInvoice.references.customerContact.customer.customerNumber",
         "DraftInvoice.references.customerContact.customer.customerNumber",

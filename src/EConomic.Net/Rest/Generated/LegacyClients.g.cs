@@ -1408,7 +1408,7 @@ namespace EConomic.Rest.Generated
         /// <param name="pagesize">Items per page. Defaults to 20, maximum 1000.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AccountsEntriesCollection> GetAccountsByaccountNumberAccountingYearsByaccountingYearEntriesAsync(int accountNumber, string accountingYear, string? filter = null, string? sort = null, int? skippages = null, int? pagesize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AccountingYearsEntriesCollection> GetAccountsByaccountNumberAccountingYearsByaccountingYearEntriesAsync(int accountNumber, string accountingYear, string? filter = null, string? sort = null, int? skippages = null, int? pagesize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (accountNumber == null)
                 throw new System.ArgumentNullException("accountNumber");
@@ -1477,7 +1477,7 @@ namespace EConomic.Rest.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AccountsEntriesCollection>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<AccountingYearsEntriesCollection>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new EconomicGeneratedApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -18133,7 +18133,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier for reminders and invoices.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("invoiceNumber")]
-        public string InvoiceNumber { get; set; } = default!;
+        public int InvoiceNumber { get; set; } = default!;
 
         /// <summary>
         /// The remainder on the entry.
@@ -18394,7 +18394,7 @@ namespace EConomic.Rest.Generated
         /// Unique identifier for reminders and invoices.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("invoiceNumber")]
-        public string InvoiceNumber { get; set; } = default!;
+        public int InvoiceNumber { get; set; } = default!;
 
         /// <summary>
         /// The remainder on the entry.
@@ -19044,234 +19044,6 @@ namespace EConomic.Rest.Generated
     }
 
     /// <summary>
-    /// A schema for retrieving the entries for a specific accounting years.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class AccountsEntriesCollection
-    {
-
-        /// <summary>
-        /// A collection of entries.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("collection")]
-        public System.Collections.Generic.IReadOnlyList<AccountsEntry> Collection { get; set; } = default!;
-
-        /// <summary>
-        /// Information about possible actions, endpoints and resource paths related to the endpoint.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("metaData")]
-        public object MetaData { get; set; } = default!;
-
-        /// <summary>
-        /// Information about the pagination.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("pagination")]
-        public object Pagination { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the accounting year entries resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    /// <summary>
-    /// A specific entry in the accounting year.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class AccountsEntry
-    {
-
-        /// <summary>
-        /// The account the entry is connected to.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account7 Account { get; set; } = default!;
-
-        /// <summary>
-        /// The total entry amount.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("amount")]
-        public double Amount { get; set; } = default!;
-
-        /// <summary>
-        /// A unique identifier of the supplier invoice.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("supplierInvoiceNumber")]
-        public string SupplierInvoiceNumber { get; set; } = default!;
-
-        /// <summary>
-        /// The total entry amount in base currency.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("amountInBaseCurrency")]
-        public double AmountInBaseCurrency { get; set; } = default!;
-
-        /// <summary>
-        /// The ISO 4217 currency code of the entry.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("currency")]
-        [System.ComponentModel.DataAnnotations.RegularExpression(@"[a-zA-Z]{3}")]
-        public string Currency { get; set; } = default!;
-
-        /// <summary>
-        /// Entry issue date. The date is formatted according to ISO-8601(YYYY-MM-DD).
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("date")]
-        [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly Date { get; set; } = default!;
-
-        /// <summary>
-        /// The date the invoice is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("dueDate")]
-        [System.ComponentModel.DataAnnotations.RegularExpression(@"\d{4}-\d{2}-\d{2}")]
-        public System.DateOnly DueDate { get; set; } = default!;
-
-        /// <summary>
-        /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution5 DepartmentalDistribution { get; set; } = default!;
-
-        /// <summary>
-        /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project3 Project { get; set; } = default!;
-
-        /// <summary>
-        /// The cost type for this entity.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType3 CostType { get; set; } = default!;
-
-        /// <summary>
-        /// The unique identifier of the entry line.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("entryNumber")]
-        public int EntryNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A short description about the entry.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("text")]
-        [System.ComponentModel.DataAnnotations.StringLength(255)]
-        public string Text { get; set; } = default!;
-
-        /// <summary>
-        /// The type of entry.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("entryType")]
-        public AccountsEntryEntryType EntryType { get; set; } = default!;
-
-        /// <summary>
-        /// The account for VAT.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount6 VatAccount { get; set; } = default!;
-
-        /// <summary>
-        /// The customer for this entity.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer4 Customer { get; set; } = default!;
-
-        /// <summary>
-        /// The supplier for this entity.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier4 Supplier { get; set; } = default!;
-
-        /// <summary>
-        /// The first unit of measure applied to the entry. Requires dimension module.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("unit1")]
-        public Unit13 Unit1 { get; set; } = default!;
-
-        /// <summary>
-        /// The second unit of measure applied to the entry. Requires dimension module.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit23 Unit2 { get; set; } = default!;
-
-        /// <summary>
-        /// Requires dimension module.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("quantity1")]
-        public double Quantity1 { get; set; } = default!;
-
-        /// <summary>
-        /// Requires dimension module.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("quantity2")]
-        public double Quantity2 { get; set; } = default!;
-
-        /// <summary>
-        /// The identifier of the voucher this entry belongs to.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("voucherNumber")]
-        public int VoucherNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A refernce to any booked Invoice this entry might be related to.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("bookedInvoice")]
-        public BookedInvoice4 BookedInvoice { get; set; } = default!;
-
-        /// <summary>
-        /// Unique identifier for reminders and invoices.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("invoiceNumber")]
-        public int InvoiceNumber { get; set; } = default!;
-
-        /// <summary>
-        /// The remainder on the entry.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("remainder")]
-        public double Remainder { get; set; } = default!;
-
-        /// <summary>
-        /// The remainder in base currency on the entry.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("remainderInBaseCurrency")]
-        public double RemainderInBaseCurrency { get; set; } = default!;
-
-        /// <summary>
-        /// Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the +71 type, fiSupplierNo and ocrLine is expected. For the +73 type, fiSupplierNo and message is expected. For the +04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the +75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("paymentDetails")]
-        public PaymentDetails3 PaymentDetails { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the entry resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    /// <summary>
     /// A specific period in the accounting year.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -19650,7 +19422,7 @@ namespace EConomic.Rest.Generated
         /// The account used by the accruals.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account8 Account { get; set; } = default!;
+        public Account7 Account { get; set; } = default!;
 
         /// <summary>
         /// The unique self reference of the customers belonging to this customer group.
@@ -19707,7 +19479,7 @@ namespace EConomic.Rest.Generated
         /// The account used by the accruals.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account9 Account { get; set; } = default!;
+        public Account8 Account { get; set; } = default!;
 
         /// <summary>
         /// The default layout used by the customer group.
@@ -19750,7 +19522,7 @@ namespace EConomic.Rest.Generated
         /// The account used by the accruals.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account10 Account { get; set; } = default!;
+        public Account9 Account { get; set; } = default!;
 
         /// <summary>
         /// The default layout used by the customer group.
@@ -20141,7 +19913,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer5 Customer { get; set; } = default!;
+        public Customer4 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -20189,7 +19961,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project4 Project { get; set; } = default!;
+        public Project3 Project { get; set; } = default!;
 
         /// <summary>
         /// The unique self reference of the booked invoice.
@@ -20864,7 +20636,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer6 Customer { get; set; } = default!;
+        public Customer5 Customer { get; set; } = default!;
 
         /// <summary>
         /// The customer contact number displayed in the e-conomic web interface.
@@ -20955,7 +20727,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer7 Customer { get; set; } = default!;
+        public Customer6 Customer { get; set; } = default!;
 
         /// <summary>
         /// Sort key shows a per agreement index in the UI.
@@ -21035,7 +20807,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer8 Customer { get; set; } = default!;
+        public Customer7 Customer { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -21107,7 +20879,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer9 Customer { get; set; } = default!;
+        public Customer8 Customer { get; set; } = default!;
 
         /// <summary>
         /// The unique self reference of the customer contact.
@@ -21791,7 +21563,7 @@ namespace EConomic.Rest.Generated
         /// The customer this delivery location belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer10 Customer { get; set; } = default!;
+        public Customer9 Customer { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -21947,7 +21719,7 @@ namespace EConomic.Rest.Generated
         /// The customer this delivery location belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer11 Customer { get; set; } = default!;
+        public Customer10 Customer { get; set; } = default!;
 
         /// <summary>
         /// The unique self reference of the delivery location resource.
@@ -22057,7 +21829,7 @@ namespace EConomic.Rest.Generated
         /// The customer this delivery location belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer12 Customer { get; set; } = default!;
+        public Customer11 Customer { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -22172,7 +21944,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer13 Customer { get; set; } = default!;
+        public Customer12 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -22356,7 +22128,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer14 Customer { get; set; } = default!;
+        public Customer13 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -23381,7 +23153,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer15 Customer { get; set; } = default!;
+        public Customer14 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -23429,7 +23201,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project5 Project { get; set; } = default!;
+        public Project4 Project { get; set; } = default!;
 
         /// <summary>
         /// An array containing the specific invoice lines.
@@ -23837,7 +23609,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer16 Customer { get; set; } = default!;
+        public Customer15 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -23873,7 +23645,7 @@ namespace EConomic.Rest.Generated
         /// The project the invoice is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project6 Project { get; set; } = default!;
+        public Project5 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the invoice was updated. The date is formatted according to ISO-8601.
@@ -24082,7 +23854,7 @@ namespace EConomic.Rest.Generated
         /// The project the invoice is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project7 Project { get; set; } = default!;
+        public Project6 Project { get; set; } = default!;
 
         /// <summary>
         /// The terms of payment for the invoice.
@@ -24096,7 +23868,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
         [System.ComponentModel.DataAnnotations.Required]
-        public Customer17 Customer { get; set; } = new Customer17();
+        public Customer16 Customer { get; set; } = new Customer16();
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -24294,7 +24066,7 @@ namespace EConomic.Rest.Generated
         /// A reference to the customer.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer18 Customer { get; set; } = default!;
+        public Customer17 Customer { get; set; } = default!;
 
         /// <summary>
         /// A reference to the draft invoices totals accounting years resource.
@@ -24669,7 +24441,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer19 Customer { get; set; } = default!;
+        public Customer18 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -24706,7 +24478,7 @@ namespace EConomic.Rest.Generated
         /// The project the invoice is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project8 Project { get; set; } = default!;
+        public Project7 Project { get; set; } = default!;
 
         /// <summary>
         /// References a pdf representation of this invoice.
@@ -24986,7 +24758,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer20 Customer { get; set; } = default!;
+        public Customer19 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -25034,7 +24806,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project9 Project { get; set; } = default!;
+        public Project8 Project { get; set; } = default!;
 
         /// <summary>
         /// A convenience link to see if the invoice has been sent or not.
@@ -25146,7 +24918,7 @@ namespace EConomic.Rest.Generated
         /// A reference to the customer.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer21 Customer { get; set; } = default!;
+        public Customer20 Customer { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -25261,7 +25033,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer22 Customer { get; set; } = default!;
+        public Customer21 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -25297,7 +25069,7 @@ namespace EConomic.Rest.Generated
         /// The project the invoice is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project10 Project { get; set; } = default!;
+        public Project9 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the invoice was updated. The date is formatted according to ISO-8601.
@@ -25661,7 +25433,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer23 Customer { get; set; } = default!;
+        public Customer22 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -25709,7 +25481,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project11 Project { get; set; } = default!;
+        public Project10 Project { get; set; } = default!;
 
         /// <summary>
         /// A convenience link to see if the invoice has been sent or not.
@@ -25900,7 +25672,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer24 Customer { get; set; } = default!;
+        public Customer23 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -25948,7 +25720,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project12 Project { get; set; } = default!;
+        public Project11 Project { get; set; } = default!;
 
         /// <summary>
         /// A convenience link to see if the invoice has been sent or not.
@@ -26214,7 +25986,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer25 Customer { get; set; } = default!;
+        public Customer24 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -26262,7 +26034,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project13 Project { get; set; } = default!;
+        public Project12 Project { get; set; } = default!;
 
         /// <summary>
         /// A convenience link to see if the invoice has been sent or not.
@@ -26483,7 +26255,7 @@ namespace EConomic.Rest.Generated
         /// The customer being invoiced.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer26 Customer { get; set; } = default!;
+        public Customer25 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the invoice. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the invoice may be ACME IT.
@@ -26531,7 +26303,7 @@ namespace EConomic.Rest.Generated
         /// A reference to any project this entry might be related to. This requires the projects module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project14 Project { get; set; } = default!;
+        public Project13 Project { get; set; } = default!;
 
         /// <summary>
         /// A convenience link to see if the invoice has been sent or not.
@@ -26641,7 +26413,7 @@ namespace EConomic.Rest.Generated
         /// The account used by the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account11 Account { get; set; } = default!;
+        public Account10 Account { get; set; } = default!;
 
         /// <summary>
         /// Templates allowing easy entry creation, its existance depends on the type of the entry.
@@ -26659,7 +26431,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer27 Customer { get; set; } = default!;
+        public Customer26 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -26672,7 +26444,7 @@ namespace EConomic.Rest.Generated
         /// The supplier this entry is based on.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier5 Supplier { get; set; } = default!;
+        public Supplier4 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -26685,7 +26457,7 @@ namespace EConomic.Rest.Generated
         /// Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the +71 type, fiSupplierNo and ocrLine is expected. For the +73 type, fiSupplierNo and message is expected. For the +04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the +75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentDetails")]
-        public PaymentDetails4 PaymentDetails { get; set; } = default!;
+        public PaymentDetails3 PaymentDetails { get; set; } = default!;
 
         /// <summary>
         /// The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
@@ -26731,7 +26503,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType4 CostType { get; set; } = default!;
+        public CostType3 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -26750,7 +26522,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution6 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution5 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -26780,7 +26552,7 @@ namespace EConomic.Rest.Generated
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project15 Project { get; set; } = default!;
+        public Project14 Project { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
@@ -26822,13 +26594,13 @@ namespace EConomic.Rest.Generated
         /// The first unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit1")]
-        public Unit14 Unit1 { get; set; } = default!;
+        public Unit13 Unit1 { get; set; } = default!;
 
         /// <summary>
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit24 Unit2 { get; set; } = default!;
+        public Unit23 Unit2 { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the entry.
@@ -27106,7 +26878,7 @@ namespace EConomic.Rest.Generated
         /// Specific customer
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer28 Customer { get; set; } = default!;
+        public Customer27 Customer { get; set; } = default!;
 
         /// <summary>
         /// Information about possible actions, endpoints and resource paths related to the endpoint.
@@ -27192,7 +26964,7 @@ namespace EConomic.Rest.Generated
         /// The account used by the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account12 Account { get; set; } = default!;
+        public Account11 Account { get; set; } = default!;
 
         /// <summary>
         /// Templates allowing easy entry creation, its existance depends on the type of the entry.
@@ -27210,7 +26982,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer29 Customer { get; set; } = default!;
+        public Customer28 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -27223,7 +26995,7 @@ namespace EConomic.Rest.Generated
         /// The supplier this entry is based on.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier6 Supplier { get; set; } = default!;
+        public Supplier5 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -27236,7 +27008,7 @@ namespace EConomic.Rest.Generated
         /// Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the +71 type, fiSupplierNo and ocrLine is expected. For the +73 type, fiSupplierNo and message is expected. For the +04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the +75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentDetails")]
-        public PaymentDetails5 PaymentDetails { get; set; } = default!;
+        public PaymentDetails4 PaymentDetails { get; set; } = default!;
 
         /// <summary>
         /// The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
@@ -27282,7 +27054,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType5 CostType { get; set; } = default!;
+        public CostType4 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -27301,7 +27073,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution7 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution6 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -27331,7 +27103,7 @@ namespace EConomic.Rest.Generated
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project16 Project { get; set; } = default!;
+        public Project15 Project { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry on the contra account in base currency.
@@ -27373,13 +27145,13 @@ namespace EConomic.Rest.Generated
         /// The first unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit1")]
-        public Unit15 Unit1 { get; set; } = default!;
+        public Unit14 Unit1 { get; set; } = default!;
 
         /// <summary>
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit25 Unit2 { get; set; } = default!;
+        public Unit24 Unit2 { get; set; } = default!;
 
         /// <summary>
         /// A unique link reference to the entry.
@@ -27797,7 +27569,7 @@ namespace EConomic.Rest.Generated
         /// The customer being orderd.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer30 Customer { get; set; } = default!;
+        public Customer29 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -27833,7 +27605,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project17 Project { get; set; } = default!;
+        public Project16 Project { get; set; } = default!;
 
         /// <summary>
         /// References to a pdf representation of this order.
@@ -28010,7 +27782,7 @@ namespace EConomic.Rest.Generated
         /// The customer being orderd.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer31 Customer { get; set; } = default!;
+        public Customer30 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -28046,7 +27818,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project18 Project { get; set; } = default!;
+        public Project17 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the order was updated. The date is formatted according to ISO-8601.
@@ -28196,7 +27968,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the order.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer32 Customer { get; set; } = default!;
+        public Customer31 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -28233,7 +28005,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project19 Project { get; set; } = default!;
+        public Project18 Project { get; set; } = default!;
 
         /// <summary>
         /// References a pdf representation of this order.
@@ -28403,7 +28175,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project20 Project { get; set; } = default!;
+        public Project19 Project { get; set; } = default!;
 
         /// <summary>
         /// The terms of payment for the order.
@@ -28417,7 +28189,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
         [System.ComponentModel.DataAnnotations.Required]
-        public Customer33 Customer { get; set; } = new Customer33();
+        public Customer32 Customer { get; set; } = new Customer32();
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -28621,7 +28393,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the order.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer34 Customer { get; set; } = default!;
+        public Customer33 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -28657,7 +28429,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project21 Project { get; set; } = default!;
+        public Project20 Project { get; set; } = default!;
 
         /// <summary>
         /// References a pdf representation of this order.
@@ -28812,7 +28584,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the order.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer35 Customer { get; set; } = default!;
+        public Customer34 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -28848,7 +28620,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project22 Project { get; set; } = default!;
+        public Project21 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the order was updated. The date is formatted according to ISO-8601.
@@ -29035,7 +28807,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the order.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer36 Customer { get; set; } = default!;
+        public Customer35 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -29071,7 +28843,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project23 Project { get; set; } = default!;
+        public Project22 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the order was updated. The date is formatted according to ISO-8601.
@@ -29224,7 +28996,7 @@ namespace EConomic.Rest.Generated
         /// The customer being orderd.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer37 Customer { get; set; } = default!;
+        public Customer36 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the order. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the order may be ACME Headquarters, but the recipient of the order may be ACME IT.
@@ -29260,7 +29032,7 @@ namespace EConomic.Rest.Generated
         /// The project the order is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project24 Project { get; set; } = default!;
+        public Project23 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the order was updated. The date is formatted according to ISO-8601.
@@ -30028,7 +29800,7 @@ namespace EConomic.Rest.Generated
         /// The default VAT code for this account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount7 VatAccount { get; set; } = default!;
+        public VatAccount6 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// An array of the account intervals used for calculating the total for this account.
@@ -30248,7 +30020,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution8 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution7 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to this product resource.
@@ -30671,7 +30443,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution9 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution8 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Information about possible actions, endpoints and resource paths related to the endpoint.
@@ -30781,7 +30553,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution10 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution9 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -30878,7 +30650,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution11 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution10 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -30993,7 +30765,7 @@ namespace EConomic.Rest.Generated
         /// The customer being quoted.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer38 Customer { get; set; } = default!;
+        public Customer37 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -31029,7 +30801,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project25 Project { get; set; } = default!;
+        public Project24 Project { get; set; } = default!;
 
         /// <summary>
         /// References to a pdf representation of this quote.
@@ -31206,7 +30978,7 @@ namespace EConomic.Rest.Generated
         /// The customer being quoted.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer39 Customer { get; set; } = default!;
+        public Customer38 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -31242,7 +31014,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project26 Project { get; set; } = default!;
+        public Project25 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the quote was updated. The date is formatted according to ISO-8601.
@@ -31392,7 +31164,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the quote.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer40 Customer { get; set; } = default!;
+        public Customer39 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -31429,7 +31201,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project27 Project { get; set; } = default!;
+        public Project26 Project { get; set; } = default!;
 
         /// <summary>
         /// References a pdf representation of this quote.
@@ -31599,7 +31371,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project28 Project { get; set; } = default!;
+        public Project27 Project { get; set; } = default!;
 
         /// <summary>
         /// The terms of payment for the quote.
@@ -31613,7 +31385,7 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
         [System.ComponentModel.DataAnnotations.Required]
-        public Customer41 Customer { get; set; } = new Customer41();
+        public Customer40 Customer { get; set; } = new Customer40();
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -31817,7 +31589,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the quote.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer42 Customer { get; set; } = default!;
+        public Customer41 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -31853,7 +31625,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project29 Project { get; set; } = default!;
+        public Project28 Project { get; set; } = default!;
 
         /// <summary>
         /// References a pdf representation of this quote.
@@ -32008,7 +31780,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the quote.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer43 Customer { get; set; } = default!;
+        public Customer42 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -32044,7 +31816,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project30 Project { get; set; } = default!;
+        public Project29 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the quote was updated. The date is formatted according to ISO-8601.
@@ -32231,7 +32003,7 @@ namespace EConomic.Rest.Generated
         /// The customer of the quote.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer44 Customer { get; set; } = default!;
+        public Customer43 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -32267,7 +32039,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project31 Project { get; set; } = default!;
+        public Project30 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the quote was updated. The date is formatted according to ISO-8601.
@@ -32420,7 +32192,7 @@ namespace EConomic.Rest.Generated
         /// The customer being quoted.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer45 Customer { get; set; } = default!;
+        public Customer44 Customer { get; set; } = default!;
 
         /// <summary>
         /// The actual recipient of the quote. This may be the same info found on the customer (and will probably be so in most cases) but it may also be a different recipient. For instance, the customer placing the quote may be ACME Headquarters, but the recipient of the quote may be ACME IT.
@@ -32456,7 +32228,7 @@ namespace EConomic.Rest.Generated
         /// The project the quote is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project32 Project { get; set; } = default!;
+        public Project31 Project { get; set; } = default!;
 
         /// <summary>
         /// The last time the quote was updated. The date is formatted according to ISO-8601.
@@ -33830,7 +33602,7 @@ namespace EConomic.Rest.Generated
         /// The account for this vat account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account13 Account { get; set; } = default!;
+        public Account12 Account { get; set; } = default!;
 
         /// <summary>
         /// The contra account for this vat account.
@@ -35325,348 +35097,6 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account7
-    {
-
-        /// <summary>
-        /// A unique identifier of the account.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("accountNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int AccountNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the account resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution5
-    {
-
-        /// <summary>
-        /// A unique identifier of the departmental distribution.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("departmentalDistributionNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int DepartmentalDistributionNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the departmental distribution resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project3
-    {
-
-        /// <summary>
-        /// A unique identifier of the project.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("projectNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int ProjectNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the project resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType3
-    {
-
-        /// <summary>
-        /// The unique identifier of cost type.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("costTypeNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CostTypeNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique link reference to the cost type.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal enum AccountsEntryEntryType
-    {
-
-        [System.Runtime.Serialization.EnumMember(Value = @"customerInvoice")]
-        customerInvoice = 0,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"customerPayment")]
-        customerPayment = 1,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"supplierInvoice")]
-        supplierInvoice = 2,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"supplierPayment")]
-        supplierPayment = 3,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"financeVoucher")]
-        financeVoucher = 4,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"reminder")]
-        reminder = 5,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"openingEntry")]
-        openingEntry = 6,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"transferredOpeningEntry")]
-        transferredOpeningEntry = 7,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"systemEntry")]
-        systemEntry = 8,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"manualDebtorInvoice")]
-        manualDebtorInvoice = 9,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount6
-    {
-
-        /// <summary>
-        /// The unique identifier of the vat account.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("vatCode")]
-        [System.ComponentModel.DataAnnotations.StringLength(5)]
-        public string VatCode { get; set; } = default!;
-
-        /// <summary>
-        /// A unique link reference to the vatAccount item.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer4
-    {
-
-        /// <summary>
-        /// The unique identifier of customer.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
-        public int CustomerNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique link reference to the customer.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier4
-    {
-
-        /// <summary>
-        /// The unique identifier of supplier.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("supplierNumber")]
-        public int SupplierNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique link reference to the supplier.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit13
-    {
-
-        /// <summary>
-        /// The unique identifier of the unit.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
-        [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the unit resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit23
-    {
-
-        /// <summary>
-        /// The unique identifier of the unit.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("unitNumber")]
-        [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
-        public int UnitNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the unit resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class BookedInvoice4
-    {
-
-        /// <summary>
-        /// A unique identifier of the booked invoice.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("bookedInvoiceNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
-        public int BookedInvoiceNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the booked invoice resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentDetails3
-    {
-
-        /// <summary>
-        /// A specific payment type on the entry.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType4 PaymentType { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class AccountingYear4
     {
 
@@ -35825,7 +35255,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account8
+    internal partial class Account7
     {
 
         /// <summary>
@@ -35838,7 +35268,7 @@ namespace EConomic.Rest.Generated
         /// The type of account in the chart of accounts.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("accountType")]
-        public Account8AccountType AccountType { get; set; } = default!;
+        public Account7AccountType AccountType { get; set; } = default!;
 
         /// <summary>
         /// The current balance of the account.
@@ -35856,7 +35286,7 @@ namespace EConomic.Rest.Generated
         /// Describes the default update type of the account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("debitCredit")]
-        public Account8DebitCredit DebitCredit { get; set; } = default!;
+        public Account7DebitCredit DebitCredit { get; set; } = default!;
 
         /// <summary>
         /// The name of the account.
@@ -35931,7 +35361,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account9
+    internal partial class Account8
     {
 
         /// <summary>
@@ -35986,7 +35416,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account10
+    internal partial class Account9
     {
 
         /// <summary>
@@ -36285,7 +35715,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer5
+    internal partial class Customer4
     {
 
         /// <summary>
@@ -36608,7 +36038,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project4
+    internal partial class Project3
     {
 
         /// <summary>
@@ -37307,7 +36737,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer6
+    internal partial class Customer5
     {
 
         /// <summary>
@@ -37354,7 +36784,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer7
+    internal partial class Customer6
     {
 
         /// <summary>
@@ -37401,7 +36831,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer8
+    internal partial class Customer7
     {
 
         /// <summary>
@@ -37447,7 +36877,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer9
+    internal partial class Customer8
     {
 
         /// <summary>
@@ -37868,7 +37298,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer10
+    internal partial class Customer9
     {
 
         /// <summary>
@@ -37954,7 +37384,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer11
+    internal partial class Customer10
     {
 
         /// <summary>
@@ -37983,7 +37413,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer12
+    internal partial class Customer11
     {
 
         /// <summary>
@@ -38060,7 +37490,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer13
+    internal partial class Customer12
     {
 
         /// <summary>
@@ -38442,7 +37872,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer14
+    internal partial class Customer13
     {
 
         /// <summary>
@@ -39117,7 +38547,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer15
+    internal partial class Customer14
     {
 
         /// <summary>
@@ -39439,7 +38869,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project5
+    internal partial class Project4
     {
 
         /// <summary>
@@ -39560,7 +38990,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this invoice line is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution12 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution11 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -39651,7 +39081,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer16
+    internal partial class Customer15
     {
 
         /// <summary>
@@ -39930,7 +39360,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project6
+    internal partial class Project5
     {
 
         /// <summary>
@@ -40121,7 +39551,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution13 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution12 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -40213,7 +39643,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution14 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution13 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -40255,7 +39685,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project7
+    internal partial class Project6
     {
 
         /// <summary>
@@ -40324,7 +39754,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer17
+    internal partial class Customer16
     {
 
         /// <summary>
@@ -40709,7 +40139,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution15 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution14 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -40723,7 +40153,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer18
+    internal partial class Customer17
     {
 
         /// <summary>
@@ -40827,7 +40257,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer19
+    internal partial class Customer18
     {
 
         /// <summary>
@@ -41098,7 +40528,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project8
+    internal partial class Project7
     {
 
         /// <summary>
@@ -41184,7 +40614,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the invoice line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit16 Unit { get; set; } = default!;
+        public Unit15 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the invoice line.
@@ -41232,7 +40662,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution16 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution15 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -41499,7 +40929,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer20
+    internal partial class Customer19
     {
 
         /// <summary>
@@ -41821,7 +41251,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project9
+    internal partial class Project8
     {
 
         /// <summary>
@@ -41850,7 +41280,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer21
+    internal partial class Customer20
     {
 
         /// <summary>
@@ -41927,7 +41357,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer22
+    internal partial class Customer21
     {
 
         /// <summary>
@@ -42206,7 +41636,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project10
+    internal partial class Project9
     {
 
         /// <summary>
@@ -42412,7 +41842,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer23
+    internal partial class Customer22
     {
 
         /// <summary>
@@ -42735,7 +42165,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project11
+    internal partial class Project10
     {
 
         /// <summary>
@@ -42814,7 +42244,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer24
+    internal partial class Customer23
     {
 
         /// <summary>
@@ -43137,7 +42567,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project12
+    internal partial class Project11
     {
 
         /// <summary>
@@ -43216,7 +42646,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer25
+    internal partial class Customer24
     {
 
         /// <summary>
@@ -43539,7 +42969,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project13
+    internal partial class Project12
     {
 
         /// <summary>
@@ -43691,7 +43121,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer26
+    internal partial class Customer25
     {
 
         /// <summary>
@@ -44014,7 +43444,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project14
+    internal partial class Project13
     {
 
         /// <summary>
@@ -44110,7 +43540,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account11
+    internal partial class Account10
     {
 
         /// <summary>
@@ -44207,7 +43637,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer27
+    internal partial class Customer26
     {
 
         /// <summary>
@@ -44236,7 +43666,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier5
+    internal partial class Supplier4
     {
 
         /// <summary>
@@ -44265,14 +43695,14 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentDetails4
+    internal partial class PaymentDetails3
     {
 
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType5 PaymentType { get; set; } = default!;
+        public PaymentType4 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -44344,7 +43774,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType4
+    internal partial class CostType3
     {
 
         /// <summary>
@@ -44400,7 +43830,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution6
+    internal partial class DepartmentalDistribution5
     {
 
         /// <summary>
@@ -44519,7 +43949,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project15
+    internal partial class Project14
     {
 
         /// <summary>
@@ -44546,7 +43976,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit14
+    internal partial class Unit13
     {
 
         /// <summary>
@@ -44574,7 +44004,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit24
+    internal partial class Unit23
     {
 
         /// <summary>
@@ -44871,7 +44301,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer28
+    internal partial class Customer27
     {
 
         /// <summary>
@@ -44900,7 +44330,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account12
+    internal partial class Account11
     {
 
         /// <summary>
@@ -44997,7 +44427,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer29
+    internal partial class Customer28
     {
 
         /// <summary>
@@ -45026,7 +44456,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier6
+    internal partial class Supplier5
     {
 
         /// <summary>
@@ -45055,14 +44485,14 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentDetails5
+    internal partial class PaymentDetails4
     {
 
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType6 PaymentType { get; set; } = default!;
+        public PaymentType5 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -45134,7 +44564,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType5
+    internal partial class CostType4
     {
 
         /// <summary>
@@ -45190,7 +44620,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution7
+    internal partial class DepartmentalDistribution6
     {
 
         /// <summary>
@@ -45309,7 +44739,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project16
+    internal partial class Project15
     {
 
         /// <summary>
@@ -45336,7 +44766,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit15
+    internal partial class Unit14
     {
 
         /// <summary>
@@ -45364,7 +44794,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit25
+    internal partial class Unit24
     {
 
         /// <summary>
@@ -45543,7 +44973,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer30
+    internal partial class Customer29
     {
 
         /// <summary>
@@ -45816,7 +45246,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project17
+    internal partial class Project16
     {
 
         /// <summary>
@@ -45936,7 +45366,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer31
+    internal partial class Customer30
     {
 
         /// <summary>
@@ -46209,7 +45639,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project18
+    internal partial class Project17
     {
 
         /// <summary>
@@ -46356,7 +45786,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer32
+    internal partial class Customer31
     {
 
         /// <summary>
@@ -46626,7 +46056,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project19
+    internal partial class Project18
     {
 
         /// <summary>
@@ -46760,7 +46190,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit17 Unit { get; set; } = default!;
+        public Unit16 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the order line.
@@ -46808,7 +46238,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution17 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution16 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -46850,7 +46280,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project20
+    internal partial class Project19
     {
 
         /// <summary>
@@ -46919,7 +46349,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer33
+    internal partial class Customer32
     {
 
         /// <summary>
@@ -47256,7 +46686,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit18 Unit { get; set; } = default!;
+        public Unit17 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the order line.
@@ -47304,7 +46734,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution18 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution17 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -47367,7 +46797,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer34
+    internal partial class Customer33
     {
 
         /// <summary>
@@ -47640,7 +47070,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project21
+    internal partial class Project20
     {
 
         /// <summary>
@@ -47748,7 +47178,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit19 Unit { get; set; } = default!;
+        public Unit18 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the order line.
@@ -47797,7 +47227,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution19 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution18 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -47888,7 +47318,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer35
+    internal partial class Customer34
     {
 
         /// <summary>
@@ -48167,7 +47597,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project22
+    internal partial class Project21
     {
 
         /// <summary>
@@ -48303,7 +47733,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit20 Unit { get; set; } = default!;
+        public Unit19 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the order line.
@@ -48358,7 +47788,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution20 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution19 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -48421,7 +47851,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer36
+    internal partial class Customer35
     {
 
         /// <summary>
@@ -48694,7 +48124,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project23
+    internal partial class Project22
     {
 
         /// <summary>
@@ -48830,7 +48260,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the order line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit21 Unit { get; set; } = default!;
+        public Unit20 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the order line.
@@ -48879,7 +48309,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution21 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution20 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -48942,7 +48372,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer37
+    internal partial class Customer36
     {
 
         /// <summary>
@@ -49215,7 +48645,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project24
+    internal partial class Project23
     {
 
         /// <summary>
@@ -49842,7 +49272,7 @@ namespace EConomic.Rest.Generated
         /// The default VAT code for this account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount8 VatAccount { get; set; } = default!;
+        public VatAccount7 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// An array of the account intervals used for calculating the total for this account.
@@ -49942,7 +49372,7 @@ namespace EConomic.Rest.Generated
         /// The default VAT code for this account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount9 VatAccount { get; set; } = default!;
+        public VatAccount8 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// An array of the account intervals used for calculating the total for this account.
@@ -50047,7 +49477,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount7
+    internal partial class VatAccount6
     {
 
         /// <summary>
@@ -50349,7 +49779,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution8
+    internal partial class DepartmentalDistribution7
     {
 
         /// <summary>
@@ -50802,7 +50232,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution9
+    internal partial class DepartmentalDistribution8
     {
 
         /// <summary>
@@ -50954,7 +50384,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution10
+    internal partial class DepartmentalDistribution9
     {
 
         /// <summary>
@@ -51105,7 +50535,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution11
+    internal partial class DepartmentalDistribution10
     {
 
         /// <summary>
@@ -51188,7 +50618,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer38
+    internal partial class Customer37
     {
 
         /// <summary>
@@ -51461,7 +50891,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project25
+    internal partial class Project24
     {
 
         /// <summary>
@@ -51581,7 +51011,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer39
+    internal partial class Customer38
     {
 
         /// <summary>
@@ -51854,7 +51284,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project26
+    internal partial class Project25
     {
 
         /// <summary>
@@ -52001,7 +51431,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer40
+    internal partial class Customer39
     {
 
         /// <summary>
@@ -52271,7 +51701,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project27
+    internal partial class Project26
     {
 
         /// <summary>
@@ -52405,7 +51835,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit26 Unit { get; set; } = default!;
+        public Unit21 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the quote line.
@@ -52453,7 +51883,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution22 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution21 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -52495,7 +51925,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project28
+    internal partial class Project27
     {
 
         /// <summary>
@@ -52564,7 +51994,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer41
+    internal partial class Customer40
     {
 
         /// <summary>
@@ -52901,7 +52331,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit27 Unit { get; set; } = default!;
+        public Unit25 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the quote line.
@@ -52949,7 +52379,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution23 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution22 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -53012,7 +52442,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer42
+    internal partial class Customer41
     {
 
         /// <summary>
@@ -53285,7 +52715,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project29
+    internal partial class Project28
     {
 
         /// <summary>
@@ -53393,7 +52823,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit28 Unit { get; set; } = default!;
+        public Unit26 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the quote line.
@@ -53442,7 +52872,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution24 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution23 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -53533,7 +52963,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer43
+    internal partial class Customer42
     {
 
         /// <summary>
@@ -53812,7 +53242,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project30
+    internal partial class Project29
     {
 
         /// <summary>
@@ -53948,7 +53378,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit29 Unit { get; set; } = default!;
+        public Unit27 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the quote line.
@@ -54003,7 +53433,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution25 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution24 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -54066,7 +53496,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer44
+    internal partial class Customer43
     {
 
         /// <summary>
@@ -54339,7 +53769,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project31
+    internal partial class Project30
     {
 
         /// <summary>
@@ -54475,7 +53905,7 @@ namespace EConomic.Rest.Generated
         /// The unit of measure applied to the quote line.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit")]
-        public Unit30 Unit { get; set; } = default!;
+        public Unit28 Unit { get; set; } = default!;
 
         /// <summary>
         /// The product or service offered on the quote line.
@@ -54524,7 +53954,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution26 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution25 DepartmentalDistribution { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -54587,7 +54017,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer45
+    internal partial class Customer44
     {
 
         /// <summary>
@@ -54860,7 +54290,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project32
+    internal partial class Project31
     {
 
         /// <summary>
@@ -55459,7 +54889,7 @@ namespace EConomic.Rest.Generated
         /// The default payment type for the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType7 PaymentType { get; set; } = default!;
+        public PaymentType6 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -55709,7 +55139,7 @@ namespace EConomic.Rest.Generated
         /// The default payment type for the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType8 PaymentType { get; set; } = default!;
+        public PaymentType7 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -55957,7 +55387,7 @@ namespace EConomic.Rest.Generated
         /// The default payment type for the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType9 PaymentType { get; set; } = default!;
+        public PaymentType8 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -56204,7 +55634,7 @@ namespace EConomic.Rest.Generated
         /// The default payment type for the supplier.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType10 PaymentType { get; set; } = default!;
+        public PaymentType9 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -56327,7 +55757,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account13
+    internal partial class Account12
     {
 
         /// <summary>
@@ -56619,31 +56049,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentType4
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal enum Account8AccountType
+    internal enum Account7AccountType
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"profitAndLoss")]
@@ -56670,7 +56076,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal enum Account8DebitCredit
+    internal enum Account7DebitCredit
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"debit")]
@@ -56785,7 +56191,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer46 Customer { get; set; } = default!;
+        public Customer45 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -56967,7 +56373,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer47 Customer { get; set; } = default!;
+        public Customer46 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -57401,7 +56807,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution12
+    internal partial class DepartmentalDistribution11
     {
 
         /// <summary>
@@ -57551,7 +56957,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer48 Customer { get; set; } = default!;
+        public Customer47 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -57745,7 +57151,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution13
+    internal partial class DepartmentalDistribution12
     {
 
         /// <summary>
@@ -57865,7 +57271,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution14
+    internal partial class DepartmentalDistribution13
     {
 
         /// <summary>
@@ -58176,7 +57582,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution15
+    internal partial class DepartmentalDistribution14
     {
 
         /// <summary>
@@ -58431,7 +57837,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit16
+    internal partial class Unit15
     {
 
         /// <summary>
@@ -58494,7 +57900,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution16
+    internal partial class DepartmentalDistribution15
     {
 
         /// <summary>
@@ -58981,7 +58387,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer49 Customer { get; set; } = default!;
+        public Customer48 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -59181,7 +58587,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer50 Customer { get; set; } = default!;
+        public Customer49 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -59351,7 +58757,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer51 Customer { get; set; } = default!;
+        public Customer50 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -59500,7 +58906,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer52 Customer { get; set; } = default!;
+        public Customer51 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -59649,7 +59055,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer53 Customer { get; set; } = default!;
+        public Customer52 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -59798,7 +59204,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer54 Customer { get; set; } = default!;
+        public Customer53 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -59960,7 +59366,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentType5
+    internal partial class PaymentType4
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
@@ -60050,7 +59456,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType6 CostType { get; set; } = default!;
+        public CostType5 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -60069,7 +59475,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution27 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution26 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -60129,19 +59535,19 @@ namespace EConomic.Rest.Generated
         /// The account used by the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account14 Account { get; set; } = default!;
+        public Account13 Account { get; set; } = default!;
 
         /// <summary>
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project33 Project { get; set; } = default!;
+        public Project32 Project { get; set; } = default!;
 
         /// <summary>
         /// The account for VAT.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount10 VatAccount { get; set; } = default!;
+        public VatAccount9 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry. Used if the entry has a VAT account.
@@ -60177,7 +59583,7 @@ namespace EConomic.Rest.Generated
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit210 Unit2 { get; set; } = default!;
+        public Unit29 Unit2 { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -60242,7 +59648,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution28 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution27 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -60302,7 +59708,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer55 Customer { get; set; } = default!;
+        public Customer54 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -60361,7 +59767,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType7 CostType { get; set; } = default!;
+        public CostType6 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -60380,7 +59786,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution29 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution28 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -60440,7 +59846,7 @@ namespace EConomic.Rest.Generated
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier7 Supplier { get; set; } = default!;
+        public Supplier6 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -60453,7 +59859,7 @@ namespace EConomic.Rest.Generated
         /// Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the +71 type, fiSupplierNo and ocrLine is expected. For the +73 type, fiSupplierNo and message is expected. For the +04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the +75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentDetails")]
-        public PaymentDetails6 PaymentDetails { get; set; } = default!;
+        public PaymentDetails5 PaymentDetails { get; set; } = default!;
 
         /// <summary>
         /// The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
@@ -60466,7 +59872,7 @@ namespace EConomic.Rest.Generated
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project34 Project { get; set; } = default!;
+        public Project33 Project { get; set; } = default!;
 
         /// <summary>
         /// Requires dimension module.
@@ -60490,7 +59896,7 @@ namespace EConomic.Rest.Generated
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit211 Unit2 { get; set; } = default!;
+        public Unit210 Unit2 { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -60555,7 +59961,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution30 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution29 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -60615,7 +60021,7 @@ namespace EConomic.Rest.Generated
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier8 Supplier { get; set; } = default!;
+        public Supplier7 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -60687,7 +60093,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution31 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution30 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -60747,7 +60153,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer56 Customer { get; set; } = default!;
+        public Customer55 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -60813,7 +60219,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType8 CostType { get; set; } = default!;
+        public CostType7 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -60833,7 +60239,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution32 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution31 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -60893,19 +60299,19 @@ namespace EConomic.Rest.Generated
         /// The account used by the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account15 Account { get; set; } = default!;
+        public Account14 Account { get; set; } = default!;
 
         /// <summary>
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project35 Project { get; set; } = default!;
+        public Project34 Project { get; set; } = default!;
 
         /// <summary>
         /// The account for VAT.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount11 VatAccount { get; set; } = default!;
+        public VatAccount10 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry. Used if the entry has a VAT account.
@@ -60941,7 +60347,7 @@ namespace EConomic.Rest.Generated
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit212 Unit2 { get; set; } = default!;
+        public Unit211 Unit2 { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -61010,7 +60416,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution33 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution32 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -61070,7 +60476,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer57 Customer { get; set; } = default!;
+        public Customer56 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -61129,7 +60535,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType9 CostType { get; set; } = default!;
+        public CostType8 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -61149,7 +60555,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution34 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution33 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -61209,7 +60615,7 @@ namespace EConomic.Rest.Generated
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier9 Supplier { get; set; } = default!;
+        public Supplier8 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -61222,7 +60628,7 @@ namespace EConomic.Rest.Generated
         /// Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the +71 type, fiSupplierNo and ocrLine is expected. For the +73 type, fiSupplierNo and message is expected. For the +04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the +75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentDetails")]
-        public PaymentDetails7 PaymentDetails { get; set; } = default!;
+        public PaymentDetails6 PaymentDetails { get; set; } = default!;
 
         /// <summary>
         /// The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
@@ -61235,7 +60641,7 @@ namespace EConomic.Rest.Generated
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project36 Project { get; set; } = default!;
+        public Project35 Project { get; set; } = default!;
 
         /// <summary>
         /// Requires dimension module.
@@ -61259,7 +60665,7 @@ namespace EConomic.Rest.Generated
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit213 Unit2 { get; set; } = default!;
+        public Unit212 Unit2 { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -61325,7 +60731,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution35 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution34 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -61385,7 +60791,7 @@ namespace EConomic.Rest.Generated
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier10 Supplier { get; set; } = default!;
+        public Supplier9 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -61458,7 +60864,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution36 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution35 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -61518,7 +60924,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer58 Customer { get; set; } = default!;
+        public Customer57 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -61629,7 +61035,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentType6
+    internal partial class PaymentType5
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
@@ -61719,7 +61125,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType10 CostType { get; set; } = default!;
+        public CostType9 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -61738,7 +61144,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution37 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution36 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -61798,19 +61204,19 @@ namespace EConomic.Rest.Generated
         /// The account used by the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("account")]
-        public Account16 Account { get; set; } = default!;
+        public Account15 Account { get; set; } = default!;
 
         /// <summary>
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project37 Project { get; set; } = default!;
+        public Project36 Project { get; set; } = default!;
 
         /// <summary>
         /// The account for VAT.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount12 VatAccount { get; set; } = default!;
+        public VatAccount11 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// The amount of VAT on the entry. Used if the entry has a VAT account.
@@ -61846,7 +61252,7 @@ namespace EConomic.Rest.Generated
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit214 Unit2 { get; set; } = default!;
+        public Unit213 Unit2 { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -61911,7 +61317,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution38 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution37 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -61971,7 +61377,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer59 Customer { get; set; } = default!;
+        public Customer58 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -62030,7 +61436,7 @@ namespace EConomic.Rest.Generated
         /// The cost type for this entity.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("costType")]
-        public CostType11 CostType { get; set; } = default!;
+        public CostType10 CostType { get; set; } = default!;
 
         /// <summary>
         /// The currency for the entry.
@@ -62049,7 +61455,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution39 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution38 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -62109,7 +61515,7 @@ namespace EConomic.Rest.Generated
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier11 Supplier { get; set; } = default!;
+        public Supplier10 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -62122,7 +61528,7 @@ namespace EConomic.Rest.Generated
         /// Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the +71 type, fiSupplierNo and ocrLine is expected. For the +73 type, fiSupplierNo and message is expected. For the +04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the +75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentDetails")]
-        public PaymentDetails8 PaymentDetails { get; set; } = default!;
+        public PaymentDetails7 PaymentDetails { get; set; } = default!;
 
         /// <summary>
         /// The date the entry is due for payment. Format according to ISO-8601 (YYYY-MM-DD).
@@ -62135,7 +61541,7 @@ namespace EConomic.Rest.Generated
         /// The project the entry is connected to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("project")]
-        public Project38 Project { get; set; } = default!;
+        public Project37 Project { get; set; } = default!;
 
         /// <summary>
         /// Requires dimension module.
@@ -62159,7 +61565,7 @@ namespace EConomic.Rest.Generated
         /// The second unit of measure applied to the entry. Requires dimension module.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("unit2")]
-        public Unit215 Unit2 { get; set; } = default!;
+        public Unit214 Unit2 { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -62224,7 +61630,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution40 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution39 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -62284,7 +61690,7 @@ namespace EConomic.Rest.Generated
         /// The supplier is the vendor from whom you buy your goods. Either 'supplier' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("supplier")]
-        public Supplier12 Supplier { get; set; } = default!;
+        public Supplier11 Supplier { get; set; } = default!;
 
         /// <summary>
         /// The unique identifier of the supplier invoice gotten from the supplier.
@@ -62356,7 +61762,7 @@ namespace EConomic.Rest.Generated
         /// A departmental distribution defines which departments this entry is distributed between. This requires the departments module to be enabled.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("departmentalDistribution")]
-        public DepartmentalDistribution41 DepartmentalDistribution { get; set; } = default!;
+        public DepartmentalDistribution40 DepartmentalDistribution { get; set; } = default!;
 
         /// <summary>
         /// Employee that this entry is related to. Requires Project module
@@ -62416,7 +61822,7 @@ namespace EConomic.Rest.Generated
         /// The customer this entry is based on. Either 'customer' or 'contraAccount' is required.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer60 Customer { get; set; } = default!;
+        public Customer59 Customer { get; set; } = default!;
 
         /// <summary>
         /// Customer invoice number.
@@ -62547,7 +61953,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer61 Customer { get; set; } = default!;
+        public Customer60 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -62750,7 +62156,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer62 Customer { get; set; } = default!;
+        public Customer61 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -62969,7 +62375,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer63 Customer { get; set; } = default!;
+        public Customer62 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -63095,7 +62501,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit17
+    internal partial class Unit16
     {
 
         /// <summary>
@@ -63159,7 +62565,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution17
+    internal partial class DepartmentalDistribution16
     {
 
         /// <summary>
@@ -63414,7 +62820,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit18
+    internal partial class Unit17
     {
 
         /// <summary>
@@ -63470,7 +62876,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution18
+    internal partial class DepartmentalDistribution17
     {
 
         /// <summary>
@@ -63607,7 +63013,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer64 Customer { get; set; } = default!;
+        public Customer63 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -63736,7 +63142,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit19
+    internal partial class Unit18
     {
 
         /// <summary>
@@ -63802,7 +63208,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution19
+    internal partial class DepartmentalDistribution18
     {
 
         /// <summary>
@@ -63958,7 +63364,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer65 Customer { get; set; } = default!;
+        public Customer64 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -64087,7 +63493,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit20
+    internal partial class Unit19
     {
 
         /// <summary>
@@ -64153,7 +63559,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution20
+    internal partial class DepartmentalDistribution19
     {
 
         /// <summary>
@@ -64291,7 +63697,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer66 Customer { get; set; } = default!;
+        public Customer65 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -64420,7 +63826,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit21
+    internal partial class Unit20
     {
 
         /// <summary>
@@ -64486,7 +63892,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution21
+    internal partial class DepartmentalDistribution20
     {
 
         /// <summary>
@@ -64624,7 +64030,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer67 Customer { get; set; } = default!;
+        public Customer66 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -64791,7 +64197,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount8
+    internal partial class VatAccount7
     {
 
         /// <summary>
@@ -64945,7 +64351,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount9
+    internal partial class VatAccount8
     {
 
         /// <summary>
@@ -65150,7 +64556,7 @@ namespace EConomic.Rest.Generated
         /// The default VAT code for this account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount13 VatAccount { get; set; } = default!;
+        public VatAccount12 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// An array of the account intervals used for calculating the total for this account.
@@ -65250,7 +64656,7 @@ namespace EConomic.Rest.Generated
         /// The default VAT code for this account.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("vatAccount")]
-        public VatAccount14 VatAccount { get; set; } = default!;
+        public VatAccount13 VatAccount { get; set; } = default!;
 
         /// <summary>
         /// An array of the account intervals used for calculating the total for this account.
@@ -65391,7 +64797,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer68 Customer { get; set; } = default!;
+        public Customer67 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -65594,7 +65000,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer69 Customer { get; set; } = default!;
+        public Customer68 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -65813,7 +65219,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer70 Customer { get; set; } = default!;
+        public Customer69 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -65939,7 +65345,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit26
+    internal partial class Unit21
     {
 
         /// <summary>
@@ -66003,7 +65409,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution22
+    internal partial class DepartmentalDistribution21
     {
 
         /// <summary>
@@ -66258,7 +65664,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit27
+    internal partial class Unit25
     {
 
         /// <summary>
@@ -66314,7 +65720,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution23
+    internal partial class DepartmentalDistribution22
     {
 
         /// <summary>
@@ -66451,7 +65857,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer71 Customer { get; set; } = default!;
+        public Customer70 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -66580,7 +65986,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit28
+    internal partial class Unit26
     {
 
         /// <summary>
@@ -66646,7 +66052,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution24
+    internal partial class DepartmentalDistribution23
     {
 
         /// <summary>
@@ -66802,7 +66208,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer72 Customer { get; set; } = default!;
+        public Customer71 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -66931,7 +66337,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit29
+    internal partial class Unit27
     {
 
         /// <summary>
@@ -66997,7 +66403,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution25
+    internal partial class DepartmentalDistribution24
     {
 
         /// <summary>
@@ -67135,7 +66541,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer73 Customer { get; set; } = default!;
+        public Customer72 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -67264,7 +66670,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit30
+    internal partial class Unit28
     {
 
         /// <summary>
@@ -67330,7 +66736,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution26
+    internal partial class DepartmentalDistribution25
     {
 
         /// <summary>
@@ -67468,7 +66874,7 @@ namespace EConomic.Rest.Generated
         /// The customer this contact belongs to.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customer")]
-        public Customer74 Customer { get; set; } = default!;
+        public Customer73 Customer { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer contact resource.
@@ -67644,6 +67050,33 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    internal partial class PaymentType6
+    {
+
+        /// <summary>
+        /// Unique number identifying the payment type.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        public int PaymentTypeNumber { get; set; } = default!;
+
+        /// <summary>
+        /// A unique reference to the payment type resource.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        public System.Uri Self { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class PaymentType7
     {
 
@@ -67678,7 +67111,7 @@ namespace EConomic.Rest.Generated
         /// Unique number identifying the payment type.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
-        public int PaymentTypeNumber { get; set; } = default!;
+        public int? PaymentTypeNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the payment type resource.
@@ -67725,19 +67158,21 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentType10
+    internal partial class Customer45
     {
 
         /// <summary>
-        /// Unique number identifying the payment type.
+        /// The customer number is a positive unique numerical identifier with a maximum of 9 digits.
         /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
-        public int? PaymentTypeNumber { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
+        public int CustomerNumber { get; set; } = default!;
 
         /// <summary>
-        /// A unique reference to the payment type resource.
+        /// A unique reference to the customer resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
@@ -67782,35 +67217,6 @@ namespace EConomic.Rest.Generated
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class Customer47
-    {
-
-        /// <summary>
-        /// The customer number is a positive unique numerical identifier with a maximum of 9 digits.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the customer resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer48
     {
 
         /// <summary>
@@ -67908,6 +67314,35 @@ namespace EConomic.Rest.Generated
 
         /// <summary>
         /// A reference to the invoices totals booked unpaid not overdue resource.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    internal partial class Customer48
+    {
+
+        /// <summary>
+        /// The customer id number. The customer id number can be either positive or negative, but it can't be zero.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
+        public int CustomerNumber { get; set; } = default!;
+
+        /// <summary>
+        /// A unique reference to the customer resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -68042,35 +67477,6 @@ namespace EConomic.Rest.Generated
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class Customer53
-    {
-
-        /// <summary>
-        /// The customer id number. The customer id number can be either positive or negative, but it can't be zero.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the customer resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer54
     {
 
         /// <summary>
@@ -68270,7 +67676,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType6
+    internal partial class CostType5
     {
 
         /// <summary>
@@ -68326,7 +67732,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution27
+    internal partial class DepartmentalDistribution26
     {
 
         /// <summary>
@@ -68427,7 +67833,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account14
+    internal partial class Account13
     {
 
         /// <summary>
@@ -68456,7 +67862,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project33
+    internal partial class Project32
     {
 
         /// <summary>
@@ -68485,7 +67891,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount10
+    internal partial class VatAccount9
     {
 
         /// <summary>
@@ -68542,7 +67948,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit210
+    internal partial class Unit29
     {
 
         /// <summary>
@@ -68686,7 +68092,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution28
+    internal partial class DepartmentalDistribution27
     {
 
         /// <summary>
@@ -68787,7 +68193,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer55
+    internal partial class Customer54
     {
 
         /// <summary>
@@ -68903,7 +68309,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType7
+    internal partial class CostType6
     {
 
         /// <summary>
@@ -68959,7 +68365,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution29
+    internal partial class DepartmentalDistribution28
     {
 
         /// <summary>
@@ -69060,7 +68466,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier7
+    internal partial class Supplier6
     {
 
         /// <summary>
@@ -69089,14 +68495,14 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentDetails6
+    internal partial class PaymentDetails5
     {
 
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType11 PaymentType { get; set; } = default!;
+        public PaymentType10 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -69110,7 +68516,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project34
+    internal partial class Project33
     {
 
         /// <summary>
@@ -69167,7 +68573,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit211
+    internal partial class Unit210
     {
 
         /// <summary>
@@ -69311,7 +68717,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution30
+    internal partial class DepartmentalDistribution29
     {
 
         /// <summary>
@@ -69412,7 +68818,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier8
+    internal partial class Supplier7
     {
 
         /// <summary>
@@ -69557,7 +68963,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution31
+    internal partial class DepartmentalDistribution30
     {
 
         /// <summary>
@@ -69658,7 +69064,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer56
+    internal partial class Customer55
     {
 
         /// <summary>
@@ -69771,7 +69177,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType8
+    internal partial class CostType7
     {
 
         /// <summary>
@@ -69826,7 +69232,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution32
+    internal partial class DepartmentalDistribution31
     {
 
         /// <summary>
@@ -69925,7 +69331,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account15
+    internal partial class Account14
     {
 
         /// <summary>
@@ -69953,7 +69359,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project35
+    internal partial class Project34
     {
 
         /// <summary>
@@ -69981,7 +69387,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount11
+    internal partial class VatAccount10
     {
 
         /// <summary>
@@ -70037,7 +69443,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit212
+    internal partial class Unit211
     {
 
         /// <summary>
@@ -70177,7 +69583,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution33
+    internal partial class DepartmentalDistribution32
     {
 
         /// <summary>
@@ -70276,7 +69682,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer57
+    internal partial class Customer56
     {
 
         /// <summary>
@@ -70388,7 +69794,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType9
+    internal partial class CostType8
     {
 
         /// <summary>
@@ -70443,7 +69849,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution34
+    internal partial class DepartmentalDistribution33
     {
 
         /// <summary>
@@ -70542,7 +69948,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier9
+    internal partial class Supplier8
     {
 
         /// <summary>
@@ -70570,14 +69976,14 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentDetails7
+    internal partial class PaymentDetails6
     {
 
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType12 PaymentType { get; set; } = default!;
+        public PaymentType11 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -70591,7 +69997,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project36
+    internal partial class Project35
     {
 
         /// <summary>
@@ -70647,7 +70053,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit213
+    internal partial class Unit212
     {
 
         /// <summary>
@@ -70787,7 +70193,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution35
+    internal partial class DepartmentalDistribution34
     {
 
         /// <summary>
@@ -70886,7 +70292,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier10
+    internal partial class Supplier9
     {
 
         /// <summary>
@@ -71026,7 +70432,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution36
+    internal partial class DepartmentalDistribution35
     {
 
         /// <summary>
@@ -71125,7 +70531,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer58
+    internal partial class Customer57
     {
 
         /// <summary>
@@ -71324,7 +70730,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType10
+    internal partial class CostType9
     {
 
         /// <summary>
@@ -71380,7 +70786,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution37
+    internal partial class DepartmentalDistribution36
     {
 
         /// <summary>
@@ -71481,7 +70887,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Account16
+    internal partial class Account15
     {
 
         /// <summary>
@@ -71510,7 +70916,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project37
+    internal partial class Project36
     {
 
         /// <summary>
@@ -71539,7 +70945,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount12
+    internal partial class VatAccount11
     {
 
         /// <summary>
@@ -71596,7 +71002,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit214
+    internal partial class Unit213
     {
 
         /// <summary>
@@ -71740,7 +71146,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution38
+    internal partial class DepartmentalDistribution37
     {
 
         /// <summary>
@@ -71841,7 +71247,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer59
+    internal partial class Customer58
     {
 
         /// <summary>
@@ -71957,7 +71363,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class CostType11
+    internal partial class CostType10
     {
 
         /// <summary>
@@ -72013,7 +71419,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution39
+    internal partial class DepartmentalDistribution38
     {
 
         /// <summary>
@@ -72114,7 +71520,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier11
+    internal partial class Supplier10
     {
 
         /// <summary>
@@ -72143,14 +71549,14 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentDetails8
+    internal partial class PaymentDetails7
     {
 
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("paymentType")]
-        public PaymentType13 PaymentType { get; set; } = default!;
+        public PaymentType12 PaymentType { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -72164,7 +71570,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Project38
+    internal partial class Project37
     {
 
         /// <summary>
@@ -72221,7 +71627,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Unit215
+    internal partial class Unit214
     {
 
         /// <summary>
@@ -72365,7 +71771,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution40
+    internal partial class DepartmentalDistribution39
     {
 
         /// <summary>
@@ -72466,7 +71872,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Supplier12
+    internal partial class Supplier11
     {
 
         /// <summary>
@@ -72611,7 +72017,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class DepartmentalDistribution41
+    internal partial class DepartmentalDistribution40
     {
 
         /// <summary>
@@ -72712,11 +72118,40 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer60
+    internal partial class Customer59
     {
 
         /// <summary>
         /// The customer number is a positive unique numerical identifier with a maximum of 9 digits.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
+        public int CustomerNumber { get; set; } = default!;
+
+        /// <summary>
+        /// A unique reference to the customer resource.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    internal partial class Customer60
+    {
+
+        /// <summary>
+        /// The customer id number. The customer id number can be either positive or negative, but it can't be zero.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
@@ -72778,13 +72213,12 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
@@ -72807,12 +72241,13 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int? CustomerNumber { get; set; } = default!;
+        public int CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
@@ -72886,35 +72321,6 @@ namespace EConomic.Rest.Generated
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class Customer66
-    {
-
-        /// <summary>
-        /// The customer id number. The customer id number can be either positive or negative, but it can't be zero.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the customer resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer67
     {
 
         /// <summary>
@@ -73122,7 +72528,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount13
+    internal partial class VatAccount12
     {
 
         /// <summary>
@@ -73276,7 +72682,7 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class VatAccount14
+    internal partial class VatAccount13
     {
 
         /// <summary>
@@ -73363,6 +72769,35 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    internal partial class Customer67
+    {
+
+        /// <summary>
+        /// The customer id number. The customer id number can be either positive or negative, but it can't be zero.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
+        public int CustomerNumber { get; set; } = default!;
+
+        /// <summary>
+        /// A unique reference to the customer resource.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class Customer68
     {
 
@@ -73400,13 +72835,12 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
+        public int? CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
@@ -73429,12 +72863,13 @@ namespace EConomic.Rest.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
         [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int? CustomerNumber { get; set; } = default!;
+        public int CustomerNumber { get; set; } = default!;
 
         /// <summary>
         /// A unique reference to the customer resource.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
@@ -73536,22 +72971,17 @@ namespace EConomic.Rest.Generated
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class Customer74
+    internal partial class PaymentType10
     {
 
-        /// <summary>
-        /// The customer id number. The customer id number can be either positive or negative, but it can't be zero.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("customerNumber")]
-        [System.ComponentModel.DataAnnotations.Range(1, 999999999)]
-        public int CustomerNumber { get; set; } = default!;
-
-        /// <summary>
-        /// A unique reference to the customer resource.
-        /// </summary>
-        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Uri Self { get; set; } = default!;
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -73590,30 +73020,6 @@ namespace EConomic.Rest.Generated
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class PaymentType12
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
-
-        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
-
-        [System.Text.Json.Serialization.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class PaymentType13
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
