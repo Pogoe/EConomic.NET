@@ -356,6 +356,25 @@ Write comments that explain *why*, especially where the code works around API be
 contradicts the documentation. Several of the stranger-looking decisions in this repository are
 load-bearing, and a comment is what stops the next person from "simplifying" them back into a bug.
 
+### Static analysis
+
+A `sonar` job in `ci.yml` reports to SonarQube Cloud on every push and pull request. It does not
+gate a merge: it annotates, and the build job is what fails a pull request. Two things about it are
+worth knowing before you change it.
+
+**It measures the hand-written code only.** `sonar.exclusions` covers `**/*.g.cs` and
+`**/Generated/**`, which is 174 504 of the 178 069 lines under `src/` — 98% of it. Excluding it is
+not a way of hiding problems: an issue in generated output is a bug in the generator, so the file
+Sonar would point at is the one place you must not fix it. What is measured is the ~3 600
+hand-written lines plus `tools/`, which is where a review comment can actually be acted on.
+
+**The scan builds with `TreatWarningsAsErrors` off, and only the scan does.** `sonarscanner begin`
+injects `SonarAnalyzer.CSharp` into every project in the build, so under the repository-wide setting
+a Sonar rule would fail the compile before it could ever be reported. The `build` job compiles the
+same solution with warnings as errors on both operating systems, so nothing is relaxed overall.
+
+A scan is skipped for a pull request from a fork, because the token is not exposed to one.
+
 ## Submitting a change
 
 - Include a test for any behaviour change.

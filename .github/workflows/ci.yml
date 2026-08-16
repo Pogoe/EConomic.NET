@@ -65,6 +65,82 @@ jobs:
           name: nupkg
           path: ./artifacts/*
 
+  sonar:
+    name: SonarQube Cloud
+    runs-on: ubuntu-latest
+
+    # The secret is not exposed to a pull request from a fork, so this would fail on a
+    # contributor's PR rather than report anything. Skipped there; `build` still gates the PR.
+    if: >
+      github.event_name != 'pull_request'
+      || github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # blame data, which is what decides Sonar's "new code"
+
+      # The scanner is a Java program regardless of what it analyses.
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Cache the analyser
+        uses: actions/cache@v6
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Install the scanner
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-coverage
+          # dotnet-coverage is invoked as a bare executable, so the tool directory has to be on
+          # PATH for the next step. It is not reliably there on a fresh runner.
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      # begin/build/end has to be one step: `begin` injects MSBuild targets into the *current*
+      # process's environment, and `end` reads what the build wrote to disk between them.
+      - name: Analyse
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet sonarscanner begin \
+            /k:"Pogoe_EConomic.NET" \
+            /o:"pogoe" \
+            /d:sonar.token="$SONAR_TOKEN" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.scanner.skipJreProvisioning=true \
+            /d:sonar.exclusions="**/*.g.cs,**/Generated/**,specs/**" \
+            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+
+          # --no-incremental because the scanner only sees files that actually compile in this
+          # build; a cached one reports a fraction of the code and silently shrinks the results.
+          #
+          # TreatWarningsAsErrors is off for this build alone. `begin` injects SonarAnalyzer.CSharp
+          # into every project, and with the repo-wide setting its rules would become build errors
+          # here — a Sonar rule would break the build before it could ever be reported. The setting
+          # is still enforced as normal by the `build` job, on both operating systems.
+          dotnet build EConomic.Net.slnx \
+            --configuration Release --no-incremental -p:TreatWarningsAsErrors=false
+
+          dotnet-coverage collect \
+            "dotnet test tests/EConomic.Net.Tests --configuration Release --no-build" \
+            -f xml -o coverage.xml
+
+          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
   aot:
     name: Native AOT smoke test
     runs-on: ubuntu-latest
