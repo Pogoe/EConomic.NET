@@ -144,6 +144,220 @@ public sealed class AccountingYearSort
 }
 
 /// <summary>
+/// The properties e-conomic will filter <c>AccountingYearsEntry</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class AccountingYearsEntryFilter
+{
+    /// <summary>Maps to <c>amount</c>.</summary>
+    [EconomicField("amount")]
+    public NumericField<decimal> Amount { get; } = null!;
+
+    /// <summary>Maps to <c>supplierInvoiceNumber</c>.</summary>
+    [EconomicField("supplierInvoiceNumber")]
+    public TextField SupplierInvoiceNumber { get; } = null!;
+
+    /// <summary>Maps to <c>amountInBaseCurrency</c>.</summary>
+    [EconomicField("amountInBaseCurrency")]
+    public NumericField<decimal> AmountInBaseCurrency { get; } = null!;
+
+    /// <summary>Maps to <c>currency</c>.</summary>
+    [EconomicField("currency")]
+    public TextField Currency { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public ComparableField<System.DateOnly> Date { get; } = null!;
+
+    /// <summary>Maps to <c>dueDate</c>.</summary>
+    [EconomicField("dueDate")]
+    public ComparableField<System.DateOnly> DueDate { get; } = null!;
+
+    /// <summary>Maps to <c>costType.costTypeNumber</c>.</summary>
+    [EconomicField("costType.costTypeNumber")]
+    public NumericField<int> CostTypeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>entryNumber</c>.</summary>
+    [EconomicField("entryNumber")]
+    public NumericField<int> EntryNumber { get; } = null!;
+
+    /// <summary>Maps to <c>text</c>.</summary>
+    [EconomicField("text")]
+    public TextField Text { get; } = null!;
+
+    /// <summary>Maps to <c>entryType</c>.</summary>
+    [EconomicField("entryType")]
+    public EqualityField<string> EntryType { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public NumericField<int> CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>supplier.supplierNumber</c>.</summary>
+    [EconomicField("supplier.supplierNumber")]
+    public NumericField<int> SupplierNumber { get; } = null!;
+
+    /// <summary>Maps to <c>unit1.unitNumber</c>.</summary>
+    [EconomicField("unit1.unitNumber")]
+    public NumericField<int> Unit1UnitNumber { get; } = null!;
+
+    /// <summary>Maps to <c>unit2.unitNumber</c>.</summary>
+    [EconomicField("unit2.unitNumber")]
+    public NumericField<int> Unit2UnitNumber { get; } = null!;
+
+    /// <summary>Maps to <c>quantity1</c>.</summary>
+    [EconomicField("quantity1")]
+    public NumericField<decimal> Quantity1 { get; } = null!;
+
+    /// <summary>Maps to <c>quantity2</c>.</summary>
+    [EconomicField("quantity2")]
+    public NumericField<decimal> Quantity2 { get; } = null!;
+
+    /// <summary>Maps to <c>voucherNumber</c>.</summary>
+    [EconomicField("voucherNumber")]
+    public NumericField<int> VoucherNumber { get; } = null!;
+
+    /// <summary>Maps to <c>remainder</c>.</summary>
+    [EconomicField("remainder")]
+    public NumericField<decimal> Remainder { get; } = null!;
+
+    /// <summary>Maps to <c>remainderInBaseCurrency</c>.</summary>
+    [EconomicField("remainderInBaseCurrency")]
+    public NumericField<decimal> RemainderInBaseCurrency { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>AccountingYearsEntry</c> by.
+/// </summary>
+public sealed class AccountingYearsEntrySort
+{
+    /// <summary>Maps to <c>amount</c>.</summary>
+    [EconomicField("amount")]
+    public EconomicSortField Amount { get; } = null!;
+
+    /// <summary>Maps to <c>supplierInvoiceNumber</c>.</summary>
+    [EconomicField("supplierInvoiceNumber")]
+    public EconomicSortField SupplierInvoiceNumber { get; } = null!;
+
+    /// <summary>Maps to <c>amountInBaseCurrency</c>.</summary>
+    [EconomicField("amountInBaseCurrency")]
+    public EconomicSortField AmountInBaseCurrency { get; } = null!;
+
+    /// <summary>Maps to <c>currency</c>.</summary>
+    [EconomicField("currency")]
+    public EconomicSortField Currency { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public EconomicSortField Date { get; } = null!;
+
+    /// <summary>Maps to <c>dueDate</c>.</summary>
+    [EconomicField("dueDate")]
+    public EconomicSortField DueDate { get; } = null!;
+
+    /// <summary>Maps to <c>costType.costTypeNumber</c>.</summary>
+    [EconomicField("costType.costTypeNumber")]
+    public EconomicSortField CostTypeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>entryNumber</c>.</summary>
+    [EconomicField("entryNumber")]
+    public EconomicSortField EntryNumber { get; } = null!;
+
+    /// <summary>Maps to <c>text</c>.</summary>
+    [EconomicField("text")]
+    public EconomicSortField Text { get; } = null!;
+
+    /// <summary>Maps to <c>entryType</c>.</summary>
+    [EconomicField("entryType")]
+    public EconomicSortField EntryType { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public EconomicSortField CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>supplier.supplierNumber</c>.</summary>
+    [EconomicField("supplier.supplierNumber")]
+    public EconomicSortField SupplierNumber { get; } = null!;
+
+    /// <summary>Maps to <c>unit1.unitNumber</c>.</summary>
+    [EconomicField("unit1.unitNumber")]
+    public EconomicSortField Unit1UnitNumber { get; } = null!;
+
+    /// <summary>Maps to <c>unit2.unitNumber</c>.</summary>
+    [EconomicField("unit2.unitNumber")]
+    public EconomicSortField Unit2UnitNumber { get; } = null!;
+
+    /// <summary>Maps to <c>quantity1</c>.</summary>
+    [EconomicField("quantity1")]
+    public EconomicSortField Quantity1 { get; } = null!;
+
+    /// <summary>Maps to <c>quantity2</c>.</summary>
+    [EconomicField("quantity2")]
+    public EconomicSortField Quantity2 { get; } = null!;
+
+    /// <summary>Maps to <c>voucherNumber</c>.</summary>
+    [EconomicField("voucherNumber")]
+    public EconomicSortField VoucherNumber { get; } = null!;
+
+    /// <summary>Maps to <c>remainder</c>.</summary>
+    [EconomicField("remainder")]
+    public EconomicSortField Remainder { get; } = null!;
+
+    /// <summary>Maps to <c>remainderInBaseCurrency</c>.</summary>
+    [EconomicField("remainderInBaseCurrency")]
+    public EconomicSortField RemainderInBaseCurrency { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will filter <c>AccountsPeriod</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class AccountsPeriodFilter
+{
+    /// <summary>Maps to <c>fromDate</c>.</summary>
+    [EconomicField("fromDate")]
+    public ComparableField<System.DateOnly> FromDate { get; } = null!;
+
+    /// <summary>Maps to <c>toDate</c>.</summary>
+    [EconomicField("toDate")]
+    public ComparableField<System.DateOnly> ToDate { get; } = null!;
+
+    /// <summary>Maps to <c>closed</c>.</summary>
+    [EconomicField("closed")]
+    public BooleanField Closed { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>AccountsPeriod</c> by.
+/// </summary>
+public sealed class AccountsPeriodSort
+{
+    /// <summary>Maps to <c>fromDate</c>.</summary>
+    [EconomicField("fromDate")]
+    public EconomicSortField FromDate { get; } = null!;
+
+    /// <summary>Maps to <c>toDate</c>.</summary>
+    [EconomicField("toDate")]
+    public EconomicSortField ToDate { get; } = null!;
+
+    /// <summary>Maps to <c>closed</c>.</summary>
+    [EconomicField("closed")]
+    public EconomicSortField Closed { get; } = null!;
+}
+
+/// <summary>
 /// The properties e-conomic will filter <c>AppRole</c> on, each typed to the
 /// operators it accepts. Anything absent here is not filterable.
 /// </summary>
@@ -1068,6 +1282,225 @@ public sealed class CustomerSort
 }
 
 /// <summary>
+/// The properties e-conomic will filter <c>CustomerBookedInvoice</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class CustomerBookedInvoiceFilter
+{
+    /// <summary>Maps to <c>bookedInvoiceNumber</c>.</summary>
+    [EconomicField("bookedInvoiceNumber")]
+    public NumericField<int> BookedInvoiceNumber { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public ComparableField<System.DateOnly> Date { get; } = null!;
+
+    /// <summary>Maps to <c>currency</c>.</summary>
+    [EconomicField("currency")]
+    public TextField Currency { get; } = null!;
+
+    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
+    [EconomicField("paymentTerms.paymentTermsNumber")]
+    public NumericField<int> PaymentTermsNumber { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public NumericField<int> CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.name</c>.</summary>
+    [EconomicField("recipient.name")]
+    public TextField RecipientName { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.address</c>.</summary>
+    [EconomicField("recipient.address")]
+    public TextField RecipientAddress { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.zip</c>.</summary>
+    [EconomicField("recipient.zip")]
+    public TextField RecipientZip { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.city</c>.</summary>
+    [EconomicField("recipient.city")]
+    public TextField RecipientCity { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.country</c>.</summary>
+    [EconomicField("recipient.country")]
+    public TextField RecipientCountry { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.ean</c>.</summary>
+    [EconomicField("recipient.ean")]
+    public TextField RecipientEan { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.publicEntryNumber</c>.</summary>
+    [EconomicField("recipient.publicEntryNumber")]
+    public TextField RecipientPublicEntryNumber { get; } = null!;
+
+    /// <summary>Maps to <c>deliveryLocation.deliveryLocationNumber</c>.</summary>
+    [EconomicField("deliveryLocation.deliveryLocationNumber")]
+    public NumericField<int> DeliveryLocationNumber { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.address</c>.</summary>
+    [EconomicField("delivery.address")]
+    public TextField DeliveryAddress { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.zip</c>.</summary>
+    [EconomicField("delivery.zip")]
+    public TextField DeliveryZip { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.city</c>.</summary>
+    [EconomicField("delivery.city")]
+    public TextField DeliveryCity { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.country</c>.</summary>
+    [EconomicField("delivery.country")]
+    public TextField DeliveryCountry { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryTerms</c>.</summary>
+    [EconomicField("delivery.deliveryTerms")]
+    public TextField DeliveryTerms { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryDate</c>.</summary>
+    [EconomicField("delivery.deliveryDate")]
+    public ComparableField<System.DateOnly> DeliveryDate { get; } = null!;
+
+    /// <summary>Maps to <c>notes.heading</c>.</summary>
+    [EconomicField("notes.heading")]
+    public TextField NotesHeading { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine1</c>.</summary>
+    [EconomicField("notes.textLine1")]
+    public TextField NotesTextLine1 { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine2</c>.</summary>
+    [EconomicField("notes.textLine2")]
+    public TextField NotesTextLine2 { get; } = null!;
+
+    /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
+    [EconomicField("references.salesPerson.employeeNumber")]
+    public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.vendorReference.employeeNumber</c>.</summary>
+    [EconomicField("references.vendorReference.employeeNumber")]
+    public NumericField<int> ReferencesVendorReferenceEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.other</c>.</summary>
+    [EconomicField("references.other")]
+    public TextField ReferencesOther { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>CustomerBookedInvoice</c> by.
+/// </summary>
+public sealed class CustomerBookedInvoiceSort
+{
+    /// <summary>Maps to <c>bookedInvoiceNumber</c>.</summary>
+    [EconomicField("bookedInvoiceNumber")]
+    public EconomicSortField BookedInvoiceNumber { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public EconomicSortField Date { get; } = null!;
+
+    /// <summary>Maps to <c>currency</c>.</summary>
+    [EconomicField("currency")]
+    public EconomicSortField Currency { get; } = null!;
+
+    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
+    [EconomicField("paymentTerms.paymentTermsNumber")]
+    public EconomicSortField PaymentTermsNumber { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public EconomicSortField CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.name</c>.</summary>
+    [EconomicField("recipient.name")]
+    public EconomicSortField RecipientName { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.address</c>.</summary>
+    [EconomicField("recipient.address")]
+    public EconomicSortField RecipientAddress { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.zip</c>.</summary>
+    [EconomicField("recipient.zip")]
+    public EconomicSortField RecipientZip { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.city</c>.</summary>
+    [EconomicField("recipient.city")]
+    public EconomicSortField RecipientCity { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.country</c>.</summary>
+    [EconomicField("recipient.country")]
+    public EconomicSortField RecipientCountry { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.ean</c>.</summary>
+    [EconomicField("recipient.ean")]
+    public EconomicSortField RecipientEan { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.publicEntryNumber</c>.</summary>
+    [EconomicField("recipient.publicEntryNumber")]
+    public EconomicSortField RecipientPublicEntryNumber { get; } = null!;
+
+    /// <summary>Maps to <c>deliveryLocation.deliveryLocationNumber</c>.</summary>
+    [EconomicField("deliveryLocation.deliveryLocationNumber")]
+    public EconomicSortField DeliveryLocationNumber { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.address</c>.</summary>
+    [EconomicField("delivery.address")]
+    public EconomicSortField DeliveryAddress { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.zip</c>.</summary>
+    [EconomicField("delivery.zip")]
+    public EconomicSortField DeliveryZip { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.city</c>.</summary>
+    [EconomicField("delivery.city")]
+    public EconomicSortField DeliveryCity { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.country</c>.</summary>
+    [EconomicField("delivery.country")]
+    public EconomicSortField DeliveryCountry { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryTerms</c>.</summary>
+    [EconomicField("delivery.deliveryTerms")]
+    public EconomicSortField DeliveryTerms { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryDate</c>.</summary>
+    [EconomicField("delivery.deliveryDate")]
+    public EconomicSortField DeliveryDate { get; } = null!;
+
+    /// <summary>Maps to <c>notes.heading</c>.</summary>
+    [EconomicField("notes.heading")]
+    public EconomicSortField NotesHeading { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine1</c>.</summary>
+    [EconomicField("notes.textLine1")]
+    public EconomicSortField NotesTextLine1 { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine2</c>.</summary>
+    [EconomicField("notes.textLine2")]
+    public EconomicSortField NotesTextLine2 { get; } = null!;
+
+    /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
+    [EconomicField("references.salesPerson.employeeNumber")]
+    public EconomicSortField ReferencesSalesPersonEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.vendorReference.employeeNumber</c>.</summary>
+    [EconomicField("references.vendorReference.employeeNumber")]
+    public EconomicSortField ReferencesVendorReferenceEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.other</c>.</summary>
+    [EconomicField("references.other")]
+    public EconomicSortField ReferencesOther { get; } = null!;
+}
+
+/// <summary>
 /// The properties e-conomic will filter <c>CustomerContact</c> on, each typed to the
 /// operators it accepts. Anything absent here is not filterable.
 /// </summary>
@@ -1132,6 +1565,233 @@ public sealed class CustomerContactSort
     /// <summary>Maps to <c>sortKey</c>.</summary>
     [EconomicField("sortKey")]
     public EconomicSortField SortKey { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will filter <c>CustomerDraftInvoice</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class CustomerDraftInvoiceFilter
+{
+    /// <summary>Maps to <c>draftInvoiceNumber</c>.</summary>
+    [EconomicField("draftInvoiceNumber")]
+    public NumericField<int> DraftInvoiceNumber { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public ComparableField<System.DateOnly> Date { get; } = null!;
+
+    /// <summary>Maps to <c>currency</c>.</summary>
+    [EconomicField("currency")]
+    public TextField Currency { get; } = null!;
+
+    /// <summary>Maps to <c>exchangeRate</c>.</summary>
+    [EconomicField("exchangeRate")]
+    public NumericField<decimal> ExchangeRate { get; } = null!;
+
+    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
+    [EconomicField("paymentTerms.paymentTermsNumber")]
+    public NumericField<int> PaymentTermsNumber { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public NumericField<int> CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.name</c>.</summary>
+    [EconomicField("recipient.name")]
+    public TextField RecipientName { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.address</c>.</summary>
+    [EconomicField("recipient.address")]
+    public TextField RecipientAddress { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.zip</c>.</summary>
+    [EconomicField("recipient.zip")]
+    public TextField RecipientZip { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.city</c>.</summary>
+    [EconomicField("recipient.city")]
+    public TextField RecipientCity { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.country</c>.</summary>
+    [EconomicField("recipient.country")]
+    public TextField RecipientCountry { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.ean</c>.</summary>
+    [EconomicField("recipient.ean")]
+    public TextField RecipientEan { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.publicEntryNumber</c>.</summary>
+    [EconomicField("recipient.publicEntryNumber")]
+    public TextField RecipientPublicEntryNumber { get; } = null!;
+
+    /// <summary>Maps to <c>deliveryLocation.deliveryLocationNumber</c>.</summary>
+    [EconomicField("deliveryLocation.deliveryLocationNumber")]
+    public NumericField<int> DeliveryLocationNumber { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.address</c>.</summary>
+    [EconomicField("delivery.address")]
+    public TextField DeliveryAddress { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.zip</c>.</summary>
+    [EconomicField("delivery.zip")]
+    public TextField DeliveryZip { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.city</c>.</summary>
+    [EconomicField("delivery.city")]
+    public TextField DeliveryCity { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.country</c>.</summary>
+    [EconomicField("delivery.country")]
+    public TextField DeliveryCountry { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryTerms</c>.</summary>
+    [EconomicField("delivery.deliveryTerms")]
+    public TextField DeliveryTerms { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryDate</c>.</summary>
+    [EconomicField("delivery.deliveryDate")]
+    public ComparableField<System.DateOnly> DeliveryDate { get; } = null!;
+
+    /// <summary>Maps to <c>notes.heading</c>.</summary>
+    [EconomicField("notes.heading")]
+    public TextField NotesHeading { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine1</c>.</summary>
+    [EconomicField("notes.textLine1")]
+    public TextField NotesTextLine1 { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine2</c>.</summary>
+    [EconomicField("notes.textLine2")]
+    public TextField NotesTextLine2 { get; } = null!;
+
+    /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
+    [EconomicField("references.salesPerson.employeeNumber")]
+    public NumericField<int> ReferencesSalesPersonEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.vendorReference.employeeNumber</c>.</summary>
+    [EconomicField("references.vendorReference.employeeNumber")]
+    public NumericField<int> ReferencesVendorReferenceEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.other</c>.</summary>
+    [EconomicField("references.other")]
+    public TextField ReferencesOther { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>CustomerDraftInvoice</c> by.
+/// </summary>
+public sealed class CustomerDraftInvoiceSort
+{
+    /// <summary>Maps to <c>draftInvoiceNumber</c>.</summary>
+    [EconomicField("draftInvoiceNumber")]
+    public EconomicSortField DraftInvoiceNumber { get; } = null!;
+
+    /// <summary>Maps to <c>date</c>.</summary>
+    [EconomicField("date")]
+    public EconomicSortField Date { get; } = null!;
+
+    /// <summary>Maps to <c>currency</c>.</summary>
+    [EconomicField("currency")]
+    public EconomicSortField Currency { get; } = null!;
+
+    /// <summary>Maps to <c>exchangeRate</c>.</summary>
+    [EconomicField("exchangeRate")]
+    public EconomicSortField ExchangeRate { get; } = null!;
+
+    /// <summary>Maps to <c>paymentTerms.paymentTermsNumber</c>.</summary>
+    [EconomicField("paymentTerms.paymentTermsNumber")]
+    public EconomicSortField PaymentTermsNumber { get; } = null!;
+
+    /// <summary>Maps to <c>customer.customerNumber</c>.</summary>
+    [EconomicField("customer.customerNumber")]
+    public EconomicSortField CustomerNumber { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.name</c>.</summary>
+    [EconomicField("recipient.name")]
+    public EconomicSortField RecipientName { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.address</c>.</summary>
+    [EconomicField("recipient.address")]
+    public EconomicSortField RecipientAddress { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.zip</c>.</summary>
+    [EconomicField("recipient.zip")]
+    public EconomicSortField RecipientZip { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.city</c>.</summary>
+    [EconomicField("recipient.city")]
+    public EconomicSortField RecipientCity { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.country</c>.</summary>
+    [EconomicField("recipient.country")]
+    public EconomicSortField RecipientCountry { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.ean</c>.</summary>
+    [EconomicField("recipient.ean")]
+    public EconomicSortField RecipientEan { get; } = null!;
+
+    /// <summary>Maps to <c>recipient.publicEntryNumber</c>.</summary>
+    [EconomicField("recipient.publicEntryNumber")]
+    public EconomicSortField RecipientPublicEntryNumber { get; } = null!;
+
+    /// <summary>Maps to <c>deliveryLocation.deliveryLocationNumber</c>.</summary>
+    [EconomicField("deliveryLocation.deliveryLocationNumber")]
+    public EconomicSortField DeliveryLocationNumber { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.address</c>.</summary>
+    [EconomicField("delivery.address")]
+    public EconomicSortField DeliveryAddress { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.zip</c>.</summary>
+    [EconomicField("delivery.zip")]
+    public EconomicSortField DeliveryZip { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.city</c>.</summary>
+    [EconomicField("delivery.city")]
+    public EconomicSortField DeliveryCity { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.country</c>.</summary>
+    [EconomicField("delivery.country")]
+    public EconomicSortField DeliveryCountry { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryTerms</c>.</summary>
+    [EconomicField("delivery.deliveryTerms")]
+    public EconomicSortField DeliveryTerms { get; } = null!;
+
+    /// <summary>Maps to <c>delivery.deliveryDate</c>.</summary>
+    [EconomicField("delivery.deliveryDate")]
+    public EconomicSortField DeliveryDate { get; } = null!;
+
+    /// <summary>Maps to <c>notes.heading</c>.</summary>
+    [EconomicField("notes.heading")]
+    public EconomicSortField NotesHeading { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine1</c>.</summary>
+    [EconomicField("notes.textLine1")]
+    public EconomicSortField NotesTextLine1 { get; } = null!;
+
+    /// <summary>Maps to <c>notes.textLine2</c>.</summary>
+    [EconomicField("notes.textLine2")]
+    public EconomicSortField NotesTextLine2 { get; } = null!;
+
+    /// <summary>Maps to <c>references.salesPerson.employeeNumber</c>.</summary>
+    [EconomicField("references.salesPerson.employeeNumber")]
+    public EconomicSortField ReferencesSalesPersonEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.vendorReference.employeeNumber</c>.</summary>
+    [EconomicField("references.vendorReference.employeeNumber")]
+    public EconomicSortField ReferencesVendorReferenceEmployeeNumber { get; } = null!;
+
+    /// <summary>Maps to <c>references.other</c>.</summary>
+    [EconomicField("references.other")]
+    public EconomicSortField ReferencesOther { get; } = null!;
 }
 
 /// <summary>
@@ -1467,6 +2127,37 @@ public sealed class DepartmentalDistributionSummarySort
     /// <summary>Maps to <c>name</c>.</summary>
     [EconomicField("name")]
     public EconomicSortField Name { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will filter <c>DraftInvoiceLineTemplate</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class DraftInvoiceLineTemplateFilter
+{
+    /// <summary>Maps to <c>description</c>.</summary>
+    [EconomicField("description")]
+    public TextField Description { get; } = null!;
+
+    /// <summary>Maps to <c>product.productNumber</c>.</summary>
+    [EconomicField("product.productNumber")]
+    public TextField ProductNumber { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>DraftInvoiceLineTemplate</c> by.
+/// </summary>
+public sealed class DraftInvoiceLineTemplateSort
+{
+    /// <summary>Maps to <c>product.productNumber</c>.</summary>
+    [EconomicField("product.productNumber")]
+    public EconomicSortField ProductNumber { get; } = null!;
 }
 
 /// <summary>
@@ -2754,6 +3445,27 @@ public sealed class JournalEntrySort
 }
 
 /// <summary>
+/// The properties e-conomic will filter <c>JournalsCustomer</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class JournalsCustomerFilter
+{
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>JournalsCustomer</c> by.
+/// </summary>
+public sealed class JournalsCustomerSort
+{
+}
+
+/// <summary>
 /// The properties e-conomic will filter <c>Layout</c> on, each typed to the
 /// operators it accepts. Anything absent here is not filterable.
 /// </summary>
@@ -3650,6 +4362,49 @@ public sealed class ProductGroupFilter
 /// </summary>
 public sealed class ProductGroupSort
 {
+}
+
+/// <summary>
+/// The properties e-conomic will filter <c>ProductPrice</c> on, each typed to the
+/// operators it accepts. Anything absent here is not filterable.
+/// </summary>
+/// <remarks>
+/// Operator sets are inferred from each property's type: the legacy schemas record only
+/// whether a property is filterable, not which operators it accepts. The inference errs
+/// toward fewer operators, so it can under-report but will not produce a request the
+/// server rejects.
+/// </remarks>
+public sealed class ProductPriceFilter
+{
+    /// <summary>Maps to <c>price</c>.</summary>
+    [EconomicField("price")]
+    public NumericField<decimal> Price { get; } = null!;
+
+    /// <summary>Maps to <c>product.productNumber</c>.</summary>
+    [EconomicField("product.productNumber")]
+    public TextField ProductNumber { get; } = null!;
+
+    /// <summary>Maps to <c>currency.code</c>.</summary>
+    [EconomicField("currency.code")]
+    public TextField CurrencyCode { get; } = null!;
+}
+
+/// <summary>
+/// The properties e-conomic will sort <c>ProductPrice</c> by.
+/// </summary>
+public sealed class ProductPriceSort
+{
+    /// <summary>Maps to <c>price</c>.</summary>
+    [EconomicField("price")]
+    public EconomicSortField Price { get; } = null!;
+
+    /// <summary>Maps to <c>product.productNumber</c>.</summary>
+    [EconomicField("product.productNumber")]
+    public EconomicSortField ProductNumber { get; } = null!;
+
+    /// <summary>Maps to <c>currency.code</c>.</summary>
+    [EconomicField("currency.code")]
+    public EconomicSortField CurrencyCode { get; } = null!;
 }
 
 /// <summary>

@@ -114,13 +114,30 @@ public sealed record FacadeWrite(
     string KeyProperty,
     bool SupportsDelete);
 
+/// <summary>The single-resource <c>GET</c> a collection publishes, when it has one.</summary>
+/// <param name="Path">The URL path, e.g. <c>/customers/{customerNumber}</c>.</param>
+/// <param name="Entity">The component name of the response, which is often not the collection's.</param>
+/// <param name="Method">The generated NSwag method that fetches it.</param>
+/// <param name="KeyName">C# parameter name for the identifier.</param>
+/// <param name="KeyType">C# type of that identifier.</param>
+public sealed record FacadeSingle(
+    string Path,
+    string Entity,
+    string Method,
+    string KeyName,
+    string KeyType);
+
 /// <summary>A collection that hangs off another resource, such as a customer's contacts.</summary>
+/// <param name="Name">C# parameter name, e.g. <c>customerNumber</c>.</param>
+/// <param name="Type">C# type, <c>int</c> or <c>string</c>.</param>
+public sealed record FacadeParentKey(string Name, string Type);
+
 /// <param name="Path">The URL path, e.g. <c>/customers/{customerNumber}/contacts</c>.</param>
 /// <param name="ParentEntity">The owning entity, e.g. <c>Customer</c>.</param>
-/// <param name="ParentKeyName">C# parameter name for the parent's identifier.</param>
-/// <param name="ParentKeyType">C# type of the parent's identifier.</param>
-/// <param name="ParentCollection">The parent's collection segment, e.g. <c>customers</c>.</param>
-/// <param name="Collection">This collection's segment, e.g. <c>contacts</c>.</param>
+/// <param name="ParentKeys">
+/// The identifiers scoping the collection, in path order. Usually one; an account's entries within
+/// a period of an accounting year take three.
+/// </param>
 /// <param name="Entity">The component name of the item type.</param>
 /// <param name="ClientClass">The generated NSwag client class.</param>
 /// <param name="ListMethod">The generated method that fetches the collection.</param>
@@ -130,16 +147,44 @@ public sealed record FacadeWrite(
 public sealed record FacadeNested(
     string Path,
     string ParentEntity,
-    string ParentKeyName,
-    string ParentKeyType,
-    string ParentCollection,
-    string Collection,
+    IReadOnlyList<FacadeParentKey> ParentKeys,
     string Entity,
     string ClientClass,
     string ListMethod,
     string AccessorName,
     FacadeWrite? Write,
-    string PublicName);
+    string PublicName)
+{
+    /// <summary>
+    /// The name of the resource and page-source classes, which is the entity's unless two paths
+    /// answer with the same entity.
+    /// </summary>
+    /// <remarks>
+    /// Three collections answer with an accounting year's entries — reached through the year, and
+    /// through an account, and through an account's period — and one class cannot carry three
+    /// constructors taking different identifiers. The model stays shared; only the classes scoping
+    /// it are qualified.
+    /// </remarks>
+    public string ResourceName { get; init; } = PublicName;
+
+    /// <summary>The parent keys as a C# parameter list, e.g. <c>int accountNumber, string year</c>.</summary>
+    public string Parameters => string.Join(", ", ParentKeys.Select(k => $"{k.Type} {k.Name}"));
+
+    /// <summary>The parent keys as arguments, e.g. <c>accountNumber, year</c>.</summary>
+    public string Arguments => string.Join(", ", ParentKeys.Select(k => k.Name));
+
+    /// <summary>The parent keys as the fields they are stored in, e.g. <c>_accountNumber, _year</c>.</summary>
+    public string Fields => string.Join(", ", ParentKeys.Select(k => $"_{k.Name}"));
+
+    /// <summary>
+    /// The path as an interpolated string over those fields, for the deletes that have to be issued
+    /// directly because <c>DELETE</c> publishes no schema and so generates no method.
+    /// </summary>
+    public string UrlTemplate =>
+        ParentKeys.Aggregate(
+            Path.Trim('/'),
+            (path, key) => path.Replace($"{{{key.Name}}}", $"{{_{key.Name}}}", StringComparison.Ordinal));
+}
 
 /// <summary>
 /// Generates the public models, transports and client properties for whole resources.
@@ -268,17 +313,20 @@ public static class FacadeGenerator
                 : null;
 
             var children = nested.Where(n => n.ParentEntity == resource.Entity).ToList();
+            var single = SingleFor(document, resource);
 
-            if (write is not null || children.Count > 0)
+            if (write is not null || children.Count > 0 || single is not null)
             {
                 withResourceType.Add(resource.Entity);
-                AppendResource(builder, resource, write, properties, schemas, children, skipped);
+                AppendResource(builder, resource, write, properties, schemas, children, single, skipped);
             }
         }
 
+        var modelled = new HashSet<string>(StringComparer.Ordinal);
+
         foreach (var child in nested)
         {
-            AppendNested(builder, child, schemas, skipped);
+            AppendNested(builder, child, schemas, modelled.Add(child.PublicName), skipped);
         }
 
         builder.AppendLine("}");
@@ -739,10 +787,68 @@ public static class FacadeGenerator
         IReadOnlyList<FacadeProperty> readProperties,
         JsonObject schemas,
         IReadOnlyList<FacadeNested> children,
+        FacadeSingle? single,
         IList<string> skipped)
     {
         var entity = resource.PublicName;
         var collection = resource.Path.Trim('/');
+
+        // The single resource is published as its own type only when its mapped shape differs from
+        // the collection's. Most do not: e-conomic titles them separately and they carry the same
+        // properties plus a `metaData` link bundle, which the facade drops anyway, so reusing the
+        // collection type avoids some twenty-five public records identical to ones already emitted.
+        // Where the shapes really differ the difference is the point — a draft invoice's `lines` are
+        // served here and nowhere else — so a distinct record is emitted and named `…Details`.
+        List<FacadeProperty>? singleProperties = null;
+        var singleTypes = new List<FacadeNestedType>();
+        var singleTypeName = entity;
+
+        if (single is not null)
+        {
+            // Mapped under the collection's own name first, so the two are directly comparable —
+            // and compared on the whole mapping, not on names and types. Those agree while the
+            // shapes differ: a supplier's `attention` is a reference in the listing and an object
+            // here, a journal's settings lose their contra accounts, and a product's inventory
+            // loses a timestamp. Every one of those produces a different assignment, and nothing
+            // shallower catches all three.
+            var probeTypes = new List<FacadeNestedType>();
+            var probeSkipped = new List<string>();
+            var probe = MapProperties(
+                schemas[single.Entity]!.AsObject(), entity, single.Entity,
+                schemas, probeSkipped, probeTypes);
+
+            static IEnumerable<string> Shape(IEnumerable<FacadeProperty> properties) =>
+                properties
+                    .Select(p => $"{p.Name} {p.PublicType} {p.Mapping}")
+                    .OrderBy(s => s, StringComparer.Ordinal);
+
+            if (Shape(probe).SequenceEqual(Shape(readProperties), StringComparer.Ordinal))
+            {
+                // Every assignment is identical to the collection's, so every nested record it
+                // names has already been emitted and the collection's own type serves.
+                singleProperties = probe;
+            }
+            else
+            {
+                singleProperties = MapProperties(
+                    schemas[single.Entity]!.AsObject(), $"{entity}Details", single.Entity,
+                    schemas, skipped, singleTypes);
+
+                singleTypeName = $"{entity}Details";
+                AppendNestedTypes(builder, singleTypes);
+                builder.AppendLine();
+                builder.AppendLine("/// <summary>");
+                builder.AppendLine($"/// A single resource from <c>{single.Path}</c>.");
+                builder.AppendLine("/// </summary>");
+                builder.AppendLine("/// <remarks>");
+                builder.AppendLine(
+                    $"/// Distinct from <see cref=\"{entity}\"/> because e-conomic serves a different shape here");
+                builder.AppendLine("/// than in the collection. Fetching one is the only way to read the properties");
+                builder.AppendLine("/// the listing leaves out.");
+                builder.AppendLine("/// </remarks>");
+                AppendRecord(builder, singleTypeName, singleProperties);
+            }
+        }
 
         // Both writes return the whole resource — WriteResponseCorrector points their responses at
         // the read entity — so the response always carries the identifier and `self`, whatever the
@@ -849,6 +955,34 @@ public static class FacadeGenerator
         builder.AppendLine("    /// <returns>The page.</returns>");
         builder.AppendLine($"    public System.Threading.Tasks.Task<EconomicPage<{entity}>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);");
 
+        if (single is not null)
+        {
+            builder.AppendLine();
+            builder.AppendLine($"    /// <summary>Fetches one {Camel(entity)} by its identifier.</summary>");
+            builder.AppendLine($"    /// <param name=\"{single.KeyName}\">The one to fetch.</param>");
+            builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
+            builder.AppendLine("    /// <returns>The item.</returns>");
+
+            if (!ReferenceEquals(singleTypeName, entity) && singleTypeName != entity)
+            {
+                builder.AppendLine("    /// <remarks>");
+                builder.AppendLine(
+                    $"    /// Answers a <see cref=\"{singleTypeName}\"/> rather than a <see cref=\"{entity}\"/>: e-conomic");
+                builder.AppendLine("    /// serves more here than the listing does.");
+                builder.AppendLine("    /// </remarks>");
+            }
+
+            builder.AppendLine(
+                $"    public async System.Threading.Tasks.Task<{singleTypeName}> GetAsync({single.KeyType} {single.KeyName}, System.Threading.CancellationToken cancellationToken = default)");
+            builder.AppendLine("    {");
+            builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
+            builder.AppendLine($"            () => _client.{single.Method}({single.KeyName}, cancellationToken),");
+            builder.AppendLine($"            \"GET {single.Path}\").ConfigureAwait(false);");
+            builder.AppendLine();
+            builder.AppendLine("        return FromSingle(response);");
+            builder.AppendLine("    }");
+        }
+
         if (canCreate)
         {
             builder.AppendLine();
@@ -932,12 +1066,17 @@ public static class FacadeGenerator
         foreach (var child in children)
         {
             builder.AppendLine();
-            builder.AppendLine($"    /// <summary>The <c>{child.Collection}</c> belonging to one {Camel(entity)}.</summary>");
-            builder.AppendLine($"    /// <param name=\"{child.ParentKeyName}\">The owning {Camel(entity)}.</param>");
-            builder.AppendLine($"    /// <returns>The nested collection, scoped to that {Camel(entity)}.</returns>");
+            builder.AppendLine($"    /// <summary><c>{child.Path}</c>, scoped to one {Camel(entity)}.</summary>");
+
+            foreach (var key in child.ParentKeys)
+            {
+                builder.AppendLine($"    /// <param name=\"{key.Name}\">Scopes the collection.</param>");
+            }
+
+            builder.AppendLine("    /// <returns>The nested collection, scoped to those identifiers.</returns>");
             builder.AppendLine(
-                $"    public {child.PublicName}Resource {child.AccessorName}({child.ParentKeyType} {child.ParentKeyName}) =>");
-            builder.AppendLine($"        new(_httpClient, {child.ParentKeyName});");
+                $"    public {child.ResourceName}Resource {child.AccessorName}({child.Parameters}) =>");
+            builder.AppendLine($"        new(_httpClient, {child.Arguments});");
         }
 
         // One mapper serves both writes: each returns the whole resource, so the response is the
@@ -955,6 +1094,27 @@ public static class FacadeGenerator
             }
 
             builder.AppendLine("    };");
+        }
+
+        if (singleProperties is not null)
+        {
+            builder.AppendLine();
+            builder.AppendLine(
+                $"    private static {singleTypeName} FromSingle(Generated.{single!.Entity} source) => new()");
+            builder.AppendLine("    {");
+
+            foreach (var property in singleProperties)
+            {
+                builder.AppendLine($"        {property.Name} = {property.Mapping},");
+            }
+
+            builder.AppendLine("    };");
+        }
+
+        // One helper serves every mapper on the resource, so it is emitted once and only when
+        // something references it. An unused private method would not survive the analyzers.
+        if (write is not null || singleProperties is not null)
+        {
             builder.AppendLine();
             builder.AppendLine("    private static EconomicReference? Reference(int? number, System.Uri? self) =>");
             builder.AppendLine("        number is { } value ? new EconomicReference(value, self) : null;");
@@ -967,28 +1127,35 @@ public static class FacadeGenerator
         StringBuilder builder,
         FacadeNested nested,
         JsonObject schemas,
+        bool emitModel,
         IList<string> skipped)
     {
         var entity = nested.PublicName;
+        var resourceName = nested.ResourceName;
         var write = nested.Write;
         var nestedTypes = new List<FacadeNestedType>();
         var properties = MapProperties(
-            schemas[nested.Entity]!.AsObject(), entity, nested.Entity, schemas, skipped, nestedTypes);
+            schemas[nested.Entity]!.AsObject(), entity, nested.Entity, schemas,
+            emitModel ? skipped : [], nestedTypes);
 
-        AppendNestedTypes(builder, nestedTypes);
+        // The model is per entity, the classes scoping it are per path: three collections answer
+        // with an accounting year's entries and there is only one record to describe them.
+        if (emitModel)
+        {
+            AppendNestedTypes(builder, nestedTypes);
 
-        // The model, mirroring a top-level one.
-        builder.AppendLine();
-        builder.AppendLine("/// <summary>");
-        builder.AppendLine($"/// A resource from <c>{nested.Path}</c>.");
-        builder.AppendLine("/// </summary>");
-        AppendRecord(builder, entity, properties);
+            builder.AppendLine();
+            builder.AppendLine("/// <summary>");
+            builder.AppendLine($"/// A resource from <c>{nested.Path}</c>.");
+            builder.AppendLine("/// </summary>");
+            AppendRecord(builder, entity, properties);
+        }
 
         // The page source, which differs from a top-level one only by carrying the parent's key.
         builder.AppendLine();
         builder.AppendLine($"/// <summary>Fetches pages of <c>{nested.Path}</c> and maps them to <see cref=\"{entity}\"/>.</summary>");
         builder.AppendLine(
-            $"internal sealed class {entity}PageSource(Generated.{nested.ClientClass} client, {nested.ParentKeyType} {nested.ParentKeyName})");
+            $"internal sealed class {resourceName}PageSource(Generated.{nested.ClientClass} client, {nested.Parameters})");
         builder.AppendLine($"    : IEconomicPageSource<{entity}>");
         builder.AppendLine("{");
         builder.AppendLine($"    public async Task<EconomicPage<{entity}>> GetPageAsync(");
@@ -997,7 +1164,7 @@ public static class FacadeGenerator
         builder.AppendLine("    {");
         builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
         builder.AppendLine($"            () => client.{nested.ListMethod}(");
-        builder.AppendLine($"                {nested.ParentKeyName}, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),");
+        builder.AppendLine($"                {nested.Arguments}, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),");
         builder.AppendLine($"            \"GET {nested.Path}\").ConfigureAwait(false);");
         builder.AppendLine();
         builder.AppendLine($"        var items = new List<{entity}>(response.Collection?.Count ?? 0);");
@@ -1055,26 +1222,41 @@ public static class FacadeGenerator
         builder.AppendLine("/// <summary>");
         builder.AppendLine($"/// The <c>{nested.Path}</c> collection, scoped to one {Camel(nested.ParentEntity)}.");
         builder.AppendLine("/// </summary>");
-        builder.AppendLine($"public sealed partial class {entity}Resource");
+        builder.AppendLine($"public sealed partial class {resourceName}Resource");
         builder.AppendLine("{");
         builder.AppendLine("    private readonly System.Net.Http.HttpClient _httpClient;");
         builder.AppendLine($"    private readonly Generated.{nested.ClientClass} _client;");
-        builder.AppendLine($"    private readonly {nested.ParentKeyType} _{nested.ParentKeyName};");
+
+        foreach (var key in nested.ParentKeys)
+        {
+            builder.AppendLine($"    private readonly {key.Type} _{key.Name};");
+        }
+
         builder.AppendLine();
         builder.AppendLine("    /// <summary>Creates the resource over a configured transport.</summary>");
         builder.AppendLine("    /// <param name=\"httpClient\">A client carrying the base address and authentication.</param>");
-        builder.AppendLine($"    /// <param name=\"{nested.ParentKeyName}\">The owning {Camel(nested.ParentEntity)}.</param>");
-        builder.AppendLine($"    public {entity}Resource(System.Net.Http.HttpClient httpClient, {nested.ParentKeyType} {nested.ParentKeyName})");
+
+        foreach (var key in nested.ParentKeys)
+        {
+            builder.AppendLine($"    /// <param name=\"{key.Name}\">Scopes the collection.</param>");
+        }
+
+        builder.AppendLine($"    public {resourceName}Resource(System.Net.Http.HttpClient httpClient, {nested.Parameters})");
         builder.AppendLine("    {");
         builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(httpClient);");
         builder.AppendLine("        _httpClient = httpClient;");
         builder.AppendLine($"        _client = new Generated.{nested.ClientClass}(httpClient);");
-        builder.AppendLine($"        _{nested.ParentKeyName} = {nested.ParentKeyName};");
+
+        foreach (var key in nested.ParentKeys)
+        {
+            builder.AppendLine($"        _{key.Name} = {key.Name};");
+        }
+
         builder.AppendLine("    }");
         builder.AppendLine();
 
         var queryType = $"EconomicQuery<{entity}, {entity}Filter, {entity}Sort>";
-        builder.AppendLine($"    private {queryType} Query => new(new {entity}PageSource(_client, _{nested.ParentKeyName}));");
+        builder.AppendLine($"    private {queryType} Query => new(new {resourceName}PageSource(_client, {nested.Fields}));");
         builder.AppendLine();
         builder.AppendLine("    /// <summary>The collection as an unfiltered, unsorted query.</summary>");
         builder.AppendLine("    /// <returns>A query over every item.</returns>");
@@ -1150,7 +1332,7 @@ public static class FacadeGenerator
             builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(item);");
             builder.AppendLine();
             builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
-            builder.AppendLine($"            () => _client.{write!.CreateMethod}(_{nested.ParentKeyName}, ToGenerated(item), cancellationToken),");
+            builder.AppendLine($"            () => _client.{write!.CreateMethod}({nested.Fields}, ToGenerated(item), cancellationToken),");
             builder.AppendLine($"            \"POST {nested.Path}\").ConfigureAwait(false);");
             builder.AppendLine();
             builder.AppendLine(createReturnsCollection
@@ -1173,7 +1355,7 @@ public static class FacadeGenerator
             builder.AppendLine("        System.ArgumentNullException.ThrowIfNull(item);");
             builder.AppendLine();
             builder.AppendLine("        var response = await FacadeTransport.SendAsync(");
-            builder.AppendLine($"            () => _client.{write.UpdateMethod}(_{nested.ParentKeyName}, {write.KeyName}, ToGenerated(item, {write.KeyName}), cancellationToken),");
+            builder.AppendLine($"            () => _client.{write.UpdateMethod}({nested.Fields}, {write.KeyName}, ToGenerated(item, {write.KeyName}), cancellationToken),");
             builder.AppendLine($"            \"PUT {nested.Path}/{{{write.KeyName}}}\").ConfigureAwait(false);");
             builder.AppendLine();
             builder.AppendLine("        return FromGenerated(response);");
@@ -1192,7 +1374,7 @@ public static class FacadeGenerator
             builder.AppendLine("            _httpClient,");
             builder.AppendLine(
                 $"            string.Create(System.Globalization.CultureInfo.InvariantCulture, "
-                + $"$\"{nested.ParentCollection}/{{_{nested.ParentKeyName}}}/{nested.Collection}/{{{write.KeyName}}}\"),");
+                + $"$\"{nested.UrlTemplate}/{{{write.KeyName}}}\"),");
             builder.AppendLine("            cancellationToken);");
         }
 
@@ -1231,6 +1413,28 @@ public static class FacadeGenerator
         builder.AppendLine("}");
     }
 
+    /// <summary>
+    /// Accessor names for the nested collections whose last path segment is a poor method name.
+    /// </summary>
+    /// <remarks>
+    /// The last segment serves for most of them — <c>contacts</c> is <c>Contacts</c>. It stops
+    /// serving where the collection sits under a grouping segment: <c>/customers/{n}/invoices/booked</c>
+    /// would be <c>Booked</c>, which says nothing about what is booked, and
+    /// <c>/products/{n}/pricing/currency-specific-sales-prices</c> would drop the pricing context
+    /// or keep it and read like a sentence. Named here rather than by a rule, because the rule
+    /// would have to encode which segment is a grouping and e-conomic is not consistent about it.
+    /// An entry matching no path fails the run.
+    /// </remarks>
+    public static IReadOnlyDictionary<string, string> AccessorNames { get; } =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["/customers/{customerNumber}/invoices/booked"] = "BookedInvoices",
+            ["/customers/{customerNumber}/invoices/drafts"] = "DraftInvoices",
+            ["/customers/{customerNumber}/templates/invoiceline"] = "InvoiceLineTemplates",
+            ["/journals/{journalNumber}/templates/manualCustomerInvoice"] = "ManualCustomerInvoiceTemplates",
+            ["/products/{productNumber}/pricing/currency-specific-sales-prices"] = "CurrencySpecificSalesPrices",
+        };
+
     /// <summary>Finds the collections that hang off another resource.</summary>
     /// <param name="document">The merged OpenAPI document.</param>
     /// <param name="resources">The top-level resources already discovered.</param>
@@ -1256,11 +1460,38 @@ public static class FacadeGenerator
         {
             var segments = path.Trim('/').Split('/');
 
-            if (segments.Length != 3
-                || !segments[1].StartsWith('{')
-                || segments[2].StartsWith('{')
-                || item?["get"] is not JsonObject get
-                || !byCollection.TryGetValue(segments[0], out var parent))
+            // The collection itself must not be a path parameter — that is a single resource — and
+            // there has to be at least one parameter above it for it to hang from.
+            if (segments.Length < 3
+                || segments[^1].StartsWith('{')
+                || !segments.Any(s => s.StartsWith('{'))
+                || item?["get"] is not JsonObject get)
+            {
+                continue;
+            }
+
+            // The parent is the longest published collection that ends where the first parameter
+            // begins. That is a prefix rather than a single segment, because a collection can live
+            // under one — /invoices/drafts is a resource in its own right, and its lines hang off
+            // it exactly as a customer's contacts hang off /customers.
+            FacadeResource? parent = null;
+            var parentDepth = 0;
+
+            for (var i = 1; i < segments.Length; i++)
+            {
+                if (!segments[i].StartsWith('{'))
+                {
+                    continue;
+                }
+
+                if (byCollection.TryGetValue(string.Join('/', segments[..i]), out var candidate))
+                {
+                    parent = candidate;
+                    parentDepth = i;
+                }
+            }
+
+            if (parent is null)
             {
                 continue;
             }
@@ -1295,24 +1526,98 @@ public static class FacadeGenerator
             // most needs: /accounting-years/{y}/entries is how a period is reconciled.
             var write = NestedWriteFor(paths, path, entity);
 
-            var parentKey = segments[1].Trim('{', '}');
-            var parentKeyType = get["parameters"]?[0]?["schema"]?["type"]?.GetValue<string>() == "string"
-                ? "string"
-                : "int";
+            // Every parameter above the collection scopes it, in path order, and their types come
+            // from the operation's own parameter list rather than from the names — the same list
+            // NSwag generates the method signature from, so the two cannot drift apart.
+            var declared = get["parameters"]?.AsArray()
+                .Where(p => p?["in"]?.GetValue<string>() == "path")
+                .ToDictionary(
+                    p => p!["name"]!.GetValue<string>(),
+                    p => p!["schema"]?["type"]?.GetValue<string>() == "string" ? "string" : "int",
+                    StringComparer.Ordinal)
+                ?? [];
+
+            var parentKeys = segments
+                .Where(s => s.StartsWith('{'))
+                .Select(s => s.Trim('{', '}'))
+                .Select(name => new FacadeParentKey(name, declared.GetValueOrDefault(name, "int")))
+                .ToList();
+
+            // A composite key packs two parameters into one segment, as a journal voucher does.
+            // Nothing here expresses that, and guessing at the separator would be worse than
+            // leaving the collection out.
+            if (segments.Any(s => s.Count(c => c == '{') > 1))
+            {
+                continue;
+            }
 
             nested.Add(new FacadeNested(
                 path,
                 parent.Entity,
-                parentKey,
-                parentKeyType,
-                segments[0],
-                segments[2],
+                parentKeys,
                 entity,
                 parent.ClientClass,
                 MethodName(get),
-                SchemaRegistry.Identifier(segments[2]),
+                AccessorNames.TryGetValue(path, out var accessor)
+                    ? accessor
+                    : SchemaRegistry.Identifier(segments[^1]),
                 write,
                 SchemaRegistry.PublicName(entity)));
+        }
+
+        // Qualify the classes of any entity two paths answer with. The parent plus the literal
+        // segments below its identifier is what distinguishes them, and it is derived rather than
+        // curated because the paths already say it: an account's entries and an account's period's
+        // entries differ by exactly the segment that separates them.
+        var shared = nested
+            .GroupBy(n => n.PublicName, StringComparer.Ordinal)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToHashSet(StringComparer.Ordinal);
+
+        for (var i = 0; i < nested.Count; i++)
+        {
+            if (!shared.Contains(nested[i].PublicName))
+            {
+                continue;
+            }
+
+            var below = nested[i].Path.Trim('/').Split('/');
+            var literals = below
+                .Skip(Array.FindIndex(below, s => s.StartsWith('{')) + 1)
+                .Where(s => !s.StartsWith('{'))
+                .Select(SchemaRegistry.Identifier);
+
+            nested[i] = nested[i] with
+            {
+                ResourceName = SchemaRegistry.PublicName(nested[i].ParentEntity) + string.Concat(literals),
+            };
+        }
+
+        var collisions = nested
+            .GroupBy(n => n.ResourceName, StringComparer.Ordinal)
+            .Where(g => g.Count() > 1)
+            .ToList();
+
+        if (collisions.Count > 0)
+        {
+            throw new InvalidOperationException(
+                "Two nested collections would emit the same resource class: "
+                + string.Join("; ", collisions.Select(g => $"{g.Key} <- {string.Join(", ", g.Select(n => n.Path))}")));
+        }
+
+        // Every correction describes a path the naming rule handles badly. One that matches nothing
+        // is describing a specification that has changed, and this is the only moment anyone sees it.
+        var unused = AccessorNames.Keys
+            .Except(nested.Select(n => n.Path), StringComparer.Ordinal)
+            .OrderBy(p => p, StringComparer.Ordinal)
+            .ToList();
+
+        if (unused.Count > 0)
+        {
+            throw new InvalidOperationException(
+                $"These paths have a curated accessor name but are not nested collections any more: "
+                + $"{string.Join(", ", unused)}. Remove them from {nameof(AccessorNames)}.");
         }
 
         return nested;
@@ -1368,6 +1673,58 @@ public static class FacadeGenerator
             keyType,
             keyProperty,
             canDelete);
+    }
+
+    /// <summary>
+    /// Finds the single-resource <c>GET</c> a collection publishes, when it has one.
+    /// </summary>
+    /// <param name="document">The merged OpenAPI document.</param>
+    /// <param name="resource">The resource.</param>
+    /// <returns>The single <c>GET</c>, or <see langword="null"/> when the resource publishes none.</returns>
+    /// <remarks>
+    /// e-conomic serves the single resource from a different schema than the collection, and the two
+    /// disagree in both directions: a customer gains only a <c>metaData</c> link bundle, an account
+    /// loses <c>department</c>, and a draft invoice gains its <c>lines</c>. Which of those matters is
+    /// decided from the mapped shapes rather than from the titles — see <see cref="AppendResource"/>.
+    /// </remarks>
+    public static FacadeSingle? SingleFor(JsonObject document, FacadeResource resource)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+        ArgumentNullException.ThrowIfNull(resource);
+
+        var paths = document["paths"]!.AsObject();
+
+        foreach (var (path, item) in paths.OrderBy(p => p.Key, StringComparer.Ordinal))
+        {
+            // Exactly one segment below the collection, and that segment is the identifier: two
+            // slashes for /customers, three for /invoices/drafts.
+            if (!path.StartsWith(resource.Path + "/", StringComparison.Ordinal)
+                || path.Count(c => c == '/') != resource.Path.Count(c => c == '/') + 1
+                || !path.EndsWith('}')
+                || item?["get"] is not JsonObject get
+                || Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } entity)
+            {
+                continue;
+            }
+
+            // A composite key is two parameters in one segment — a journal voucher is addressed by
+            // {accountingYear}-{voucherNumber}. Nothing expresses that as one argument, so it is
+            // left out rather than guessed at.
+            var segment = path[(path.LastIndexOf('/') + 1)..];
+            if (segment.Count(c => c == '{') != 1)
+            {
+                continue;
+            }
+
+            return new FacadeSingle(
+                path,
+                entity,
+                MethodName(get),
+                Camel(SchemaRegistry.KeyProperty(resource.Entity)),
+                get["parameters"]?[0]?["schema"]?["type"]?.GetValue<string>() == "string" ? "string" : "int");
+        }
+
+        return null;
     }
 
     /// <summary>Finds the write operations a resource supports, when it is write-enabled.</summary>

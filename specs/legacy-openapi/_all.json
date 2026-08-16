@@ -9058,7 +9058,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -9878,107 +9878,36 @@
             "type": "object",
             "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
             "properties": {
+              "fiSupplierNo": {
+                "type": "string"
+              },
+              "ocrLine": {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              "message": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 100
+              },
+              "giroAccount": {
+                "type": "string"
+              },
+              "accountNo": {
+                "type": "string"
+              },
+              "ibanSwift": {
+                "type": "string"
+              },
+              "ocrLineMessage": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 157
+              },
               "paymentType": {
                 "type": "object",
                 "description": "A specific payment type on the entry.",
-                "oneOf": [
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 15,
-                        "maxLength": 15
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "giroAccount": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 16
-                      }
-                    },
-                    "required": [
-                      "giroAccount",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "accountNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "accountNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "ibanSwift": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "ibanSwift",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLineMessage": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 157
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLineMessage"
-                    ]
-                  }
-                ],
                 "properties": {
                   "paymentTypeNumber": {
                     "type": "integer",
@@ -10395,107 +10324,36 @@
             "type": "object",
             "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
             "properties": {
+              "fiSupplierNo": {
+                "type": "string"
+              },
+              "ocrLine": {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              "message": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 100
+              },
+              "giroAccount": {
+                "type": "string"
+              },
+              "accountNo": {
+                "type": "string"
+              },
+              "ibanSwift": {
+                "type": "string"
+              },
+              "ocrLineMessage": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 157
+              },
               "paymentType": {
                 "type": "object",
                 "description": "A specific payment type on the entry.",
-                "oneOf": [
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 15,
-                        "maxLength": 15
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "giroAccount": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 16
-                      }
-                    },
-                    "required": [
-                      "giroAccount",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "accountNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "accountNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "ibanSwift": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "ibanSwift",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLineMessage": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 157
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLineMessage"
-                    ]
-                  }
-                ],
                 "properties": {
                   "paymentTypeNumber": {
                     "type": "integer",
@@ -23945,107 +23803,36 @@
             "type": "object",
             "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
             "properties": {
+              "fiSupplierNo": {
+                "type": "string"
+              },
+              "ocrLine": {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              "message": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 100
+              },
+              "giroAccount": {
+                "type": "string"
+              },
+              "accountNo": {
+                "type": "string"
+              },
+              "ibanSwift": {
+                "type": "string"
+              },
+              "ocrLineMessage": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 157
+              },
               "paymentType": {
                 "type": "object",
                 "description": "A specific payment type on the entry.",
-                "oneOf": [
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 15,
-                        "maxLength": 15
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "giroAccount": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 16
-                      }
-                    },
-                    "required": [
-                      "giroAccount",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "accountNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "accountNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "ibanSwift": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "ibanSwift",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLineMessage": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 157
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLineMessage"
-                    ]
-                  }
-                ],
                 "properties": {
                   "paymentTypeNumber": {
                     "type": "integer",
@@ -25199,107 +24986,36 @@
                       "type": "object",
                       "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
                       "properties": {
+                        "fiSupplierNo": {
+                          "type": "string"
+                        },
+                        "ocrLine": {
+                          "type": "string",
+                          "minLength": 15,
+                          "maxLength": 15
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 5,
+                          "maxLength": 100
+                        },
+                        "giroAccount": {
+                          "type": "string"
+                        },
+                        "accountNo": {
+                          "type": "string"
+                        },
+                        "ibanSwift": {
+                          "type": "string"
+                        },
+                        "ocrLineMessage": {
+                          "type": "string",
+                          "minLength": 16,
+                          "maxLength": 157
+                        },
                         "paymentType": {
                           "type": "object",
                           "description": "A specific payment type on the entry.",
-                          "oneOf": [
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "ocrLine": {
-                                  "type": "string",
-                                  "minLength": 15,
-                                  "maxLength": 15
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "ocrLine"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "giroAccount": {
-                                  "type": "string"
-                                },
-                                "ocrLine": {
-                                  "type": "string",
-                                  "minLength": 16,
-                                  "maxLength": 16
-                                }
-                              },
-                              "required": [
-                                "giroAccount",
-                                "ocrLine"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "accountNo": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "accountNo",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "ibanSwift": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "ibanSwift",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "ocrLineMessage": {
-                                  "type": "string",
-                                  "minLength": 16,
-                                  "maxLength": 157
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "ocrLineMessage"
-                              ]
-                            }
-                          ],
                           "properties": {
                             "paymentTypeNumber": {
                               "type": "integer",
@@ -26711,107 +26427,36 @@
                       "type": "object",
                       "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
                       "properties": {
+                        "fiSupplierNo": {
+                          "type": "string"
+                        },
+                        "ocrLine": {
+                          "type": "string",
+                          "minLength": 15,
+                          "maxLength": 15
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 5,
+                          "maxLength": 100
+                        },
+                        "giroAccount": {
+                          "type": "string"
+                        },
+                        "accountNo": {
+                          "type": "string"
+                        },
+                        "ibanSwift": {
+                          "type": "string"
+                        },
+                        "ocrLineMessage": {
+                          "type": "string",
+                          "minLength": 16,
+                          "maxLength": 157
+                        },
                         "paymentType": {
                           "type": "object",
                           "description": "A specific payment type on the entry.",
-                          "oneOf": [
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "ocrLine": {
-                                  "type": "string",
-                                  "minLength": 15,
-                                  "maxLength": 15
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "ocrLine"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "giroAccount": {
-                                  "type": "string"
-                                },
-                                "ocrLine": {
-                                  "type": "string",
-                                  "minLength": 16,
-                                  "maxLength": 16
-                                }
-                              },
-                              "required": [
-                                "giroAccount",
-                                "ocrLine"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "accountNo": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "accountNo",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "ibanSwift": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "ibanSwift",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "ocrLineMessage": {
-                                  "type": "string",
-                                  "minLength": 16,
-                                  "maxLength": 157
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "ocrLineMessage"
-                              ]
-                            }
-                          ],
                           "properties": {
                             "paymentTypeNumber": {
                               "type": "integer",
@@ -27738,107 +27383,36 @@
             "type": "object",
             "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
             "properties": {
+              "fiSupplierNo": {
+                "type": "string"
+              },
+              "ocrLine": {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              "message": {
+                "type": "string",
+                "minLength": 5,
+                "maxLength": 100
+              },
+              "giroAccount": {
+                "type": "string"
+              },
+              "accountNo": {
+                "type": "string"
+              },
+              "ibanSwift": {
+                "type": "string"
+              },
+              "ocrLineMessage": {
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 157
+              },
               "paymentType": {
                 "type": "object",
                 "description": "A specific payment type on the entry.",
-                "oneOf": [
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 15,
-                        "maxLength": 15
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "giroAccount": {
-                        "type": "string"
-                      },
-                      "ocrLine": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 16
-                      }
-                    },
-                    "required": [
-                      "giroAccount",
-                      "ocrLine"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "accountNo": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "accountNo",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "ibanSwift": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string",
-                        "minLength": 5,
-                        "maxLength": 100
-                      }
-                    },
-                    "required": [
-                      "ibanSwift",
-                      "message"
-                    ]
-                  },
-                  {
-                    "properties": {
-                      "fiSupplierNo": {
-                        "type": "string"
-                      },
-                      "ocrLineMessage": {
-                        "type": "string",
-                        "minLength": 16,
-                        "maxLength": 157
-                      }
-                    },
-                    "required": [
-                      "fiSupplierNo",
-                      "ocrLineMessage"
-                    ]
-                  }
-                ],
                 "properties": {
                   "paymentTypeNumber": {
                     "type": "integer",
@@ -29111,107 +28685,36 @@
                       "type": "object",
                       "description": "Payment details associated with the supplier invoice. Each payment detail contains two keys that are required. For the \u002B71 type, fiSupplierNo and ocrLine is expected. For the \u002B73 type, fiSupplierNo and message is expected. For the \u002B04 type, giroAccount and ocrLine is expected. For the bank transfer type, accountNo and message is expected. For the IBAN type, ibanSwift and message is expected. For the \u002B75 type, fiSupplierNo and ocrLineMessage is expected. Please refer to the schema for validation rules details.",
                       "properties": {
+                        "fiSupplierNo": {
+                          "type": "string"
+                        },
+                        "ocrLine": {
+                          "type": "string",
+                          "minLength": 15,
+                          "maxLength": 15
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 5,
+                          "maxLength": 100
+                        },
+                        "giroAccount": {
+                          "type": "string"
+                        },
+                        "accountNo": {
+                          "type": "string"
+                        },
+                        "ibanSwift": {
+                          "type": "string"
+                        },
+                        "ocrLineMessage": {
+                          "type": "string",
+                          "minLength": 16,
+                          "maxLength": 157
+                        },
                         "paymentType": {
                           "type": "object",
                           "description": "A specific payment type on the entry.",
-                          "oneOf": [
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "ocrLine": {
-                                  "type": "string",
-                                  "minLength": 15,
-                                  "maxLength": 15
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "ocrLine"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "giroAccount": {
-                                  "type": "string"
-                                },
-                                "ocrLine": {
-                                  "type": "string",
-                                  "minLength": 16,
-                                  "maxLength": 16
-                                }
-                              },
-                              "required": [
-                                "giroAccount",
-                                "ocrLine"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "accountNo": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "accountNo",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "ibanSwift": {
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "type": "string",
-                                  "minLength": 5,
-                                  "maxLength": 100
-                                }
-                              },
-                              "required": [
-                                "ibanSwift",
-                                "message"
-                              ]
-                            },
-                            {
-                              "properties": {
-                                "fiSupplierNo": {
-                                  "type": "string"
-                                },
-                                "ocrLineMessage": {
-                                  "type": "string",
-                                  "minLength": 16,
-                                  "maxLength": 157
-                                }
-                              },
-                              "required": [
-                                "fiSupplierNo",
-                                "ocrLineMessage"
-                              ]
-                            }
-                          ],
                           "properties": {
                             "paymentTypeNumber": {
                               "type": "integer",

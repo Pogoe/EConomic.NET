@@ -167,6 +167,12 @@ public sealed class SchemaRegistry
         // reconciling a period actually needs.
         "Entry", "Period", "AccountTotalsEntry", "CustomerGroupsCustomer", "EmployeesCustomer",
 
+        // Reachable once a nested collection could sit below more than one identifier, or below a
+        // grouping segment: an accounting year's periods and their entries, a customer's own
+        // invoices, and a product's prices per currency.
+        "AccountingYearsEntry", "AccountsPeriod", "CustomerBookedInvoice", "CustomerDraftInvoice",
+        "DraftInvoiceLineTemplate", "JournalsCustomer", "ProductPrice",
+
         // The invoice, order and quote families. Each is a collection in its own right under a
         // namespace segment — /invoices/drafts, /orders/sent — rather than a nested collection.
         "DraftInvoiceSummary", "BookedInvoiceSummary", "SentInvoice", "PaidInvoice", "UnpaidInvoice",
@@ -199,6 +205,23 @@ public sealed class SchemaRegistry
         // because the resource has neither an update nor a delete, but recording it here keeps the
         // create model honest and is what a future PUT would need.
         ["AccountingYear"] = "Year",
+
+        // The rest are identified by something the convention does not predict, each checked
+        // against the property the model actually publishes. They reach a signature now that every
+        // collection has a single-resource GET; before that nothing addressed one of these.
+        ["AppRole"] = "RoleNumber",
+        ["Currency"] = "Code",
+        ["VatAccount"] = "VatCode",
+
+        // The invoice, order and quote views are addressed by the document's own number rather than
+        // by one built from the view's name: a sent order is order 12, not "sent order 12". The one
+        // exception is a sent invoice, which e-conomic gives an `id` of its own.
+        ["BookedInvoiceSummary"] = "BookedInvoiceNumber",
+        ["SentInvoice"] = "Id",
+        ["SentOrder"] = "OrderNumber",
+        ["ArchivedOrder"] = "OrderNumber",
+        ["SentQuote"] = "QuoteNumber",
+        ["ArchivedQuote"] = "QuoteNumber",
     };
 
     /// <summary>The property that identifies one instance of an entity.</summary>

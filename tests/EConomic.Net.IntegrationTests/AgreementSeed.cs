@@ -716,13 +716,13 @@ internal sealed class AgreementSeed(EconomicClient client, CancellationToken can
         (await FirstPageAsync(client.Rest.PaymentTerms.AsQuery())).PaymentTermsNumber;
 
     private async Task<int> FirstVatZoneAsync() =>
-        (await FirstPageAsync(client.Rest.VatZones)).VatZoneNumber;
+        (await FirstPageAsync(client.Rest.VatZones.AsQuery())).VatZoneNumber;
 
     private async Task<int> FirstProductGroupAsync() =>
-        (await FirstPageAsync(client.Rest.ProductGroups)).ProductGroupNumber;
+        (await FirstPageAsync(client.Rest.ProductGroups.AsQuery())).ProductGroupNumber;
 
     private async Task<int> FirstLayoutAsync() =>
-        (await FirstPageAsync(client.Rest.Layouts)).LayoutNumber;
+        (await FirstPageAsync(client.Rest.Layouts.AsQuery())).LayoutNumber;
 
     /// <summary>
     /// The first supplier group, read from the OpenAPI surface because the legacy one does not

@@ -61,7 +61,7 @@ public class FacadeMappingTests
 
         // A guard against the reflection silently matching nothing, which would make this pass
         // while mapping zero resources.
-        Assert.True(mapped.Count >= 100, $"Expected every resource; only mapped {mapped.Count}.");
+        Assert.True(mapped.Count >= 138, $"Expected every resource; only mapped {mapped.Count}.");
     }
 
     /// <summary>
@@ -93,16 +93,30 @@ public class FacadeMappingTests
     /// Taken from the assembly rather than a list here, so a resource added later is covered
     /// without anyone remembering to add it.
     /// </remarks>
-    private static IEnumerable<MethodInfo> Mappers() =>
-        typeof(EconomicClient).Assembly
-            .GetTypes()
-            // Both surfaces: the legacy sources are named ...PageSource and the OpenAPI ones
-            // ...Source, and the common suffix is what keeps this from needing a list per surface.
+    private static IEnumerable<MethodInfo> Mappers()
+    {
+        var types = typeof(EconomicClient).Assembly.GetTypes();
+
+        // Both surfaces: the legacy sources are named ...PageSource and the OpenAPI ones
+        // ...Source, and the common suffix is what keeps this from needing a list per surface.
+        var listings = types
             .Where(t => t.Name.EndsWith("Source", StringComparison.Ordinal))
-            .Select(t => t.GetMethod("Map", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public))
+            .Select(t => t.GetMethod("Map", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public));
+
+        // The single-resource GET maps a different generated type from the listing — e-conomic
+        // serves a draft invoice's lines only there — so it is a mapping of its own and needs
+        // covering separately. It lives on the resource rather than on a page source, which is why
+        // the sweep above cannot see it.
+        var singles = types
+            .Where(t => t.Name.EndsWith("Resource", StringComparison.Ordinal))
+            .Select(t => t.GetMethod("FromSingle", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public));
+
+        return listings.Concat(singles)
             .OfType<MethodInfo>()
             .Where(m => m.GetParameters().Length == 1)
-            .OrderBy(m => m.ReturnType.Name, StringComparer.Ordinal);
+            .OrderBy(m => m.ReturnType.Name, StringComparer.Ordinal)
+            .ThenBy(m => m.DeclaringType!.Name, StringComparer.Ordinal);
+    }
 
     /// <summary>Builds a generated response with every property set to something recognisable.</summary>
     /// <param name="type">The generated type to fill.</param>

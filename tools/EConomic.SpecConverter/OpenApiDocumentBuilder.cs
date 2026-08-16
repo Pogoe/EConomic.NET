@@ -156,7 +156,7 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
         var parameters = new JsonArray();
         foreach (var name in endpoint.Parameters)
         {
-            parameters.Add(PathParameter(name));
+            parameters.Add(PathParameter(name, endpoint.Path));
         }
 
         // Collection responses carry a `collection` array alongside `pagination`, and only those
@@ -322,12 +322,12 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
         ["description"] = description,
     };
 
-    private static JsonObject PathParameter(string name) => new()
+    private static JsonObject PathParameter(string name, string path) => new()
     {
         ["name"] = name,
         ["in"] = "path",
         ["required"] = true,
-        ["schema"] = new JsonObject { ["type"] = ParameterType(name) },
+        ["schema"] = new JsonObject { ["type"] = ParameterType(name, path) },
     };
 
     /// <summary>
@@ -345,11 +345,33 @@ public sealed class OpenApiDocumentBuilder(SchemaRegistry registry)
     };
 
     /// <summary>
+    /// Paths whose identifier is a string, where the name alone says otherwise.
+    /// </summary>
+    /// <remarks>
+    /// <c>id</c> is not one thing. <c>/invoices/sent/{id}</c> really is numeric — the demo agreement
+    /// answers <c>"id": 1</c> — while <c>/vat-accounts/{id}</c> is addressed by the VAT code:
+    /// <c>GET /vat-accounts/Abr</c> answers <c>200</c> and <c>/vat-accounts/1</c> answers
+    /// <c>404</c>, and the record's own <c>self</c> link ends in <c>Abr</c>. Typing it as an integer
+    /// generated a client method that could never reach the endpoint.
+    /// <para>
+    /// Keyed by path rather than by name for that reason. Both were read from a live agreement; the
+    /// legacy schemas do not type their path parameters at all, so nothing offline can settle this.
+    /// </para>
+    /// </remarks>
+    private static readonly HashSet<string> StringIdentifierPaths = new(StringComparer.Ordinal)
+    {
+        "/vat-accounts/{id}",
+    };
+
+    /// <summary>
     /// The schemas do not type their path parameters, so this is inferred from the name:
     /// anything ending in "Number", plus "id", is numeric unless listed as a string identifier.
     /// </summary>
-    private static string ParameterType(string name) =>
+    /// <param name="name">The parameter's name.</param>
+    /// <param name="path">The path it appears in, for the identifiers that differ per endpoint.</param>
+    private static string ParameterType(string name, string path) =>
         !StringIdentifiers.Contains(name)
+        && !StringIdentifierPaths.Contains(path)
         && (name.EndsWith("Number", StringComparison.Ordinal)
             || name.Equals("id", StringComparison.Ordinal)
             || name.Equals("customergroupnumber", StringComparison.Ordinal)

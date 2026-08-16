@@ -16766,7 +16766,7 @@ namespace EConomic.Rest.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="EconomicGeneratedApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<VatAccount> GetVatAccountsByidAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<VatAccount> GetVatAccountsByidAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -34219,6 +34219,30 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentDetails
     {
 
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
+
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
@@ -34568,6 +34592,30 @@ namespace EConomic.Rest.Generated
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class PaymentDetails2
     {
+
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
 
         /// <summary>
         /// A specific payment type on the entry.
@@ -43698,6 +43746,30 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentDetails3
     {
 
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
+
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
@@ -44487,6 +44559,30 @@ namespace EConomic.Rest.Generated
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class PaymentDetails4
     {
+
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
 
         /// <summary>
         /// A specific payment type on the entry.
@@ -55851,14 +55947,19 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType2
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -55904,14 +56005,19 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType3
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -59369,14 +59475,19 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType4
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -61038,14 +61149,19 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType5
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -68498,6 +68614,30 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentDetails5
     {
 
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
+
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
@@ -69978,6 +70118,30 @@ namespace EConomic.Rest.Generated
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
     internal partial class PaymentDetails6
     {
+
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
 
         /// <summary>
         /// A specific payment type on the entry.
@@ -71552,6 +71716,30 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentDetails7
     {
 
+        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
+        public string FiSupplierNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
+        public string OcrLine { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("message")]
+        [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 5)]
+        public string Message { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("giroAccount")]
+        public string GiroAccount { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountNo")]
+        public string AccountNo { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ibanSwift")]
+        public string IbanSwift { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ocrLineMessage")]
+        [System.ComponentModel.DataAnnotations.StringLength(157, MinimumLength = 16)]
+        public string OcrLineMessage { get; set; } = default!;
+
         /// <summary>
         /// A specific payment type on the entry.
         /// </summary>
@@ -72974,14 +73162,19 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType10
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -72998,14 +73191,18 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType11
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int? PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 
@@ -73022,14 +73219,19 @@ namespace EConomic.Rest.Generated
     internal partial class PaymentType12
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("fiSupplierNo")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FiSupplierNo { get; set; } = default!;
+        /// <summary>
+        /// The payment type number is a positive unique numerical identifier.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("paymentTypeNumber")]
+        [System.ComponentModel.DataAnnotations.Range(1, int.MaxValue)]
+        public int PaymentTypeNumber { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("ocrLine")]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 15)]
-        public string OcrLine { get; set; } = default!;
+        /// <summary>
+        /// A unique link reference to the payment type item.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("self")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Uri Self { get; set; } = default!;
 
         private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
 

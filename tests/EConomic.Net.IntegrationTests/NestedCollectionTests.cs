@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Globalization;
 using System.Reflection;
 using EConomic.Exceptions;
 using Xunit;
@@ -49,11 +50,12 @@ public class NestedCollectionTests
         var unreachable = new List<string>();
         var elsewhere = new List<string>();
         List<(string ParentName, object Parent, MethodInfo Accessor)>? onDemo = null;
+        EconomicClient? demo = null;
 
         foreach (var (parentName, parent, accessor) in accessors)
         {
             var name = $"{parentName}.{accessor.Name}";
-            var outcome = await ProbeAsync(parent, accessor, token);
+            var outcome = await ProbeAsync(client, parent, accessor, token);
 
             if (outcome.Failure is not null)
             {
@@ -71,7 +73,8 @@ public class NestedCollectionTests
             // nothing on the legacy surface creates one, so the seed cannot supply a parent, and an
             // agreement that happens to have no staff would otherwise leave the accessor untested.
             // The demo agreement has them, and this only reads.
-            onDemo ??= [.. Accessors(TestClients.CreateDemo().Rest)];
+            demo ??= TestClients.CreateDemo();
+            onDemo ??= [.. Accessors(demo.Rest)];
             var fallback = onDemo.FirstOrDefault(a =>
                 a.ParentName == parentName && a.Accessor.Name == accessor.Name);
 
@@ -81,7 +84,7 @@ public class NestedCollectionTests
                 continue;
             }
 
-            var retry = await ProbeAsync(fallback.Parent, fallback.Accessor, token);
+            var retry = await ProbeAsync(demo, fallback.Parent, fallback.Accessor, token);
 
             if (retry.Failure is not null)
             {
@@ -108,7 +111,7 @@ public class NestedCollectionTests
 
         // A guard against the reflection silently matching nothing, which would make this pass
         // while probing zero collections.
-        Assert.True(probed.Count >= 9, $"Expected every nested collection; only probed {probed.Count}.");
+        Assert.True(probed.Count >= 19, $"Expected every nested collection; only probed {probed.Count}.");
 
         // Only employees are expected to be missing. Anything else falling back means the
         // configured agreement lost records that the rest of the suite assumes are there, which
@@ -131,17 +134,28 @@ public class NestedCollectionTests
     /// server's own explanation when the call itself failed.
     /// </returns>
     private static async Task<(bool Probed, string? Reason, string? Failure)> ProbeAsync(
+        EconomicClient client,
         object parent,
         MethodInfo accessor,
         CancellationToken token)
     {
-        var key = await ParentKeyAsync(parent, accessor, token);
-        if (key.Failure is not null)
+        var scopes = new List<object>();
+
+        foreach (var parameter in accessor.GetParameters())
         {
-            return (false, key.Failure, null);
+            var scope = await ScopeAsync(client, parameter.Name!, token);
+            if (scope is null)
+            {
+                return (false, $"nothing supplies '{parameter.Name}' on this agreement", null);
+            }
+
+            // The path parameter's type is inferred from its name, and `accountingYearPeriod` does
+            // not end in "Number" so it is typed as text while the record carries an int. Both
+            // reach the server as a path segment, so converting is right rather than papering over.
+            scopes.Add(Convert.ChangeType(scope, parameter.ParameterType, CultureInfo.InvariantCulture));
         }
 
-        var collection = accessor.Invoke(parent, [key.Value])!;
+        var collection = accessor.Invoke(parent, [.. scopes])!;
         var page = collection.GetType().GetMethod(
             "GetPageAsync",
             [typeof(int), typeof(CancellationToken)])!;
@@ -156,97 +170,68 @@ public class NestedCollectionTests
         }
         catch (EconomicApiException exception)
         {
-            return (false, null, $"scoped to {key.Value}: {exception.Message}");
+            return (false, null, $"scoped to {string.Join(", ", scopes)}: {exception.Message}");
         }
         catch (TargetInvocationException exception)
         {
-            return (false, null, $"scoped to {key.Value}: {exception.InnerException?.Message}");
+            return (false, null, $"scoped to {string.Join(", ", scopes)}: {exception.InnerException?.Message}");
         }
     }
 
     /// <summary>
-    /// The parent's identifier, read from the first record the parent collection returns.
+    /// A real identifier for one of an accessor's parameters, read from the agreement.
     /// </summary>
-    /// <param name="parent">The parent resource.</param>
-    /// <param name="accessor">The accessor whose parameter is being supplied.</param>
-    /// <param name="token">Cancels the request.</param>
-    /// <returns>The identifier, or why one could not be had.</returns>
-    private static async Task<(object? Value, string? Failure)> ParentKeyAsync(
-        object parent,
-        MethodInfo accessor,
-        CancellationToken token)
-    {
-        var page = parent.GetType().GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)])!;
-
-        object result;
-        try
-        {
-            var task = (Task)page.Invoke(parent, [0, token])!;
-            await task;
-            result = task.GetType().GetProperty("Result")!.GetValue(task)!;
-        }
-        catch (EconomicApiException exception)
-        {
-            return (null, $"listing the parent failed: {exception.Message}");
-        }
-
-        var items = (IEnumerable)result.GetType().GetProperty("Items")!.GetValue(result)!;
-        var first = items.Cast<object>().FirstOrDefault();
-
-        if (first is null)
-        {
-            return (null, "the parent collection is empty, so nothing scopes it");
-        }
-
-        var parameter = accessor.GetParameters()[0];
-        var key = KeyProperty(first.GetType(), parameter);
-
-        if (key is null)
-        {
-            return (null, $"no property on {first.GetType().Name} supplies '{parameter.Name}'");
-        }
-
-        var value = key.GetValue(first);
-
-        return value is null
-            ? (null, $"{first.GetType().Name}.{key.Name} is null on the first record")
-            : (value, null);
-    }
-
-    /// <summary>Finds the property on the parent's model that supplies an accessor's parameter.</summary>
-    /// <param name="model">The parent's public record.</param>
-    /// <param name="parameter">The accessor's single parameter.</param>
-    /// <returns>The property, or <see langword="null"/> when nothing matches unambiguously.</returns>
+    /// <param name="client">The client to read from.</param>
+    /// <param name="parameter">The parameter's name, which is the path parameter's name.</param>
+    /// <param name="token">Cancels the requests.</param>
+    /// <returns>The identifier, or <see langword="null"/> when the agreement holds no such record.</returns>
     /// <remarks>
-    /// The names line up for most of them — <c>customerNumber</c> is <c>CustomerNumber</c>. An
-    /// accounting year is the exception: it is addressed by <c>{accountingYear}</c> in the path and
-    /// carries the value in <c>Year</c>, so a parameter name ending in the property's name is
-    /// accepted too. That second rule is required to be unambiguous; matching more than one
-    /// property reports a failure rather than picking one.
+    /// Named deliberately rather than matched by reflection. A collection can now sit under three
+    /// identifiers, and they do not all come from the accessor's own parent — an account's entries
+    /// within a period take an account, a year and a period, which are three different collections.
+    /// Anything unrecognised fails the run rather than being skipped, so a nested collection added
+    /// later cannot quietly go unprobed.
     /// </remarks>
-    private static PropertyInfo? KeyProperty(Type model, ParameterInfo parameter)
+    private static async Task<object?> ScopeAsync(EconomicClient client, string parameter, CancellationToken token)
     {
-        var candidates = model
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => Underlying(p.PropertyType) == parameter.ParameterType)
-            .ToList();
-
-        var exact = candidates.FirstOrDefault(p =>
-            string.Equals(p.Name, parameter.Name, StringComparison.OrdinalIgnoreCase));
-
-        if (exact is not null)
+        switch (parameter)
         {
-            return exact;
+            case "customerNumber":
+                return (await First(client.Rest.Customers.AsQuery()))?.CustomerNumber;
+            case "customerGroupNumber":
+                return (await First(client.Rest.CustomerGroups.AsQuery()))?.CustomerGroupNumber;
+            case "employeeNumber":
+                return (await First(client.Rest.Employees.AsQuery()))?.EmployeeNumber;
+            case "journalNumber":
+                return (await First(client.Rest.Journals.AsQuery()))?.JournalNumber;
+            case "productNumber":
+                return (await First(client.Rest.Products.AsQuery()))?.ProductNumber;
+            case "accountNumber":
+                return (await First(client.Rest.Accounts.AsQuery()))?.AccountNumber;
+            case "accountingYear":
+                return (await First(client.Rest.AccountingYears.AsQuery()))?.Year;
+
+            case "accountingYearPeriod":
+                {
+                    // A period is itself scoped by a year, so this is the one that has to walk down.
+                    var year = (await First(client.Rest.AccountingYears.AsQuery()))?.Year;
+
+                    return year is null
+                        ? null
+                        : (await First(client.Rest.AccountingYears.Periods(year).AsQuery()))?.PeriodNumber;
+                }
+
+            default:
+                throw new InvalidOperationException(
+                    $"Nothing here supplies '{parameter}'. Add it to {nameof(ScopeAsync)}.");
         }
 
-        var suffixed = candidates
-            .Where(p => parameter.Name!.EndsWith(p.Name, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-
-        return suffixed.Count == 1 ? suffixed[0] : null;
+        async Task<T?> First<T, TFilter, TSort>(Querying.EconomicQuery<T, TFilter, TSort> query)
+        {
+            var page = await query.WithPageSize(1).GetPageAsync(0, token);
+            return page.Items.Count == 0 ? default : page.Items[0];
+        }
     }
-
-    private static Type Underlying(Type type) => Nullable.GetUnderlyingType(type) ?? type;
 
     /// <summary>Every nested collection on the legacy surface, as parent and accessor.</summary>
     /// <param name="rest">The legacy surface.</param>
@@ -265,7 +250,7 @@ public class NestedCollectionTests
             .OrderBy(p => p.Name, StringComparer.Ordinal)
             .SelectMany(property => property.PropertyType
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(m => m.GetParameters().Length == 1
+                .Where(m => m.GetParameters().Length >= 1
                     && m.ReturnType.Name.EndsWith("Resource", StringComparison.Ordinal)
                     && m.ReturnType.GetMethod("GetPageAsync", [typeof(int), typeof(CancellationToken)]) is not null)
                 .OrderBy(m => m.Name, StringComparer.Ordinal)

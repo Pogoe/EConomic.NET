@@ -163,6 +163,19 @@ public sealed partial class AccountingYearResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<AccountingYear>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one accountingYear by its identifier.</summary>
+    /// <param name="year">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<AccountingYear> GetAsync(string year, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetAccountingYearsByaccountingYearAsync(year, cancellationToken),
+            "GET /accounting-years/{accountingYear}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a accountingYear.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -187,25 +200,52 @@ public sealed partial class AccountingYearResource
         return target;
     }
 
-    /// <summary>The <c>entries</c> belonging to one accountingYear.</summary>
-    /// <param name="accountingYear">The owning accountingYear.</param>
-    /// <returns>The nested collection, scoped to that accountingYear.</returns>
+    /// <summary><c>/accounting-years/{accountingYear}/entries</c>, scoped to one accountingYear.</summary>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public AccountingYearEntryResource Entries(string accountingYear) =>
         new(_httpClient, accountingYear);
 
-    /// <summary>The <c>periods</c> belonging to one accountingYear.</summary>
-    /// <param name="accountingYear">The owning accountingYear.</param>
-    /// <returns>The nested collection, scoped to that accountingYear.</returns>
+    /// <summary><c>/accounting-years/{accountingYear}/periods</c>, scoped to one accountingYear.</summary>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public AccountingYearPeriodResource Periods(string accountingYear) =>
         new(_httpClient, accountingYear);
 
-    /// <summary>The <c>totals</c> belonging to one accountingYear.</summary>
-    /// <param name="accountingYear">The owning accountingYear.</param>
-    /// <returns>The nested collection, scoped to that accountingYear.</returns>
-    public AccountTotalResource Totals(string accountingYear) =>
+    /// <summary><c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c>, scoped to one accountingYear.</summary>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <param name="accountingYearPeriod">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public AccountingYearPeriodsEntriesResource Entries(string accountingYear, string accountingYearPeriod) =>
+        new(_httpClient, accountingYear, accountingYearPeriod);
+
+    /// <summary><c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/totals</c>, scoped to one accountingYear.</summary>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <param name="accountingYearPeriod">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public AccountingYearPeriodsTotalsResource Totals(string accountingYear, string accountingYearPeriod) =>
+        new(_httpClient, accountingYear, accountingYearPeriod);
+
+    /// <summary><c>/accounting-years/{accountingYear}/totals</c>, scoped to one accountingYear.</summary>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public AccountingYearTotalsResource Totals(string accountingYear) =>
         new(_httpClient, accountingYear);
 
     private static AccountingYear FromGenerated(Generated.AccountingYear source) => new()
+    {
+        FromDate = source.FromDate == default ? null : source.FromDate,
+        ToDate = source.ToDate == default ? null : source.ToDate,
+        Closed = source.Closed,
+        Year = source.Year,
+        Periods = source.Periods,
+        Entries = source.Entries,
+        Totals = source.Totals,
+        Vouchers = source.Vouchers,
+        Self = source.Self,
+    };
+
+    private static AccountingYear FromSingle(Generated.AccountingYear source) => new()
     {
         FromDate = source.FromDate == default ? null : source.FromDate,
         ToDate = source.ToDate == default ? null : source.ToDate,
@@ -423,6 +463,216 @@ internal sealed class AccountPageSource(Generated.AccountsClient client)
 }
 
 /// <summary>
+/// The <c>vatAccount</c> of a <see cref="AccountDetails"/>.
+/// </summary>
+public sealed record AccountDetailsVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>accountsSummed</c> of a <see cref="AccountDetails"/>.
+/// </summary>
+public sealed record AccountDetailsAccountsSummedItem
+{
+    /// <summary>The <c>fromAccount</c> field.</summary>
+    public EconomicReference? FromAccount { get; init; }
+
+    /// <summary>The <c>toAccount</c> field.</summary>
+    public EconomicReference? ToAccount { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/accounts/{accountNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="Account"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record AccountDetails
+{
+    /// <summary>The <c>accountNumber</c> field.</summary>
+    public int AccountNumber { get; init; }
+
+    /// <summary>The <c>accountType</c> field.</summary>
+    public string? AccountType { get; init; }
+
+    /// <summary>The <c>balance</c> field.</summary>
+    public decimal Balance { get; init; }
+
+    /// <summary>The <c>draftBalance</c> field.</summary>
+    public decimal DraftBalance { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>blockDirectEntries</c> field.</summary>
+    public bool BlockDirectEntries { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>debitCredit</c> field.</summary>
+    public string? DebitCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>vatAccount</c> field.</summary>
+    public AccountDetailsVatAccount? VatAccount { get; init; }
+
+    /// <summary>The <c>accountsSummed</c> field.</summary>
+    public IReadOnlyList<AccountDetailsAccountsSummedItem> AccountsSummed { get; init; } = [];
+
+    /// <summary>The <c>totalFromAccount</c> field.</summary>
+    public EconomicReference? TotalFromAccount { get; init; }
+
+    /// <summary>The <c>accountingYears</c> field.</summary>
+    public System.Uri? AccountingYears { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/accounts</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class AccountResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public AccountResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountsClient(httpClient);
+    }
+
+    private EconomicQuery<Account, AccountFilter, AccountSort> Query => new(new AccountPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Account, AccountFilter, AccountSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Account, AccountFilter, AccountSort> Where(System.Linq.Expressions.Expression<System.Func<AccountFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Account, AccountFilter, AccountSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Account, AccountFilter, AccountSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Account, AccountFilter, AccountSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Account, AccountFilter, AccountSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Account> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Account>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one account by its identifier.</summary>
+    /// <param name="accountNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="AccountDetails"/> rather than a <see cref="Account"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<AccountDetails> GetAsync(int accountNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetAccountsByaccountNumberAsync(accountNumber, cancellationToken),
+            "GET /accounts/{accountNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    /// <summary><c>/accounts/{accountNumber}/accounting-years/{accountingYear}/entries</c>, scoped to one account.</summary>
+    /// <param name="accountNumber">Scopes the collection.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public AccountAccountingYearsEntriesResource Entries(int accountNumber, string accountingYear) =>
+        new(_httpClient, accountNumber, accountingYear);
+
+    /// <summary><c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods</c>, scoped to one account.</summary>
+    /// <param name="accountNumber">Scopes the collection.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public AccountsPeriodResource Periods(int accountNumber, string accountingYear) =>
+        new(_httpClient, accountNumber, accountingYear);
+
+    /// <summary><c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c>, scoped to one account.</summary>
+    /// <param name="accountNumber">Scopes the collection.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <param name="accountingYearPeriod">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public AccountAccountingYearsPeriodsEntriesResource Entries(int accountNumber, string accountingYear, string accountingYearPeriod) =>
+        new(_httpClient, accountNumber, accountingYear, accountingYearPeriod);
+
+    private static AccountDetails FromSingle(Generated.AccountDetails source) => new()
+    {
+        AccountNumber = source.AccountNumber,
+        AccountType = source.AccountType.ToString(),
+        Balance = (decimal)source.Balance,
+        DraftBalance = (decimal)source.DraftBalance,
+        Barred = source.Barred,
+        BlockDirectEntries = source.BlockDirectEntries,
+        ContraAccount = Reference(source.ContraAccount?.AccountNumber, source.ContraAccount?.Self),
+        DebitCredit = source.DebitCredit.ToString(),
+        Name = source.Name,
+        VatAccount = source.VatAccount is null ? null : new AccountDetailsVatAccount
+        {
+            VatCode = source.VatAccount.VatCode,
+            Self = source.VatAccount.Self,
+        },
+        AccountsSummed = FacadeTransport.MapList(source.AccountsSummed, item0 => new AccountDetailsAccountsSummedItem
+        {
+            FromAccount = Reference(item0.FromAccount?.AccountNumber, item0.FromAccount?.Self),
+            ToAccount = Reference(item0.ToAccount?.AccountNumber, item0.ToAccount?.Self),
+        }),
+        TotalFromAccount = Reference(source.TotalFromAccount?.AccountNumber, source.TotalFromAccount?.Self),
+        AccountingYears = source.AccountingYears,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/app-roles</c>.
 /// </summary>
 public sealed record AppRole
@@ -468,6 +718,94 @@ internal sealed class AppRolePageSource(Generated.AppRolesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/app-roles</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class AppRoleResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AppRolesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public AppRoleResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AppRolesClient(httpClient);
+    }
+
+    private EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> Query => new(new AppRolePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> Where(System.Linq.Expressions.Expression<System.Func<AppRoleFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AppRoleSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AppRoleSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AppRole> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AppRole>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one appRole by its identifier.</summary>
+    /// <param name="roleNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<AppRole> GetAsync(int roleNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetAppRolesByroleNumberAsync(roleNumber, cancellationToken),
+            "GET /app-roles/{roleNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static AppRole FromSingle(Generated.AppRoles source) => new()
+    {
+        RoleNumber = source.RoleNumber,
+        Name = source.Name.ToString(),
+        RequiredModules = FacadeTransport.MapList(source.RequiredModules, value => new EconomicReference(value.ModuleNumber, value.Self)),
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -520,6 +858,95 @@ internal sealed class CurrencyPageSource(Generated.CurrenciesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/currencies</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class CurrencyResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CurrenciesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public CurrencyResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CurrenciesClient(httpClient);
+    }
+
+    private EconomicQuery<Currency, CurrencyFilter, CurrencySort> Query => new(new CurrencyPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Currency, CurrencyFilter, CurrencySort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Currency, CurrencyFilter, CurrencySort> Where(System.Linq.Expressions.Expression<System.Func<CurrencyFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Currency, CurrencyFilter, CurrencySort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Currency, CurrencyFilter, CurrencySort> OrderBy(System.Linq.Expressions.Expression<System.Func<CurrencySort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Currency, CurrencyFilter, CurrencySort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CurrencySort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Currency, CurrencyFilter, CurrencySort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Currency> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Currency>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one currency by its identifier.</summary>
+    /// <param name="code">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<Currency> GetAsync(string code, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetCurrenciesBycodeAsync(code, cancellationToken),
+            "GET /currencies/{code}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static Currency FromSingle(Generated.CurrencyDetails source) => new()
+    {
+        Name = source.Name,
+        Code = source.Code,
+        IsoNumber = source.IsoNumber,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -751,6 +1178,19 @@ public sealed partial class CustomerGroupResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<CustomerGroup>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one customerGroup by its identifier.</summary>
+    /// <param name="customerGroupNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<CustomerGroup> GetAsync(int customerGroupNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetCustomerGroupsBycustomerGroupNumberAsync(customerGroupNumber, cancellationToken),
+            "GET /customer-groups/{customerGroupNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a customerGroup.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -838,13 +1278,39 @@ public sealed partial class CustomerGroupResource
         return target;
     }
 
-    /// <summary>The <c>customers</c> belonging to one customerGroup.</summary>
-    /// <param name="customerGroupNumber">The owning customerGroup.</param>
-    /// <returns>The nested collection, scoped to that customerGroup.</returns>
+    /// <summary><c>/customer-groups/{customerGroupNumber}/customers</c>, scoped to one customerGroup.</summary>
+    /// <param name="customerGroupNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public CustomerGroupCustomerResource Customers(int customerGroupNumber) =>
         new(_httpClient, customerGroupNumber);
 
     private static CustomerGroup FromGenerated(Generated.CustomerGroup source) => new()
+    {
+        CustomerGroupNumber = source.CustomerGroupNumber,
+        Name = source.Name,
+        Account = source.Account is null ? null : new CustomerGroupAccount
+        {
+            AccountNumber = source.Account.AccountNumber,
+            AccountType = source.Account.AccountType.ToString(),
+            Balance = (decimal)source.Account.Balance,
+            BlockDirectEntries = source.Account.BlockDirectEntries,
+            DebitCredit = source.Account.DebitCredit.ToString(),
+            Name = source.Account.Name,
+            AccountingYears = source.Account.AccountingYears,
+            Self = source.Account.Self,
+        },
+        Customers = source.Customers,
+        Layout = source.Layout is null ? null : new CustomerGroupLayout
+        {
+            LayoutNumber = source.Layout.LayoutNumber,
+            Name = source.Layout.Name,
+            Deleted = source.Layout.Deleted,
+            Self = source.Layout.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static CustomerGroup FromSingle(Generated.CustomerGroup source) => new()
     {
         CustomerGroupNumber = source.CustomerGroupNumber,
         Name = source.Name,
@@ -1348,6 +1814,19 @@ public sealed partial class CustomerResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<Customer>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one customer by its identifier.</summary>
+    /// <param name="customerNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<Customer> GetAsync(int customerNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetCustomersBycustomerNumberAsync(customerNumber, cancellationToken),
+            "GET /customers/{customerNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a customer.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -1496,16 +1975,34 @@ public sealed partial class CustomerResource
         return target;
     }
 
-    /// <summary>The <c>contacts</c> belonging to one customer.</summary>
-    /// <param name="customerNumber">The owning customer.</param>
-    /// <returns>The nested collection, scoped to that customer.</returns>
+    /// <summary><c>/customers/{customerNumber}/contacts</c>, scoped to one customer.</summary>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public CustomerContactResource Contacts(int customerNumber) =>
         new(_httpClient, customerNumber);
 
-    /// <summary>The <c>delivery-locations</c> belonging to one customer.</summary>
-    /// <param name="customerNumber">The owning customer.</param>
-    /// <returns>The nested collection, scoped to that customer.</returns>
+    /// <summary><c>/customers/{customerNumber}/delivery-locations</c>, scoped to one customer.</summary>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public DeliveryLocationResource DeliveryLocations(int customerNumber) =>
+        new(_httpClient, customerNumber);
+
+    /// <summary><c>/customers/{customerNumber}/invoices/booked</c>, scoped to one customer.</summary>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public CustomerBookedInvoiceResource BookedInvoices(int customerNumber) =>
+        new(_httpClient, customerNumber);
+
+    /// <summary><c>/customers/{customerNumber}/invoices/drafts</c>, scoped to one customer.</summary>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public CustomerDraftInvoiceResource DraftInvoices(int customerNumber) =>
+        new(_httpClient, customerNumber);
+
+    /// <summary><c>/customers/{customerNumber}/templates/invoiceline</c>, scoped to one customer.</summary>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public DraftInvoiceLineTemplateResource InvoiceLineTemplates(int customerNumber) =>
         new(_httpClient, customerNumber);
 
     private static Customer FromGenerated(Generated.Customer source) => new()
@@ -1560,6 +2057,61 @@ public sealed partial class CustomerResource
             Booked = source.Invoices.Booked,
             Self = source.Invoices.Self,
         },
+        Self = source.Self,
+    };
+
+    private static Customer FromSingle(Generated.CustomerDetails source) => new()
+    {
+        Address = source.Address,
+        Balance = (decimal)source.Balance,
+        Barred = source.Barred,
+        City = source.City,
+        Contacts = source.Contacts,
+        CorporateIdentificationNumber = source.CorporateIdentificationNumber,
+        PNumber = source.PNumber,
+        Country = source.Country,
+        CreditLimit = (decimal)source.CreditLimit,
+        Currency = source.Currency ?? string.Empty,
+        CustomerNumber = source.CustomerNumber,
+        DeliveryLocations = source.DeliveryLocations,
+        DefaultDeliveryLocation = Reference(source.DefaultDeliveryLocation?.DeliveryLocationNumber, source.DefaultDeliveryLocation?.Self),
+        DueAmount = (decimal)source.DueAmount,
+        Ean = source.Ean,
+        Email = source.Email,
+        Invoices = source.Invoices is null ? null : new CustomerInvoices
+        {
+            Drafts = source.Invoices.Drafts,
+            Booked = source.Invoices.Booked,
+            Self = source.Invoices.Self,
+        },
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Name = source.Name ?? string.Empty,
+        PublicEntryNumber = source.PublicEntryNumber,
+        TelephoneAndFaxNumber = source.TelephoneAndFaxNumber,
+        MobilePhone = source.MobilePhone,
+        EInvoicingDisabledByDefault = source.EInvoicingDisabledByDefault,
+        Templates = source.Templates is null ? null : new CustomerTemplates
+        {
+            Invoice = source.Templates.Invoice,
+            InvoiceLine = source.Templates.InvoiceLine,
+            Self = source.Templates.Self,
+        },
+        Totals = source.Totals is null ? null : new CustomerTotals
+        {
+            Drafts = source.Totals.Drafts,
+            Booked = source.Totals.Booked,
+            Self = source.Totals.Self,
+        },
+        VatNumber = source.VatNumber,
+        Website = source.Website,
+        Zip = source.Zip,
+        Attention = Reference(source.Attention?.CustomerContactNumber, source.Attention?.Self),
+        CustomerContact = Reference(source.CustomerContact?.CustomerContactNumber, source.CustomerContact?.Self),
+        CustomerGroup = Reference(source.CustomerGroup?.CustomerGroupNumber, source.CustomerGroup?.Self),
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        PaymentTerms = Reference(source.PaymentTerms?.PaymentTermsNumber, source.PaymentTerms?.Self),
+        SalesPerson = Reference(source.SalesPerson?.EmployeeNumber, source.SalesPerson?.Self),
+        VatZone = Reference(source.VatZone?.VatZoneNumber, source.VatZone?.Self),
         Self = source.Self,
     };
 
@@ -1689,6 +2241,122 @@ internal sealed class DepartmentPageSource(Generated.DepartmentsClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A single resource from <c>/departments/{departmentNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="Department"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record DepartmentDetails
+{
+    /// <summary>The <c>departmentNumber</c> field.</summary>
+    public int DepartmentNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/departments</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class DepartmentResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.DepartmentsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public DepartmentResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.DepartmentsClient(httpClient);
+    }
+
+    private EconomicQuery<Department, DepartmentFilter, DepartmentSort> Query => new(new DepartmentPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Department, DepartmentFilter, DepartmentSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Department, DepartmentFilter, DepartmentSort> Where(System.Linq.Expressions.Expression<System.Func<DepartmentFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Department, DepartmentFilter, DepartmentSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Department, DepartmentFilter, DepartmentSort> OrderBy(System.Linq.Expressions.Expression<System.Func<DepartmentSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Department, DepartmentFilter, DepartmentSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<DepartmentSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Department, DepartmentFilter, DepartmentSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Department> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Department>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one department by its identifier.</summary>
+    /// <param name="departmentNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="DepartmentDetails"/> rather than a <see cref="Department"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<DepartmentDetails> GetAsync(int departmentNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetDepartmentsBydepartmentNumberAsync(departmentNumber, cancellationToken),
+            "GET /departments/{departmentNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static DepartmentDetails FromSingle(Generated.DepartmentDetails source) => new()
+    {
+        DepartmentNumber = source.DepartmentNumber,
+        Name = source.Name,
+        Barred = source.Barred,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -1831,11 +2499,41 @@ public sealed partial class EmployeeResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<Employee>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
-    /// <summary>The <c>customers</c> belonging to one employee.</summary>
-    /// <param name="employeeNumber">The owning employee.</param>
-    /// <returns>The nested collection, scoped to that employee.</returns>
+    /// <summary>Fetches one employee by its identifier.</summary>
+    /// <param name="employeeNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<Employee> GetAsync(int employeeNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetEmployeesByemployeeNumberAsync(employeeNumber, cancellationToken),
+            "GET /employees/{employeeNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    /// <summary><c>/employees/{employeeNumber}/customers</c>, scoped to one employee.</summary>
+    /// <param name="employeeNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public EmployeeCustomerResource Customers(int employeeNumber) =>
         new(_httpClient, employeeNumber);
+
+    private static Employee FromSingle(Generated.EmployeeDetails source) => new()
+    {
+        EmployeeNumber = source.EmployeeNumber,
+        EmployeeGroup = Reference(source.EmployeeGroup?.EmployeeGroupNumber, source.EmployeeGroup?.Self),
+        Name = source.Name,
+        Customers = source.Customers,
+        DraftInvoices = source.DraftInvoices,
+        BookedInvoices = source.BookedInvoices,
+        Email = source.Email,
+        Phone = source.Phone,
+        Barred = source.Barred,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -2136,6 +2834,454 @@ internal sealed class BookedInvoicePageSource(Generated.InvoicesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="BookedInvoiceDetailsLine"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="BookedInvoiceDetails"/>.
+/// </summary>
+public sealed record BookedInvoiceDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>vatRate</c> field.</summary>
+    public decimal VatRate { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>totalNetAmount</c> field.</summary>
+    public decimal TotalNetAmount { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public BookedInvoiceDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/invoices/booked/{bookedInvoiceNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="BookedInvoice"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record BookedInvoiceDetails
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public BookedInvoiceDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public BookedInvoiceDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public BookedInvoiceDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public BookedInvoiceDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public BookedInvoiceDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public BookedInvoiceDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<BookedInvoiceDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>sent</c> field.</summary>
+    public System.Uri? Sent { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/invoices/booked</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class BookedInvoiceResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.InvoicesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public BookedInvoiceResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.InvoicesClient(httpClient);
+    }
+
+    private EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> Query => new(new BookedInvoicePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> Where(System.Linq.Expressions.Expression<System.Func<BookedInvoiceFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> OrderBy(System.Linq.Expressions.Expression<System.Func<BookedInvoiceSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<BookedInvoiceSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<BookedInvoice> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<BookedInvoice>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one bookedInvoice by its identifier.</summary>
+    /// <param name="bookedInvoiceNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="BookedInvoiceDetails"/> rather than a <see cref="BookedInvoice"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<BookedInvoiceDetails> GetAsync(int bookedInvoiceNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetInvoicesBookedBybookedInvoiceNumberAsync(bookedInvoiceNumber, cancellationToken),
+            "GET /invoices/booked/{bookedInvoiceNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static BookedInvoiceDetails FromSingle(Generated.BookedInvoice source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new BookedInvoiceDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new BookedInvoiceDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new BookedInvoiceDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new BookedInvoiceDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new BookedInvoiceDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Pdf = source.Pdf is null ? null : new BookedInvoiceDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new BookedInvoiceDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            DeliveryDate = item0.DeliveryDate == default ? null : item0.DeliveryDate,
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            VatRate = (decimal)item0.VatRate,
+            VatAmount = (decimal)item0.VatAmount,
+            TotalNetAmount = (decimal)item0.TotalNetAmount,
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new BookedInvoiceDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Sent = source.Sent,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -2488,6 +3634,335 @@ internal sealed class DraftInvoicePageSource(Generated.InvoicesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+
+    /// <summary>The <c>nemHandelType</c> field.</summary>
+    public string? NemHandelType { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>currentInvoiceHandle</c> of a <see cref="DraftInvoiceDetailsSoap"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsSoapCurrentInvoiceHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsSoap
+{
+    /// <summary>The <c>currentInvoiceHandle</c> field.</summary>
+    public DraftInvoiceDetailsSoapCurrentInvoiceHandle? CurrentInvoiceHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsTemplates
+{
+    /// <summary>The <c>bookingInstructions</c> field.</summary>
+    public required System.Uri BookingInstructions { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="DraftInvoiceDetailsLine"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="DraftInvoiceDetailsLine"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="DraftInvoiceDetails"/>.
+/// </summary>
+public sealed record DraftInvoiceDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public DraftInvoiceDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public DraftInvoiceDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>totalNetAmount</c> field.</summary>
+    public decimal TotalNetAmount { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/invoices/drafts/{draftInvoiceNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="DraftInvoice"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record DraftInvoiceDetails
+{
+    /// <summary>The <c>draftInvoiceNumber</c> field.</summary>
+    public int DraftInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>attachment</c> field.</summary>
+    public System.Uri? Attachment { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public DraftInvoiceDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public DraftInvoiceDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public DraftInvoiceDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public DraftInvoiceDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public DraftInvoiceDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public DraftInvoiceDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public DraftInvoiceDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public DraftInvoiceDetailsTemplates? Templates { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<DraftInvoiceDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
 }
 
 /// <summary>
@@ -2988,6 +4463,23 @@ public sealed partial class DraftInvoiceResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<DraftInvoice>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one draftInvoice by its identifier.</summary>
+    /// <param name="draftInvoiceNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="DraftInvoiceDetails"/> rather than a <see cref="DraftInvoice"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<DraftInvoiceDetails> GetAsync(int draftInvoiceNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetInvoicesDraftsBydraftInvoiceNumberAsync(draftInvoiceNumber, cancellationToken),
+            "GET /invoices/drafts/{draftInvoiceNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a draftInvoice.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -3411,6 +4903,116 @@ public sealed partial class DraftInvoiceResource
             BookingInstructions = source.Templates.BookingInstructions,
             Self = source.Templates.Self,
         },
+        Self = source.Self,
+    };
+
+    private static DraftInvoiceDetails FromSingle(Generated.DraftInvoice source) => new()
+    {
+        DraftInvoiceNumber = source.DraftInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Attachment = source.Attachment,
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        PaymentTerms = source.PaymentTerms is null ? null : new DraftInvoiceDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new DraftInvoiceDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+            NemHandelType = source.Recipient.NemHandelType.ToString(),
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new DraftInvoiceDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new DraftInvoiceDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new DraftInvoiceDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Pdf = source.Pdf is null ? null : new DraftInvoiceDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new DraftInvoiceDetailsSoap
+        {
+            CurrentInvoiceHandle = source.Soap.CurrentInvoiceHandle is null ? null : new DraftInvoiceDetailsSoapCurrentInvoiceHandle
+            {
+                Id = source.Soap.CurrentInvoiceHandle.Id,
+            },
+        },
+        Templates = source.Templates is null ? null : new DraftInvoiceDetailsTemplates
+        {
+            BookingInstructions = source.Templates.BookingInstructions,
+            Self = source.Templates.Self,
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new DraftInvoiceDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new DraftInvoiceDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new DraftInvoiceDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            TotalNetAmount = (decimal)item0.TotalNetAmount,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
         Self = source.Self,
     };
 
@@ -4383,6 +5985,104 @@ internal sealed class SentInvoicePageSource(Generated.InvoicesClient client)
 }
 
 /// <summary>
+/// The <c>/invoices/sent</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class SentInvoiceResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.InvoicesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public SentInvoiceResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.InvoicesClient(httpClient);
+    }
+
+    private EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> Query => new(new SentInvoicePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> Where(System.Linq.Expressions.Expression<System.Func<SentInvoiceFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> OrderBy(System.Linq.Expressions.Expression<System.Func<SentInvoiceSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<SentInvoiceSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<SentInvoice> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<SentInvoice>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one sentInvoice by its identifier.</summary>
+    /// <param name="id">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<SentInvoice> GetAsync(int id, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetInvoicesSentByidAsync(id, cancellationToken),
+            "GET /invoices/sent/{id}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static SentInvoice FromSingle(Generated.SentInvoice source) => new()
+    {
+        Id = source.Id,
+        Invoice = Reference(source.Invoice?.BookedInvoiceNumber, source.Invoice?.Self),
+        Status = source.Status,
+        SendBy = source.SendBy.ToString(),
+        CreationDate = source.CreationDate == default ? null : source.CreationDate,
+        CreatedBy = source.CreatedBy,
+        Recipient = source.Recipient is null ? null : new SentInvoiceRecipient
+        {
+            Name = source.Recipient.Name,
+            MobilePhone = source.Recipient.MobilePhone,
+            Ean = source.Recipient.Ean,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// The <c>paymentTerms</c> of a <see cref="UnpaidInvoice"/>.
 /// </summary>
 public sealed record UnpaidInvoicePaymentTerms
@@ -4815,6 +6515,77 @@ internal sealed class JournalPageSource(Generated.JournalsClient client)
 }
 
 /// <summary>
+/// The <c>voucherNumbers</c> of a <see cref="JournalDetailsSettings"/>.
+/// </summary>
+public sealed record JournalDetailsSettingsVoucherNumbers
+{
+    /// <summary>The <c>minimumVoucherNumber</c> field.</summary>
+    public int MinimumVoucherNumber { get; init; }
+
+    /// <summary>The <c>maximumVoucherNumber</c> field.</summary>
+    public int MaximumVoucherNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>settings</c> of a <see cref="JournalDetails"/>.
+/// </summary>
+public sealed record JournalDetailsSettings
+{
+    /// <summary>The <c>voucherNumbers</c> field.</summary>
+    public JournalDetailsSettingsVoucherNumbers? VoucherNumbers { get; init; }
+
+    /// <summary>The <c>entryTypeRestrictedTo</c> field.</summary>
+    public string? EntryTypeRestrictedTo { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="JournalDetails"/>.
+/// </summary>
+public sealed record JournalDetailsTemplates
+{
+    /// <summary>The <c>financeVoucher</c> field.</summary>
+    public System.Uri? FinanceVoucher { get; init; }
+
+    /// <summary>The <c>manualCustomerInvoice</c> field.</summary>
+    public System.Uri? ManualCustomerInvoice { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/journals/{journalNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="Journal"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record JournalDetails
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>settings</c> field.</summary>
+    public JournalDetailsSettings? Settings { get; init; }
+
+    /// <summary>The <c>vouchers</c> field.</summary>
+    public System.Uri? Vouchers { get; init; }
+
+    /// <summary>The <c>entries</c> field.</summary>
+    public System.Uri? Entries { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public JournalDetailsTemplates? Templates { get; init; }
+
+    /// <summary>The <c>journalNumber</c> field.</summary>
+    public int JournalNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
 /// The <c>/journals</c> resource: a composable query, plus its nested collections.
 /// </summary>
 /// <remarks>
@@ -4878,17 +6649,67 @@ public sealed partial class JournalResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<Journal>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
-    /// <summary>The <c>entries</c> belonging to one journal.</summary>
-    /// <param name="journalNumber">The owning journal.</param>
-    /// <returns>The nested collection, scoped to that journal.</returns>
+    /// <summary>Fetches one journal by its identifier.</summary>
+    /// <param name="journalNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="JournalDetails"/> rather than a <see cref="Journal"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<JournalDetails> GetAsync(int journalNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetJournalsByjournalNumberAsync(journalNumber, cancellationToken),
+            "GET /journals/{journalNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    /// <summary><c>/journals/{journalNumber}/entries</c>, scoped to one journal.</summary>
+    /// <param name="journalNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public JournalEntryResource Entries(int journalNumber) =>
         new(_httpClient, journalNumber);
 
-    /// <summary>The <c>vouchers</c> belonging to one journal.</summary>
-    /// <param name="journalNumber">The owning journal.</param>
-    /// <returns>The nested collection, scoped to that journal.</returns>
+    /// <summary><c>/journals/{journalNumber}/templates/manualCustomerInvoice</c>, scoped to one journal.</summary>
+    /// <param name="journalNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public JournalsCustomerResource ManualCustomerInvoiceTemplates(int journalNumber) =>
+        new(_httpClient, journalNumber);
+
+    /// <summary><c>/journals/{journalNumber}/vouchers</c>, scoped to one journal.</summary>
+    /// <param name="journalNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
     public JournalVoucherResource Vouchers(int journalNumber) =>
         new(_httpClient, journalNumber);
+
+    private static JournalDetails FromSingle(Generated.JournalDetails source) => new()
+    {
+        Name = source.Name,
+        Settings = source.Settings is null ? null : new JournalDetailsSettings
+        {
+            VoucherNumbers = source.Settings.VoucherNumbers is null ? null : new JournalDetailsSettingsVoucherNumbers
+            {
+                MinimumVoucherNumber = source.Settings.VoucherNumbers.MinimumVoucherNumber,
+                MaximumVoucherNumber = source.Settings.VoucherNumbers.MaximumVoucherNumber,
+            },
+            EntryTypeRestrictedTo = source.Settings.EntryTypeRestrictedTo.ToString(),
+        },
+        Vouchers = source.Vouchers,
+        Entries = source.Entries,
+        Templates = source.Templates is null ? null : new JournalDetailsTemplates
+        {
+            FinanceVoucher = source.Templates.FinanceVoucher,
+            ManualCustomerInvoice = source.Templates.ManualCustomerInvoice,
+            Self = source.Templates.Self,
+        },
+        JournalNumber = source.JournalNumber,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -4941,6 +6762,95 @@ internal sealed class LayoutPageSource(Generated.LayoutsClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/layouts</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class LayoutResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.LayoutsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public LayoutResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.LayoutsClient(httpClient);
+    }
+
+    private EconomicQuery<Layout, LayoutFilter, LayoutSort> Query => new(new LayoutPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<Layout, LayoutFilter, LayoutSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Layout, LayoutFilter, LayoutSort> Where(System.Linq.Expressions.Expression<System.Func<LayoutFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<Layout, LayoutFilter, LayoutSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Layout, LayoutFilter, LayoutSort> OrderBy(System.Linq.Expressions.Expression<System.Func<LayoutSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<Layout, LayoutFilter, LayoutSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<LayoutSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<Layout, LayoutFilter, LayoutSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<Layout> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<Layout>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one layout by its identifier.</summary>
+    /// <param name="layoutNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<Layout> GetAsync(int layoutNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetLayoutsBylayoutNumberAsync(layoutNumber, cancellationToken),
+            "GET /layouts/{layoutNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static Layout FromSingle(Generated.Layout source) => new()
+    {
+        LayoutNumber = source.LayoutNumber,
+        Name = source.Name,
+        Deleted = source.Deleted,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -5265,6 +7175,490 @@ internal sealed class ArchivedOrderPageSource(Generated.OrdersClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>orderHandle</c> of a <see cref="ArchivedOrderDetailsSoap"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsSoapOrderHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsSoap
+{
+    /// <summary>The <c>orderHandle</c> field.</summary>
+    public ArchivedOrderDetailsSoapOrderHandle? OrderHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="ArchivedOrderDetailsLine"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="ArchivedOrderDetailsLine"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="ArchivedOrderDetails"/>.
+/// </summary>
+public sealed record ArchivedOrderDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public ArchivedOrderDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public ArchivedOrderDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/orders/archived/{orderNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="ArchivedOrder"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record ArchivedOrderDetails
+{
+    /// <summary>The <c>orderNumber</c> field.</summary>
+    public int OrderNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public ArchivedOrderDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public ArchivedOrderDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public ArchivedOrderDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public ArchivedOrderDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public ArchivedOrderDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public ArchivedOrderDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public ArchivedOrderDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<ArchivedOrderDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/orders/archived</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class ArchivedOrderResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.OrdersClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public ArchivedOrderResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.OrdersClient(httpClient);
+    }
+
+    private EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> Query => new(new ArchivedOrderPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> Where(System.Linq.Expressions.Expression<System.Func<ArchivedOrderFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> OrderBy(System.Linq.Expressions.Expression<System.Func<ArchivedOrderSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<ArchivedOrderSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<ArchivedOrder> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<ArchivedOrder>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one archivedOrder by its identifier.</summary>
+    /// <param name="orderNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="ArchivedOrderDetails"/> rather than a <see cref="ArchivedOrder"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<ArchivedOrderDetails> GetAsync(int orderNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetOrdersArchivedByorderNumberAsync(orderNumber, cancellationToken),
+            "GET /orders/archived/{orderNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static ArchivedOrderDetails FromSingle(Generated.OrdersArchivedOrder source) => new()
+    {
+        OrderNumber = source.OrderNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new ArchivedOrderDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new ArchivedOrderDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new ArchivedOrderDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new ArchivedOrderDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new ArchivedOrderDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Pdf = source.Pdf is null ? null : new ArchivedOrderDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new ArchivedOrderDetailsSoap
+        {
+            OrderHandle = source.Soap.OrderHandle is null ? null : new ArchivedOrderDetailsSoapOrderHandle
+            {
+                Id = source.Soap.OrderHandle.Id,
+            },
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new ArchivedOrderDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new ArchivedOrderDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new ArchivedOrderDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -5613,6 +8007,335 @@ internal sealed class DraftOrderPageSource(Generated.OrdersClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+
+    /// <summary>The <c>nemHandelType</c> field.</summary>
+    public string? NemHandelType { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>orderHandle</c> of a <see cref="DraftOrderDetailsSoap"/>.
+/// </summary>
+public sealed record DraftOrderDetailsSoapOrderHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsSoap
+{
+    /// <summary>The <c>orderHandle</c> field.</summary>
+    public DraftOrderDetailsSoapOrderHandle? OrderHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsTemplates
+{
+    /// <summary>The <c>upgradeInstructions</c> field.</summary>
+    public System.Uri? UpgradeInstructions { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="DraftOrderDetailsLine"/>.
+/// </summary>
+public sealed record DraftOrderDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="DraftOrderDetailsLine"/>.
+/// </summary>
+public sealed record DraftOrderDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="DraftOrderDetails"/>.
+/// </summary>
+public sealed record DraftOrderDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public DraftOrderDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public DraftOrderDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>totalNetAmount</c> field.</summary>
+    public decimal TotalNetAmount { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/orders/drafts/{orderNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="DraftOrder"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record DraftOrderDetails
+{
+    /// <summary>The <c>orderNumber</c> field.</summary>
+    public int OrderNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>attachment</c> field.</summary>
+    public System.Uri? Attachment { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public DraftOrderDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public DraftOrderDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public DraftOrderDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public DraftOrderDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public DraftOrderDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public DraftOrderDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public DraftOrderDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public DraftOrderDetailsTemplates? Templates { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<DraftOrderDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
 }
 
 /// <summary>
@@ -6176,6 +8899,23 @@ public sealed partial class DraftOrderResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<DraftOrder>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one draftOrder by its identifier.</summary>
+    /// <param name="orderNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="DraftOrderDetails"/> rather than a <see cref="DraftOrder"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<DraftOrderDetails> GetAsync(int orderNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetOrdersDraftsByorderNumberAsync(orderNumber, cancellationToken),
+            "GET /orders/drafts/{orderNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a draftOrder.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -6666,6 +9406,116 @@ public sealed partial class DraftOrderResource
         Self = source.Self,
     };
 
+    private static DraftOrderDetails FromSingle(Generated.OrdersDraftOrder source) => new()
+    {
+        OrderNumber = source.OrderNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Attachment = source.Attachment,
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        PaymentTerms = source.PaymentTerms is null ? null : new DraftOrderDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new DraftOrderDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+            NemHandelType = source.Recipient.NemHandelType.ToString(),
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new DraftOrderDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new DraftOrderDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new DraftOrderDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Pdf = source.Pdf is null ? null : new DraftOrderDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new DraftOrderDetailsSoap
+        {
+            OrderHandle = source.Soap.OrderHandle is null ? null : new DraftOrderDetailsSoapOrderHandle
+            {
+                Id = source.Soap.OrderHandle.Id,
+            },
+        },
+        Templates = source.Templates is null ? null : new DraftOrderDetailsTemplates
+        {
+            UpgradeInstructions = source.Templates.UpgradeInstructions,
+            Self = source.Templates.Self,
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new DraftOrderDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new DraftOrderDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new DraftOrderDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            TotalNetAmount = (decimal)item0.TotalNetAmount,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Self = source.Self,
+    };
+
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
@@ -7019,6 +9869,514 @@ internal sealed class SentOrderPageSource(Generated.OrdersClient client)
 }
 
 /// <summary>
+/// The <c>paymentTerms</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>orderHandle</c> of a <see cref="SentOrderDetailsSoap"/>.
+/// </summary>
+public sealed record SentOrderDetailsSoapOrderHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsSoap
+{
+    /// <summary>The <c>orderHandle</c> field.</summary>
+    public SentOrderDetailsSoapOrderHandle? OrderHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsTemplates
+{
+    /// <summary>The <c>upgradeInstructions</c> field.</summary>
+    public System.Uri? UpgradeInstructions { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="SentOrderDetailsLine"/>.
+/// </summary>
+public sealed record SentOrderDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="SentOrderDetailsLine"/>.
+/// </summary>
+public sealed record SentOrderDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="SentOrderDetails"/>.
+/// </summary>
+public sealed record SentOrderDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public SentOrderDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public SentOrderDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/orders/sent/{orderNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="SentOrder"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record SentOrderDetails
+{
+    /// <summary>The <c>orderNumber</c> field.</summary>
+    public int OrderNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public SentOrderDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public SentOrderDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public SentOrderDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public SentOrderDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public SentOrderDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public SentOrderDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public SentOrderDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public SentOrderDetailsTemplates? Templates { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<SentOrderDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/orders/sent</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class SentOrderResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.OrdersClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public SentOrderResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.OrdersClient(httpClient);
+    }
+
+    private EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> Query => new(new SentOrderPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> Where(System.Linq.Expressions.Expression<System.Func<SentOrderFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> OrderBy(System.Linq.Expressions.Expression<System.Func<SentOrderSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<SentOrderSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<SentOrder> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<SentOrder>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one sentOrder by its identifier.</summary>
+    /// <param name="orderNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="SentOrderDetails"/> rather than a <see cref="SentOrder"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<SentOrderDetails> GetAsync(int orderNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetOrdersSentByorderNumberAsync(orderNumber, cancellationToken),
+            "GET /orders/sent/{orderNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static SentOrderDetails FromSingle(Generated.OrdersSentOrder source) => new()
+    {
+        OrderNumber = source.OrderNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new SentOrderDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new SentOrderDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new SentOrderDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new SentOrderDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new SentOrderDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Pdf = source.Pdf is null ? null : new SentOrderDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new SentOrderDetailsSoap
+        {
+            OrderHandle = source.Soap.OrderHandle is null ? null : new SentOrderDetailsSoapOrderHandle
+            {
+                Id = source.Soap.OrderHandle.Id,
+            },
+        },
+        Templates = source.Templates is null ? null : new SentOrderDetailsTemplates
+        {
+            UpgradeInstructions = source.Templates.UpgradeInstructions,
+            Self = source.Templates.Self,
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new SentOrderDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new SentOrderDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new SentOrderDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/payment-terms</c>.
 /// </summary>
 public sealed record PaymentTerms
@@ -7236,6 +10594,19 @@ public sealed partial class PaymentTermsResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<PaymentTerms>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one paymentTerms by its identifier.</summary>
+    /// <param name="paymentTermsNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<PaymentTerms> GetAsync(int paymentTermsNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetPaymentTermsBypaymentTermsNumberAsync(paymentTermsNumber, cancellationToken),
+            "GET /payment-terms/{paymentTermsNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a paymentTerms.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -7372,6 +10743,21 @@ public sealed partial class PaymentTermsResource
         Self = source.Self,
     };
 
+    private static PaymentTerms FromSingle(Generated.PaymentTerm source) => new()
+    {
+        PaymentTermsNumber = source.PaymentTermsNumber,
+        DaysOfCredit = source.DaysOfCredit,
+        Description = source.Description,
+        Name = source.Name,
+        PaymentTermsType = source.PaymentTermsType.ToString(),
+        ContraAccountForPrepaidAmount = Reference(source.ContraAccountForPrepaidAmount?.AccountNumber, source.ContraAccountForPrepaidAmount?.Self),
+        ContraAccountForRemainderAmount = Reference(source.ContraAccountForRemainderAmount?.AccountNumber, source.ContraAccountForRemainderAmount?.Self),
+        PercentageForPrepaidAmount = (decimal)source.PercentageForPrepaidAmount,
+        PercentageForRemainderAmount = (decimal)source.PercentageForRemainderAmount,
+        CreditCardCompany = Reference(source.CreditCardCompany?.CustomerNumber, source.CreditCardCompany?.Self),
+        Self = source.Self,
+    };
+
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
@@ -7422,6 +10808,94 @@ internal sealed class PaymentTypePageSource(Generated.PaymentTypesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/payment-types</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class PaymentTypeResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.PaymentTypesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public PaymentTypeResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.PaymentTypesClient(httpClient);
+    }
+
+    private EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> Query => new(new PaymentTypePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> Where(System.Linq.Expressions.Expression<System.Func<PaymentTypeFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> OrderBy(System.Linq.Expressions.Expression<System.Func<PaymentTypeSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<PaymentTypeSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<PaymentType> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<PaymentType>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one paymentType by its identifier.</summary>
+    /// <param name="paymentTypeNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<PaymentType> GetAsync(int paymentTypeNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetPaymentTypesBypaymentTypeNumberAsync(paymentTypeNumber, cancellationToken),
+            "GET /payment-types/{paymentTypeNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static PaymentType FromSingle(Generated.PaymentTypeYear source) => new()
+    {
+        PaymentTypeNumber = source.PaymentTypeNumber,
+        Name = source.Name ?? string.Empty,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -7582,6 +11056,122 @@ internal sealed class ProductGroupPageSource(Generated.ProductGroupsClient clien
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/product-groups</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class ProductGroupResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.ProductGroupsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public ProductGroupResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.ProductGroupsClient(httpClient);
+    }
+
+    private EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> Query => new(new ProductGroupPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> Where(System.Linq.Expressions.Expression<System.Func<ProductGroupFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> OrderBy(System.Linq.Expressions.Expression<System.Func<ProductGroupSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<ProductGroupSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<ProductGroup> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<ProductGroup>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one productGroup by its identifier.</summary>
+    /// <param name="productGroupNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<ProductGroup> GetAsync(int productGroupNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetProductGroupsByproductGroupNumberAsync(productGroupNumber, cancellationToken),
+            "GET /product-groups/{productGroupNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static ProductGroup FromSingle(Generated.ProductGroups source) => new()
+    {
+        ProductGroupNumber = source.ProductGroupNumber,
+        Name = source.Name,
+        SalesAccounts = source.SalesAccounts,
+        Products = source.Products,
+        InventoryEnabled = source.InventoryEnabled,
+        Accrual = source.Accrual is null ? null : new ProductGroupAccrual
+        {
+            AccountNumber = source.Accrual.AccountNumber,
+            AccountType = source.Accrual.AccountType.ToString(),
+            Balance = (decimal)source.Accrual.Balance,
+            DraftBalance = (decimal)source.Accrual.DraftBalance,
+            Barred = source.Accrual.Barred,
+            BlockDirectEntries = source.Accrual.BlockDirectEntries,
+            ContraAccount = Reference(source.Accrual.ContraAccount?.AccountNumber, source.Accrual.ContraAccount?.Self),
+            DebitCredit = source.Accrual.DebitCredit.ToString(),
+            Name = source.Accrual.Name,
+            VatAccount = source.Accrual.VatAccount is null ? null : new ProductGroupAccrualVatAccount
+            {
+                VatCode = source.Accrual.VatAccount.VatCode,
+                Self = source.Accrual.VatAccount.Self,
+            },
+            AccountsSummed = FacadeTransport.MapList(source.Accrual.AccountsSummed, item1 => new ProductGroupAccrualAccountsSummedItem
+            {
+                FromAccount = Reference(item1.FromAccount?.AccountNumber, item1.FromAccount?.Self),
+                ToAccount = Reference(item1.ToAccount?.AccountNumber, item1.ToAccount?.Self),
+            }),
+            TotalFromAccount = Reference(source.Accrual.TotalFromAccount?.AccountNumber, source.Accrual.TotalFromAccount?.Self),
+            AccountingYears = source.Accrual.AccountingYears,
+            Self = source.Accrual.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -7873,6 +11463,203 @@ internal sealed class ProductPageSource(Generated.ProductsClient client)
 }
 
 /// <summary>
+/// The <c>invoices</c> of a <see cref="ProductDetails"/>.
+/// </summary>
+public sealed record ProductDetailsInvoices
+{
+    /// <summary>The <c>drafts</c> field.</summary>
+    public System.Uri? Drafts { get; init; }
+
+    /// <summary>The <c>booked</c> field.</summary>
+    public System.Uri? Booked { get; init; }
+}
+
+/// <summary>
+/// The <c>inventory</c> of a <see cref="ProductDetails"/>.
+/// </summary>
+public sealed record ProductDetailsInventory
+{
+    /// <summary>The <c>available</c> field.</summary>
+    public decimal Available { get; init; }
+
+    /// <summary>The <c>inStock</c> field.</summary>
+    public decimal InStock { get; init; }
+
+    /// <summary>The <c>orderedByCustomers</c> field.</summary>
+    public decimal OrderedByCustomers { get; init; }
+
+    /// <summary>The <c>orderedFromSuppliers</c> field.</summary>
+    public decimal OrderedFromSuppliers { get; init; }
+
+    /// <summary>The <c>packageVolume</c> field.</summary>
+    public decimal PackageVolume { get; init; }
+
+    /// <summary>The <c>grossWeight</c> field.</summary>
+    public decimal GrossWeight { get; init; }
+
+    /// <summary>The <c>netWeight</c> field.</summary>
+    public decimal NetWeight { get; init; }
+
+    /// <summary>The <c>recommendedCostPrice</c> field.</summary>
+    public decimal RecommendedCostPrice { get; init; }
+}
+
+/// <summary>
+/// The <c>vatAccount</c> of a <see cref="ProductDetailsProductGroupAccrual"/>.
+/// </summary>
+public sealed record ProductDetailsProductGroupAccrualVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>accountsSummed</c> of a <see cref="ProductDetailsProductGroupAccrual"/>.
+/// </summary>
+public sealed record ProductDetailsProductGroupAccrualAccountsSummedItem
+{
+    /// <summary>The <c>fromAccount</c> field.</summary>
+    public EconomicReference? FromAccount { get; init; }
+
+    /// <summary>The <c>toAccount</c> field.</summary>
+    public EconomicReference? ToAccount { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="ProductDetailsProductGroup"/>.
+/// </summary>
+public sealed record ProductDetailsProductGroupAccrual
+{
+    /// <summary>The <c>accountNumber</c> field.</summary>
+    public int AccountNumber { get; init; }
+
+    /// <summary>The <c>accountType</c> field.</summary>
+    public string? AccountType { get; init; }
+
+    /// <summary>The <c>balance</c> field.</summary>
+    public decimal Balance { get; init; }
+
+    /// <summary>The <c>draftBalance</c> field.</summary>
+    public decimal DraftBalance { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>blockDirectEntries</c> field.</summary>
+    public bool BlockDirectEntries { get; init; }
+
+    /// <summary>The <c>contraAccount</c> field.</summary>
+    public EconomicReference? ContraAccount { get; init; }
+
+    /// <summary>The <c>debitCredit</c> field.</summary>
+    public string? DebitCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>vatAccount</c> field.</summary>
+    public ProductDetailsProductGroupAccrualVatAccount? VatAccount { get; init; }
+
+    /// <summary>The <c>accountsSummed</c> field.</summary>
+    public IReadOnlyList<ProductDetailsProductGroupAccrualAccountsSummedItem> AccountsSummed { get; init; } = [];
+
+    /// <summary>The <c>totalFromAccount</c> field.</summary>
+    public EconomicReference? TotalFromAccount { get; init; }
+
+    /// <summary>The <c>accountingYears</c> field.</summary>
+    public System.Uri? AccountingYears { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public System.Uri? Self { get; init; }
+}
+
+/// <summary>
+/// The <c>productGroup</c> of a <see cref="ProductDetails"/>.
+/// </summary>
+public sealed record ProductDetailsProductGroup
+{
+    /// <summary>The <c>productGroupNumber</c> field.</summary>
+    public int ProductGroupNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>salesAccounts</c> field.</summary>
+    public System.Uri? SalesAccounts { get; init; }
+
+    /// <summary>The <c>products</c> field.</summary>
+    public System.Uri? Products { get; init; }
+
+    /// <summary>The <c>inventoryEnabled</c> field.</summary>
+    public bool InventoryEnabled { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public ProductDetailsProductGroupAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/products/{productNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="Product"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record ProductDetails
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public required string ProductNumber { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>The <c>costPrice</c> field.</summary>
+    public decimal CostPrice { get; init; }
+
+    /// <summary>The <c>recommendedPrice</c> field.</summary>
+    public decimal RecommendedPrice { get; init; }
+
+    /// <summary>The <c>salesPrice</c> field.</summary>
+    public decimal SalesPrice { get; init; }
+
+    /// <summary>The <c>barCode</c> field.</summary>
+    public string? BarCode { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>invoices</c> field.</summary>
+    public ProductDetailsInvoices? Invoices { get; init; }
+
+    /// <summary>The <c>inventory</c> field.</summary>
+    public ProductDetailsInventory? Inventory { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>productGroup</c> field.</summary>
+    public ProductDetailsProductGroup? ProductGroup { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
 /// The <c>inventory</c> of a <see cref="ProductCreate"/>.
 /// </summary>
 public sealed record ProductCreateInventory
@@ -8049,6 +11836,23 @@ public sealed partial class ProductResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<Product>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one product by its identifier.</summary>
+    /// <param name="productNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="ProductDetails"/> rather than a <see cref="Product"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<ProductDetails> GetAsync(string productNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetProductsByproductNumberAsync(productNumber, cancellationToken),
+            "GET /products/{productNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a product.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -8192,6 +11996,12 @@ public sealed partial class ProductResource
         return target;
     }
 
+    /// <summary><c>/products/{productNumber}/pricing/currency-specific-sales-prices</c>, scoped to one product.</summary>
+    /// <param name="productNumber">Scopes the collection.</param>
+    /// <returns>The nested collection, scoped to those identifiers.</returns>
+    public ProductPriceResource CurrencySpecificSalesPrices(string productNumber) =>
+        new(_httpClient, productNumber);
+
     private static Product FromGenerated(Generated.Product source) => new()
     {
         ProductNumber = source.ProductNumber ?? string.Empty,
@@ -8245,6 +12055,72 @@ public sealed partial class ProductResource
                     Self = source.ProductGroup.Accrual.VatAccount.Self,
                 },
                 AccountsSummed = FacadeTransport.MapList(source.ProductGroup.Accrual.AccountsSummed, item2 => new ProductProductGroupAccrualAccountsSummedItem
+                {
+                    FromAccount = Reference(item2.FromAccount?.AccountNumber, item2.FromAccount?.Self),
+                    ToAccount = Reference(item2.ToAccount?.AccountNumber, item2.ToAccount?.Self),
+                }),
+                TotalFromAccount = Reference(source.ProductGroup.Accrual.TotalFromAccount?.AccountNumber, source.ProductGroup.Accrual.TotalFromAccount?.Self),
+                AccountingYears = source.ProductGroup.Accrual.AccountingYears,
+                Self = source.ProductGroup.Accrual.Self,
+            },
+            Self = source.ProductGroup.Self,
+        },
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Self = source.Self,
+    };
+
+    private static ProductDetails FromSingle(Generated.Products source) => new()
+    {
+        ProductNumber = source.ProductNumber ?? string.Empty,
+        Description = source.Description,
+        Name = source.Name ?? string.Empty,
+        CostPrice = (decimal)source.CostPrice,
+        RecommendedPrice = (decimal)source.RecommendedPrice,
+        SalesPrice = (decimal)source.SalesPrice,
+        BarCode = source.BarCode,
+        Barred = source.Barred,
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Invoices = source.Invoices is null ? null : new ProductDetailsInvoices
+        {
+            Drafts = source.Invoices.Drafts,
+            Booked = source.Invoices.Booked,
+        },
+        Inventory = source.Inventory is null ? null : new ProductDetailsInventory
+        {
+            Available = (decimal)source.Inventory.Available,
+            InStock = (decimal)source.Inventory.InStock,
+            OrderedByCustomers = (decimal)source.Inventory.OrderedByCustomers,
+            OrderedFromSuppliers = (decimal)source.Inventory.OrderedFromSuppliers,
+            PackageVolume = (decimal)source.Inventory.PackageVolume,
+            GrossWeight = (decimal)source.Inventory.GrossWeight,
+            NetWeight = (decimal)source.Inventory.NetWeight,
+            RecommendedCostPrice = (decimal)source.Inventory.RecommendedCostPrice,
+        },
+        Unit = Reference(source.Unit?.UnitNumber, source.Unit?.Self),
+        ProductGroup = source.ProductGroup is null ? null : new ProductDetailsProductGroup
+        {
+            ProductGroupNumber = source.ProductGroup.ProductGroupNumber,
+            Name = source.ProductGroup.Name,
+            SalesAccounts = source.ProductGroup.SalesAccounts,
+            Products = source.ProductGroup.Products,
+            InventoryEnabled = source.ProductGroup.InventoryEnabled,
+            Accrual = source.ProductGroup.Accrual is null ? null : new ProductDetailsProductGroupAccrual
+            {
+                AccountNumber = source.ProductGroup.Accrual.AccountNumber,
+                AccountType = source.ProductGroup.Accrual.AccountType.ToString(),
+                Balance = (decimal)source.ProductGroup.Accrual.Balance,
+                DraftBalance = (decimal)source.ProductGroup.Accrual.DraftBalance,
+                Barred = source.ProductGroup.Accrual.Barred,
+                BlockDirectEntries = source.ProductGroup.Accrual.BlockDirectEntries,
+                ContraAccount = Reference(source.ProductGroup.Accrual.ContraAccount?.AccountNumber, source.ProductGroup.Accrual.ContraAccount?.Self),
+                DebitCredit = source.ProductGroup.Accrual.DebitCredit.ToString(),
+                Name = source.ProductGroup.Accrual.Name,
+                VatAccount = source.ProductGroup.Accrual.VatAccount is null ? null : new ProductDetailsProductGroupAccrualVatAccount
+                {
+                    VatCode = source.ProductGroup.Accrual.VatAccount.VatCode,
+                    Self = source.ProductGroup.Accrual.VatAccount.Self,
+                },
+                AccountsSummed = FacadeTransport.MapList(source.ProductGroup.Accrual.AccountsSummed, item2 => new ProductDetailsProductGroupAccrualAccountsSummedItem
                 {
                     FromAccount = Reference(item2.FromAccount?.AccountNumber, item2.FromAccount?.Self),
                     ToAccount = Reference(item2.ToAccount?.AccountNumber, item2.ToAccount?.Self),
@@ -8585,6 +12461,490 @@ internal sealed class ArchivedQuotePageSource(Generated.QuotesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>quoteHandle</c> of a <see cref="ArchivedQuoteDetailsSoap"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsSoapQuoteHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsSoap
+{
+    /// <summary>The <c>quoteHandle</c> field.</summary>
+    public ArchivedQuoteDetailsSoapQuoteHandle? QuoteHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="ArchivedQuoteDetailsLine"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="ArchivedQuoteDetailsLine"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="ArchivedQuoteDetails"/>.
+/// </summary>
+public sealed record ArchivedQuoteDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public ArchivedQuoteDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public ArchivedQuoteDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/quotes/archived/{quoteNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="ArchivedQuote"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record ArchivedQuoteDetails
+{
+    /// <summary>The <c>quoteNumber</c> field.</summary>
+    public int QuoteNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public ArchivedQuoteDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public ArchivedQuoteDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public ArchivedQuoteDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public ArchivedQuoteDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public ArchivedQuoteDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public ArchivedQuoteDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public ArchivedQuoteDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<ArchivedQuoteDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/quotes/archived</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class ArchivedQuoteResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.QuotesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public ArchivedQuoteResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.QuotesClient(httpClient);
+    }
+
+    private EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> Query => new(new ArchivedQuotePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> Where(System.Linq.Expressions.Expression<System.Func<ArchivedQuoteFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> OrderBy(System.Linq.Expressions.Expression<System.Func<ArchivedQuoteSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<ArchivedQuoteSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<ArchivedQuote> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<ArchivedQuote>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one archivedQuote by its identifier.</summary>
+    /// <param name="quoteNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="ArchivedQuoteDetails"/> rather than a <see cref="ArchivedQuote"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<ArchivedQuoteDetails> GetAsync(int quoteNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetQuotesArchivedByquoteNumberAsync(quoteNumber, cancellationToken),
+            "GET /quotes/archived/{quoteNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static ArchivedQuoteDetails FromSingle(Generated.QuotesArchivedQuote source) => new()
+    {
+        QuoteNumber = source.QuoteNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new ArchivedQuoteDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new ArchivedQuoteDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new ArchivedQuoteDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new ArchivedQuoteDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new ArchivedQuoteDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Pdf = source.Pdf is null ? null : new ArchivedQuoteDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new ArchivedQuoteDetailsSoap
+        {
+            QuoteHandle = source.Soap.QuoteHandle is null ? null : new ArchivedQuoteDetailsSoapQuoteHandle
+            {
+                Id = source.Soap.QuoteHandle.Id,
+            },
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new ArchivedQuoteDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new ArchivedQuoteDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new ArchivedQuoteDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -8933,6 +13293,335 @@ internal sealed class DraftQuotePageSource(Generated.QuotesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+
+    /// <summary>The <c>nemHandelType</c> field.</summary>
+    public string? NemHandelType { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>quoteHandle</c> of a <see cref="DraftQuoteDetailsSoap"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsSoapQuoteHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsSoap
+{
+    /// <summary>The <c>quoteHandle</c> field.</summary>
+    public DraftQuoteDetailsSoapQuoteHandle? QuoteHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsTemplates
+{
+    /// <summary>The <c>upgradeInstructions</c> field.</summary>
+    public System.Uri? UpgradeInstructions { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="DraftQuoteDetailsLine"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="DraftQuoteDetailsLine"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="DraftQuoteDetails"/>.
+/// </summary>
+public sealed record DraftQuoteDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public DraftQuoteDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public DraftQuoteDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>totalNetAmount</c> field.</summary>
+    public decimal TotalNetAmount { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/quotes/drafts/{quoteNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="DraftQuote"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record DraftQuoteDetails
+{
+    /// <summary>The <c>quoteNumber</c> field.</summary>
+    public int QuoteNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>attachment</c> field.</summary>
+    public System.Uri? Attachment { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public DraftQuoteDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public DraftQuoteDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public DraftQuoteDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public DraftQuoteDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public DraftQuoteDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public DraftQuoteDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public DraftQuoteDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public DraftQuoteDetailsTemplates? Templates { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<DraftQuoteDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
 }
 
 /// <summary>
@@ -9496,6 +14185,23 @@ public sealed partial class DraftQuoteResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<DraftQuote>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one draftQuote by its identifier.</summary>
+    /// <param name="quoteNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="DraftQuoteDetails"/> rather than a <see cref="DraftQuote"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<DraftQuoteDetails> GetAsync(int quoteNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetQuotesDraftsByquoteNumberAsync(quoteNumber, cancellationToken),
+            "GET /quotes/drafts/{quoteNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a draftQuote.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -9986,6 +14692,116 @@ public sealed partial class DraftQuoteResource
         Self = source.Self,
     };
 
+    private static DraftQuoteDetails FromSingle(Generated.QuotesDraftQuote source) => new()
+    {
+        QuoteNumber = source.QuoteNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        Attachment = source.Attachment,
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        PaymentTerms = source.PaymentTerms is null ? null : new DraftQuoteDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new DraftQuoteDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+            NemHandelType = source.Recipient.NemHandelType.ToString(),
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new DraftQuoteDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new DraftQuoteDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new DraftQuoteDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Pdf = source.Pdf is null ? null : new DraftQuoteDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new DraftQuoteDetailsSoap
+        {
+            QuoteHandle = source.Soap.QuoteHandle is null ? null : new DraftQuoteDetailsSoapQuoteHandle
+            {
+                Id = source.Soap.QuoteHandle.Id,
+            },
+        },
+        Templates = source.Templates is null ? null : new DraftQuoteDetailsTemplates
+        {
+            UpgradeInstructions = source.Templates.UpgradeInstructions,
+            Self = source.Templates.Self,
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new DraftQuoteDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new DraftQuoteDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new DraftQuoteDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            TotalNetAmount = (decimal)item0.TotalNetAmount,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Self = source.Self,
+    };
+
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
@@ -10339,6 +15155,514 @@ internal sealed class SentQuotePageSource(Generated.QuotesClient client)
 }
 
 /// <summary>
+/// The <c>paymentTerms</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsPaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsPdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public System.Uri? Download { get; init; }
+}
+
+/// <summary>
+/// The <c>quoteHandle</c> of a <see cref="SentQuoteDetailsSoap"/>.
+/// </summary>
+public sealed record SentQuoteDetailsSoapQuoteHandle
+{
+    /// <summary>The <c>id</c> field.</summary>
+    public int Id { get; init; }
+}
+
+/// <summary>
+/// The <c>soap</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsSoap
+{
+    /// <summary>The <c>quoteHandle</c> field.</summary>
+    public SentQuoteDetailsSoapQuoteHandle? QuoteHandle { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsTemplates
+{
+    /// <summary>The <c>upgradeInstructions</c> field.</summary>
+    public System.Uri? UpgradeInstructions { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>accrual</c> of a <see cref="SentQuoteDetailsLine"/>.
+/// </summary>
+public sealed record SentQuoteDetailsLineAccrual
+{
+    /// <summary>The <c>startDate</c> field.</summary>
+    public DateOnly? StartDate { get; init; }
+
+    /// <summary>The <c>endDate</c> field.</summary>
+    public DateOnly? EndDate { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="SentQuoteDetailsLine"/>.
+/// </summary>
+public sealed record SentQuoteDetailsLineProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// One entry in the <c>lines</c> of a <see cref="SentQuoteDetails"/>.
+/// </summary>
+public sealed record SentQuoteDetailsLine
+{
+    /// <summary>The <c>lineNumber</c> field.</summary>
+    public int LineNumber { get; init; }
+
+    /// <summary>The <c>sortKey</c> field.</summary>
+    public int SortKey { get; init; }
+
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>accrual</c> field.</summary>
+    public SentQuoteDetailsLineAccrual? Accrual { get; init; }
+
+    /// <summary>The <c>unit</c> field.</summary>
+    public EconomicReference? Unit { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public SentQuoteDetailsLineProduct? Product { get; init; }
+
+    /// <summary>The <c>quantity</c> field.</summary>
+    public decimal Quantity { get; init; }
+
+    /// <summary>The <c>unitNetPrice</c> field.</summary>
+    public decimal UnitNetPrice { get; init; }
+
+    /// <summary>The <c>discountPercentage</c> field.</summary>
+    public decimal DiscountPercentage { get; init; }
+
+    /// <summary>The <c>unitCostPrice</c> field.</summary>
+    public decimal UnitCostPrice { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/quotes/sent/{quoteNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="SentQuote"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record SentQuoteDetails
+{
+    /// <summary>The <c>quoteNumber</c> field.</summary>
+    public int QuoteNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public SentQuoteDetailsPaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public SentQuoteDetailsRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public SentQuoteDetailsDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public SentQuoteDetailsNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public SentQuoteDetailsReferences? References { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>lastUpdated</c> field.</summary>
+    public DateTimeOffset? LastUpdated { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public SentQuoteDetailsPdf? Pdf { get; init; }
+
+    /// <summary>The <c>soap</c> field.</summary>
+    public SentQuoteDetailsSoap? Soap { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public SentQuoteDetailsTemplates? Templates { get; init; }
+
+    /// <summary>The <c>lines</c> field.</summary>
+    public IReadOnlyList<SentQuoteDetailsLine> Lines { get; init; } = [];
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>/quotes/sent</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class SentQuoteResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.QuotesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public SentQuoteResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.QuotesClient(httpClient);
+    }
+
+    private EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> Query => new(new SentQuotePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> Where(System.Linq.Expressions.Expression<System.Func<SentQuoteFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> OrderBy(System.Linq.Expressions.Expression<System.Func<SentQuoteSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<SentQuoteSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<SentQuote> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<SentQuote>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one sentQuote by its identifier.</summary>
+    /// <param name="quoteNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="SentQuoteDetails"/> rather than a <see cref="SentQuote"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<SentQuoteDetails> GetAsync(int quoteNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetQuotesSentByquoteNumberAsync(quoteNumber, cancellationToken),
+            "GET /quotes/sent/{quoteNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static SentQuoteDetails FromSingle(Generated.QuotesSentQuote source) => new()
+    {
+        QuoteNumber = source.QuoteNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new SentQuoteDetailsPaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new SentQuoteDetailsRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new SentQuoteDetailsDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new SentQuoteDetailsNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new SentQuoteDetailsReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        LastUpdated = source.LastUpdated == default ? null : source.LastUpdated,
+        Pdf = source.Pdf is null ? null : new SentQuoteDetailsPdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Soap = source.Soap is null ? null : new SentQuoteDetailsSoap
+        {
+            QuoteHandle = source.Soap.QuoteHandle is null ? null : new SentQuoteDetailsSoapQuoteHandle
+            {
+                Id = source.Soap.QuoteHandle.Id,
+            },
+        },
+        Templates = source.Templates is null ? null : new SentQuoteDetailsTemplates
+        {
+            UpgradeInstructions = source.Templates.UpgradeInstructions,
+            Self = source.Templates.Self,
+        },
+        Lines = FacadeTransport.MapList(source.Lines, item0 => new SentQuoteDetailsLine
+        {
+            LineNumber = item0.LineNumber,
+            SortKey = item0.SortKey,
+            Description = item0.Description,
+            Accrual = item0.Accrual is null ? null : new SentQuoteDetailsLineAccrual
+            {
+                StartDate = item0.Accrual.StartDate == default ? null : item0.Accrual.StartDate,
+                EndDate = item0.Accrual.EndDate == default ? null : item0.Accrual.EndDate,
+            },
+            Unit = Reference(item0.Unit?.UnitNumber, item0.Unit?.Self),
+            Product = item0.Product is null ? null : new SentQuoteDetailsLineProduct
+            {
+                ProductNumber = item0.Product.ProductNumber,
+                Self = item0.Product.Self,
+            },
+            Quantity = (decimal)item0.Quantity,
+            UnitNetPrice = (decimal)item0.UnitNetPrice,
+            DiscountPercentage = (decimal)item0.DiscountPercentage,
+            UnitCostPrice = (decimal)item0.UnitCostPrice,
+            MarginInBaseCurrency = (decimal)item0.MarginInBaseCurrency,
+            MarginPercentage = (decimal)item0.MarginPercentage,
+            DepartmentalDistribution = Reference(item0.DepartmentalDistribution?.DepartmentalDistributionNumber, item0.DepartmentalDistribution?.Self),
+        }),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// The <c>remittanceAdvice</c> of a <see cref="Supplier"/>.
 /// </summary>
 public sealed record SupplierRemittanceAdvice
@@ -10484,6 +15808,125 @@ internal sealed class SupplierPageSource(Generated.SuppliersClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>attention</c> of a <see cref="SupplierDetails"/>.
+/// </summary>
+public sealed record SupplierDetailsAttention
+{
+    /// <summary>The <c>number</c> field.</summary>
+    public int Number { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public System.Uri? Self { get; init; }
+}
+
+/// <summary>
+/// The <c>remittanceAdvice</c> of a <see cref="SupplierDetails"/>.
+/// </summary>
+public sealed record SupplierDetailsRemittanceAdvice
+{
+    /// <summary>The <c>creditorId</c> field.</summary>
+    public string? CreditorId { get; init; }
+
+    /// <summary>The <c>paymentType</c> field.</summary>
+    public EconomicReference? PaymentType { get; init; }
+}
+
+/// <summary>
+/// The <c>supplierContact</c> of a <see cref="SupplierDetails"/>.
+/// </summary>
+public sealed record SupplierDetailsSupplierContact
+{
+    /// <summary>The <c>number</c> field.</summary>
+    public int Number { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public System.Uri? Self { get; init; }
+}
+
+/// <summary>
+/// A single resource from <c>/suppliers/{supplierNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="Supplier"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record SupplierDetails
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public SupplierDetailsAttention? Attention { get; init; }
+
+    /// <summary>The <c>bankAccount</c> field.</summary>
+    public string? BankAccount { get; init; }
+
+    /// <summary>The <c>barred</c> field.</summary>
+    public bool Barred { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>contacts</c> field.</summary>
+    public System.Uri? Contacts { get; init; }
+
+    /// <summary>The <c>corporateIdentificationNumber</c> field.</summary>
+    public string? CorporateIdentificationNumber { get; init; }
+
+    /// <summary>The <c>costAccount</c> field.</summary>
+    public EconomicReference? CostAccount { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public required string Currency { get; init; }
+
+    /// <summary>The <c>defaultInvoiceText</c> field.</summary>
+    public string? DefaultInvoiceText { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>email</c> field.</summary>
+    public string? Email { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public EconomicReference? PaymentTerms { get; init; }
+
+    /// <summary>The <c>phone</c> field.</summary>
+    public string? Phone { get; init; }
+
+    /// <summary>The <c>remittanceAdvice</c> field.</summary>
+    public SupplierDetailsRemittanceAdvice? RemittanceAdvice { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>supplierContact</c> field.</summary>
+    public SupplierDetailsSupplierContact? SupplierContact { get; init; }
+
+    /// <summary>The <c>supplierGroup</c> field.</summary>
+    public EconomicReference? SupplierGroup { get; init; }
+
+    /// <summary>The <c>supplierNumber</c> field.</summary>
+    public int SupplierNumber { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public System.Uri? Self { get; init; }
 }
 
 /// <summary>
@@ -10723,6 +16166,23 @@ public sealed partial class SupplierResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<Supplier>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one supplier by its identifier.</summary>
+    /// <param name="supplierNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="SupplierDetails"/> rather than a <see cref="Supplier"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<SupplierDetails> GetAsync(int supplierNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetSuppliersBysupplierNumberAsync(supplierNumber, cancellationToken),
+            "GET /suppliers/{supplierNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a supplier.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -10915,6 +16375,46 @@ public sealed partial class SupplierResource
         Self = source.Self,
     };
 
+    private static SupplierDetails FromSingle(Generated.SupplierResource source) => new()
+    {
+        Address = source.Address,
+        Attention = source.Attention is null ? null : new SupplierDetailsAttention
+        {
+            Number = source.Attention.Number,
+            Self = source.Attention.Self,
+        },
+        BankAccount = source.BankAccount,
+        Barred = source.Barred,
+        City = source.City,
+        Contacts = source.Contacts,
+        CorporateIdentificationNumber = source.CorporateIdentificationNumber,
+        CostAccount = Reference(source.CostAccount?.AccountNumber, source.CostAccount?.Self),
+        Country = source.Country,
+        Currency = source.Currency ?? string.Empty,
+        DefaultInvoiceText = source.DefaultInvoiceText,
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Email = source.Email,
+        Name = source.Name,
+        PaymentTerms = Reference(source.PaymentTerms?.PaymentTermsNumber, source.PaymentTerms?.Self),
+        Phone = source.Phone,
+        RemittanceAdvice = source.RemittanceAdvice is null ? null : new SupplierDetailsRemittanceAdvice
+        {
+            CreditorId = source.RemittanceAdvice.CreditorId,
+            PaymentType = Reference(source.RemittanceAdvice.PaymentType?.PaymentTypeNumber, source.RemittanceAdvice.PaymentType?.Self),
+        },
+        SalesPerson = Reference(source.SalesPerson?.EmployeeNumber, source.SalesPerson?.Self),
+        SupplierContact = source.SupplierContact is null ? null : new SupplierDetailsSupplierContact
+        {
+            Number = source.SupplierContact.Number,
+            Self = source.SupplierContact.Self,
+        },
+        SupplierGroup = Reference(source.SupplierGroup?.SupplierGroupNumber, source.SupplierGroup?.Self),
+        SupplierNumber = source.SupplierNumber,
+        VatZone = Reference(source.VatZone?.VatZoneNumber, source.VatZone?.Self),
+        Zip = source.Zip,
+        Self = source.Self,
+    };
+
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
@@ -10965,6 +16465,29 @@ internal sealed class UnitPageSource(Generated.UnitsClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// A single resource from <c>/units/{unitNumber}</c>.
+/// </summary>
+/// <remarks>
+/// Distinct from <see cref="Unit"/> because e-conomic serves a different shape here
+/// than in the collection. Fetching one is the only way to read the properties
+/// the listing leaves out.
+/// </remarks>
+public sealed record UnitDetails
+{
+    /// <summary>The <c>unitNumber</c> field.</summary>
+    public int UnitNumber { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>products</c> field.</summary>
+    public System.Uri? Products { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
 }
 
 /// <summary>
@@ -11057,6 +16580,23 @@ public sealed partial class UnitResource
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<Unit>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 
+    /// <summary>Fetches one unit by its identifier.</summary>
+    /// <param name="unitNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    /// <remarks>
+    /// Answers a <see cref="UnitDetails"/> rather than a <see cref="Unit"/>: e-conomic
+    /// serves more here than the listing does.
+    /// </remarks>
+    public async System.Threading.Tasks.Task<UnitDetails> GetAsync(int unitNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetUnitsByunitNumberAsync(unitNumber, cancellationToken),
+            "GET /units/{unitNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
     /// <summary>Creates a unit.</summary>
     /// <param name="item">The item to create.</param>
     /// <param name="cancellationToken">Cancels the request.</param>
@@ -11133,6 +16673,14 @@ public sealed partial class UnitResource
         Self = source.Self,
     };
 
+    private static UnitDetails FromSingle(Generated.UnitDetails source) => new()
+    {
+        UnitNumber = source.UnitNumber,
+        Name = source.Name,
+        Products = source.Products,
+        Self = source.Self,
+    };
+
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
@@ -11206,6 +16754,99 @@ internal sealed class VatAccountPageSource(Generated.VatAccountsClient client)
 }
 
 /// <summary>
+/// The <c>/vat-accounts</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class VatAccountResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.VatAccountsClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public VatAccountResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.VatAccountsClient(httpClient);
+    }
+
+    private EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> Query => new(new VatAccountPageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> Where(System.Linq.Expressions.Expression<System.Func<VatAccountFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> OrderBy(System.Linq.Expressions.Expression<System.Func<VatAccountSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<VatAccountSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<VatAccount> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<VatAccount>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one vatAccount by its identifier.</summary>
+    /// <param name="vatCode">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<VatAccount> GetAsync(string vatCode, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetVatAccountsByidAsync(vatCode, cancellationToken),
+            "GET /vat-accounts/{id}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static VatAccount FromSingle(Generated.VatAccount source) => new()
+    {
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        ContraAccount = Reference(source.ContraAccount?.AccountNumber, source.ContraAccount?.Self),
+        VatType = Reference(source.VatType?.VatTypeNumber, source.VatType?.Self),
+        Barred = source.Barred,
+        Name = source.Name,
+        RatePercentage = (decimal)source.RatePercentage,
+        VatCode = source.VatCode,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// A resource from <c>/vat-types</c>.
 /// </summary>
 public sealed record VatType
@@ -11251,6 +16892,94 @@ internal sealed class VatTypePageSource(Generated.VatTypesClient client)
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/vat-types</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class VatTypeResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.VatTypesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public VatTypeResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.VatTypesClient(httpClient);
+    }
+
+    private EconomicQuery<VatType, VatTypeFilter, VatTypeSort> Query => new(new VatTypePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> Where(System.Linq.Expressions.Expression<System.Func<VatTypeFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> OrderBy(System.Linq.Expressions.Expression<System.Func<VatTypeSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<VatTypeSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<VatType> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<VatType>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one vatType by its identifier.</summary>
+    /// <param name="vatTypeNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<VatType> GetAsync(int vatTypeNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetVatTypesByidAsync(vatTypeNumber, cancellationToken),
+            "GET /vat-types/{id}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static VatType FromSingle(Generated.VatTypes source) => new()
+    {
+        VatTypeNumber = source.VatTypeNumber,
+        Name = source.Name ?? string.Empty,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
 }
 
 /// <summary>
@@ -11310,6 +17039,96 @@ internal sealed class VatZonePageSource(Generated.VatZonesClient client)
 }
 
 /// <summary>
+/// The <c>/vat-zones</c> resource: a composable query, plus its nested collections.
+/// </summary>
+/// <remarks>
+/// The query-building methods each return a query and composition continues from there.
+/// Writes live on the resource rather than on the query: a query describes a filtered view,
+/// which is not a meaningful thing to create from.
+/// </remarks>
+public sealed partial class VatZoneResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.VatZonesClient _client;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    public VatZoneResource(System.Net.Http.HttpClient httpClient)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.VatZonesClient(httpClient);
+    }
+
+    private EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> Query => new(new VatZonePageSource(_client));
+
+    /// <summary>The resource as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> Where(System.Linq.Expressions.Expression<System.Func<VatZoneFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> OrderBy(System.Linq.Expressions.Expression<System.Func<VatZoneSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<VatZoneSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<VatZone> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<VatZone>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Fetches one vatZone by its identifier.</summary>
+    /// <param name="vatZoneNumber">The one to fetch.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The item.</returns>
+    public async System.Threading.Tasks.Task<VatZone> GetAsync(int vatZoneNumber, System.Threading.CancellationToken cancellationToken = default)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => _client.GetVatZonesByvatZoneNumberAsync(vatZoneNumber, cancellationToken),
+            "GET /vat-zones/{vatZoneNumber}").ConfigureAwait(false);
+
+        return FromSingle(response);
+    }
+
+    private static VatZone FromSingle(Generated.VatZone source) => new()
+    {
+        VatZoneNumber = source.VatZoneNumber,
+        Name = source.Name,
+        EnabledForCustomer = source.EnabledForCustomer,
+        EnabledForSupplier = source.EnabledForSupplier,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
 /// The <c>vatAccount</c> of a <see cref="AccountingYearEntry"/>.
 /// </summary>
 public sealed record AccountingYearEntryVatAccount
@@ -11319,6 +17138,36 @@ public sealed record AccountingYearEntryVatAccount
 
     /// <summary>The <c>self</c> field.</summary>
     public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>paymentDetails</c> of a <see cref="AccountingYearEntry"/>.
+/// </summary>
+public sealed record AccountingYearEntryPaymentDetails
+{
+    /// <summary>The <c>fiSupplierNo</c> field.</summary>
+    public string? FiSupplierNo { get; init; }
+
+    /// <summary>The <c>ocrLine</c> field.</summary>
+    public string? OcrLine { get; init; }
+
+    /// <summary>The <c>message</c> field.</summary>
+    public string? Message { get; init; }
+
+    /// <summary>The <c>giroAccount</c> field.</summary>
+    public string? GiroAccount { get; init; }
+
+    /// <summary>The <c>accountNo</c> field.</summary>
+    public string? AccountNo { get; init; }
+
+    /// <summary>The <c>ibanSwift</c> field.</summary>
+    public string? IbanSwift { get; init; }
+
+    /// <summary>The <c>ocrLineMessage</c> field.</summary>
+    public string? OcrLineMessage { get; init; }
+
+    /// <summary>The <c>paymentType</c> field.</summary>
+    public EconomicReference? PaymentType { get; init; }
 }
 
 /// <summary>
@@ -11401,6 +17250,9 @@ public sealed record AccountingYearEntry
     /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
     public decimal RemainderInBaseCurrency { get; init; }
 
+    /// <summary>The <c>paymentDetails</c> field.</summary>
+    public AccountingYearEntryPaymentDetails? PaymentDetails { get; init; }
+
     /// <summary>The <c>self</c> field.</summary>
     public required System.Uri Self { get; init; }
 }
@@ -11458,6 +17310,17 @@ internal sealed class AccountingYearEntryPageSource(Generated.AccountingYearsCli
         InvoiceNumber = source.InvoiceNumber,
         Remainder = (decimal)source.Remainder,
         RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        PaymentDetails = source.PaymentDetails is null ? null : new AccountingYearEntryPaymentDetails
+        {
+            FiSupplierNo = source.PaymentDetails.FiSupplierNo,
+            OcrLine = source.PaymentDetails.OcrLine,
+            Message = source.PaymentDetails.Message,
+            GiroAccount = source.PaymentDetails.GiroAccount,
+            AccountNo = source.PaymentDetails.AccountNo,
+            IbanSwift = source.PaymentDetails.IbanSwift,
+            OcrLineMessage = source.PaymentDetails.OcrLineMessage,
+            PaymentType = Reference(source.PaymentDetails.PaymentType?.PaymentTypeNumber, source.PaymentDetails.PaymentType?.Self),
+        },
         Self = source.Self,
     };
 
@@ -11476,7 +17339,7 @@ public sealed partial class AccountingYearEntryResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="accountingYear">The owning accountingYear.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
     public AccountingYearEntryResource(System.Net.Http.HttpClient httpClient, string accountingYear)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -11623,7 +17486,7 @@ public sealed partial class AccountingYearPeriodResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="accountingYear">The owning accountingYear.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
     public AccountingYearPeriodResource(System.Net.Http.HttpClient httpClient, string accountingYear)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -11676,7 +17539,273 @@ public sealed partial class AccountingYearPeriodResource
 }
 
 /// <summary>
-/// A resource from <c>/accounting-years/{accountingYear}/totals</c>.
+/// The <c>vatAccount</c> of a <see cref="AccountingYearsEntry"/>.
+/// </summary>
+public sealed record AccountingYearsEntryVatAccount
+{
+    /// <summary>The <c>vatCode</c> field.</summary>
+    public string? VatCode { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>paymentDetails</c> of a <see cref="AccountingYearsEntry"/>.
+/// </summary>
+public sealed record AccountingYearsEntryPaymentDetails
+{
+    /// <summary>The <c>fiSupplierNo</c> field.</summary>
+    public string? FiSupplierNo { get; init; }
+
+    /// <summary>The <c>ocrLine</c> field.</summary>
+    public string? OcrLine { get; init; }
+
+    /// <summary>The <c>message</c> field.</summary>
+    public string? Message { get; init; }
+
+    /// <summary>The <c>giroAccount</c> field.</summary>
+    public string? GiroAccount { get; init; }
+
+    /// <summary>The <c>accountNo</c> field.</summary>
+    public string? AccountNo { get; init; }
+
+    /// <summary>The <c>ibanSwift</c> field.</summary>
+    public string? IbanSwift { get; init; }
+
+    /// <summary>The <c>ocrLineMessage</c> field.</summary>
+    public string? OcrLineMessage { get; init; }
+
+    /// <summary>The <c>paymentType</c> field.</summary>
+    public EconomicReference? PaymentType { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c>.
+/// </summary>
+public sealed record AccountingYearsEntry
+{
+    /// <summary>The <c>account</c> field.</summary>
+    public EconomicReference? Account { get; init; }
+
+    /// <summary>The <c>amount</c> field.</summary>
+    public decimal Amount { get; init; }
+
+    /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
+    public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>amountInBaseCurrency</c> field.</summary>
+    public decimal AmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>departmentalDistribution</c> field.</summary>
+    public EconomicReference? DepartmentalDistribution { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>costType</c> field.</summary>
+    public EconomicReference? CostType { get; init; }
+
+    /// <summary>The <c>entryNumber</c> field.</summary>
+    public int EntryNumber { get; init; }
+
+    /// <summary>The <c>text</c> field.</summary>
+    public string? Text { get; init; }
+
+    /// <summary>The <c>entryType</c> field.</summary>
+    public string? EntryType { get; init; }
+
+    /// <summary>The <c>vatAccount</c> field.</summary>
+    public AccountingYearsEntryVatAccount? VatAccount { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>supplier</c> field.</summary>
+    public EconomicReference? Supplier { get; init; }
+
+    /// <summary>The <c>unit1</c> field.</summary>
+    public EconomicReference? Unit1 { get; init; }
+
+    /// <summary>The <c>unit2</c> field.</summary>
+    public EconomicReference? Unit2 { get; init; }
+
+    /// <summary>The <c>quantity1</c> field.</summary>
+    public decimal Quantity1 { get; init; }
+
+    /// <summary>The <c>quantity2</c> field.</summary>
+    public decimal Quantity2 { get; init; }
+
+    /// <summary>The <c>voucherNumber</c> field.</summary>
+    public int VoucherNumber { get; init; }
+
+    /// <summary>The <c>bookedInvoice</c> field.</summary>
+    public EconomicReference? BookedInvoice { get; init; }
+
+    /// <summary>The <c>invoiceNumber</c> field.</summary>
+    public int InvoiceNumber { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>paymentDetails</c> field.</summary>
+    public AccountingYearsEntryPaymentDetails? PaymentDetails { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c> and maps them to <see cref="AccountingYearsEntry"/>.</summary>
+internal sealed class AccountingYearPeriodsEntriesPageSource(Generated.AccountingYearsClient client, string accountingYear, string accountingYearPeriod)
+    : IEconomicPageSource<AccountingYearsEntry>
+{
+    public async Task<EconomicPage<AccountingYearsEntry>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountingYearsByaccountingYearPeriodsByaccountingYearPeriodEntriesAsync(
+                accountingYear, accountingYearPeriod, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries").ConfigureAwait(false);
+
+        var items = new List<AccountingYearsEntry>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountingYearsEntry>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountingYearsEntry Map(Generated.AccountingYearsEntry source) => new()
+    {
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        Amount = (decimal)source.Amount,
+        SupplierInvoiceNumber = source.SupplierInvoiceNumber,
+        AmountInBaseCurrency = (decimal)source.AmountInBaseCurrency,
+        Currency = source.Currency,
+        Date = source.Date == default ? null : source.Date,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        CostType = Reference(source.CostType?.CostTypeNumber, source.CostType?.Self),
+        EntryNumber = source.EntryNumber,
+        Text = source.Text,
+        EntryType = source.EntryType.ToString(),
+        VatAccount = source.VatAccount is null ? null : new AccountingYearsEntryVatAccount
+        {
+            VatCode = source.VatAccount.VatCode,
+            Self = source.VatAccount.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Supplier = Reference(source.Supplier?.SupplierNumber, source.Supplier?.Self),
+        Unit1 = Reference(source.Unit1?.UnitNumber, source.Unit1?.Self),
+        Unit2 = Reference(source.Unit2?.UnitNumber, source.Unit2?.Self),
+        Quantity1 = (decimal)source.Quantity1,
+        Quantity2 = (decimal)source.Quantity2,
+        VoucherNumber = source.VoucherNumber,
+        BookedInvoice = Reference(source.BookedInvoice?.BookedInvoiceNumber, source.BookedInvoice?.Self),
+        InvoiceNumber = source.InvoiceNumber,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        PaymentDetails = source.PaymentDetails is null ? null : new AccountingYearsEntryPaymentDetails
+        {
+            FiSupplierNo = source.PaymentDetails.FiSupplierNo,
+            OcrLine = source.PaymentDetails.OcrLine,
+            Message = source.PaymentDetails.Message,
+            GiroAccount = source.PaymentDetails.GiroAccount,
+            AccountNo = source.PaymentDetails.AccountNo,
+            IbanSwift = source.PaymentDetails.IbanSwift,
+            OcrLineMessage = source.PaymentDetails.OcrLineMessage,
+            PaymentType = Reference(source.PaymentDetails.PaymentType?.PaymentTypeNumber, source.PaymentDetails.PaymentType?.Self),
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c> collection, scoped to one accountingYear.
+/// </summary>
+public sealed partial class AccountingYearPeriodsEntriesResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountingYearsClient _client;
+    private readonly string _accountingYear;
+    private readonly string _accountingYearPeriod;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <param name="accountingYearPeriod">Scopes the collection.</param>
+    public AccountingYearPeriodsEntriesResource(System.Net.Http.HttpClient httpClient, string accountingYear, string accountingYearPeriod)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountingYearsClient(httpClient);
+        _accountingYear = accountingYear;
+        _accountingYearPeriod = accountingYearPeriod;
+    }
+
+    private EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> Query => new(new AccountingYearPeriodsEntriesPageSource(_client, _accountingYear, _accountingYearPeriod));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> Where(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntryFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntrySort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntrySort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountingYearsEntry> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountingYearsEntry>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// A resource from <c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/totals</c>.
 /// </summary>
 public sealed record AccountTotal
 {
@@ -11696,8 +17825,8 @@ public sealed record AccountTotal
     public required System.Uri Self { get; init; }
 }
 
-/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/totals</c> and maps them to <see cref="AccountTotal"/>.</summary>
-internal sealed class AccountTotalPageSource(Generated.AccountingYearsClient client, string accountingYear)
+/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/totals</c> and maps them to <see cref="AccountTotal"/>.</summary>
+internal sealed class AccountingYearPeriodsTotalsPageSource(Generated.AccountingYearsClient client, string accountingYear, string accountingYearPeriod)
     : IEconomicPageSource<AccountTotal>
 {
     public async Task<EconomicPage<AccountTotal>> GetPageAsync(
@@ -11705,9 +17834,9 @@ internal sealed class AccountTotalPageSource(Generated.AccountingYearsClient cli
         CancellationToken cancellationToken)
     {
         var response = await FacadeTransport.SendAsync(
-            () => client.GetAccountingYearsByaccountingYearTotalsAsync(
-                accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
-            "GET /accounting-years/{accountingYear}/totals").ConfigureAwait(false);
+            () => client.GetAccountingYearsByaccountingYearPeriodsByaccountingYearPeriodTotalsAsync(
+                accountingYear, accountingYearPeriod, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounting-years/{accountingYear}/periods/{accountingYearPeriod}/totals").ConfigureAwait(false);
 
         var items = new List<AccountTotal>(response.Collection?.Count ?? 0);
         foreach (var item in response.Collection ?? [])
@@ -11732,26 +17861,29 @@ internal sealed class AccountTotalPageSource(Generated.AccountingYearsClient cli
 }
 
 /// <summary>
-/// The <c>/accounting-years/{accountingYear}/totals</c> collection, scoped to one accountingYear.
+/// The <c>/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/totals</c> collection, scoped to one accountingYear.
 /// </summary>
-public sealed partial class AccountTotalResource
+public sealed partial class AccountingYearPeriodsTotalsResource
 {
     private readonly System.Net.Http.HttpClient _httpClient;
     private readonly Generated.AccountingYearsClient _client;
     private readonly string _accountingYear;
+    private readonly string _accountingYearPeriod;
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="accountingYear">The owning accountingYear.</param>
-    public AccountTotalResource(System.Net.Http.HttpClient httpClient, string accountingYear)
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <param name="accountingYearPeriod">Scopes the collection.</param>
+    public AccountingYearPeriodsTotalsResource(System.Net.Http.HttpClient httpClient, string accountingYear, string accountingYearPeriod)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
         _httpClient = httpClient;
         _client = new Generated.AccountingYearsClient(httpClient);
         _accountingYear = accountingYear;
+        _accountingYearPeriod = accountingYearPeriod;
     }
 
-    private EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> Query => new(new AccountTotalPageSource(_client, _accountingYear));
+    private EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> Query => new(new AccountingYearPeriodsTotalsPageSource(_client, _accountingYear, _accountingYearPeriod));
 
     /// <summary>The collection as an unfiltered, unsorted query.</summary>
     /// <returns>A query over every item.</returns>
@@ -11792,6 +17924,531 @@ public sealed partial class AccountTotalResource
     /// <param name="cancellationToken">Cancels the request.</param>
     /// <returns>The page.</returns>
     public System.Threading.Tasks.Task<EconomicPage<AccountTotal>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>Fetches pages of <c>/accounting-years/{accountingYear}/totals</c> and maps them to <see cref="AccountTotal"/>.</summary>
+internal sealed class AccountingYearTotalsPageSource(Generated.AccountingYearsClient client, string accountingYear)
+    : IEconomicPageSource<AccountTotal>
+{
+    public async Task<EconomicPage<AccountTotal>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountingYearsByaccountingYearTotalsAsync(
+                accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounting-years/{accountingYear}/totals").ConfigureAwait(false);
+
+        var items = new List<AccountTotal>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountTotal>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountTotal Map(Generated.AccountTotalsEntry source) => new()
+    {
+        TotalInBaseCurrency = (decimal)source.TotalInBaseCurrency,
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        FromDate = source.FromDate == default ? null : source.FromDate,
+        ToDate = source.ToDate == default ? null : source.ToDate,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounting-years/{accountingYear}/totals</c> collection, scoped to one accountingYear.
+/// </summary>
+public sealed partial class AccountingYearTotalsResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountingYearsClient _client;
+    private readonly string _accountingYear;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    public AccountingYearTotalsResource(System.Net.Http.HttpClient httpClient, string accountingYear)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountingYearsClient(httpClient);
+        _accountingYear = accountingYear;
+    }
+
+    private EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> Query => new(new AccountingYearTotalsPageSource(_client, _accountingYear));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> Where(System.Linq.Expressions.Expression<System.Func<AccountTotalFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountTotalSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountTotalSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountTotal, AccountTotalFilter, AccountTotalSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountTotal> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountTotal>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>Fetches pages of <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/entries</c> and maps them to <see cref="AccountingYearsEntry"/>.</summary>
+internal sealed class AccountAccountingYearsEntriesPageSource(Generated.AccountsClient client, int accountNumber, string accountingYear)
+    : IEconomicPageSource<AccountingYearsEntry>
+{
+    public async Task<EconomicPage<AccountingYearsEntry>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountsByaccountNumberAccountingYearsByaccountingYearEntriesAsync(
+                accountNumber, accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounts/{accountNumber}/accounting-years/{accountingYear}/entries").ConfigureAwait(false);
+
+        var items = new List<AccountingYearsEntry>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountingYearsEntry>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountingYearsEntry Map(Generated.AccountingYearsEntry source) => new()
+    {
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        Amount = (decimal)source.Amount,
+        SupplierInvoiceNumber = source.SupplierInvoiceNumber,
+        AmountInBaseCurrency = (decimal)source.AmountInBaseCurrency,
+        Currency = source.Currency,
+        Date = source.Date == default ? null : source.Date,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        CostType = Reference(source.CostType?.CostTypeNumber, source.CostType?.Self),
+        EntryNumber = source.EntryNumber,
+        Text = source.Text,
+        EntryType = source.EntryType.ToString(),
+        VatAccount = source.VatAccount is null ? null : new AccountingYearsEntryVatAccount
+        {
+            VatCode = source.VatAccount.VatCode,
+            Self = source.VatAccount.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Supplier = Reference(source.Supplier?.SupplierNumber, source.Supplier?.Self),
+        Unit1 = Reference(source.Unit1?.UnitNumber, source.Unit1?.Self),
+        Unit2 = Reference(source.Unit2?.UnitNumber, source.Unit2?.Self),
+        Quantity1 = (decimal)source.Quantity1,
+        Quantity2 = (decimal)source.Quantity2,
+        VoucherNumber = source.VoucherNumber,
+        BookedInvoice = Reference(source.BookedInvoice?.BookedInvoiceNumber, source.BookedInvoice?.Self),
+        InvoiceNumber = source.InvoiceNumber,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        PaymentDetails = source.PaymentDetails is null ? null : new AccountingYearsEntryPaymentDetails
+        {
+            FiSupplierNo = source.PaymentDetails.FiSupplierNo,
+            OcrLine = source.PaymentDetails.OcrLine,
+            Message = source.PaymentDetails.Message,
+            GiroAccount = source.PaymentDetails.GiroAccount,
+            AccountNo = source.PaymentDetails.AccountNo,
+            IbanSwift = source.PaymentDetails.IbanSwift,
+            OcrLineMessage = source.PaymentDetails.OcrLineMessage,
+            PaymentType = Reference(source.PaymentDetails.PaymentType?.PaymentTypeNumber, source.PaymentDetails.PaymentType?.Self),
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/entries</c> collection, scoped to one account.
+/// </summary>
+public sealed partial class AccountAccountingYearsEntriesResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountsClient _client;
+    private readonly int _accountNumber;
+    private readonly string _accountingYear;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountNumber">Scopes the collection.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    public AccountAccountingYearsEntriesResource(System.Net.Http.HttpClient httpClient, int accountNumber, string accountingYear)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountsClient(httpClient);
+        _accountNumber = accountNumber;
+        _accountingYear = accountingYear;
+    }
+
+    private EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> Query => new(new AccountAccountingYearsEntriesPageSource(_client, _accountNumber, _accountingYear));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> Where(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntryFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntrySort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntrySort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountingYearsEntry> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountingYearsEntry>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// The <c>accountingYear</c> of a <see cref="AccountsPeriod"/>.
+/// </summary>
+public sealed record AccountsPeriodAccountingYear
+{
+    /// <summary>The <c>year</c> field.</summary>
+    public string? Year { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods</c>.
+/// </summary>
+public sealed record AccountsPeriod
+{
+    /// <summary>The <c>periodNumber</c> field.</summary>
+    public int PeriodNumber { get; init; }
+
+    /// <summary>The <c>accountingYear</c> field.</summary>
+    public AccountsPeriodAccountingYear? AccountingYear { get; init; }
+
+    /// <summary>The <c>fromDate</c> field.</summary>
+    public DateOnly? FromDate { get; init; }
+
+    /// <summary>The <c>toDate</c> field.</summary>
+    public DateOnly? ToDate { get; init; }
+
+    /// <summary>The <c>closed</c> field.</summary>
+    public bool Closed { get; init; }
+
+    /// <summary>The <c>entries</c> field.</summary>
+    public System.Uri? Entries { get; init; }
+
+    /// <summary>The <c>totals</c> field.</summary>
+    public System.Uri? Totals { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods</c> and maps them to <see cref="AccountsPeriod"/>.</summary>
+internal sealed class AccountsPeriodPageSource(Generated.AccountsClient client, int accountNumber, string accountingYear)
+    : IEconomicPageSource<AccountsPeriod>
+{
+    public async Task<EconomicPage<AccountsPeriod>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountsByaccountNumberAccountingYearsByaccountingYearPeriodsAsync(
+                accountNumber, accountingYear, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounts/{accountNumber}/accounting-years/{accountingYear}/periods").ConfigureAwait(false);
+
+        var items = new List<AccountsPeriod>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountsPeriod>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountsPeriod Map(Generated.AccountsPeriod source) => new()
+    {
+        PeriodNumber = source.PeriodNumber,
+        AccountingYear = source.AccountingYear is null ? null : new AccountsPeriodAccountingYear
+        {
+            Year = source.AccountingYear.Year,
+            Self = source.AccountingYear.Self,
+        },
+        FromDate = source.FromDate == default ? null : source.FromDate,
+        ToDate = source.ToDate == default ? null : source.ToDate,
+        Closed = source.Closed,
+        Entries = source.Entries,
+        Totals = source.Totals,
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods</c> collection, scoped to one account.
+/// </summary>
+public sealed partial class AccountsPeriodResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountsClient _client;
+    private readonly int _accountNumber;
+    private readonly string _accountingYear;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountNumber">Scopes the collection.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    public AccountsPeriodResource(System.Net.Http.HttpClient httpClient, int accountNumber, string accountingYear)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountsClient(httpClient);
+        _accountNumber = accountNumber;
+        _accountingYear = accountingYear;
+    }
+
+    private EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> Query => new(new AccountsPeriodPageSource(_client, _accountNumber, _accountingYear));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> Where(System.Linq.Expressions.Expression<System.Func<AccountsPeriodFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountsPeriodSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountsPeriodSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountsPeriod, AccountsPeriodFilter, AccountsPeriodSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountsPeriod> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountsPeriod>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>Fetches pages of <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c> and maps them to <see cref="AccountingYearsEntry"/>.</summary>
+internal sealed class AccountAccountingYearsPeriodsEntriesPageSource(Generated.AccountsClient client, int accountNumber, string accountingYear, string accountingYearPeriod)
+    : IEconomicPageSource<AccountingYearsEntry>
+{
+    public async Task<EconomicPage<AccountingYearsEntry>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetAccountsByaccountNumberAccountingYearsByaccountingYearPeriodsByaccountingYearPeriodEntriesAsync(
+                accountNumber, accountingYear, accountingYearPeriod, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /accounts/{accountNumber}/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries").ConfigureAwait(false);
+
+        var items = new List<AccountingYearsEntry>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<AccountingYearsEntry>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static AccountingYearsEntry Map(Generated.AccountingYearsEntry source) => new()
+    {
+        Account = Reference(source.Account?.AccountNumber, source.Account?.Self),
+        Amount = (decimal)source.Amount,
+        SupplierInvoiceNumber = source.SupplierInvoiceNumber,
+        AmountInBaseCurrency = (decimal)source.AmountInBaseCurrency,
+        Currency = source.Currency,
+        Date = source.Date == default ? null : source.Date,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        DepartmentalDistribution = Reference(source.DepartmentalDistribution?.DepartmentalDistributionNumber, source.DepartmentalDistribution?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        CostType = Reference(source.CostType?.CostTypeNumber, source.CostType?.Self),
+        EntryNumber = source.EntryNumber,
+        Text = source.Text,
+        EntryType = source.EntryType.ToString(),
+        VatAccount = source.VatAccount is null ? null : new AccountingYearsEntryVatAccount
+        {
+            VatCode = source.VatAccount.VatCode,
+            Self = source.VatAccount.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Supplier = Reference(source.Supplier?.SupplierNumber, source.Supplier?.Self),
+        Unit1 = Reference(source.Unit1?.UnitNumber, source.Unit1?.Self),
+        Unit2 = Reference(source.Unit2?.UnitNumber, source.Unit2?.Self),
+        Quantity1 = (decimal)source.Quantity1,
+        Quantity2 = (decimal)source.Quantity2,
+        VoucherNumber = source.VoucherNumber,
+        BookedInvoice = Reference(source.BookedInvoice?.BookedInvoiceNumber, source.BookedInvoice?.Self),
+        InvoiceNumber = source.InvoiceNumber,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        PaymentDetails = source.PaymentDetails is null ? null : new AccountingYearsEntryPaymentDetails
+        {
+            FiSupplierNo = source.PaymentDetails.FiSupplierNo,
+            OcrLine = source.PaymentDetails.OcrLine,
+            Message = source.PaymentDetails.Message,
+            GiroAccount = source.PaymentDetails.GiroAccount,
+            AccountNo = source.PaymentDetails.AccountNo,
+            IbanSwift = source.PaymentDetails.IbanSwift,
+            OcrLineMessage = source.PaymentDetails.OcrLineMessage,
+            PaymentType = Reference(source.PaymentDetails.PaymentType?.PaymentTypeNumber, source.PaymentDetails.PaymentType?.Self),
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/accounts/{accountNumber}/accounting-years/{accountingYear}/periods/{accountingYearPeriod}/entries</c> collection, scoped to one account.
+/// </summary>
+public sealed partial class AccountAccountingYearsPeriodsEntriesResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.AccountsClient _client;
+    private readonly int _accountNumber;
+    private readonly string _accountingYear;
+    private readonly string _accountingYearPeriod;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="accountNumber">Scopes the collection.</param>
+    /// <param name="accountingYear">Scopes the collection.</param>
+    /// <param name="accountingYearPeriod">Scopes the collection.</param>
+    public AccountAccountingYearsPeriodsEntriesResource(System.Net.Http.HttpClient httpClient, int accountNumber, string accountingYear, string accountingYearPeriod)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.AccountsClient(httpClient);
+        _accountNumber = accountNumber;
+        _accountingYear = accountingYear;
+        _accountingYearPeriod = accountingYearPeriod;
+    }
+
+    private EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> Query => new(new AccountAccountingYearsPeriodsEntriesPageSource(_client, _accountNumber, _accountingYear, _accountingYearPeriod));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> Where(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntryFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> OrderBy(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntrySort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<AccountingYearsEntrySort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<AccountingYearsEntry, AccountingYearsEntryFilter, AccountingYearsEntrySort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<AccountingYearsEntry> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<AccountingYearsEntry>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 }
 
 /// <summary>
@@ -11949,7 +18606,7 @@ public sealed partial class CustomerGroupCustomerResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="customerGroupNumber">The owning customerGroup.</param>
+    /// <param name="customerGroupNumber">Scopes the collection.</param>
     public CustomerGroupCustomerResource(System.Net.Http.HttpClient httpClient, int customerGroupNumber)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -12154,7 +18811,7 @@ public sealed partial class CustomerContactResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="customerNumber">The owning customer.</param>
+    /// <param name="customerNumber">Scopes the collection.</param>
     public CustomerContactResource(System.Net.Http.HttpClient httpClient, int customerNumber)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -12456,7 +19113,7 @@ public sealed partial class DeliveryLocationResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="customerNumber">The owning customer.</param>
+    /// <param name="customerNumber">Scopes the collection.</param>
     public DeliveryLocationResource(System.Net.Http.HttpClient httpClient, int customerNumber)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -12608,6 +19265,859 @@ public sealed partial class DeliveryLocationResource
 
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="CustomerBookedInvoice"/>.
+/// </summary>
+public sealed record CustomerBookedInvoicePaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="CustomerBookedInvoice"/>.
+/// </summary>
+public sealed record CustomerBookedInvoiceRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="CustomerBookedInvoice"/>.
+/// </summary>
+public sealed record CustomerBookedInvoiceDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="CustomerBookedInvoice"/>.
+/// </summary>
+public sealed record CustomerBookedInvoiceNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="CustomerBookedInvoice"/>.
+/// </summary>
+public sealed record CustomerBookedInvoiceReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="CustomerBookedInvoice"/>.
+/// </summary>
+public sealed record CustomerBookedInvoicePdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public required System.Uri Download { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/customers/{customerNumber}/invoices/booked</c>.
+/// </summary>
+public sealed record CustomerBookedInvoice
+{
+    /// <summary>The <c>bookedInvoiceNumber</c> field.</summary>
+    public int BookedInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>remainder</c> field.</summary>
+    public decimal Remainder { get; init; }
+
+    /// <summary>The <c>remainderInBaseCurrency</c> field.</summary>
+    public decimal RemainderInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public CustomerBookedInvoicePaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public CustomerBookedInvoiceRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public CustomerBookedInvoiceDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public CustomerBookedInvoiceNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public CustomerBookedInvoiceReferences? References { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public CustomerBookedInvoicePdf? Pdf { get; init; }
+
+    /// <summary>The <c>layout</c> field.</summary>
+    public EconomicReference? Layout { get; init; }
+
+    /// <summary>The <c>project</c> field.</summary>
+    public EconomicReference? Project { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/customers/{customerNumber}/invoices/booked</c> and maps them to <see cref="CustomerBookedInvoice"/>.</summary>
+internal sealed class CustomerBookedInvoicePageSource(Generated.CustomersClient client, int customerNumber)
+    : IEconomicPageSource<CustomerBookedInvoice>
+{
+    public async Task<EconomicPage<CustomerBookedInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetCustomersBycustomerNumberInvoicesBookedAsync(
+                customerNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /customers/{customerNumber}/invoices/booked").ConfigureAwait(false);
+
+        var items = new List<CustomerBookedInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<CustomerBookedInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static CustomerBookedInvoice Map(Generated.CustomerBookedInvoice source) => new()
+    {
+        BookedInvoiceNumber = source.BookedInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        Remainder = (decimal)source.Remainder,
+        RemainderInBaseCurrency = (decimal)source.RemainderInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new CustomerBookedInvoicePaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new CustomerBookedInvoiceRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new CustomerBookedInvoiceDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new CustomerBookedInvoiceNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new CustomerBookedInvoiceReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Pdf = source.Pdf is null ? null : new CustomerBookedInvoicePdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Layout = Reference(source.Layout?.LayoutNumber, source.Layout?.Self),
+        Project = Reference(source.Project?.ProjectNumber, source.Project?.Self),
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/customers/{customerNumber}/invoices/booked</c> collection, scoped to one customer.
+/// </summary>
+public sealed partial class CustomerBookedInvoiceResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomersClient _client;
+    private readonly int _customerNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    public CustomerBookedInvoiceResource(System.Net.Http.HttpClient httpClient, int customerNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomersClient(httpClient);
+        _customerNumber = customerNumber;
+    }
+
+    private EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> Query => new(new CustomerBookedInvoicePageSource(_client, _customerNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerBookedInvoiceFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> OrderBy(System.Linq.Expressions.Expression<System.Func<CustomerBookedInvoiceSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CustomerBookedInvoiceSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<CustomerBookedInvoice, CustomerBookedInvoiceFilter, CustomerBookedInvoiceSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<CustomerBookedInvoice> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<CustomerBookedInvoice>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// The <c>paymentTerms</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoicePaymentTerms
+{
+    /// <summary>The <c>paymentTermsNumber</c> field.</summary>
+    public int PaymentTermsNumber { get; init; }
+
+    /// <summary>The <c>daysOfCredit</c> field.</summary>
+    public int DaysOfCredit { get; init; }
+
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>paymentTermsType</c> field.</summary>
+    public string? PaymentTermsType { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>recipient</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoiceRecipient
+{
+    /// <summary>The <c>name</c> field.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>ean</c> field.</summary>
+    public string? Ean { get; init; }
+
+    /// <summary>The <c>publicEntryNumber</c> field.</summary>
+    public string? PublicEntryNumber { get; init; }
+
+    /// <summary>The <c>attention</c> field.</summary>
+    public EconomicReference? Attention { get; init; }
+
+    /// <summary>The <c>vatZone</c> field.</summary>
+    public EconomicReference? VatZone { get; init; }
+
+    /// <summary>The <c>cvr</c> field.</summary>
+    public string? Cvr { get; init; }
+}
+
+/// <summary>
+/// The <c>delivery</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoiceDelivery
+{
+    /// <summary>The <c>address</c> field.</summary>
+    public string? Address { get; init; }
+
+    /// <summary>The <c>zip</c> field.</summary>
+    public string? Zip { get; init; }
+
+    /// <summary>The <c>city</c> field.</summary>
+    public string? City { get; init; }
+
+    /// <summary>The <c>country</c> field.</summary>
+    public string? Country { get; init; }
+
+    /// <summary>The <c>deliveryTerms</c> field.</summary>
+    public string? DeliveryTerms { get; init; }
+
+    /// <summary>The <c>deliveryDate</c> field.</summary>
+    public DateOnly? DeliveryDate { get; init; }
+}
+
+/// <summary>
+/// The <c>notes</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoiceNotes
+{
+    /// <summary>The <c>heading</c> field.</summary>
+    public string? Heading { get; init; }
+
+    /// <summary>The <c>textLine1</c> field.</summary>
+    public string? TextLine1 { get; init; }
+
+    /// <summary>The <c>textLine2</c> field.</summary>
+    public string? TextLine2 { get; init; }
+}
+
+/// <summary>
+/// The <c>references</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoiceReferences
+{
+    /// <summary>The <c>customerContact</c> field.</summary>
+    public EconomicReference? CustomerContact { get; init; }
+
+    /// <summary>The <c>salesPerson</c> field.</summary>
+    public EconomicReference? SalesPerson { get; init; }
+
+    /// <summary>The <c>vendorReference</c> field.</summary>
+    public EconomicReference? VendorReference { get; init; }
+
+    /// <summary>The <c>other</c> field.</summary>
+    public string? Other { get; init; }
+}
+
+/// <summary>
+/// The <c>pdf</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoicePdf
+{
+    /// <summary>The <c>download</c> field.</summary>
+    public required System.Uri Download { get; init; }
+}
+
+/// <summary>
+/// The <c>templates</c> of a <see cref="CustomerDraftInvoice"/>.
+/// </summary>
+public sealed record CustomerDraftInvoiceTemplates
+{
+    /// <summary>The <c>bookingInstructions</c> field.</summary>
+    public required System.Uri BookingInstructions { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/customers/{customerNumber}/invoices/drafts</c>.
+/// </summary>
+public sealed record CustomerDraftInvoice
+{
+    /// <summary>The <c>draftInvoiceNumber</c> field.</summary>
+    public int DraftInvoiceNumber { get; init; }
+
+    /// <summary>The <c>date</c> field.</summary>
+    public DateOnly? Date { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public string? Currency { get; init; }
+
+    /// <summary>The <c>exchangeRate</c> field.</summary>
+    public decimal ExchangeRate { get; init; }
+
+    /// <summary>The <c>netAmount</c> field.</summary>
+    public decimal NetAmount { get; init; }
+
+    /// <summary>The <c>netAmountInBaseCurrency</c> field.</summary>
+    public decimal NetAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>grossAmount</c> field.</summary>
+    public decimal GrossAmount { get; init; }
+
+    /// <summary>The <c>grossAmountInBaseCurrency</c> field.</summary>
+    public decimal GrossAmountInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginInBaseCurrency</c> field.</summary>
+    public decimal MarginInBaseCurrency { get; init; }
+
+    /// <summary>The <c>marginPercentage</c> field.</summary>
+    public decimal MarginPercentage { get; init; }
+
+    /// <summary>The <c>vatAmount</c> field.</summary>
+    public decimal VatAmount { get; init; }
+
+    /// <summary>The <c>roundingAmount</c> field.</summary>
+    public decimal RoundingAmount { get; init; }
+
+    /// <summary>The <c>costPriceInBaseCurrency</c> field.</summary>
+    public decimal CostPriceInBaseCurrency { get; init; }
+
+    /// <summary>The <c>dueDate</c> field.</summary>
+    public DateOnly? DueDate { get; init; }
+
+    /// <summary>The <c>paymentTerms</c> field.</summary>
+    public CustomerDraftInvoicePaymentTerms? PaymentTerms { get; init; }
+
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+
+    /// <summary>The <c>recipient</c> field.</summary>
+    public CustomerDraftInvoiceRecipient? Recipient { get; init; }
+
+    /// <summary>The <c>deliveryLocation</c> field.</summary>
+    public EconomicReference? DeliveryLocation { get; init; }
+
+    /// <summary>The <c>delivery</c> field.</summary>
+    public CustomerDraftInvoiceDelivery? Delivery { get; init; }
+
+    /// <summary>The <c>notes</c> field.</summary>
+    public CustomerDraftInvoiceNotes? Notes { get; init; }
+
+    /// <summary>The <c>references</c> field.</summary>
+    public CustomerDraftInvoiceReferences? References { get; init; }
+
+    /// <summary>The <c>pdf</c> field.</summary>
+    public CustomerDraftInvoicePdf? Pdf { get; init; }
+
+    /// <summary>The <c>templates</c> field.</summary>
+    public CustomerDraftInvoiceTemplates? Templates { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/customers/{customerNumber}/invoices/drafts</c> and maps them to <see cref="CustomerDraftInvoice"/>.</summary>
+internal sealed class CustomerDraftInvoicePageSource(Generated.CustomersClient client, int customerNumber)
+    : IEconomicPageSource<CustomerDraftInvoice>
+{
+    public async Task<EconomicPage<CustomerDraftInvoice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetCustomersBycustomerNumberInvoicesDraftsAsync(
+                customerNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /customers/{customerNumber}/invoices/drafts").ConfigureAwait(false);
+
+        var items = new List<CustomerDraftInvoice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<CustomerDraftInvoice>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static CustomerDraftInvoice Map(Generated.CustomerDraftInvoice source) => new()
+    {
+        DraftInvoiceNumber = source.DraftInvoiceNumber,
+        Date = source.Date == default ? null : source.Date,
+        Currency = source.Currency,
+        ExchangeRate = (decimal)source.ExchangeRate,
+        NetAmount = (decimal)source.NetAmount,
+        NetAmountInBaseCurrency = (decimal)source.NetAmountInBaseCurrency,
+        GrossAmount = (decimal)source.GrossAmount,
+        GrossAmountInBaseCurrency = (decimal)source.GrossAmountInBaseCurrency,
+        MarginInBaseCurrency = (decimal)source.MarginInBaseCurrency,
+        MarginPercentage = (decimal)source.MarginPercentage,
+        VatAmount = (decimal)source.VatAmount,
+        RoundingAmount = (decimal)source.RoundingAmount,
+        CostPriceInBaseCurrency = (decimal)source.CostPriceInBaseCurrency,
+        DueDate = source.DueDate == default ? null : source.DueDate,
+        PaymentTerms = source.PaymentTerms is null ? null : new CustomerDraftInvoicePaymentTerms
+        {
+            PaymentTermsNumber = source.PaymentTerms.PaymentTermsNumber,
+            DaysOfCredit = source.PaymentTerms.DaysOfCredit,
+            Name = source.PaymentTerms.Name,
+            PaymentTermsType = source.PaymentTerms.PaymentTermsType.ToString(),
+            Self = source.PaymentTerms.Self,
+        },
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+        Recipient = source.Recipient is null ? null : new CustomerDraftInvoiceRecipient
+        {
+            Name = source.Recipient.Name,
+            Address = source.Recipient.Address,
+            Zip = source.Recipient.Zip,
+            City = source.Recipient.City,
+            Country = source.Recipient.Country,
+            Ean = source.Recipient.Ean,
+            PublicEntryNumber = source.Recipient.PublicEntryNumber,
+            Attention = Reference(source.Recipient.Attention?.CustomerContactNumber, source.Recipient.Attention?.Self),
+            VatZone = Reference(source.Recipient.VatZone?.VatZoneNumber, source.Recipient.VatZone?.Self),
+            Cvr = source.Recipient.Cvr,
+        },
+        DeliveryLocation = Reference(source.DeliveryLocation?.DeliveryLocationNumber, source.DeliveryLocation?.Self),
+        Delivery = source.Delivery is null ? null : new CustomerDraftInvoiceDelivery
+        {
+            Address = source.Delivery.Address,
+            Zip = source.Delivery.Zip,
+            City = source.Delivery.City,
+            Country = source.Delivery.Country,
+            DeliveryTerms = source.Delivery.DeliveryTerms,
+            DeliveryDate = source.Delivery.DeliveryDate == default ? null : source.Delivery.DeliveryDate,
+        },
+        Notes = source.Notes is null ? null : new CustomerDraftInvoiceNotes
+        {
+            Heading = source.Notes.Heading,
+            TextLine1 = source.Notes.TextLine1,
+            TextLine2 = source.Notes.TextLine2,
+        },
+        References = source.References is null ? null : new CustomerDraftInvoiceReferences
+        {
+            CustomerContact = Reference(source.References.CustomerContact?.CustomerContactNumber, source.References.CustomerContact?.Self),
+            SalesPerson = Reference(source.References.SalesPerson?.EmployeeNumber, source.References.SalesPerson?.Self),
+            VendorReference = Reference(source.References.VendorReference?.EmployeeNumber, source.References.VendorReference?.Self),
+            Other = source.References.Other,
+        },
+        Pdf = source.Pdf is null ? null : new CustomerDraftInvoicePdf
+        {
+            Download = source.Pdf.Download,
+        },
+        Templates = source.Templates is null ? null : new CustomerDraftInvoiceTemplates
+        {
+            BookingInstructions = source.Templates.BookingInstructions,
+            Self = source.Templates.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/customers/{customerNumber}/invoices/drafts</c> collection, scoped to one customer.
+/// </summary>
+public sealed partial class CustomerDraftInvoiceResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomersClient _client;
+    private readonly int _customerNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    public CustomerDraftInvoiceResource(System.Net.Http.HttpClient httpClient, int customerNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomersClient(httpClient);
+        _customerNumber = customerNumber;
+    }
+
+    private EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> Query => new(new CustomerDraftInvoicePageSource(_client, _customerNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> Where(System.Linq.Expressions.Expression<System.Func<CustomerDraftInvoiceFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> OrderBy(System.Linq.Expressions.Expression<System.Func<CustomerDraftInvoiceSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<CustomerDraftInvoiceSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<CustomerDraftInvoice, CustomerDraftInvoiceFilter, CustomerDraftInvoiceSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<CustomerDraftInvoice> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<CustomerDraftInvoice>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="DraftInvoiceLineTemplate"/>.
+/// </summary>
+public sealed record DraftInvoiceLineTemplateProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/customers/{customerNumber}/templates/invoiceline</c>.
+/// </summary>
+public sealed record DraftInvoiceLineTemplate
+{
+    /// <summary>The <c>description</c> field.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public DraftInvoiceLineTemplateProduct? Product { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/customers/{customerNumber}/templates/invoiceline</c> and maps them to <see cref="DraftInvoiceLineTemplate"/>.</summary>
+internal sealed class DraftInvoiceLineTemplatePageSource(Generated.CustomersClient client, int customerNumber)
+    : IEconomicPageSource<DraftInvoiceLineTemplate>
+{
+    public async Task<EconomicPage<DraftInvoiceLineTemplate>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetCustomersBycustomerNumberTemplatesInvoicelineAsync(
+                customerNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /customers/{customerNumber}/templates/invoiceline").ConfigureAwait(false);
+
+        var items = new List<DraftInvoiceLineTemplate>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<DraftInvoiceLineTemplate>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static DraftInvoiceLineTemplate Map(Generated.DraftInvoiceLineTemplate source) => new()
+    {
+        Description = source.Description,
+        Product = source.Product is null ? null : new DraftInvoiceLineTemplateProduct
+        {
+            ProductNumber = source.Product.ProductNumber,
+            Self = source.Product.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/customers/{customerNumber}/templates/invoiceline</c> collection, scoped to one customer.
+/// </summary>
+public sealed partial class DraftInvoiceLineTemplateResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.CustomersClient _client;
+    private readonly int _customerNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="customerNumber">Scopes the collection.</param>
+    public DraftInvoiceLineTemplateResource(System.Net.Http.HttpClient httpClient, int customerNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.CustomersClient(httpClient);
+        _customerNumber = customerNumber;
+    }
+
+    private EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> Query => new(new DraftInvoiceLineTemplatePageSource(_client, _customerNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> Where(System.Linq.Expressions.Expression<System.Func<DraftInvoiceLineTemplateFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> OrderBy(System.Linq.Expressions.Expression<System.Func<DraftInvoiceLineTemplateSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<DraftInvoiceLineTemplateSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<DraftInvoiceLineTemplate, DraftInvoiceLineTemplateFilter, DraftInvoiceLineTemplateSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<DraftInvoiceLineTemplate> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<DraftInvoiceLineTemplate>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 }
 
 /// <summary>
@@ -12865,7 +20375,7 @@ public sealed partial class EmployeeCustomerResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="employeeNumber">The owning employee.</param>
+    /// <param name="employeeNumber">Scopes the collection.</param>
     public EmployeeCustomerResource(System.Net.Http.HttpClient httpClient, int employeeNumber)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -12948,6 +20458,36 @@ public sealed record JournalEntryJournal
 }
 
 /// <summary>
+/// The <c>paymentDetails</c> of a <see cref="JournalEntry"/>.
+/// </summary>
+public sealed record JournalEntryPaymentDetails
+{
+    /// <summary>The <c>fiSupplierNo</c> field.</summary>
+    public string? FiSupplierNo { get; init; }
+
+    /// <summary>The <c>ocrLine</c> field.</summary>
+    public string? OcrLine { get; init; }
+
+    /// <summary>The <c>message</c> field.</summary>
+    public string? Message { get; init; }
+
+    /// <summary>The <c>giroAccount</c> field.</summary>
+    public string? GiroAccount { get; init; }
+
+    /// <summary>The <c>accountNo</c> field.</summary>
+    public string? AccountNo { get; init; }
+
+    /// <summary>The <c>ibanSwift</c> field.</summary>
+    public string? IbanSwift { get; init; }
+
+    /// <summary>The <c>ocrLineMessage</c> field.</summary>
+    public string? OcrLineMessage { get; init; }
+
+    /// <summary>The <c>paymentType</c> field.</summary>
+    public EconomicReference? PaymentType { get; init; }
+}
+
+/// <summary>
 /// The <c>contraVatAccount</c> of a <see cref="JournalEntry"/>.
 /// </summary>
 public sealed record JournalEntryContraVatAccount
@@ -13023,6 +20563,9 @@ public sealed record JournalEntry
 
     /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
     public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>paymentDetails</c> field.</summary>
+    public JournalEntryPaymentDetails? PaymentDetails { get; init; }
 
     /// <summary>The <c>dueDate</c> field.</summary>
     public DateOnly? DueDate { get; init; }
@@ -13141,6 +20684,17 @@ internal sealed class JournalEntryPageSource(Generated.JournalsClient client, in
         CustomerInvoice = source.CustomerInvoice,
         Supplier = Reference(source.Supplier?.SupplierNumber, source.Supplier?.Self),
         SupplierInvoiceNumber = source.SupplierInvoiceNumber,
+        PaymentDetails = source.PaymentDetails is null ? null : new JournalEntryPaymentDetails
+        {
+            FiSupplierNo = source.PaymentDetails.FiSupplierNo,
+            OcrLine = source.PaymentDetails.OcrLine,
+            Message = source.PaymentDetails.Message,
+            GiroAccount = source.PaymentDetails.GiroAccount,
+            AccountNo = source.PaymentDetails.AccountNo,
+            IbanSwift = source.PaymentDetails.IbanSwift,
+            OcrLineMessage = source.PaymentDetails.OcrLineMessage,
+            PaymentType = Reference(source.PaymentDetails.PaymentType?.PaymentTypeNumber, source.PaymentDetails.PaymentType?.Self),
+        },
         DueDate = source.DueDate == default ? null : source.DueDate,
         Text = source.Text,
         Amount = (decimal)source.Amount,
@@ -13200,7 +20754,7 @@ public sealed partial class JournalEntryResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="journalNumber">The owning journal.</param>
+    /// <param name="journalNumber">Scopes the collection.</param>
     public JournalEntryResource(System.Net.Http.HttpClient httpClient, int journalNumber)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -13260,6 +20814,109 @@ public sealed partial class JournalEntryResource
             _httpClient,
             string.Create(System.Globalization.CultureInfo.InvariantCulture, $"journals/{_journalNumber}/entries/{journalEntryNumber}"),
             cancellationToken);
+}
+
+/// <summary>
+/// A resource from <c>/journals/{journalNumber}/templates/manualCustomerInvoice</c>.
+/// </summary>
+public sealed record JournalsCustomer
+{
+    /// <summary>The <c>customer</c> field.</summary>
+    public EconomicReference? Customer { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/journals/{journalNumber}/templates/manualCustomerInvoice</c> and maps them to <see cref="JournalsCustomer"/>.</summary>
+internal sealed class JournalsCustomerPageSource(Generated.JournalsClient client, int journalNumber)
+    : IEconomicPageSource<JournalsCustomer>
+{
+    public async Task<EconomicPage<JournalsCustomer>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetJournalsByjournalNumberTemplatesManualCustomerInvoiceAsync(
+                journalNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /journals/{journalNumber}/templates/manualCustomerInvoice").ConfigureAwait(false);
+
+        var items = new List<JournalsCustomer>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<JournalsCustomer>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static JournalsCustomer Map(Generated.JournalsCustomer source) => new()
+    {
+        Customer = Reference(source.Customer?.CustomerNumber, source.Customer?.Self),
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>/journals/{journalNumber}/templates/manualCustomerInvoice</c> collection, scoped to one journal.
+/// </summary>
+public sealed partial class JournalsCustomerResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.JournalsClient _client;
+    private readonly int _journalNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="journalNumber">Scopes the collection.</param>
+    public JournalsCustomerResource(System.Net.Http.HttpClient httpClient, int journalNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.JournalsClient(httpClient);
+        _journalNumber = journalNumber;
+    }
+
+    private EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> Query => new(new JournalsCustomerPageSource(_client, _journalNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> Where(System.Linq.Expressions.Expression<System.Func<JournalsCustomerFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> OrderBy(System.Linq.Expressions.Expression<System.Func<JournalsCustomerSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<JournalsCustomerSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<JournalsCustomer, JournalsCustomerFilter, JournalsCustomerSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<JournalsCustomer> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<JournalsCustomer>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
 }
 
 /// <summary>
@@ -13593,6 +21250,36 @@ public sealed record JournalVoucherEntriesSupplierInvoiceVoucher
 }
 
 /// <summary>
+/// The <c>paymentDetails</c> of a <see cref="JournalVoucherEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherEntriesSupplierInvoicePaymentDetails
+{
+    /// <summary>The <c>fiSupplierNo</c> field.</summary>
+    public string? FiSupplierNo { get; init; }
+
+    /// <summary>The <c>ocrLine</c> field.</summary>
+    public string? OcrLine { get; init; }
+
+    /// <summary>The <c>message</c> field.</summary>
+    public string? Message { get; init; }
+
+    /// <summary>The <c>giroAccount</c> field.</summary>
+    public string? GiroAccount { get; init; }
+
+    /// <summary>The <c>accountNo</c> field.</summary>
+    public string? AccountNo { get; init; }
+
+    /// <summary>The <c>ibanSwift</c> field.</summary>
+    public string? IbanSwift { get; init; }
+
+    /// <summary>The <c>ocrLineMessage</c> field.</summary>
+    public string? OcrLineMessage { get; init; }
+
+    /// <summary>The <c>paymentType</c> field.</summary>
+    public EconomicReference? PaymentType { get; init; }
+}
+
+/// <summary>
 /// One entry in the <c>supplierInvoices</c> of a <see cref="JournalVoucherEntries"/>.
 /// </summary>
 public sealed record JournalVoucherEntriesSupplierInvoice
@@ -13656,6 +21343,9 @@ public sealed record JournalVoucherEntriesSupplierInvoice
 
     /// <summary>The <c>supplierInvoiceNumber</c> field.</summary>
     public string? SupplierInvoiceNumber { get; init; }
+
+    /// <summary>The <c>paymentDetails</c> field.</summary>
+    public JournalVoucherEntriesSupplierInvoicePaymentDetails? PaymentDetails { get; init; }
 
     /// <summary>The <c>dueDate</c> field.</summary>
     public DateOnly? DueDate { get; init; }
@@ -14103,6 +21793,17 @@ internal sealed class JournalVoucherPageSource(Generated.JournalsClient client, 
                 RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
                 Supplier = Reference(item1.Supplier?.SupplierNumber, item1.Supplier?.Self),
                 SupplierInvoiceNumber = item1.SupplierInvoiceNumber,
+                PaymentDetails = item1.PaymentDetails is null ? null : new JournalVoucherEntriesSupplierInvoicePaymentDetails
+                {
+                    FiSupplierNo = item1.PaymentDetails.FiSupplierNo,
+                    OcrLine = item1.PaymentDetails.OcrLine,
+                    Message = item1.PaymentDetails.Message,
+                    GiroAccount = item1.PaymentDetails.GiroAccount,
+                    AccountNo = item1.PaymentDetails.AccountNo,
+                    IbanSwift = item1.PaymentDetails.IbanSwift,
+                    OcrLineMessage = item1.PaymentDetails.OcrLineMessage,
+                    PaymentType = Reference(item1.PaymentDetails.PaymentType?.PaymentTypeNumber, item1.PaymentDetails.PaymentType?.Self),
+                },
                 DueDate = item1.DueDate == default ? null : item1.DueDate,
                 Project = Reference(item1.Project?.ProjectNumber, item1.Project?.Self),
                 Quantity1 = (decimal)item1.Quantity1,
@@ -14468,6 +22169,36 @@ public sealed record JournalVoucherCreateEntriesSupplierInvoiceVoucher
 }
 
 /// <summary>
+/// The <c>paymentDetails</c> of a <see cref="JournalVoucherCreateEntriesSupplierInvoice"/>.
+/// </summary>
+public sealed record JournalVoucherCreateEntriesSupplierInvoicePaymentDetails
+{
+    /// <summary>The <c>accountNo</c> field.</summary>
+    public string? AccountNo { get; init; }
+
+    /// <summary>The <c>fiSupplierNo</c> field.</summary>
+    public string? FiSupplierNo { get; init; }
+
+    /// <summary>The <c>giroAccount</c> field.</summary>
+    public string? GiroAccount { get; init; }
+
+    /// <summary>The <c>ibanSwift</c> field.</summary>
+    public string? IbanSwift { get; init; }
+
+    /// <summary>The <c>message</c> field.</summary>
+    public string? Message { get; init; }
+
+    /// <summary>The <c>ocrLine</c> field.</summary>
+    public string? OcrLine { get; init; }
+
+    /// <summary>The <c>ocrLineMessage</c> field.</summary>
+    public string? OcrLineMessage { get; init; }
+
+    /// <summary>The <c>paymentType</c> field.</summary>
+    public int? PaymentTypeNumber { get; init; }
+}
+
+/// <summary>
 /// One entry in the <c>supplierInvoices</c> of a <see cref="JournalVoucherCreateEntries"/>.
 /// </summary>
 public sealed record JournalVoucherCreateEntriesSupplierInvoice
@@ -14516,6 +22247,9 @@ public sealed record JournalVoucherCreateEntriesSupplierInvoice
 
     /// <summary>The <c>journal</c> field.</summary>
     public JournalVoucherCreateEntriesSupplierInvoiceJournal? Journal { get; init; }
+
+    /// <summary>The <c>paymentDetails</c> field.</summary>
+    public JournalVoucherCreateEntriesSupplierInvoicePaymentDetails? PaymentDetails { get; init; }
 
     /// <summary>The <c>project</c> field.</summary>
     public int? ProjectNumber { get; init; }
@@ -14788,7 +22522,7 @@ public sealed partial class JournalVoucherResource
 
     /// <summary>Creates the resource over a configured transport.</summary>
     /// <param name="httpClient">A client carrying the base address and authentication.</param>
-    /// <param name="journalNumber">The owning journal.</param>
+    /// <param name="journalNumber">Scopes the collection.</param>
     public JournalVoucherResource(System.Net.Http.HttpClient httpClient, int journalNumber)
     {
         System.ArgumentNullException.ThrowIfNull(httpClient);
@@ -15118,6 +22852,21 @@ public sealed partial class JournalVoucherResource
                     element1.Supplier = new() { SupplierNumber = supplierNumber2 };
                 }
                 element1.SupplierInvoiceNumber = item1.SupplierInvoiceNumber!;
+                if (item1.PaymentDetails is { } paymentDetails2)
+                {
+                    element1.PaymentDetails = new();
+                    element1.PaymentDetails.FiSupplierNo = paymentDetails2.FiSupplierNo!;
+                    element1.PaymentDetails.OcrLine = paymentDetails2.OcrLine!;
+                    element1.PaymentDetails.Message = paymentDetails2.Message!;
+                    element1.PaymentDetails.GiroAccount = paymentDetails2.GiroAccount!;
+                    element1.PaymentDetails.AccountNo = paymentDetails2.AccountNo!;
+                    element1.PaymentDetails.IbanSwift = paymentDetails2.IbanSwift!;
+                    element1.PaymentDetails.OcrLineMessage = paymentDetails2.OcrLineMessage!;
+                    if (paymentDetails2.PaymentTypeNumber is { } paymentTypeNumber3)
+                    {
+                        element1.PaymentDetails.PaymentType = new() { PaymentTypeNumber = paymentTypeNumber3 };
+                    }
+                }
                 if (item1.DueDate is { } dueDate2)
                 {
                     element1.DueDate = dueDate2;
@@ -15428,6 +23177,17 @@ public sealed partial class JournalVoucherResource
                 RemainderInDefaultCurrency = (decimal)item1.RemainderInDefaultCurrency,
                 Supplier = Reference(item1.Supplier?.SupplierNumber, item1.Supplier?.Self),
                 SupplierInvoiceNumber = item1.SupplierInvoiceNumber,
+                PaymentDetails = item1.PaymentDetails is null ? null : new JournalVoucherEntriesSupplierInvoicePaymentDetails
+                {
+                    FiSupplierNo = item1.PaymentDetails.FiSupplierNo,
+                    OcrLine = item1.PaymentDetails.OcrLine,
+                    Message = item1.PaymentDetails.Message,
+                    GiroAccount = item1.PaymentDetails.GiroAccount,
+                    AccountNo = item1.PaymentDetails.AccountNo,
+                    IbanSwift = item1.PaymentDetails.IbanSwift,
+                    OcrLineMessage = item1.PaymentDetails.OcrLineMessage,
+                    PaymentType = Reference(item1.PaymentDetails.PaymentType?.PaymentTypeNumber, item1.PaymentDetails.PaymentType?.Self),
+                },
                 DueDate = item1.DueDate == default ? null : item1.DueDate,
                 Project = Reference(item1.Project?.ProjectNumber, item1.Project?.Self),
                 Quantity1 = (decimal)item1.Quantity1,
@@ -15518,6 +23278,314 @@ public sealed partial class JournalVoucherResource
     private static EconomicReference? Reference(int? number, System.Uri? self) =>
         number is { } value ? new EconomicReference(value, self) : null;
 }
+
+/// <summary>
+/// The <c>product</c> of a <see cref="ProductPrice"/>.
+/// </summary>
+public sealed record ProductPriceProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public required string ProductNumber { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="ProductPrice"/>.
+/// </summary>
+public sealed record ProductPriceCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public required string Code { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>
+/// A resource from <c>/products/{productNumber}/pricing/currency-specific-sales-prices</c>.
+/// </summary>
+public sealed record ProductPrice
+{
+    /// <summary>The <c>price</c> field.</summary>
+    public decimal Price { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public ProductPriceProduct? Product { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public ProductPriceCurrency? Currency { get; init; }
+
+    /// <summary>The <c>self</c> field.</summary>
+    public required System.Uri Self { get; init; }
+}
+
+/// <summary>Fetches pages of <c>/products/{productNumber}/pricing/currency-specific-sales-prices</c> and maps them to <see cref="ProductPrice"/>.</summary>
+internal sealed class ProductPricePageSource(Generated.ProductsClient client, string productNumber)
+    : IEconomicPageSource<ProductPrice>
+{
+    public async Task<EconomicPage<ProductPrice>> GetPageAsync(
+        EconomicPageRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await FacadeTransport.SendAsync(
+            () => client.GetProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(
+                productNumber, request.Filter, request.Sort, request.PageIndex, request.PageSize, cancellationToken),
+            "GET /products/{productNumber}/pricing/currency-specific-sales-prices").ConfigureAwait(false);
+
+        var items = new List<ProductPrice>(response.Collection?.Count ?? 0);
+        foreach (var item in response.Collection ?? [])
+        {
+            items.Add(Map(item));
+        }
+
+        return new EconomicPage<ProductPrice>(items, request.PageIndex, request.PageSize);
+    }
+
+    internal static ProductPrice Map(Generated.ProductPrice source) => new()
+    {
+        Price = (decimal)source.Price,
+        Product = source.Product is null ? null : new ProductPriceProduct
+        {
+            ProductNumber = source.Product.ProductNumber ?? string.Empty,
+            Self = source.Product.Self,
+        },
+        Currency = source.Currency is null ? null : new ProductPriceCurrency
+        {
+            Code = source.Currency.Code ?? string.Empty,
+            Self = source.Currency.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is null ? null : new EconomicReference(number.Value, self);
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="ProductPriceCreate"/>.
+/// </summary>
+public sealed record ProductPriceCreateProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="ProductPriceCreate"/>.
+/// </summary>
+public sealed record ProductPriceCreateCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public required string Code { get; init; }
+}
+
+/// <summary>
+/// The <c>ProductPrice</c> to create.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record ProductPriceCreate
+{
+    /// <summary>The <c>price</c> field.</summary>
+    public required decimal Price { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public ProductPriceCreateCurrency? Currency { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public ProductPriceCreateProduct? Product { get; init; }
+}
+
+/// <summary>
+/// The <c>product</c> of a <see cref="ProductPriceUpdate"/>.
+/// </summary>
+public sealed record ProductPriceUpdateProduct
+{
+    /// <summary>The <c>productNumber</c> field.</summary>
+    public string? ProductNumber { get; init; }
+}
+
+/// <summary>
+/// The <c>currency</c> of a <see cref="ProductPriceUpdate"/>.
+/// </summary>
+public sealed record ProductPriceUpdateCurrency
+{
+    /// <summary>The <c>code</c> field.</summary>
+    public required string Code { get; init; }
+}
+
+/// <summary>
+/// The <c>ProductPrice</c> to replace.
+/// </summary>
+/// <remarks>
+/// Only the properties e-conomic accepts appear here. Server-maintained values are absent,
+/// and references to other resources are flattened to their numbers.
+/// </remarks>
+public sealed record ProductPriceUpdate
+{
+    /// <summary>The <c>price</c> field.</summary>
+    public required decimal Price { get; init; }
+
+    /// <summary>The <c>currency</c> field.</summary>
+    public ProductPriceUpdateCurrency? Currency { get; init; }
+
+    /// <summary>The <c>product</c> field.</summary>
+    public ProductPriceUpdateProduct? Product { get; init; }
+}
+
+/// <summary>
+/// The <c>/products/{productNumber}/pricing/currency-specific-sales-prices</c> collection, scoped to one product.
+/// </summary>
+public sealed partial class ProductPriceResource
+{
+    private readonly System.Net.Http.HttpClient _httpClient;
+    private readonly Generated.ProductsClient _client;
+    private readonly string _productNumber;
+
+    /// <summary>Creates the resource over a configured transport.</summary>
+    /// <param name="httpClient">A client carrying the base address and authentication.</param>
+    /// <param name="productNumber">Scopes the collection.</param>
+    public ProductPriceResource(System.Net.Http.HttpClient httpClient, string productNumber)
+    {
+        System.ArgumentNullException.ThrowIfNull(httpClient);
+        _httpClient = httpClient;
+        _client = new Generated.ProductsClient(httpClient);
+        _productNumber = productNumber;
+    }
+
+    private EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> Query => new(new ProductPricePageSource(_client, _productNumber));
+
+    /// <summary>The collection as an unfiltered, unsorted query.</summary>
+    /// <returns>A query over every item.</returns>
+    public EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> AsQuery() => Query;
+
+    /// <summary>Restricts what is returned.</summary>
+    /// <param name="predicate">A filter over the filterable properties.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> Where(System.Linq.Expressions.Expression<System.Func<ProductPriceFilter, bool>> predicate) => Query.Where(predicate);
+
+    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>
+    /// <param name="filter">A filter expression.</param>
+    /// <returns>A query carrying the filter.</returns>
+    public EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> WhereRaw(string filter) => Query.WhereRaw(filter);
+
+    /// <summary>Orders ascending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> OrderBy(System.Linq.Expressions.Expression<System.Func<ProductPriceSort, EconomicSortField>> selector) => Query.OrderBy(selector);
+
+    /// <summary>Orders descending.</summary>
+    /// <param name="selector">The property to sort by.</param>
+    /// <returns>A query carrying the sort.</returns>
+    public EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> OrderByDescending(System.Linq.Expressions.Expression<System.Func<ProductPriceSort, EconomicSortField>> selector) => Query.OrderByDescending(selector);
+
+    /// <summary>Sets how many items are fetched per request.</summary>
+    /// <param name="pageSize">Items per page, up to 1000.</param>
+    /// <returns>A query using that page size.</returns>
+    public EconomicQuery<ProductPrice, ProductPriceFilter, ProductPriceSort> WithPageSize(int pageSize) => Query.WithPageSize(pageSize);
+
+    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>
+    /// <param name="cancellationToken">Cancels the enumeration.</param>
+    /// <returns>The items.</returns>
+    public System.Collections.Generic.IAsyncEnumerable<ProductPrice> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);
+
+    /// <summary>Fetches a single page.</summary>
+    /// <param name="pageIndex">Zero-based page index.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The page.</returns>
+    public System.Threading.Tasks.Task<EconomicPage<ProductPrice>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);
+
+    /// <summary>Creates a productPrice.</summary>
+    /// <param name="item">The item to create.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The created item, as e-conomic stored it.</returns>
+    public async System.Threading.Tasks.Task<ProductPrice> CreateAsync(ProductPriceCreate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PostProductsByproductNumberPricingCurrencySpecificSalesPricesAsync(_productNumber, ToGenerated(item), cancellationToken),
+            "POST /products/{productNumber}/pricing/currency-specific-sales-prices").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    /// <summary>Replaces an existing productPrice.</summary>
+    /// <param name="productPriceNumber">The item to replace.</param>
+    /// <param name="item">The replacement state.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The updated item, as e-conomic stored it.</returns>
+    /// <remarks>This replaces rather than patches: a property left unset is cleared.</remarks>
+    public async System.Threading.Tasks.Task<ProductPrice> UpdateAsync(string productPriceNumber, ProductPriceUpdate item, System.Threading.CancellationToken cancellationToken = default)
+    {
+        System.ArgumentNullException.ThrowIfNull(item);
+
+        var response = await FacadeTransport.SendAsync(
+            () => _client.PutProductsByproductNumberPricingCurrencySpecificSalesPricesBycurrencyCodeAsync(_productNumber, productPriceNumber, ToGenerated(item, productPriceNumber), cancellationToken),
+            "PUT /products/{productNumber}/pricing/currency-specific-sales-prices/{productPriceNumber}").ConfigureAwait(false);
+
+        return FromGenerated(response);
+    }
+
+    private static Generated.ProductPricesCreate ToGenerated(ProductPriceCreate source)
+    {
+        var target = new Generated.ProductPricesCreate();
+        target.Price = (double)source.Price;
+        if (source.Product is { } product0)
+        {
+            target.Product = new();
+            target.Product.ProductNumber = product0.ProductNumber!;
+        }
+        if (source.Currency is { } currency0)
+        {
+            target.Currency = new();
+            target.Currency.Code = currency0.Code;
+        }
+
+        return target;
+    }
+
+    private static Generated.ProductPricesUpdate ToGenerated(ProductPriceUpdate source, string productPriceNumber)
+    {
+        var target = new Generated.ProductPricesUpdate();
+        target.Price = (double)source.Price;
+        if (source.Product is { } product0)
+        {
+            target.Product = new();
+            target.Product.ProductNumber = product0.ProductNumber!;
+        }
+        if (source.Currency is { } currency0)
+        {
+            target.Currency = new();
+            target.Currency.Code = currency0.Code;
+        }
+
+        return target;
+    }
+
+    private static ProductPrice FromGenerated(Generated.ProductPrice source) => new()
+    {
+        Price = (decimal)source.Price,
+        Product = source.Product is null ? null : new ProductPriceProduct
+        {
+            ProductNumber = source.Product.ProductNumber ?? string.Empty,
+            Self = source.Product.Self,
+        },
+        Currency = source.Currency is null ? null : new ProductPriceCurrency
+        {
+            Code = source.Currency.Code ?? string.Empty,
+            Self = source.Currency.Self,
+        },
+        Self = source.Self,
+    };
+
+    private static EconomicReference? Reference(int? number, System.Uri? self) =>
+        number is { } value ? new EconomicReference(value, self) : null;
+}
 }
 
 namespace EConomic.Rest
@@ -15541,17 +23609,17 @@ namespace EConomic.Rest
         public AccountingYearResource AccountingYears =>
             new(HttpClient);
 
-        /// <summary><c>/accounts</c>, as a composable query.</summary>
-        public EconomicQuery<Account, AccountFilter, AccountSort> Accounts =>
-            new(new AccountPageSource(new Generated.AccountsClient(HttpClient)));
+        /// <summary><c>/accounts</c>, as a query plus its nested collections.</summary>
+        public AccountResource Accounts =>
+            new(HttpClient);
 
-        /// <summary><c>/app-roles</c>, as a composable query.</summary>
-        public EconomicQuery<AppRole, AppRoleFilter, AppRoleSort> AppRoles =>
-            new(new AppRolePageSource(new Generated.AppRolesClient(HttpClient)));
+        /// <summary><c>/app-roles</c>, as a query plus its nested collections.</summary>
+        public AppRoleResource AppRoles =>
+            new(HttpClient);
 
-        /// <summary><c>/currencies</c>, as a composable query.</summary>
-        public EconomicQuery<Currency, CurrencyFilter, CurrencySort> Currencies =>
-            new(new CurrencyPageSource(new Generated.CurrenciesClient(HttpClient)));
+        /// <summary><c>/currencies</c>, as a query plus its nested collections.</summary>
+        public CurrencyResource Currencies =>
+            new(HttpClient);
 
         /// <summary><c>/customer-groups</c>, as a queryable and writable resource.</summary>
         public CustomerGroupResource CustomerGroups =>
@@ -15565,17 +23633,17 @@ namespace EConomic.Rest
         public EconomicQuery<DepartmentalDistributionSummary, DepartmentalDistributionSummaryFilter, DepartmentalDistributionSummarySort> DepartmentalDistributions =>
             new(new DepartmentalDistributionSummaryPageSource(new Generated.DepartmentalDistributionsClient(HttpClient)));
 
-        /// <summary><c>/departments</c>, as a composable query.</summary>
-        public EconomicQuery<Department, DepartmentFilter, DepartmentSort> Departments =>
-            new(new DepartmentPageSource(new Generated.DepartmentsClient(HttpClient)));
+        /// <summary><c>/departments</c>, as a query plus its nested collections.</summary>
+        public DepartmentResource Departments =>
+            new(HttpClient);
 
         /// <summary><c>/employees</c>, as a query plus its nested collections.</summary>
         public EmployeeResource Employees =>
             new(HttpClient);
 
-        /// <summary><c>/invoices/booked</c>, as a composable query.</summary>
-        public EconomicQuery<BookedInvoice, BookedInvoiceFilter, BookedInvoiceSort> BookedInvoices =>
-            new(new BookedInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+        /// <summary><c>/invoices/booked</c>, as a query plus its nested collections.</summary>
+        public BookedInvoiceResource BookedInvoices =>
+            new(HttpClient);
 
         /// <summary><c>/invoices/drafts</c>, as a queryable and writable resource.</summary>
         public DraftInvoiceResource DraftInvoices =>
@@ -15593,9 +23661,9 @@ namespace EConomic.Rest
         public EconomicQuery<PaidInvoice, PaidInvoiceFilter, PaidInvoiceSort> PaidInvoices =>
             new(new PaidInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
 
-        /// <summary><c>/invoices/sent</c>, as a composable query.</summary>
-        public EconomicQuery<SentInvoice, SentInvoiceFilter, SentInvoiceSort> SentInvoices =>
-            new(new SentInvoicePageSource(new Generated.InvoicesClient(HttpClient)));
+        /// <summary><c>/invoices/sent</c>, as a query plus its nested collections.</summary>
+        public SentInvoiceResource SentInvoices =>
+            new(HttpClient);
 
         /// <summary><c>/invoices/unpaid</c>, as a composable query.</summary>
         public EconomicQuery<UnpaidInvoice, UnpaidInvoiceFilter, UnpaidInvoiceSort> UnpaidInvoices =>
@@ -15605,49 +23673,49 @@ namespace EConomic.Rest
         public JournalResource Journals =>
             new(HttpClient);
 
-        /// <summary><c>/layouts</c>, as a composable query.</summary>
-        public EconomicQuery<Layout, LayoutFilter, LayoutSort> Layouts =>
-            new(new LayoutPageSource(new Generated.LayoutsClient(HttpClient)));
+        /// <summary><c>/layouts</c>, as a query plus its nested collections.</summary>
+        public LayoutResource Layouts =>
+            new(HttpClient);
 
-        /// <summary><c>/orders/archived</c>, as a composable query.</summary>
-        public EconomicQuery<ArchivedOrder, ArchivedOrderFilter, ArchivedOrderSort> ArchivedOrders =>
-            new(new ArchivedOrderPageSource(new Generated.OrdersClient(HttpClient)));
+        /// <summary><c>/orders/archived</c>, as a query plus its nested collections.</summary>
+        public ArchivedOrderResource ArchivedOrders =>
+            new(HttpClient);
 
         /// <summary><c>/orders/drafts</c>, as a queryable and writable resource.</summary>
         public DraftOrderResource DraftOrders =>
             new(HttpClient);
 
-        /// <summary><c>/orders/sent</c>, as a composable query.</summary>
-        public EconomicQuery<SentOrder, SentOrderFilter, SentOrderSort> SentOrders =>
-            new(new SentOrderPageSource(new Generated.OrdersClient(HttpClient)));
+        /// <summary><c>/orders/sent</c>, as a query plus its nested collections.</summary>
+        public SentOrderResource SentOrders =>
+            new(HttpClient);
 
         /// <summary><c>/payment-terms</c>, as a queryable and writable resource.</summary>
         public PaymentTermsResource PaymentTerms =>
             new(HttpClient);
 
-        /// <summary><c>/payment-types</c>, as a composable query.</summary>
-        public EconomicQuery<PaymentType, PaymentTypeFilter, PaymentTypeSort> PaymentTypes =>
-            new(new PaymentTypePageSource(new Generated.PaymentTypesClient(HttpClient)));
+        /// <summary><c>/payment-types</c>, as a query plus its nested collections.</summary>
+        public PaymentTypeResource PaymentTypes =>
+            new(HttpClient);
 
-        /// <summary><c>/product-groups</c>, as a composable query.</summary>
-        public EconomicQuery<ProductGroup, ProductGroupFilter, ProductGroupSort> ProductGroups =>
-            new(new ProductGroupPageSource(new Generated.ProductGroupsClient(HttpClient)));
+        /// <summary><c>/product-groups</c>, as a query plus its nested collections.</summary>
+        public ProductGroupResource ProductGroups =>
+            new(HttpClient);
 
         /// <summary><c>/products</c>, as a queryable and writable resource.</summary>
         public ProductResource Products =>
             new(HttpClient);
 
-        /// <summary><c>/quotes/archived</c>, as a composable query.</summary>
-        public EconomicQuery<ArchivedQuote, ArchivedQuoteFilter, ArchivedQuoteSort> ArchivedQuotes =>
-            new(new ArchivedQuotePageSource(new Generated.QuotesClient(HttpClient)));
+        /// <summary><c>/quotes/archived</c>, as a query plus its nested collections.</summary>
+        public ArchivedQuoteResource ArchivedQuotes =>
+            new(HttpClient);
 
         /// <summary><c>/quotes/drafts</c>, as a queryable and writable resource.</summary>
         public DraftQuoteResource DraftQuotes =>
             new(HttpClient);
 
-        /// <summary><c>/quotes/sent</c>, as a composable query.</summary>
-        public EconomicQuery<SentQuote, SentQuoteFilter, SentQuoteSort> SentQuotes =>
-            new(new SentQuotePageSource(new Generated.QuotesClient(HttpClient)));
+        /// <summary><c>/quotes/sent</c>, as a query plus its nested collections.</summary>
+        public SentQuoteResource SentQuotes =>
+            new(HttpClient);
 
         /// <summary><c>/suppliers</c>, as a queryable and writable resource.</summary>
         public SupplierResource Suppliers =>
@@ -15657,16 +23725,16 @@ namespace EConomic.Rest
         public UnitResource Units =>
             new(HttpClient);
 
-        /// <summary><c>/vat-accounts</c>, as a composable query.</summary>
-        public EconomicQuery<VatAccount, VatAccountFilter, VatAccountSort> VatAccounts =>
-            new(new VatAccountPageSource(new Generated.VatAccountsClient(HttpClient)));
+        /// <summary><c>/vat-accounts</c>, as a query plus its nested collections.</summary>
+        public VatAccountResource VatAccounts =>
+            new(HttpClient);
 
-        /// <summary><c>/vat-types</c>, as a composable query.</summary>
-        public EconomicQuery<VatType, VatTypeFilter, VatTypeSort> VatTypes =>
-            new(new VatTypePageSource(new Generated.VatTypesClient(HttpClient)));
+        /// <summary><c>/vat-types</c>, as a query plus its nested collections.</summary>
+        public VatTypeResource VatTypes =>
+            new(HttpClient);
 
-        /// <summary><c>/vat-zones</c>, as a composable query.</summary>
-        public EconomicQuery<VatZone, VatZoneFilter, VatZoneSort> VatZones =>
-            new(new VatZonePageSource(new Generated.VatZonesClient(HttpClient)));
+        /// <summary><c>/vat-zones</c>, as a query plus its nested collections.</summary>
+        public VatZoneResource VatZones =>
+            new(HttpClient);
     }
 }

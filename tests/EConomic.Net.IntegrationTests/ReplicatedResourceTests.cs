@@ -18,7 +18,7 @@ public class ReplicatedResourceTests
         TestClients.SkipUnlessConfigured();
 
         // The chart of accounts is seeded by e-conomic, so this needs nothing of its own.
-        var accounts = await FirstPageAsync(CreateClient().Rest.Accounts);
+        var accounts = await FirstPageAsync(CreateClient().Rest.Accounts.AsQuery());
 
         Assert.NotEmpty(accounts);
         Assert.All(accounts, a => Assert.True(a.AccountNumber > 0));
@@ -63,7 +63,7 @@ public class ReplicatedResourceTests
 
         // An empty filter surface is a real answer, not a gap: this resource simply cannot be
         // filtered. Enumeration must still work.
-        var currencies = await FirstPageAsync(CreateClient().Rest.Currencies);
+        var currencies = await FirstPageAsync(CreateClient().Rest.Currencies.AsQuery());
 
         Assert.NotEmpty(currencies);
     }
@@ -177,7 +177,7 @@ public class ReplicatedResourceTests
 
         // An array whose items are the {number, self} reference shape collapses to a list of
         // references rather than to a record per element.
-        var roles = await FirstPageAsync(CreateClient().Rest.AppRoles);
+        var roles = await FirstPageAsync(CreateClient().Rest.AppRoles.AsQuery());
 
         var withModules = Assert.Single(roles.Where(r => r.RequiredModules.Count > 0).Take(1));
 

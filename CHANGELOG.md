@@ -198,6 +198,38 @@ is a mapping change inside the facade, not automatically a major release here.
 - `DELETE` support, from the 21 endpoints described in the published documentation. e-conomic
   publishes no schema for `DELETE` — it has neither request nor response body — so these are issued
   directly rather than through the generated clients, and are documented as documentation-derived.
+- `GetAsync` on every legacy resource that publishes a single-resource `GET` — 28 of them. Most
+  answer with the same shape as the listing and so return the same type; fourteen do not, and those
+  return a distinct `…Details` record because the difference is the reason to fetch one. A draft or
+  booked invoice carries its `lines` only here, which is how an invoice is read; an account's single
+  `GET` omits the department the listing carries. Which of the two applies is decided by comparing
+  the mapped shapes rather than by e-conomic's titles, so a specification refresh moves it on its
+  own.
+- Nineteen nested collections, reached through the record that scopes them. Beyond the four that
+  already existed, this adds an accounting year's entries, periods and totals; an account's
+  accounting years, periods and entries, including within a single period; a customer's own booked
+  and draft invoices and invoice-line templates; a customer group's and an employee's customers; a
+  journal's manual customer invoice templates; and a product's currency-specific sales prices. A
+  collection can now sit under more than one identifier — `client.Rest.Accounts.Entries(accountNumber,
+  year, period)` — and under a grouping segment rather than directly below its parent.
+- Read-only nested collections are published as queries. They were previously left out on the
+  grounds that the parent's model already links to them, but a link is a URL: nothing about it
+  filters, sorts or pages, which is what reconciling a period actually needs.
+- Nested collections gained the same query composition top-level ones have — `WhereRaw`, `OrderBy`,
+  `OrderByDescending` and `WithPageSize`. They were quietly less capable than the collection beside
+  them, with no raw filter for what the schemas under-report and no sorting at all.
+- Payment details on a supplier-invoice voucher can now be set. e-conomic describes the payment type
+  as a `oneOf` over six alternatives — one pair of fields per payment type, `+71` through IBAN — and
+  NSwag emits the first alternative and silently drops the other five, leaving five of the six
+  payment types unrepresentable. The alternatives are merged into the union of their fields before
+  generation, all optional, since which pair is required is a property of the payment type and the
+  server validates the combination.
+- Those fields are carried on `paymentDetails` itself, not on the `paymentDetails.paymentType` the
+  schema nests them under. The schema is wrong about it: posting the pair where it says answers
+  `400` "The folowing fields need to be either all set or all not set", and posting it one level up
+  answers `201` and reads back at that level. `WriteRoundTripTests` sends a bank transfer — the
+  fourth alternative, so one that could not have worked before — and asserts the fields survive the
+  round trip.
 
 ### Fixed
 
@@ -313,9 +345,9 @@ is a mapping change inside the facade, not automatically a major release here.
 - `$null:` is a value rather than an operator, so an absent property is filtered with
   `field$eq:$null:`. The previously generated `field$null:` was a syntax error the server rejected.
 - A property described by `oneOf` was mapped from its own `properties`, which produced code
-  referring to members the generated type did not have. NSwag picks one branch to generate from,
-  and there is no way to know which, so these are now reported rather than guessed —
-  `paymentDetails.paymentType`, whose six alternatives cover different payment forms, is the case.
+  referring to members the generated type did not have. The alternatives are merged into the union
+  of their fields before generation now, which is what makes `paymentDetails.paymentType` settable
+  at all — see above.
 - Posting a journal voucher succeeded and then failed to read the reply: e-conomic answers with an
   array of vouchers, while the specification describes a single one.
 - Unset optional numbers were only made nullable at the top level of a write payload, so one nested

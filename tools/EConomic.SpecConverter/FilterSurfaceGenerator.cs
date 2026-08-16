@@ -83,6 +83,8 @@ public static class FilterSurfaceGenerator
         // The server filters invoices on customer.customerNumber, but not on the same number
         // reached through the customer contact.
         "BookedInvoice.references.customerContact.customer.customerNumber",
+        "CustomerBookedInvoice.references.customerContact.customer.customerNumber",
+        "CustomerDraftInvoice.references.customerContact.customer.customerNumber",
         "DraftInvoice.references.customerContact.customer.customerNumber",
         "NotDueInvoice.references.customerContact.customer.customerNumber",
         "OverdueInvoice.references.customerContact.customer.customerNumber",
@@ -147,6 +149,8 @@ public static class FilterSurfaceGenerator
         "CustomerContact.customer.customerNumber",
 
         "BookedInvoice.references.customerContact.customer.customerNumber",
+        "CustomerBookedInvoice.references.customerContact.customer.customerNumber",
+        "CustomerDraftInvoice.references.customerContact.customer.customerNumber",
         "DraftInvoice.references.customerContact.customer.customerNumber",
         "NotDueInvoice.references.customerContact.customer.customerNumber",
         "OverdueInvoice.references.customerContact.customer.customerNumber",

@@ -787,6 +787,108 @@ public class WriteRoundTripTests
         Assert.DoesNotContain(remaining.Items, e => e.JournalEntryNumber == entry.JournalEntryNumber);
     }
 
+    /// <summary>
+    /// Posts a supplier invoice carrying payment details, and reads them back.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// e-conomic describes the payment type as a <c>oneOf</c> over six alternatives — one pair of
+    /// fields per payment type — and NSwag generates from the first alternative and silently drops
+    /// the other five. Five of the six were therefore unrepresentable in the <em>generated</em>
+    /// layer, so no amount of facade work could have reached them; the alternatives are merged into
+    /// the union of their fields before generation now.
+    /// </para>
+    /// <para>
+    /// This deliberately sends a bank transfer, which is the fourth alternative. The first —
+    /// <c>fiSupplierNo</c> with <c>ocrLine</c> — is the one that survived the drop, so testing it
+    /// would have passed before the fix and proved nothing.
+    /// </para>
+    /// </remarks>
+    [Fact]
+    public async Task A_supplier_invoice_voucher_carries_its_payment_details()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        var client = CreateClient();
+        var token = TestContext.Current.CancellationToken;
+
+        await using var seed = new AgreementSeed(client, token);
+        var supplier = await seed.SupplierAsync("ZZ Probe Payment Supplier");
+
+        var journal = (await client.Rest.Journals.GetPageAsync(0, token)).Items[0];
+        var year = (await client.Rest.AccountingYears.AsQuery().GetPageAsync(0, token)).Items
+            .First(y => y.Closed == false);
+
+        // A supplier invoice posts to the supplier's own creditor account and balances against an
+        // expense account, so only the contra account is chosen here.
+        var accounts = await client.Rest.Accounts
+            .Where(a => a.AccountType == "profitAndLoss")
+            .WithPageSize(50)
+            .GetPageAsync(0, token);
+
+        var expense = accounts.Items.FirstOrDefault(a => !a.BlockDirectEntries);
+        Assert.SkipWhen(expense is null, "The agreement has no account that accepts direct entries.");
+
+        // 7 is the bank transfer type, which takes an account number and a message. The numbers are
+        // read from the agreement rather than hard-coded: e-conomic seeds them, but nothing
+        // guarantees the numbering.
+        var bankTransfer = (await client.Rest.PaymentTypes.AsQuery().GetPageAsync(0, token)).Items
+            .FirstOrDefault(t => t.Name == "Bank transfer");
+
+        Assert.SkipWhen(bankTransfer is null, "The agreement publishes no bank transfer payment type.");
+
+        var created = await client.Rest.Journals.Vouchers(journal.JournalNumber).CreateAsync(
+            new JournalVoucherCreate
+            {
+                AccountingYear = new JournalVoucherCreateAccountingYear { Year = year.Year },
+                Entries = new JournalVoucherCreateEntries
+                {
+                    SupplierInvoices =
+                    [
+                        new JournalVoucherCreateEntriesSupplierInvoice
+                        {
+                            Date = new DateOnly(2026, 8, 14),
+                            DueDate = new DateOnly(2026, 9, 14),
+                            Amount = -250m,
+                            Currency = new JournalVoucherCreateEntriesSupplierInvoiceCurrency { Code = "DKK" },
+                            SupplierNumber = supplier.SupplierNumber,
+                            ContraAccountNumber = expense!.AccountNumber,
+                            SupplierInvoiceNumber = "ZZ-PROBE-1",
+                            Text = "ZZ Probe supplier invoice",
+                            PaymentDetails = new JournalVoucherCreateEntriesSupplierInvoicePaymentDetails
+                            {
+                                PaymentTypeNumber = bankTransfer!.PaymentTypeNumber,
+                                AccountNo = "12345678",
+                                Message = "ZZ Probe payment message",
+                            },
+                        },
+                    ],
+                },
+            },
+            token);
+
+        var voucher = Assert.Single(created);
+        var posted = Assert.Single(voucher.Entries!.SupplierInvoices);
+
+        // The point of the test: the fields of the alternative that was dropped survive the round
+        // trip. Asserting on the number alone would pass with the payment details missing entirely.
+        Assert.Equal(bankTransfer.PaymentTypeNumber, posted.PaymentDetails?.PaymentType?.Number);
+        Assert.Equal("12345678", posted.PaymentDetails?.AccountNo);
+        Assert.Equal("ZZ Probe payment message", posted.PaymentDetails?.Message);
+
+        // Unpost it, so a run leaves nothing behind. A voucher has no delete of its own; its
+        // entries carry one, which is how the finance voucher round-trip cleans up too.
+        var entries = client.Rest.Journals.Entries(journal.JournalNumber);
+        var mine = (await entries.GetPageAsync(0, token)).Items
+            .Where(e => e.Voucher?.VoucherNumber == voucher.VoucherNumber)
+            .ToList();
+
+        foreach (var entry in mine)
+        {
+            await entries.DeleteAsync(entry.JournalEntryNumber, token);
+        }
+    }
+
     [Fact]
     public async Task An_accounting_year_can_be_created()
     {

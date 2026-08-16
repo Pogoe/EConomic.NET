@@ -42,6 +42,16 @@ public static class Draft03Converter
         "exclusiveMinimum", "exclusiveMaximum", "uniqueItems",
     };
 
+    /// <summary>
+    /// Where a <c>oneOf</c>'s merged fields wait until the containing object can take them.
+    /// </summary>
+    /// <remarks>
+    /// Internal to the conversion and removed before anything is written, so it never appears in a
+    /// generated document. It exists because the fields belong one level above the schema that
+    /// declares them, and only the object that owns that schema can put them there.
+    /// </remarks>
+    private const string OneOfUnionMarker = "x-oneof-union";
+
     /// <summary>Keywords dropped: they describe the document, not the type.</summary>
     private static readonly HashSet<string> Dropped = new(StringComparer.Ordinal)
     {
@@ -253,6 +263,10 @@ public static class Draft03Converter
         var required = new JsonArray();
         var misplaced = new JsonObject();
 
+        // Collected during the walk and merged after it: `oneOf` sits beside `properties` in these
+        // files and comes first, so merging in place would be overwritten by the property pass.
+        JsonObject? branches = null;
+
         foreach (var (key, value) in source)
         {
             if (Renamed.TryGetValue(key, out var corrected))
@@ -273,15 +287,39 @@ public static class Draft03Converter
                     break;
 
                 case "oneOf" when value is JsonArray alternatives:
-                    var converted = new JsonArray();
-                    foreach (var alternative in alternatives)
+                    // Flattened into the union of its branches rather than carried across, and the
+                    // reason is what NSwag does with it: given six alternatives it emits a class
+                    // with the first branch's two properties and silently drops the other five, so
+                    // five of e-conomic's six payment types become unrepresentable. Every oneOf in
+                    // these schemas is the same shape — a payment type, whose branches are pairs of
+                    // properties chosen by the payment type number — so the union is exactly the
+                    // set of fields a caller might set, and the server validates the combination.
+                    //
+                    // Merged as optional, because required-ness here belongs to a branch and not to
+                    // the type: `ocrLine` is required for a +71 payment and meaningless for an IBAN
+                    // one. Marking any of them required would make five of the six impossible to
+                    // express, which is the defect this exists to remove.
+                    foreach (var alternative in alternatives.OfType<JsonObject>())
                     {
-                        converted.Add(alternative is JsonObject option
-                            ? Convert(option, unhandled)
-                            : alternative?.DeepClone());
+                        if (Convert(alternative, unhandled)["properties"] is not JsonObject branch)
+                        {
+                            continue;
+                        }
+
+                        foreach (var (name, definition) in branch)
+                        {
+                            // First branch wins: where two describe the same field they agree on
+                            // its type, and differ only in the length limits one payment type
+                            // imposes. Keeping the first is arbitrary but stable, and the server is
+                            // the authority on the limits either way.
+                            branches ??= [];
+                            if (!branches.ContainsKey(name))
+                            {
+                                branches[name] = definition?.DeepClone();
+                            }
+                        }
                     }
 
-                    target["oneOf"] = converted;
                     break;
 
                 case "format" when value is JsonValue format:
@@ -356,6 +394,17 @@ public static class Draft03Converter
             }
         }
 
+        // Handed to the containing object rather than merged here, under a marker the property pass
+        // lifts and removes. The server is what decides that: e-conomic puts the `oneOf` on
+        // `paymentDetails.paymentType`, and posting the pair there answers 400 "The folowing fields
+        // need to be either all set or all not set", while posting it one level up on
+        // `paymentDetails` answers 201 and reads back with the fields at that level. The schema
+        // nests them one deeper than the API does.
+        if (branches is { Count: > 0 })
+        {
+            target[OneOfUnionMarker] = branches;
+        }
+
         if (required.Count > 0)
         {
             target["required"] = required;
@@ -391,6 +440,19 @@ public static class Draft03Converter
             }
 
             var result = Convert(property, unhandled);
+
+            // A `oneOf` on this property describes fields the API carries on *this* object, not on
+            // the property — verified against the server, which rejects them nested and accepts
+            // them here. Lift them out and drop the marker so it never reaches the document.
+            if (result[OneOfUnionMarker] is JsonObject union)
+            {
+                result.Remove(OneOfUnionMarker);
+
+                foreach (var (field, definition) in union)
+                {
+                    converted[field] ??= definition?.DeepClone();
+                }
+            }
 
             // Every resource carries a `self` link and all but one label it `format: "uri"`.
             // Supplier omits it, which would otherwise surface `Supplier.Self` as a string while
