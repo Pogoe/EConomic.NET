@@ -113,8 +113,9 @@ result when one is supplied.
       silently resolved, and which wins.
 - [ ] Whether `self` is accepted on `PUT` bodies and in path position, not just in nested
       references on `POST`.
-- [ ] Whether the server accepts an alphanumeric `productNumber`, given the path parameter declares
-      an integer while the value is a string.
+- [x] The server accepts an alphanumeric `productNumber` in path position:
+      `GET /products/ZZ-PROBE-BOOK` answers `200` with that record. The path parameter's declared
+      integer type is wrong, and the correction to `string` was right.
 
 ### Status codes
 
@@ -128,32 +129,66 @@ result when one is supplied.
 - [x] `readOnly` properties are ignored, so sending `balance: 0` is harmless.
 - [x] `PUT` is a true replace: an omitted property is cleared.
 - [x] Unknown properties are ignored.
-- [ ] What a create response actually contains for `UnitsCreate`, `PaymentTermPOST` and
-      `AccountingYearsPOST`, whose schemas carry no identifier — which is the only reason those
-      resources have no `CreateAsync`. Customers proved the response carries far more than the
-      schema describes, so these very likely do too.
-- [ ] Whether `customerNumber` may be supplied on create, or is always server-assigned.
+- [x] **The create responses do carry an identifier, and the schemas are wrong.** `POST /units`
+      answers `201 {"unitNumber":3,"name":…,"products":…,"self":…}` and `POST /payment-terms`
+      answers `201 {"paymentTermsNumber":5,…,"self":…}` — both with the key the schema omits. So
+      the reason `Units` and `PaymentTerms` have no `CreateAsync` does not hold, and both could
+      publish one. `AccountingYearsPOST` is untested here on purpose: an accounting year cannot be
+      deleted, so it stays behind `ECONOMIC_RUN_BOOKING_TESTS`.
+- [x] **`customerNumber` may be supplied on create.** `POST /customers` carrying
+      `"customerNumber":900123` answers `201` with that exact number, so the server assigns one only
+      when it is omitted. The surface split in `CLAUDE.md` describes legacy as "server-assigned",
+      which is true of the default and not of the contract; the legacy create model could expose the
+      number as optional.
 
 ### Idempotency and retries
 
 - [x] `DELETE` honours `Idempotency-Key` and replays with `X-ResultFromCache: true`.
-- [ ] The same for `POST` — whether a replayed create returns the original resource rather than
-      making a second one.
-- [ ] How long a key is remembered.
+- [x] **`POST` replays too.** The same create sent twice under one `Idempotency-Key` answered `201`
+      both times, the second carrying `X-ResultFromCache: true` and the *same* `customerNumber`. One
+      record, not two — so the retry handler's promise holds on creates as well as deletes.
+- [ ] How long a key is remembered. Still open, and not answerable in a single session: the replay
+      above was seconds apart, which bounds it from below and nothing else.
 
 ### Querying
 
-- [ ] Which properties are filterable per resource, against the schema's list. Customers is known
-      to under-report by one (`pNumber`).
-- [ ] Whether `$like:` without wildcards really means *contains*.
-- [ ] `$in:`/`$nin:` are numeric-only with a 200-value maximum.
-- [ ] Sorting on a property the schema marks unsortable — rejected, or silently ignored.
-- [ ] The escape table, by sending values containing `$ ( ) * [ ] ,`.
+- [x] Which properties are filterable per resource, against the schema's list — this is what
+      `FilterSurfaceTests` does on every run, one clause per request, diffed against the server's
+      own `allowedFilteringFields`.
+- [x] **`$like:` without wildcards is *contains*, and the server says so itself.** The
+      filter-parse `developerHint` reads "If no wildcards are used, the expression is considered a
+      'contains' expression and effectively becomes a filter with a wildcard at the start of the
+      string and one at the end". Confirmed with data: `name$like:robe` returns
+      `ZZ Probe Booking Customer`.
+- [x] **`$in:`/`$nin:` take a bracketed list, `$in:[1,2,3]`.** The bare comma-separated form the
+      docs imply is a `400`, "Syntax error, expected: [", on both surfaces. Max 200 values: 200
+      answers `200`, 201 answers `400` — the OpenAPI services say so outright ("only allow filtering
+      on arrays with less than '200' values"), the legacy one just fails to parse. The translator
+      already emitted the bracketed form and enforces the cap client-side, so this confirms the code
+      rather than correcting it. Note the "numeric-only" half is a *client* restriction, not a
+      server one: `name$in:[Abe,Bob]` answers `200` and matches nothing rather than being rejected.
+- [x] **Sorting on an unsortable property is rejected, not ignored.** `sort=paymentTerms` and
+      `sort=zzzNoSuchField` both answer `400` "Could not parse query string sort parameter". This is
+      the opposite of the OpenAPI services, where a sort under cursor pagination is silently
+      dropped — so the legacy surface needs no equivalent of that guard.
+- [x] **The escape table, and it is wrong about square brackets.** Verified by creating one customer
+      per character and filtering for each. `$` and `)` *must* be escaped or the filter is a `400`;
+      `(`, `*` and `,` work either way. But `[` and `]` must be left **alone**: the server publishes
+      `$[` and `$]` and does not honour them, so `name$eq:ZZesc$[tail` parses fine and matches
+      nothing while `name$eq:ZZesc[tail` returns the record. Under `$like:` a bracket is not literal
+      at all — `[…]` is a SQL character class, and `name$like:ZZcc[XY]tail` returns both `ZZccXtail`
+      and `ZZccYtail`. The escape that works there is SQL's own, `[[]`. Both corrected in
+      `EconomicFilterEscaping`; before the fix any filter on a value containing a bracket returned
+      zero rows silently.
 
 ### Pagination
 
-- [ ] `pagesize` maximum is 1000, and what happens above it.
-- [ ] Whether `skippages` past the end returns an empty collection or an error.
+- [x] **`pagesize` caps at 1000.** `pagesize=1000` answers `200`; `pagesize=1001` answers `400`
+      `E04810`, "must be a positive whole number between 1 and 1000". The collection's own
+      `pagination.maxPageSizeAllowed` reports 1000 on every response, so it need not be hard-coded.
+- [x] **`skippages` past the end is an empty collection, not an error.** `skippages=99999` answers
+      `200` with `collection: []` and a `pagination` block still reporting the true `results` count
+      and first/last page links. So paging terminates on an empty page rather than on a failure.
 
 ## Endpoint checklist
 

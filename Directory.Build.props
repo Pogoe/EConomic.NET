@@ -46,7 +46,12 @@
     <PackageTags>e-conomic;economic;visma;accounting;erp;api-client;denmark</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <!-- TODO: add PackageIcon once an icon.png exists in the repo root. -->
+    <!--
+      The file itself is packed by the project that produces the package, next to the readme.
+      `PackageIcon` names the path *inside* the nupkg, not the path on disk, so declaring it here
+      and packing it there is the only combination that works.
+    -->
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
 </Project>

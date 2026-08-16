@@ -168,10 +168,32 @@ public class FilterTranslatorTests
         Assert.Equal("name$eq:a$$b", Translate(c => c.Name == "a$b"));
         Assert.Equal("name$eq:a$(b$)c", Translate(c => c.Name == "a(b)c"));
         Assert.Equal("name$eq:a$,b", Translate(c => c.Name == "a,b"));
-        Assert.Equal("name$eq:a$[b$]c", Translate(c => c.Name == "a[b]c"));
 
         // A literal asterisk in an equality value must not become a wildcard.
         Assert.Equal("name$eq:a$*b", Translate(c => c.Name == "a*b"));
+    }
+
+    [Fact]
+    // Regression: the server publishes `$[` and `$]` in its own escape table and then ignores them.
+    // A customer named `ZZ[X]tail` is returned by `name$eq:ZZ[X]tail` and by nothing else — the
+    // escaped form parses cleanly and matches no rows, so escaping it lost the record silently.
+    // Confirmed live, one customer per character in the table.
+    public void Square_brackets_are_left_alone_in_a_comparison()
+    {
+        Assert.Equal("name$eq:a[b]c", Translate(c => c.Name == "a[b]c"));
+        Assert.DoesNotContain("$[", Translate(c => c.Name == "a[b]c"), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    // Under `$like:` a bracket opens a SQL character class rather than standing for itself:
+    // `name$like:ZZcc[XY]tail` returns both `ZZccXtail` and `ZZccYtail`. The escape that works is
+    // SQL's own, `[[]`, and a `]` outside a class is already literal.
+    public void A_literal_bracket_in_a_like_pattern_uses_the_sql_class_idiom()
+    {
+        Assert.Equal("name$like:a[[]b]c", Translate(c => c.Name.Like("a[b]c")));
+
+        // The wildcard still survives a pattern, which is the whole point of the separate method.
+        Assert.Equal("name$like:a*[[]b]", Translate(c => c.Name.Like("a*[b]")));
     }
 
     [Fact]

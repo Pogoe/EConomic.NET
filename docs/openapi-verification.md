@@ -162,12 +162,29 @@ The inline copy is dropped in preparation, leaving the reference.
 - [ ] Whether `PUT` at a collection path — `PUT /Contacts`, which several services offer instead of
       `PUT /Contacts/{id}` — takes the identifier from the body
 - [ ] Whether a cursor survives an intervening write, and what happens when it does not
-- [ ] Whether `/count` respects `filter` in practice, as its parameter list claims
-- [ ] Whether `429` carries the same `X-RateLimiting` budget as the legacy surface
-- [ ] Whether the `like` operator behaves as "contains" without wildcards here too
-- [ ] Whether the `500`s on `assetGroupNumber` and `isDepartmentMandatory` are fixed, which would
-      make the curated exclusions fail the generator and prompt their removal
+- [x] **`/count` does respect `filter`.** `/customers/count` answers `4`, the same count under
+      `?filter=customerNumber$gt:0` answers `4`, and under a filter matching nothing answers `0`.
+- [ ] Whether `429` carries the same `X-RateLimiting` budget as the legacy surface. Deliberately
+      not probed: forcing one means exhausting a shared bucket on a live agreement.
+- [x] **`$like:` is "contains" here too.** `productsapi` answers `name$like:robe` with
+      `ZZ Probe booking product`, identically to `name$like:*robe*`. Checked on products because the
+      customers service publishes no `like` at all — `name$like:` there is
+      "Operator $like: not supported on property name", which is the operator list being accurate
+      rather than a defect.
+- [x] **The `500`s are all still `500`, so the curated exclusions stay.** `assetGroupNumber$eq:1`,
+      `sort=assetGroupNumber`, `isDepartmentMandatory$eq:true` and every `/journals` filter answer
+      `500`; the neighbouring `isUnitMandatory$eq:true` answers `200`. Nothing to remove, and the
+      rot guards should not fire.
 - [ ] Whether any other `format: date` on these services is likewise answered with a timestamp; only
       the projects one has been caught, and only because a page failed to deserialize
-- [ ] Whether `$or:` short-circuits the way `$and:` does, which would matter if the operator check
-      is ever batched again
+- [~] **`$or:` did not short-circuit, and neither did `$and:` on a re-test.** Pairing a clause that
+      works with the broken `assetGroupNumber$eq:1` propagated the `500` under both combinators, so
+      neither hid it here. That is *not* a retraction of the original finding — that one was a
+      twenty-clause filter, this one has two — but it does mean the hiding depends on the filter,
+      not on the combinator. One clause per request remains the only safe rule, and it is the
+      conservative reading either way.
+- [x] **`$in:`/`$nin:` need the bracketed list `$in:[1,2,3]` on this surface too**, and the 200-value
+      cap is stated outright: 201 values answers "The $in: and $nin: operators only allow filtering
+      on arrays with less than '200' values. Your array has 201 values." 200 answers `200`.
+- [x] **`objectVersion` is present across services**, confirmed on `customersapi`, `productsapi` and
+      `dimensionsapi`. Whether `POST` *accepts* one is still open — see the first item above.

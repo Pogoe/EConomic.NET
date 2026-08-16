@@ -17,14 +17,15 @@ await foreach (var customer in client.Rest.Customers
 }
 ```
 
-> **Status: pre-release.** Thirty-three collection resources on the legacy REST API are covered,
+> **Status: stable.** Thirty-three collection resources on the legacy REST API are covered,
 > with filtering, sorting and transparent paging, along with nineteen more reached through the
 > record that scopes them and a `GetAsync` on every resource that publishes a single-record `GET`.
 > Eleven of them support writing. All
 > fourteen of the newer OpenAPI services — accounting years, accounts, booked entries, budgets,
 > customers, dimensions, documents, journals, products, projects, quote-to-cash, subscriptions,
 > suppliers and webhooks, fifty-seven collections in all — are covered under `client.Open`. The
-> public API may change before 1.0.
+> public API is locked as of 1.0.0 and follows SemVer from there; endpoints e-conomic publishes and
+> this client does not yet express are additive, and will arrive in minor releases.
 
 > **Unofficial.** This project is not affiliated with, endorsed by, or supported by Visma or
 > e-conomic. For API support, contact <api@e-conomic.com>.

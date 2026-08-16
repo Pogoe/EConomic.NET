@@ -10,6 +10,12 @@ is a mapping change inside the facade, not automatically a major release here.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-16
+
+First stable release. The public API surface is locked from here: everything accumulated in
+`PublicAPI.Unshipped.txt` during the `0.1.0-rc` series moves to `PublicAPI.Shipped.txt`, and a
+removal from it is a major version from now on.
+
 ### Added
 
 - Project scaffolding: multi-targeted `net8.0`/`net10.0` library, xUnit unit and integration test
@@ -242,6 +248,16 @@ is a mapping change inside the facade, not automatically a major release here.
 
 ### Fixed
 
+- A filter on any value containing a square bracket returned **no rows, with no error**. e-conomic
+  publishes its escape table in the body of a filter-parse failure, and that table lists `$[` and
+  `$]` alongside the rest — but the server does not honour them. A customer named `ZZ[X]tail` is
+  returned by `name$eq:ZZ[X]tail` and by nothing else; the escaped form parses cleanly and matches
+  nothing. Brackets are now left alone in a comparison. Under `$like:` they are not literal at all —
+  `[…]` is a SQL character class, so `name$like:ZZcc[XY]tail` returns both `ZZccXtail` and
+  `ZZccYtail` — and a literal bracket there is now written the way SQL writes it, `[[]`. Found by
+  creating one customer per character in the published table and filtering for each; the unit tests
+  had pinned the published table, so they agreed with the documentation and with the server's own
+  error message, and were wrong with both.
 - `ProjectEmployeeDetails.CutOffDate` could not be read at all. e-conomic declares it
   `format: date` — alone among the twelve date properties in that document, the other eleven being
   `date-time` — and then answers it with `2022-05-31T00:00:00` like all the rest. That maps to a
@@ -364,4 +380,5 @@ is a mapping change inside the facade, not automatically a major release here.
   set `lineNumber` and `sortKey` — neither of which a caller has any reason to set — was rejected
   outright, both declaring a minimum of 1.
 
-[Unreleased]: https://github.com/Pogoe/EConomic.NET/commits/main
+[Unreleased]: https://github.com/Pogoe/EConomic.NET/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Pogoe/EConomic.NET/releases/tag/v1.0.0

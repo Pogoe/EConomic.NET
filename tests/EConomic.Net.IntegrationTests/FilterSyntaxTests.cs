@@ -95,6 +95,49 @@ public class FilterSyntaxTests
     }
 
     [Fact]
+    public async Task A_bracket_in_a_value_finds_the_record_it_names()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        var client = TestClients.Create();
+        await using var seed = new AgreementSeed(client, TestContext.Current.CancellationToken);
+
+        // e-conomic publishes `$[` and `$]` in the escape table it returns on a filter-parse
+        // failure, and does not honour them: the escaped form parses cleanly and matches nothing.
+        // A unit test cannot see this — it agreed with the published table, which is why the bug
+        // survived. Only a record that exists settles it.
+        const string Name = "ZZ Probe Br[X] Tail";
+        await seed.CustomerAsync(Name);
+
+        var expression = FilterTranslator.Translate<DemoCustomerFilter>(c => c.Name == Name);
+        var (status, count) = await QueryAsync(expression);
+
+        Assert.Equal(HttpStatusCode.OK, status);
+        Assert.Equal(1, count);
+    }
+
+    [Fact]
+    public async Task A_bracket_in_a_like_pattern_is_literal_rather_than_a_character_class()
+    {
+        TestClients.SkipUnlessConfigured();
+
+        var client = TestClients.Create();
+        await using var seed = new AgreementSeed(client, TestContext.Current.CancellationToken);
+
+        // Under `$like:` a bracket opens a SQL character class, so an unescaped `Br[X]` matches
+        // `BrX` and not `Br[X]` — the exact inverse of what the caller asked for. The two records
+        // below are what tells those apart: the pattern must find the first and not the second.
+        await seed.CustomerAsync("ZZ Probe Cls Br[X] Tail");
+        await seed.CustomerAsync("ZZ Probe Cls BrX Tail");
+
+        var expression = FilterTranslator.Translate<DemoCustomerFilter>(c => c.Name.Like("Cls Br[X]"));
+        var (status, count) = await QueryAsync(expression);
+
+        Assert.Equal(HttpStatusCode.OK, status);
+        Assert.Equal(1, count);
+    }
+
+    [Fact]
     public async Task A_filter_on_a_property_the_schema_under_reports_still_works()
     {
         TestClients.SkipUnlessConfigured();
