@@ -51,7 +51,7 @@ public static class EconomicFilterEscaping
     {
         var builder = new StringBuilder(value.Length);
 
-        foreach (var character in value)
+        foreach (char character in value)
         {
             switch (character)
             {

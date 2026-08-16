@@ -80,7 +80,7 @@ public sealed class EconomicRetryHandler : DelegatingHandler
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var retryable = IsSafeToRetry(request);
+        bool retryable = IsSafeToRetry(request);
 
         // A request body is a forward-only stream by default, so a second attempt would send an
         // empty one. Buffering first makes the request repeatable.
@@ -94,9 +94,9 @@ public sealed class EconomicRetryHandler : DelegatingHandler
 #endif
         }
 
-        for (var attempt = 1; ; attempt++)
+        for (int attempt = 1; ; attempt++)
         {
-            var isLastAttempt = attempt >= _options.MaxAttempts || !retryable;
+            bool isLastAttempt = attempt >= _options.MaxAttempts || !retryable;
 
             HttpResponseMessage response;
             try

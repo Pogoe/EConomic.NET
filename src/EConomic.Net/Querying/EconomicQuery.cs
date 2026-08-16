@@ -162,7 +162,7 @@ public sealed class EconomicQuery<TResource, TFilter, TSort>
     public async IAsyncEnumerable<TResource> AsAsyncEnumerable(
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var pageIndex = 0;
+        int pageIndex = 0;
 
         while (true)
         {
