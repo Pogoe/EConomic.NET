@@ -89,7 +89,7 @@ public static class FilterTranslator
 
     private static void VisitComparison(BinaryExpression binary, StringBuilder output)
     {
-        string op = binary.NodeType switch
+        var op = binary.NodeType switch
         {
             ExpressionType.Equal => "$eq:",
             ExpressionType.NotEqual => "$ne:",
@@ -100,8 +100,8 @@ public static class FilterTranslator
             _ => throw Unsupported(binary),
         };
 
-        string field = FieldName(binary.Left) ?? FieldName(binary.Right) ?? throw Unsupported(binary);
-        object? value = ValueOf(FieldName(binary.Left) is null ? binary.Left : binary.Right);
+        var field = FieldName(binary.Left) ?? FieldName(binary.Right) ?? throw Unsupported(binary);
+        var value = ValueOf(FieldName(binary.Left) is null ? binary.Left : binary.Right);
 
         // $null: is a value, not an operator: `name$null:` is a syntax error, and the server
         // replies listing the operators it expected. It has to be written `name$eq:$null:`.
@@ -122,12 +122,12 @@ public static class FilterTranslator
 
     private static void VisitCall(MethodCallExpression call, StringBuilder output)
     {
-        string field = FieldName(call.Object) ?? throw Unsupported(call);
+        var field = FieldName(call.Object) ?? throw Unsupported(call);
 
         switch (call.Method.Name)
         {
             case nameof(TextField.Like):
-                string pattern = ValueOf(call.Arguments[0]) as string
+                var pattern = ValueOf(call.Arguments[0]) as string
                     ?? throw new NotSupportedException("Like requires a non-null pattern.");
 
                 output.Append(field).Append("$like:").Append(EconomicFilterEscaping.EscapePattern(pattern));
@@ -172,7 +172,7 @@ public static class FilterTranslator
         }
 
         var formatted = new List<string>();
-        foreach (object? value in values)
+        foreach (var value in values)
         {
             if (value is null)
             {
@@ -238,7 +238,7 @@ public static class FilterTranslator
                 return staticProperty.GetValue(null);
 
             case MemberExpression member:
-                object? target = ValueOf(member.Expression!);
+                var target = ValueOf(member.Expression!);
                 return member.Member switch
                 {
                     FieldInfo field => field.GetValue(target),

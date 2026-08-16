@@ -111,6 +111,12 @@ jobs:
 
       # begin/build/end has to be one step: `begin` injects MSBuild targets into the *current*
       # process's environment, and `end` reads what the build wrote to disk between them.
+      #
+      # `tools/**` is excluded because none of it is packaged — the spec converter and the probe are
+      # build-time and diagnostic tooling. They accounted for 394 of 616 issues, which buried the 47
+      # in `src/` that a consumer of the package could actually be affected by. Their correctness is
+      # held by `tests/EConomic.SpecConverter.Tests` and by the byte-identical regeneration check,
+      # not by Sonar.
       - name: Analyse
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -122,7 +128,7 @@ jobs:
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.scanner.skipJreProvisioning=true \
-            /d:sonar.exclusions="**/*.g.cs,**/Generated/**,specs/**" \
+            /d:sonar.exclusions="**/*.g.cs,**/Generated/**,specs/**,tools/**" \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
           # --no-incremental because the scanner only sees files that actually compile in this

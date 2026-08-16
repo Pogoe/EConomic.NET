@@ -21,8 +21,16 @@ csharp_using_directive_placement = outside_namespace:warning
 
 # Modern C# style
 csharp_style_namespace_declarations = file_scoped:warning
-csharp_style_var_for_built_in_types = false:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
+# `var` is the house style throughout, which is what the code already does in ~420 places. The
+# preference is recorded here so a re-enabled severity pushes towards `var` rather than away from
+# it, and IDE0007/IDE0008 are then turned off outright: at `:suggestion` they are invisible in the
+# editor and in `dotnet format`, but SonarQube Cloud imports Roslyn diagnostics regardless of
+# severity and filed all 417 as maintainability issues. A rule nobody enforces should not report.
+csharp_style_var_for_built_in_types = true:silent
+csharp_style_var_when_type_is_apparent = true:silent
+csharp_style_var_elsewhere = true:silent
+dotnet_diagnostic.IDE0007.severity = none         # "use var"
+dotnet_diagnostic.IDE0008.severity = none         # "use explicit type"
 csharp_prefer_braces = true:warning
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion

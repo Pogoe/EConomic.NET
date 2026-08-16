@@ -80,7 +80,7 @@ public sealed class EconomicRetryHandler : DelegatingHandler
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        bool retryable = IsSafeToRetry(request);
+        var retryable = IsSafeToRetry(request);
 
         // A request body is a forward-only stream by default, so a second attempt would send an
         // empty one. Buffering first makes the request repeatable.
@@ -94,9 +94,17 @@ public sealed class EconomicRetryHandler : DelegatingHandler
 #endif
         }
 
-        for (int attempt = 1; ; attempt++)
+        // S1994 wants the stop condition to test `attempt`. It deliberately does not: every exit
+        // from this loop is a `return` guarded by `isLastAttempt`, and putting `attempt` in the
+        // condition instead would leave an unreachable path after the loop for the compiler to
+        // demand a value for. The increment has to stay in the for-clause rather than move to the
+        // end of the body, because the `continue` on a transport failure below would skip it and
+        // retry forever at attempt 1.
+#pragma warning disable S1994
+        for (var attempt = 1; ; attempt++)
+#pragma warning restore S1994
         {
-            bool isLastAttempt = attempt >= _options.MaxAttempts || !retryable;
+            var isLastAttempt = attempt >= _options.MaxAttempts || !retryable;
 
             HttpResponseMessage response;
             try

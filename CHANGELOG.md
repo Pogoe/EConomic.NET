@@ -231,6 +231,15 @@ is a mapping change inside the facade, not automatically a major release here.
   fourth alternative, so one that could not have worked before — and asserts the fields survive the
   round trip.
 
+### Changed
+
+- `EconomicRateLimitException` and `EconomicConcurrencyException` no longer default their
+  `problemDetails` parameter. Each type also has a message-only constructor, and two overlapping
+  signatures meant the default could only ever apply when a later argument was named — the
+  message-only call always bound to the other constructor. Every argument after `problemDetails`
+  keeps its default. Source-breaking only for a caller that passed a message plus named arguments
+  and skipped `problemDetails`, which is why it lands before the surface is locked at `1.0.0`.
+
 ### Fixed
 
 - `ProjectEmployeeDetails.CutOffDate` could not be read at all. e-conomic declares it

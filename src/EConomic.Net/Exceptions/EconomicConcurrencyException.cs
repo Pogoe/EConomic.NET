@@ -30,9 +30,15 @@ public sealed class EconomicConcurrencyException : EconomicApiException
     /// <param name="problemDetails">The parsed <c>problem+json</c> body.</param>
     /// <param name="requestId">The request identifier, when the response carried one.</param>
     /// <param name="rawBody">The unparsed response body.</param>
+    /// <remarks>
+    /// <paramref name="problemDetails"/> has no default so that this overload cannot be reached
+    /// with a message alone — that call belongs to the single-argument constructor below, and two
+    /// signatures competing for it means the default here would only ever apply when a later
+    /// argument was named.
+    /// </remarks>
     public EconomicConcurrencyException(
         string message,
-        EconomicProblemDetails? problemDetails = null,
+        EconomicProblemDetails? problemDetails,
         string? requestId = null,
         string? rawBody = null)
         : base(message, HttpStatusCode.Conflict, problemDetails, legacyError: null, requestId,

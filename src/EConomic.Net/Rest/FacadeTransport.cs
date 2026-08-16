@@ -81,6 +81,23 @@ internal static class FacadeTransport
             nameof(value));
     }
 
+    /// <summary>Converts a public string onto a generated enum property that is itself optional.</summary>
+    /// <typeparam name="TEnum">The generated enum, inferred from <paramref name="inferenceOnly"/>.</typeparam>
+    /// <param name="value">The caller's value, or <see langword="null"/> to leave it unset.</param>
+    /// <param name="inferenceOnly">The target property, read solely for type inference.</param>
+    /// <returns>The parsed value, or <see langword="null"/> when nothing is supplied.</returns>
+    /// <remarks>
+    /// NSwag makes a nested class's optional enum nullable, so the same generated assignment needs
+    /// both shapes. Overload resolution picks between them: the non-nullable one cannot infer
+    /// <typeparamref name="TEnum"/> from a <see cref="Nullable{T}"/> argument, and this one cannot
+    /// infer it from a bare enum. Kept adjacent to that overload, which is both what a reader
+    /// expects and what S4136 asks for.
+    /// </remarks>
+    /// <exception cref="ArgumentException">The value is not one this property accepts.</exception>
+    public static TEnum? ParseEnum<TEnum>(string? value, TEnum? inferenceOnly)
+        where TEnum : struct, Enum =>
+        value is null ? inferenceOnly : ParseEnum(value, default(TEnum));
+
     /// <summary>Projects a generated collection onto its public counterpart.</summary>
     /// <typeparam name="TSource">The generated element type, which NSwag names.</typeparam>
     /// <typeparam name="TResult">The public element type.</typeparam>
@@ -111,22 +128,6 @@ internal static class FacadeTransport
 
         return mapped;
     }
-
-    /// <summary>Converts a public string onto a generated enum property that is itself optional.</summary>
-    /// <typeparam name="TEnum">The generated enum, inferred from <paramref name="inferenceOnly"/>.</typeparam>
-    /// <param name="value">The caller's value, or <see langword="null"/> to leave it unset.</param>
-    /// <param name="inferenceOnly">The target property, read solely for type inference.</param>
-    /// <returns>The parsed value, or <see langword="null"/> when nothing is supplied.</returns>
-    /// <remarks>
-    /// NSwag makes a nested class's optional enum nullable, so the same generated assignment needs
-    /// both shapes. Overload resolution picks between them: the non-nullable one cannot infer
-    /// <typeparamref name="TEnum"/> from a <see cref="Nullable{T}"/> argument, and this one cannot
-    /// infer it from a bare enum.
-    /// </remarks>
-    /// <exception cref="ArgumentException">The value is not one this property accepts.</exception>
-    public static TEnum? ParseEnum<TEnum>(string? value, TEnum? inferenceOnly)
-        where TEnum : struct, Enum =>
-        value is null ? inferenceOnly : ParseEnum(value, default(TEnum));
 
     /// <summary>Builds a generated collection from a public one.</summary>
     /// <typeparam name="TSource">The public element type.</typeparam>

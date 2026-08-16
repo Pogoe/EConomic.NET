@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using EConomic.Pagination;
@@ -22,6 +23,10 @@ namespace EConomic.Querying;
 /// be shared or reused without surprises.
 /// </para>
 /// </remarks>
+[SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters",
+    Justification = "The three are the point: the resource, its generated filter surface and its generated sort "
+        + "surface are independent per endpoint, and carrying each as its own parameter is what makes a "
+        + "non-filterable property a compile error instead of a 400.")]
 public sealed class EconomicQuery<TResource, TFilter, TSort>
 {
     /// <summary>e-conomic's default page size.</summary>
@@ -162,7 +167,7 @@ public sealed class EconomicQuery<TResource, TFilter, TSort>
     public async IAsyncEnumerable<TResource> AsAsyncEnumerable(
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        int pageIndex = 0;
+        var pageIndex = 0;
 
         while (true)
         {

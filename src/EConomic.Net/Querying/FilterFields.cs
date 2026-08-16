@@ -1,5 +1,19 @@
 using System.Diagnostics.CodeAnalysis;
 
+// Every member in this file is a marker that exists to be read out of an expression tree and is
+// never executed, which trips three SonarQube rules that are right about ordinary code and wrong
+// about this file. Disabled here rather than per member because it is one decision, not thirty:
+//
+//   S3877  "Remove this 'throw' expression"      — thrown from Equals, GetHashCode and operators.
+//   S3875  "Remove this overload of 'operator ==' " — the overload *is* the filter syntax.
+//   S2325  "Make this a static method"           — an instance member is what makes a lambda read
+//                                                   as `field.Like(...)`; the CA1822 equivalent is
+//                                                   already suppressed per member below.
+//
+// Removing any of them would delete the compile-time guard this whole surface exists to provide.
+// See the remarks on EconomicFilterField.
+#pragma warning disable S3877, S3875, S2325
+
 namespace EConomic.Querying;
 
 /// <summary>
@@ -224,3 +238,5 @@ public sealed class NumericField<T> : EconomicFilterField
         Justification = "Must be an instance member so it reads as field.NotIn(...) in a lambda.")]
     public bool NotIn(params T[] values) => throw NotAnExpression();
 }
+
+#pragma warning restore S3877, S3875, S2325

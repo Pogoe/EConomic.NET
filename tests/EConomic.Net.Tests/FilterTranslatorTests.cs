@@ -89,10 +89,8 @@ public class FilterTranslatorTests
     }
 
     [Fact]
-    public void Like_keeps_wildcards_but_escapes_everything_else()
-    {
+    public void Like_keeps_wildcards_but_escapes_everything_else() =>
         Assert.Equal("name$like:*Acme$,Ltd*", Translate(c => c.Name.Like("*Acme,Ltd*")));
-    }
 
     [Fact]
     public void In_and_not_in_render_bracketed_lists()
@@ -148,10 +146,8 @@ public class FilterTranslatorTests
     }
 
     [Fact]
-    public void Booleans_render_lower_case()
-    {
+    public void Booleans_render_lower_case() =>
         Assert.Equal("barred$eq:false", Translate(c => c.Barred == false));
-    }
 
     [Fact]
     public void Dates_render_as_iso_days()
@@ -162,11 +158,9 @@ public class FilterTranslatorTests
     }
 
     [Fact]
-    public void Decimals_use_invariant_formatting()
-    {
-        // A Danish machine formats 1234.5 as "1234,5"; the comma would be parsed as a list separator.
+    // A Danish machine formats 1234.5 as "1234,5"; the comma would be parsed as a list separator.
+    public void Decimals_use_invariant_formatting() =>
         Assert.Equal("balance$gt:1234.5", Translate(c => c.Balance > 1234.5m));
-    }
 
     [Fact]
     public void Values_are_escaped_using_the_servers_own_table()

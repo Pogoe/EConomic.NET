@@ -1,5 +1,3 @@
-using System.Globalization;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -28,26 +26,26 @@ if (arguments.ShowHelp)
 
 if (arguments.Method is null || arguments.Path is null)
 {
-    Console.Error.WriteLine("A method and a path are required.");
-    Console.Error.WriteLine(Arguments.Usage);
+    await Console.Error.WriteLineAsync("A method and a path are required.");
+    await Console.Error.WriteLineAsync(Arguments.Usage);
     return 2;
 }
 
-var appSecret = Environment.GetEnvironmentVariable("ECONOMIC_APP_SECRET_TOKEN") ?? "demo";
-var agreementGrant = Environment.GetEnvironmentVariable("ECONOMIC_AGREEMENT_GRANT_TOKEN") ?? "demo";
-var usingDemo = appSecret == "demo" && agreementGrant == "demo";
+string appSecret = Environment.GetEnvironmentVariable("ECONOMIC_APP_SECRET_TOKEN") ?? "demo";
+string agreementGrant = Environment.GetEnvironmentVariable("ECONOMIC_AGREEMENT_GRANT_TOKEN") ?? "demo";
+bool usingDemo = appSecret == "demo" && agreementGrant == "demo";
 
 using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-AppSecretToken", appSecret);
 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-AgreementGrantToken", agreementGrant);
 
-var url = arguments.Path.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+string url = arguments.Path.StartsWith("http", StringComparison.OrdinalIgnoreCase)
     ? arguments.Path
     : arguments.BaseAddress.TrimEnd('/') + "/" + arguments.Path.TrimStart('/');
 
 using var request = new HttpRequestMessage(new HttpMethod(arguments.Method.ToUpperInvariant()), url);
 
-var body = await arguments.ReadBodyAsync().ConfigureAwait(false);
+string? body = await arguments.ReadBodyAsync().ConfigureAwait(false);
 if (body is not null)
 {
     request.Content = new StringContent(body, Encoding.UTF8, "application/json");
@@ -72,11 +70,11 @@ if (body is not null)
 Console.WriteLine();
 
 using var response = await httpClient.SendAsync(request).ConfigureAwait(false);
-var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
 Console.WriteLine($"← {(int)response.StatusCode} {response.ReasonPhrase}");
 
-foreach (var header in Headers(response))
+foreach (string header in Headers(response))
 {
     Console.WriteLine($"  {header}");
 }
@@ -86,7 +84,7 @@ Console.WriteLine(responseBody.Length == 0 ? "(empty body)" : Pretty(responseBod
 
 if (arguments.SaveAs is { } name)
 {
-    var path = Path.Combine("tests", "Fixtures", name.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ? name : name + ".json");
+    string path = Path.Combine("tests", "Fixtures", name.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ? name : name + ".json");
     Directory.CreateDirectory(Path.GetDirectoryName(path)!);
     await File.WriteAllTextAsync(path, responseBody.ReplaceLineEndings("\n")).ConfigureAwait(false);
     Console.WriteLine();
@@ -113,10 +111,10 @@ static IEnumerable<string> Headers(HttpResponseMessage response)
         "X-ResultFromCache", "Location", "Retry-After",
     ];
 
-    foreach (var name in interesting)
+    foreach (string name in interesting)
     {
         if (response.Headers.TryGetValues(name, out var values)
-            || (response.Content.Headers as HttpHeaders).TryGetValues(name, out values))
+            || response.Content.Headers.TryGetValues(name, out values))
         {
             yield return $"{name}: {string.Join(", ", values)}";
         }
@@ -167,7 +165,7 @@ internal sealed class Arguments
     {
         var positional = new List<string>();
 
-        for (var i = 0; i < args.Length; i++)
+        for (int i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {

@@ -51,8 +51,10 @@ jobs:
       # workflow file and environment, and nuget.org exchanges it for an API key valid for one hour
       # if that matches a policy configured on the account. No long-lived key is stored anywhere.
       # The exchange happens immediately before the push because of that one-hour window.
+      # Pinned to a commit for the same reason as the release step below: a tag is mutable, and
+      # this one mints a publish key. `v1` currently resolves to the 1.2.0 commit.
       - name: Exchange the OIDC token for a publish key
-        uses: NuGet/login@v1
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         id: nuget-login
         with:
           user: ${{ secrets.NUGET_USER }} # nuget.org profile name, not the account's email address
@@ -68,8 +70,11 @@ jobs:
           --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
           --source https://api.nuget.org/v3/index.json
 
+      # Pinned to a commit rather than a tag: a tag is mutable, and this step runs with a token
+      # that can publish a release. `v3` currently resolves to the 3.0.2 commit below. Bumping it
+      # means resolving the new tag to its commit, not editing the comment.
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
           files: ./artifacts/*
           generate_release_notes: true

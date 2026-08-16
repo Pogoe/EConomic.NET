@@ -36,9 +36,15 @@ public sealed class EconomicRateLimitException : EconomicApiException
     /// <param name="rateLimit">The rate-limit budget reported on the response, if any.</param>
     /// <param name="retryAfter">The <c>Retry-After</c> delay the server asked for, if any.</param>
     /// <param name="rawBody">The raw response body, if it was read.</param>
+    /// <remarks>
+    /// <paramref name="problemDetails"/> has no default so that this overload cannot be reached
+    /// with a message alone — that call belongs to the single-argument constructor above, and two
+    /// signatures competing for it means the default here would only ever apply when a later
+    /// argument was named.
+    /// </remarks>
     public EconomicRateLimitException(
         string message,
-        EconomicProblemDetails? problemDetails = null,
+        EconomicProblemDetails? problemDetails,
         EconomicLegacyError? legacyError = null,
         string? requestId = null,
         RateLimitStatus? rateLimit = null,

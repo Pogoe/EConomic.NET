@@ -132,11 +132,11 @@ public class EconomicApiException : Exception
         var problem = EconomicProblemDetails.TryParse(body);
         var legacy = problem is null ? EconomicLegacyError.TryParse(body) : null;
         var rateLimit = RateLimitStatus.FromResponse(response);
-        string? requestId = response.Headers.TryGetValues(RequestIdHeader, out var ids)
+        var requestId = response.Headers.TryGetValues(RequestIdHeader, out var ids)
             ? ids.FirstOrDefault()
             : null;
 
-        string message = BuildMessage(response, problem, legacy);
+        var message = BuildMessage(response, problem, legacy);
 
         if (response.StatusCode == HttpStatusCode.TooManyRequests)
         {
@@ -159,19 +159,19 @@ public class EconomicApiException : Exception
         EconomicProblemDetails? problem,
         EconomicLegacyError? legacy)
     {
-        int status = (int)response.StatusCode;
-        string reason =
+        var status = (int)response.StatusCode;
+        var reason =
             problem?.Detail
             ?? problem?.Title
             ?? legacy?.Message
             ?? response.ReasonPhrase
             ?? "Request failed";
 
-        string code = problem?.ErrorCode is { Length: > 0 } errorCode ? $" ({errorCode})" : string.Empty;
-        string method = response.RequestMessage?.Method.Method ?? "?";
-        string uri = response.RequestMessage?.RequestUri?.ToString() ?? "?";
+        var code = problem?.ErrorCode is { Length: > 0 } errorCode ? $" ({errorCode})" : string.Empty;
+        var method = response.RequestMessage?.Method.Method ?? "?";
+        var uri = response.RequestMessage?.RequestUri?.ToString() ?? "?";
 
-        string message = $"e-conomic returned {status}{code} for {method} {uri}: {reason}";
+        var message = $"e-conomic returned {status}{code} for {method} {uri}: {reason}";
 
         // The legacy API names the offending property here, which is far more actionable than
         // the generic "Could not parse query string filter." message it leads with.

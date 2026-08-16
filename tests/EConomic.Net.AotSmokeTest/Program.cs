@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using EConomic.Authentication;
@@ -85,6 +86,22 @@ internal static class Program
         { "customerNumber": 42 }
         """;
 
+    /// <summary>The media type every stubbed response is served as.</summary>
+    private const string JsonMediaType = "application/json";
+
+    /// <summary>The recipient name the write checks round-trip, asserted on both sides of the wire.</summary>
+    private const string RecipientName = "Acme A/S";
+
+    /// <summary>A legacy collection URI, only ever attached to a stubbed response.</summary>
+    /// <remarks>
+    /// Never dialled. <see cref="EconomicApiException.FromResponseAsync"/> reads the request URI off
+    /// the response, so the stub needs one for the parse to be exercised at all — which is the whole
+    /// point of this check. Making it configurable would test the configuration, not the trimmer.
+    /// </remarks>
+    [SuppressMessage("Major Code Smell", "S1075:URIs should not be hardcoded",
+        Justification = "A fixed address on a stubbed response that never leaves the process.")]
+    private const string LegacyCustomersUri = "https://restapi.e-conomic.com/customers";
+
     private static int _failures;
 
     private static async Task<int> Main()
@@ -125,8 +142,8 @@ internal static class Program
     {
         using var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
         {
-            Content = new StringContent(LegacyErrorJson, Encoding.UTF8, "application/json"),
-            RequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://restapi.e-conomic.com/customers"),
+            Content = new StringContent(LegacyErrorJson, Encoding.UTF8, JsonMediaType),
+            RequestMessage = new HttpRequestMessage(HttpMethod.Get, LegacyCustomersUri),
         };
 
         var exception = await EconomicApiException.FromResponseAsync(response).ConfigureAwait(false);
@@ -162,7 +179,7 @@ internal static class Program
                 LayoutNumber = 21,
                 CustomerNumber = 1,
                 PaymentTerms = new DraftInvoiceCreatePaymentTerms { PaymentTermsNumber = 1 },
-                Recipient = new DraftInvoiceCreateRecipient { Name = "Acme A/S", VatZoneNumber = 1 },
+                Recipient = new DraftInvoiceCreateRecipient { Name = RecipientName, VatZoneNumber = 1 },
                 Lines =
                 [
                     new DraftInvoiceCreateLine
@@ -179,7 +196,7 @@ internal static class Program
         Check(
             "nested object is serialized",
             body.Contains("\"recipient\"", StringComparison.Ordinal)
-            && body.Contains("Acme A/S", StringComparison.Ordinal));
+            && body.Contains(RecipientName, StringComparison.Ordinal));
 
         Check(
             "reference inside a nested object is serialized",
@@ -192,7 +209,7 @@ internal static class Program
 
         // The whole invoice comes back, including what the request never described.
         Check("composite write response is mapped", created.DraftInvoiceNumber == 7);
-        Check("nested response object is mapped", created.Recipient?.Name == "Acme A/S");
+        Check("nested response object is mapped", created.Recipient?.Name == RecipientName);
     }
 
     /// <summary>
@@ -228,14 +245,14 @@ internal static class Program
             new Open.Customer
             {
                 CustomerNumber = 42,
-                Name = "Acme A/S",
+                Name = RecipientName,
                 Currency = "DKK",
                 PaymentTermId = 1,
             }).ConfigureAwait(false);
 
         var body = handler.LastBody ?? string.Empty;
 
-        Check("open write serializes its payload", body.Contains("Acme A/S", StringComparison.Ordinal));
+        Check("open write serializes its payload", body.Contains(RecipientName, StringComparison.Ordinal));
         Check("open create response is mapped", assigned == 42);
     }
 
@@ -287,7 +304,7 @@ internal static class Program
 
             return new HttpResponseMessage(isWrite ? HttpStatusCode.Created : HttpStatusCode.OK)
             {
-                Content = new StringContent(isWrite ? writeBody : readBody, Encoding.UTF8, "application/json"),
+                Content = new StringContent(isWrite ? writeBody : readBody, Encoding.UTF8, JsonMediaType),
                 RequestMessage = request,
             };
         }
@@ -309,7 +326,7 @@ internal static class Program
 
             return new HttpResponseMessage(HttpStatusCode.Created)
             {
-                Content = new StringContent(body, Encoding.UTF8, "application/json"),
+                Content = new StringContent(body, Encoding.UTF8, JsonMediaType),
                 RequestMessage = request,
             };
         }
@@ -322,7 +339,7 @@ internal static class Program
             CancellationToken cancellationToken) =>
             Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StringContent(body, Encoding.UTF8, "application/json"),
+                Content = new StringContent(body, Encoding.UTF8, JsonMediaType),
                 RequestMessage = request,
             });
     }

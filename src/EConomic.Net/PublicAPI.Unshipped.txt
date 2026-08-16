@@ -41,7 +41,7 @@ EConomic.Exceptions.EconomicApiException.TraceId.get -> string?
 EConomic.Exceptions.EconomicConcurrencyException
 EConomic.Exceptions.EconomicConcurrencyException.EconomicConcurrencyException() -> void
 EConomic.Exceptions.EconomicConcurrencyException.EconomicConcurrencyException(string! message) -> void
-EConomic.Exceptions.EconomicConcurrencyException.EconomicConcurrencyException(string! message, EConomic.Exceptions.EconomicProblemDetails? problemDetails = null, string? requestId = null, string? rawBody = null) -> void
+EConomic.Exceptions.EconomicConcurrencyException.EconomicConcurrencyException(string! message, EConomic.Exceptions.EconomicProblemDetails? problemDetails, string? requestId = null, string? rawBody = null) -> void
 EConomic.Exceptions.EconomicConcurrencyException.EconomicConcurrencyException(string! message, System.Exception! innerException) -> void
 EConomic.Exceptions.EconomicLegacyError
 EConomic.Exceptions.EconomicLegacyError.AllowedFilteringFields.get -> System.Collections.Generic.IReadOnlyList<string!>?
@@ -77,7 +77,7 @@ EConomic.Exceptions.EconomicProblemDetails.Type.get -> string?
 EConomic.Exceptions.EconomicProblemDetails.Type.init -> void
 EConomic.Exceptions.EconomicRateLimitException
 EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message) -> void
-EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message, EConomic.Exceptions.EconomicProblemDetails? problemDetails = null, EConomic.Exceptions.EconomicLegacyError? legacyError = null, string? requestId = null, EConomic.Http.RateLimitStatus? rateLimit = null, System.TimeSpan? retryAfter = null, string? rawBody = null) -> void
+EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message, EConomic.Exceptions.EconomicProblemDetails? problemDetails, EConomic.Exceptions.EconomicLegacyError? legacyError = null, string? requestId = null, EConomic.Http.RateLimitStatus? rateLimit = null, System.TimeSpan? retryAfter = null, string? rawBody = null) -> void
 EConomic.Exceptions.EconomicRateLimitException.EconomicRateLimitException(string! message, System.Exception? innerException) -> void
 EConomic.Exceptions.EconomicRateLimitException.RetryAfter.get -> System.TimeSpan?
 EConomic.Http.EconomicIdempotencyHandler
