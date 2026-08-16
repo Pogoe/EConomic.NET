@@ -18,7 +18,9 @@ await foreach (var customer in client.Rest.Customers
 ```
 
 > **Status: pre-release.** Thirty-three collection resources on the legacy REST API are covered,
-> with filtering, sorting and transparent paging; twelve of them also support writing. All
+> with filtering, sorting and transparent paging, along with nineteen more reached through the
+> record that scopes them and a `GetAsync` on every resource that publishes a single-record `GET`.
+> Eleven of them support writing. All
 > fourteen of the newer OpenAPI services — accounting years, accounts, booked entries, budgets,
 > customers, dimensions, documents, journals, products, projects, quote-to-cash, subscriptions,
 > suppliers and webhooks, fifty-seven collections in all — are covered under `client.Open`. The
@@ -174,6 +176,47 @@ query.GetFilterExpression(); // "barred$eq:false$and:balance$gte:1000"
 query.GetSortExpression();   // "name,-balance"
 ```
 
+## Fetching one record
+
+Every resource for which e-conomic publishes a single-record `GET` has a `GetAsync` taking that
+record's identifier — 28 of them:
+
+```csharp
+var customer = await client.Rest.Customers.GetAsync(1, cancellationToken);
+```
+
+Half of those answer with more than the listing carries, and where they do the return type says so:
+`Accounts.GetAsync` returns an `AccountDetails`, not the `Account` a page of accounts yields. Fourteen
+resources work that way; on the other fourteen both routes return the same record.
+
+The identifier is whatever e-conomic keys the resource by, which is neither always a number nor
+always `{Entity}Number` — a currency is keyed by `code`, a sent invoice by `id`, and a VAT account by
+its `vatCode`, which is a string even though the specification types it as an integer.
+
+## Collections reached through their parent
+
+Nineteen collections cannot be addressed without the record that scopes them, so they are methods on
+the parent taking the identifiers they need, rather than properties on the client. Everything else is
+the same — `Where`, `WhereRaw`, `OrderBy` and transparent paging all work:
+
+```csharp
+await foreach (var invoice in client.Rest.Customers.BookedInvoices(customerNumber)
+    .OrderByDescending(i => i.Date)
+    .AsAsyncEnumerable(cancellationToken))
+{
+    Console.WriteLine($"{invoice.BookedInvoiceNumber}: {invoice.Date}");
+}
+```
+
+Some need more than one identifier, and take them outermost first:
+
+```csharp
+var entries = client.Rest.Accounts.Entries(accountNumber, year, period);
+```
+
+Their filter and sort surfaces are generated per endpoint rather than inherited from the top-level
+collection of the same entity, because e-conomic publishes the two separately and they differ.
+
 ## Creating, updating and deleting
 
 Writable resources take a purpose-built model carrying only what e-conomic accepts. Server-
@@ -239,7 +282,7 @@ var booked = await client.Rest.DraftInvoices.BookAsync(invoice.DraftInvoiceNumbe
 edited or deleted, only corrected with a credit note — and the draft no longer exists afterwards.
 Pass `bookWithNumber` to choose the invoice number, or `sendBy` to have e-conomic send it.
 
-Collections that cannot be addressed without their parent are reached through it:
+The collections reached through their parent write the same way:
 
 ```csharp
 var contacts = client.Rest.Customers.Contacts(customer.CustomerNumber);
@@ -300,12 +343,21 @@ Queryable: `AccountingYears`, `Accounts`, `AppRoles`, `ArchivedOrders`, `Archive
 `ProductGroups`, `Products`, `SentInvoices`, `SentOrders`, `SentQuotes`, `Suppliers`,
 `UnpaidInvoices`, `Units`, `VatAccounts`, `VatTypes`, `VatZones`.
 
+Reached through their parent: `AccountingYears.Entries`, `.Periods` and `.Totals`;
+`Accounts.Entries` and `.Periods`; `CustomerGroups.Customers`; `Customers.Contacts`,
+`.DeliveryLocations`, `.BookedInvoices`, `.DraftInvoices` and `.InvoiceLineTemplates`;
+`Employees.Customers`; `Journals.Entries`, `.Vouchers` and `.ManualCustomerInvoiceTemplates`; and
+`Products.CurrencySpecificSalesPrices`. Entries and totals also come scoped by an accounting period,
+as further overloads taking it.
+
 Also writable: `AccountingYears`, `Customers` (and its `Contacts` and `DeliveryLocations`),
-`CustomerGroups`, `DraftInvoices`, `DraftOrders`, `DraftQuotes`, `Journals.Vouchers`,
-`PaymentTerms`, `Products`, `Suppliers`, `Units`.
+`CustomerGroups`, `DraftInvoices`, `DraftOrders`, `DraftQuotes`, `Journals.Vouchers` (and deletes on
+`Journals.Entries`), `PaymentTerms`, `Products` (and its `CurrencySpecificSalesPrices`), `Suppliers`,
+`Units`.
 
 Each offers exactly the operations e-conomic documents for it, no more: an accounting year can be
-created but never updated or deleted, and a booked invoice cannot be deleted at all.
+created but never updated or deleted, a booked invoice cannot be deleted at all, and the collections
+not listed as writable are queries only.
 
 Danish domain terms keep their e-conomic names — `vatZone`, `paymentTerms`, `bookedEntries` — so
 that everything maps back to the official docs without a translation step.

@@ -64,6 +64,20 @@ sort in both directions. `Account.isDepartmentMandatory` answers `500` to `$eq:`
 reproduce on the demo agreement. There is no `allowedFilteringFields` to diff against on this
 surface, so the only way to find them is to send every clause the surface offers.
 
+**These services do not under-report, which is the one way their metadata differs from the legacy
+schemas'.** The legacy boolean is wrong in both directions — `pNumber` is filterable and unpublished,
+which is why `WhereRaw` exists. That is not true here, and it was checked rather than assumed: every
+property of every one of the 53 paged listings across all fourteen services was asked directly, on
+the demo agreement, one clause per request. Sorting, 598 probes: 597 answered exactly as published,
+the single exception being `Account.assetGroupNumber`, which is a `500` already curated out. Nothing
+the specifications deny was accepted. Filtering, 840 probes over every property published as not
+filterable, two or three operators each with a value of the property's own declared type: 789 refused
+as declared, none accepted, and the remaining 51 are `/journals`, which `500`s on everything and is
+already curated to an empty surface. So a small filter surface on this API is e-conomic's own
+statement and not a gap in the pipeline — the customers service really does filter on
+`customerNumber` and nothing else. There is no case here for a legacy-style `WhereRaw` escape hatch,
+which is just as well: without `allowedFilteringFields` a caller would have nothing to debug against.
+
 **A conjunction hides a broken clause.** This is the finding that matters most for how the checks
 are written. Batching clauses with `$and:` produces false passes: a twenty-clause filter containing
 `assetGroupNumber$eq:1` returned `200` while the same clause alone returned `500`, because
