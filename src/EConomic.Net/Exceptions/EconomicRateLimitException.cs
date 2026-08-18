@@ -23,8 +23,13 @@ public sealed class EconomicRateLimitException : EconomicApiException
     /// <summary>Creates an exception with a message and an inner exception.</summary>
     /// <param name="message">The message.</param>
     /// <param name="innerException">The cause.</param>
+    /// <remarks>
+    /// The status is supplied here rather than left to the two-argument base constructor, which does
+    /// not set one. A throttling exception reporting no status contradicts its own type, and the
+    /// other constructors on it both say <c>429</c>.
+    /// </remarks>
     public EconomicRateLimitException(string message, Exception? innerException)
-        : base(message, innerException)
+        : base(message, HttpStatusCode.TooManyRequests, innerException: innerException)
     {
     }
 

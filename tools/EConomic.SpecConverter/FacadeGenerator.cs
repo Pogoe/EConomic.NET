@@ -197,8 +197,6 @@ public sealed record FacadeNested(
 /// </remarks>
 public static class FacadeGenerator
 {
-    private const string RefPrefix = "#/components/schemas/";
-
     /// <summary>
     /// How deep composite properties are followed. The deepest real nesting in the specifications is
     /// three (<c>product.productGroup.accrual.accountsSummed</c>); the cap is a guard against a
@@ -233,13 +231,13 @@ public static class FacadeGenerator
                 continue;
             }
 
-            var envelope = Reference(operation["responses"]?["200"]?["content"]?["application/json"]?["schema"]);
+            var envelope = SchemaReference.Name(operation["responses"]?["200"]?["content"]?["application/json"]?["schema"]);
             if (envelope is null || schemas[envelope] is not JsonObject envelopeSchema)
             {
                 continue;
             }
 
-            var entity = Reference(envelopeSchema["properties"]?["collection"]?["items"]);
+            var entity = SchemaReference.Name(envelopeSchema["properties"]?["collection"]?["items"]);
             if (entity is null)
             {
                 continue;
@@ -655,6 +653,62 @@ public static class FacadeGenerator
         }
     }
 
+    /// <summary>
+    /// Emits the query-composition members every queryable resource offers, top-level or nested.
+    /// </summary>
+    /// <remarks>
+    /// Shared deliberately. A top-level resource and a nested collection expose exactly the same
+    /// composition, and when this was two hand-copied blocks they drifted: the nested copy omitted
+    /// <c>WhereRaw</c> and both sort methods, which made a nested collection quietly less capable
+    /// than the collection beside it. It also hid those nine surfaces from <c>FilterSurfaceTests</c>,
+    /// which recognises a queryable by looking for <c>WhereRaw</c> — so they were never sent to a
+    /// server at all. One routine is what stops that recurring; the caller supplies only the
+    /// <c>Query</c> property and the one differing doc line.
+    /// </remarks>
+    private static void AppendQueryComposition(
+        StringBuilder builder, string queryType, string entity, string asQuerySummary)
+    {
+        builder.AppendLine($"    /// <summary>{asQuerySummary}</summary>");
+        builder.AppendLine("    /// <returns>A query over every item.</returns>");
+        builder.AppendLine($"    public {queryType} AsQuery() => Query;");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Restricts what is returned.</summary>");
+        builder.AppendLine("    /// <param name=\"predicate\">A filter over the filterable properties.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
+        builder.AppendLine($"    public {queryType} Where(System.Linq.Expressions.Expression<System.Func<{entity}Filter, bool>> predicate) => Query.Where(predicate);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>");
+        builder.AppendLine("    /// <param name=\"filter\">A filter expression.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
+        builder.AppendLine($"    public {queryType} WhereRaw(string filter) => Query.WhereRaw(filter);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Orders ascending.</summary>");
+        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
+        builder.AppendLine($"    public {queryType} OrderBy(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderBy(selector);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Orders descending.</summary>");
+        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
+        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
+        builder.AppendLine($"    public {queryType} OrderByDescending(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderByDescending(selector);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Sets how many items are fetched per request.</summary>");
+        builder.AppendLine("    /// <param name=\"pageSize\">Items per page, up to 1000.</param>");
+        builder.AppendLine("    /// <returns>A query using that page size.</returns>");
+        builder.AppendLine($"    public {queryType} WithPageSize(int pageSize) => Query.WithPageSize(pageSize);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>");
+        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the enumeration.</param>");
+        builder.AppendLine("    /// <returns>The items.</returns>");
+        builder.AppendLine($"    public System.Collections.Generic.IAsyncEnumerable<{entity}> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);");
+        builder.AppendLine();
+        builder.AppendLine("    /// <summary>Fetches a single page.</summary>");
+        builder.AppendLine("    /// <param name=\"pageIndex\">Zero-based page index.</param>");
+        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
+        builder.AppendLine("    /// <returns>The page.</returns>");
+        builder.AppendLine($"    public System.Threading.Tasks.Task<EconomicPage<{entity}>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);");
+    }
+
     private static void AppendRecord(StringBuilder builder, string typeName, IReadOnlyList<FacadeProperty> properties)
     {
         builder.AppendLine($"public sealed record {typeName}");
@@ -817,9 +871,14 @@ public static class FacadeGenerator
                 schemas[single.Entity]!.AsObject(), entity, single.Entity,
                 schemas, probeSkipped, probeTypes);
 
+            // The separator only has to be something that cannot occur in an identifier, a type name
+            // or a mapping expression, so two different triples cannot join to the same string. A
+            // literal NUL has that property and is what stood here — but it also made this file
+            // binary to ripgrep, so every `grep` over the generator silently skipped all 2 200 lines
+            // of it. U+001F separates just as well and leaves the file searchable.
             static IEnumerable<string> Shape(IEnumerable<FacadeProperty> properties) =>
                 properties
-                    .Select(p => $"{p.Name} {p.PublicType} {p.Mapping}")
+                    .Select(p => $"{p.Name}\u001F{p.PublicType}\u001F{p.Mapping}")
                     .OrderBy(s => s, StringComparer.Ordinal);
 
             if (Shape(probe).SequenceEqual(Shape(readProperties), StringComparer.Ordinal))
@@ -915,45 +974,7 @@ public static class FacadeGenerator
         var queryType = $"EconomicQuery<{entity}, {entity}Filter, {entity}Sort>";
         builder.AppendLine($"    private {queryType} Query => new(new {entity}PageSource(_client));");
         builder.AppendLine();
-        builder.AppendLine("    /// <summary>The resource as an unfiltered, unsorted query.</summary>");
-        builder.AppendLine("    /// <returns>A query over every item.</returns>");
-        builder.AppendLine($"    public {queryType} AsQuery() => Query;");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Restricts what is returned.</summary>");
-        builder.AppendLine("    /// <param name=\"predicate\">A filter over the filterable properties.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
-        builder.AppendLine($"    public {queryType} Where(System.Linq.Expressions.Expression<System.Func<{entity}Filter, bool>> predicate) => Query.Where(predicate);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>");
-        builder.AppendLine("    /// <param name=\"filter\">A filter expression.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
-        builder.AppendLine($"    public {queryType} WhereRaw(string filter) => Query.WhereRaw(filter);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Orders ascending.</summary>");
-        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
-        builder.AppendLine($"    public {queryType} OrderBy(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderBy(selector);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Orders descending.</summary>");
-        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
-        builder.AppendLine($"    public {queryType} OrderByDescending(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderByDescending(selector);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Sets how many items are fetched per request.</summary>");
-        builder.AppendLine("    /// <param name=\"pageSize\">Items per page, up to 1000.</param>");
-        builder.AppendLine("    /// <returns>A query using that page size.</returns>");
-        builder.AppendLine($"    public {queryType} WithPageSize(int pageSize) => Query.WithPageSize(pageSize);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>");
-        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the enumeration.</param>");
-        builder.AppendLine("    /// <returns>The items.</returns>");
-        builder.AppendLine($"    public System.Collections.Generic.IAsyncEnumerable<{entity}> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Fetches a single page.</summary>");
-        builder.AppendLine("    /// <param name=\"pageIndex\">Zero-based page index.</param>");
-        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
-        builder.AppendLine("    /// <returns>The page.</returns>");
-        builder.AppendLine($"    public System.Threading.Tasks.Task<EconomicPage<{entity}>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);");
+        AppendQueryComposition(builder, queryType, entity, "The resource as an unfiltered, unsorted query.");
 
         if (single is not null)
         {
@@ -963,7 +984,7 @@ public static class FacadeGenerator
             builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
             builder.AppendLine("    /// <returns>The item.</returns>");
 
-            if (!ReferenceEquals(singleTypeName, entity) && singleTypeName != entity)
+            if (singleTypeName != entity)
             {
                 builder.AppendLine("    /// <remarks>");
                 builder.AppendLine(
@@ -1258,51 +1279,7 @@ public static class FacadeGenerator
         var queryType = $"EconomicQuery<{entity}, {entity}Filter, {entity}Sort>";
         builder.AppendLine($"    private {queryType} Query => new(new {resourceName}PageSource(_client, {nested.Fields}));");
         builder.AppendLine();
-        builder.AppendLine("    /// <summary>The collection as an unfiltered, unsorted query.</summary>");
-        builder.AppendLine("    /// <returns>A query over every item.</returns>");
-        builder.AppendLine($"    public {queryType} AsQuery() => Query;");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Restricts what is returned.</summary>");
-        builder.AppendLine("    /// <param name=\"predicate\">A filter over the filterable properties.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
-        builder.AppendLine($"    public {queryType} Where(System.Linq.Expressions.Expression<System.Func<{entity}Filter, bool>> predicate) => Query.Where(predicate);");
-        builder.AppendLine();
-
-        // The same composition a top-level resource offers. Leaving these off made a nested
-        // collection quietly less capable than the collection beside it — no raw filter for what the
-        // schema under-reports, and no sorting at all — and it also hid them from FilterSurfaceTests,
-        // which finds a queryable by looking for WhereRaw. Nine surfaces were never sent to a server
-        // as a result.
-        builder.AppendLine("    /// <summary>Restricts what is returned, using e-conomic's filter syntax directly.</summary>");
-        builder.AppendLine("    /// <param name=\"filter\">A filter expression.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the filter.</returns>");
-        builder.AppendLine($"    public {queryType} WhereRaw(string filter) => Query.WhereRaw(filter);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Orders ascending.</summary>");
-        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
-        builder.AppendLine($"    public {queryType} OrderBy(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderBy(selector);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Orders descending.</summary>");
-        builder.AppendLine("    /// <param name=\"selector\">The property to sort by.</param>");
-        builder.AppendLine("    /// <returns>A query carrying the sort.</returns>");
-        builder.AppendLine($"    public {queryType} OrderByDescending(System.Linq.Expressions.Expression<System.Func<{entity}Sort, EconomicSortField>> selector) => Query.OrderByDescending(selector);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Sets how many items are fetched per request.</summary>");
-        builder.AppendLine("    /// <param name=\"pageSize\">Items per page, up to 1000.</param>");
-        builder.AppendLine("    /// <returns>A query using that page size.</returns>");
-        builder.AppendLine($"    public {queryType} WithPageSize(int pageSize) => Query.WithPageSize(pageSize);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Enumerates everything, fetching pages as they are consumed.</summary>");
-        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the enumeration.</param>");
-        builder.AppendLine("    /// <returns>The items.</returns>");
-        builder.AppendLine($"    public System.Collections.Generic.IAsyncEnumerable<{entity}> AsAsyncEnumerable(System.Threading.CancellationToken cancellationToken = default) => Query.AsAsyncEnumerable(cancellationToken);");
-        builder.AppendLine();
-        builder.AppendLine("    /// <summary>Fetches a single page.</summary>");
-        builder.AppendLine("    /// <param name=\"pageIndex\">Zero-based page index.</param>");
-        builder.AppendLine("    /// <param name=\"cancellationToken\">Cancels the request.</param>");
-        builder.AppendLine("    /// <returns>The page.</returns>");
-        builder.AppendLine($"    public System.Threading.Tasks.Task<EconomicPage<{entity}>> GetPageAsync(int pageIndex, System.Threading.CancellationToken cancellationToken = default) => Query.GetPageAsync(pageIndex, cancellationToken);");
+        AppendQueryComposition(builder, queryType, entity, "The collection as an unfiltered, unsorted query.");
         if (createProperties is not null)
         {
             builder.AppendLine();
@@ -1496,10 +1473,10 @@ public static class FacadeGenerator
                 continue;
             }
 
-            var envelope = Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]);
+            var envelope = SchemaReference.Name(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]);
             if (envelope is null
                 || schemas[envelope] is not JsonObject envelopeSchema
-                || Reference(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
+                || SchemaReference.Name(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
             {
                 continue;
             }
@@ -1634,7 +1611,7 @@ public static class FacadeGenerator
         var post = paths[path]?["post"] as JsonObject;
         var createBody = post is null
             ? null
-            : Reference(post["requestBody"]?["content"]?["application/json"]?["schema"]);
+            : SchemaReference.Name(post["requestBody"]?["content"]?["application/json"]?["schema"]);
 
         var canDelete = SchemaRegistry.DeletableEntities.Contains(entity);
 
@@ -1651,7 +1628,7 @@ public static class FacadeGenerator
         {
             if (!candidate.StartsWith(path + "/{", StringComparison.Ordinal)
                 || item?["put"] is not JsonObject put
-                || Reference(put["requestBody"]?["content"]?["application/json"]?["schema"]) is not { } schema)
+                || SchemaReference.Name(put["requestBody"]?["content"]?["application/json"]?["schema"]) is not { } schema)
             {
                 continue;
             }
@@ -1702,7 +1679,7 @@ public static class FacadeGenerator
                 || path.Count(c => c == '/') != resource.Path.Count(c => c == '/') + 1
                 || !path.EndsWith('}')
                 || item?["get"] is not JsonObject get
-                || Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } entity)
+                || SchemaReference.Name(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } entity)
             {
                 continue;
             }
@@ -1744,7 +1721,7 @@ public static class FacadeGenerator
         string? createMethod = null;
 
         if (paths[resource.Path]?["post"] is JsonObject post
-            && Reference(post["requestBody"]?["content"]?["application/json"]?["schema"]) is { } body)
+            && SchemaReference.Name(post["requestBody"]?["content"]?["application/json"]?["schema"]) is { } body)
         {
             createBody = body;
             createMethod = MethodName(post);
@@ -1762,7 +1739,7 @@ public static class FacadeGenerator
             if (!path.StartsWith(resource.Path + "/", StringComparison.Ordinal)
                 || path.Count(c => c == '/') != resource.Path.Count(c => c == '/') + 1
                 || item?["put"] is not JsonObject put
-                || Reference(put["requestBody"]?["content"]?["application/json"]?["schema"]) is not { } updateSchema)
+                || SchemaReference.Name(put["requestBody"]?["content"]?["application/json"]?["schema"]) is not { } updateSchema)
             {
                 continue;
             }
@@ -2175,7 +2152,7 @@ public static class FacadeGenerator
 
     private static JsonObject Resolve(JsonObject schema, JsonObject schemas)
     {
-        if (Reference(schema) is { } name && schemas[name] is JsonObject target)
+        if (SchemaReference.Name(schema) is { } name && schemas[name] is JsonObject target)
         {
             return target;
         }
@@ -2183,11 +2160,6 @@ public static class FacadeGenerator
         return schema;
     }
 
-    private static string? Reference(JsonNode? node) =>
-        node?["$ref"]?.GetValue<string>() is { } reference
-        && reference.StartsWith(RefPrefix, StringComparison.Ordinal)
-            ? reference[RefPrefix.Length..]
-            : null;
 
     /// <summary>Drops the nullable marker for a property the schema guarantees is present.</summary>
     private static string Required(string type) =>

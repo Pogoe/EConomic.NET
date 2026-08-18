@@ -28,8 +28,6 @@ public sealed record GeneratedProperty(string JsonName, string Name, string Type
 /// </remarks>
 public static partial class OpenFacadeGenerator
 {
-    private const string RefPrefix = "#/components/schemas/";
-
     /// <summary>
     /// The name each service contributes to the types it publishes.
     /// </summary>
@@ -440,7 +438,7 @@ public static partial class OpenFacadeGenerator
             // A cursor listing is what marks a collection: /Customers returns items plus a cursor,
             // while /Customers/paged and /Customers/count hang off it.
             var get = item?["get"] as JsonObject;
-            var envelope = Reference(get?["responses"]?["200"]?["content"]?["application/json"]?["schema"]);
+            var envelope = SchemaReference.Name(get?["responses"]?["200"]?["content"]?["application/json"]?["schema"]);
             var cursored = envelope?.EndsWith("CursorResults", StringComparison.Ordinal) == true;
 
             // Not every collection publishes one. /AccountingYears has the classic listing and no
@@ -450,8 +448,8 @@ public static partial class OpenFacadeGenerator
 
             var entity = cursored
                 // `items` is the array property on the envelope; its own `items` is the element.
-                ? Reference(schemas[envelope!]?["properties"]?["items"]?["items"])
-                : Reference(classic?["responses"]?["200"]?["content"]?["application/json"]?["schema"]?["items"]);
+                ? SchemaReference.Name(schemas[envelope!]?["properties"]?["items"]?["items"])
+                : SchemaReference.Name(classic?["responses"]?["200"]?["content"]?["application/json"]?["schema"]?["items"]);
 
             if (entity is null || (get is null && classic is null))
             {
@@ -1295,7 +1293,7 @@ public static partial class OpenFacadeGenerator
     /// </remarks>
     private static OpenParameter CreatedProperty(JsonNode? post, JsonObject schemas)
     {
-        var created = Reference(post?["responses"]?["201"]?["content"]?["application/json"]?["schema"]);
+        var created = SchemaReference.Name(post?["responses"]?["201"]?["content"]?["application/json"]?["schema"]);
         var property = created is null
             ? null
             : schemas[created]?["properties"]?.AsObject().FirstOrDefault();
@@ -1311,11 +1309,6 @@ public static partial class OpenFacadeGenerator
         return new OpenParameter(char.ToUpperInvariant(name[0]) + name[1..], type);
     }
 
-    private static string? Reference(JsonNode? node) =>
-        node?["$ref"]?.GetValue<string>() is { } reference
-        && reference.StartsWith(RefPrefix, StringComparison.Ordinal)
-            ? reference[RefPrefix.Length..]
-            : null;
 
     [GeneratedRegex(@"internal partial class (?<name>\w+)\s*\r?\n\s*\{(?<body>(?:[^{}]|\{[^{}]*\})*)\}", RegexOptions.ExplicitCapture)]
     private static partial Regex ClassPattern();

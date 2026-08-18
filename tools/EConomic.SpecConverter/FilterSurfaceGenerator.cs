@@ -29,8 +29,6 @@ public sealed record SurfaceField(string Path, string PropertyName, string Field
 /// </remarks>
 public static class FilterSurfaceGenerator
 {
-    private const string RefPrefix = "#/components/schemas/";
-
     /// <summary>
     /// Entities whose surfaces are emitted. Every entry is public API, so the list grows as each
     /// facade lands rather than exposing types nothing can be used against. Emptying it emits
@@ -276,9 +274,9 @@ public static class FilterSurfaceGenerator
         foreach (var (_, schema) in schemas)
         {
             if (schema?["properties"]?["collection"]?["items"]?["$ref"]?.GetValue<string>() is { } reference
-                && reference.StartsWith(RefPrefix, StringComparison.Ordinal))
+                && reference.StartsWith(SchemaReference.Prefix, StringComparison.Ordinal))
             {
-                entities.Add(reference[RefPrefix.Length..]);
+                entities.Add(reference[SchemaReference.Prefix.Length..]);
             }
         }
 
@@ -365,9 +363,9 @@ public static class FilterSurfaceGenerator
         foreach (var (path, item) in document["paths"]?.AsObject() ?? [])
         {
             if (item?["get"] is not JsonObject get
-                || Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } envelope
+                || SchemaReference.Name(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } envelope
                 || schemas[envelope] is not JsonObject envelopeSchema
-                || Reference(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
+                || SchemaReference.Name(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
             {
                 continue;
             }
@@ -400,17 +398,12 @@ public static class FilterSurfaceGenerator
             ? new HashSet<string>(array.Select(f => f?.GetValue<string>()).OfType<string>(), StringComparer.Ordinal)
             : new HashSet<string>(StringComparer.Ordinal);
 
-    private static string? Reference(JsonNode? node) =>
-        node?["$ref"]?.GetValue<string>() is { } reference
-        && reference.StartsWith(RefPrefix, StringComparison.Ordinal)
-            ? reference[RefPrefix.Length..]
-            : null;
 
     private static JsonObject Resolve(JsonObject schema, JsonObject schemas)
     {
         if (schema["$ref"]?.GetValue<string>() is { } reference
-            && reference.StartsWith(RefPrefix, StringComparison.Ordinal)
-            && schemas[reference[RefPrefix.Length..]] is JsonObject target)
+            && reference.StartsWith(SchemaReference.Prefix, StringComparison.Ordinal)
+            && schemas[reference[SchemaReference.Prefix.Length..]] is JsonObject target)
         {
             return target;
         }

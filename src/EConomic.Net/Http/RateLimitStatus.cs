@@ -78,6 +78,38 @@ public sealed partial class RateLimitStatus
         return TryParse(rateLimitValues.FirstOrDefault(), callCost, out var status) ? status : null;
     }
 
+    /// <summary>Reads the rate-limit status from the headers a generated client captured.</summary>
+    /// <param name="headers">The response headers, as the generated failure type carries them.</param>
+    /// <returns>The parsed status, or <see langword="null"/> if the headers carried none.</returns>
+    /// <remarks>
+    /// The generated clients hand the facade a dictionary rather than an
+    /// <see cref="HttpResponseMessage"/>, and by the time a failure is translated the response is
+    /// gone. Without this, every exception raised through a generated call reported no budget at
+    /// all — which was all of them but the hand-written <c>DELETE</c>.
+    /// </remarks>
+    internal static RateLimitStatus? FromHeaders(IReadOnlyDictionary<string, IEnumerable<string>> headers)
+    {
+        ArgumentNullException.ThrowIfNull(headers);
+
+        var rateLimiting = HeaderReading.Value(headers, RateLimitingHeader);
+        if (rateLimiting is null)
+        {
+            return null;
+        }
+
+        int? callCost = null;
+        if (int.TryParse(
+            HeaderReading.Value(headers, CallCostHeader),
+            NumberStyles.Integer,
+            CultureInfo.InvariantCulture,
+            out var cost))
+        {
+            callCost = cost;
+        }
+
+        return TryParse(rateLimiting, callCost, out var status) ? status : null;
+    }
+
     /// <summary>Parses an <c>X-RateLimiting</c> header value.</summary>
     /// <param name="headerValue">The raw header value, e.g. <c>token-limit-10000-per-60-seconds: 147/10000</c>.</param>
     /// <param name="status">The parsed status when parsing succeeds.</param>
@@ -119,8 +151,10 @@ public sealed partial class RateLimitStatus
             CultureInfo.InvariantCulture,
             $"{Used}/{Limit} tokens used per {Window.TotalSeconds:0}s");
 
+    // The trailing total restates the limit already read from the prefix, so it is matched but not
+    // captured — naming a group nothing reads only costs a capture per parse.
     [GeneratedRegex(
-        @"token-limit-(?<limit>\d+)-per-(?<seconds>\d+)-seconds\s*:\s*(?<used>\d+)\s*/\s*(?<total>\d+)",
+        @"token-limit-(?<limit>\d+)-per-(?<seconds>\d+)-seconds\s*:\s*(?<used>\d+)\s*/\s*\d+",
         RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture,
         matchTimeoutMilliseconds: 1000)]
     private static partial Regex HeaderPattern();

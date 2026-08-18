@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using EConomic.Http;
 
@@ -132,6 +133,9 @@ public class EconomicApiException : Exception
         var problem = EconomicProblemDetails.TryParse(body);
         var legacy = problem is null ? EconomicLegacyError.TryParse(body) : null;
         var rateLimit = RateLimitStatus.FromResponse(response);
+
+        // TryGetValues matches without regard to case here, unlike the dictionary the generated
+        // clients hand over, so this side needs no fallback of its own.
         var requestId = response.Headers.TryGetValues(RequestIdHeader, out var ids)
             ? ids.FirstOrDefault()
             : null;
@@ -146,7 +150,7 @@ public class EconomicApiException : Exception
                 legacy,
                 requestId,
                 rateLimit,
-                response.Headers.RetryAfter?.Delta,
+                HeaderReading.RetryAfter(response.Headers, DateTimeOffset.UtcNow),
                 body);
         }
 
@@ -154,12 +158,45 @@ public class EconomicApiException : Exception
             message, response.StatusCode, problem, legacy, requestId, rateLimit, body);
     }
 
+    /// <summary>Composes the message a failure carries, wherever the failure was noticed.</summary>
+    /// <param name="status">The HTTP status code.</param>
+    /// <param name="errorCode">e-conomic's own error code, when the body carried one.</param>
+    /// <param name="request">What was requested, e.g. <c>GET /customers</c>.</param>
+    /// <param name="reason">The server's explanation.</param>
+    /// <param name="legacyErrors">The legacy API's per-property errors, when it sent any.</param>
+    /// <returns>The message.</returns>
+    /// <remarks>
+    /// Shared with both facade transports. There were three copies of this and they had drifted:
+    /// only this one appended the error code, so the same failure read differently depending on
+    /// whether it was raised from a hand-written request or a generated one — and the code, which
+    /// is the part e-conomic's own documentation is indexed by, was missing from the two paths that
+    /// raise almost every exception this library produces.
+    /// </remarks>
+    internal static string BuildMessage(
+        int status,
+        string? errorCode,
+        string request,
+        string reason,
+        IReadOnlyList<string>? legacyErrors)
+    {
+        var code = errorCode is { Length: > 0 } value ? $" ({value})" : string.Empty;
+
+        // The legacy API names the offending property here, which is far more actionable than
+        // the generic "Could not parse query string filter." message it leads with.
+        var errors = legacyErrors is { Count: > 0 } list
+            ? " " + string.Join(" ", list)
+            : string.Empty;
+
+        return string.Create(
+            CultureInfo.InvariantCulture,
+            $"e-conomic returned {status}{code} for {request}: {reason}{errors}");
+    }
+
     private static string BuildMessage(
         HttpResponseMessage response,
         EconomicProblemDetails? problem,
         EconomicLegacyError? legacy)
     {
-        var status = (int)response.StatusCode;
         var reason =
             problem?.Detail
             ?? problem?.Title
@@ -167,19 +204,14 @@ public class EconomicApiException : Exception
             ?? response.ReasonPhrase
             ?? "Request failed";
 
-        var code = problem?.ErrorCode is { Length: > 0 } errorCode ? $" ({errorCode})" : string.Empty;
         var method = response.RequestMessage?.Method.Method ?? "?";
         var uri = response.RequestMessage?.RequestUri?.ToString() ?? "?";
 
-        var message = $"e-conomic returned {status}{code} for {method} {uri}: {reason}";
-
-        // The legacy API names the offending property here, which is far more actionable than
-        // the generic "Could not parse query string filter." message it leads with.
-        if (legacy?.Errors is { Count: > 0 } errors)
-        {
-            message += $" {string.Join(" ", errors)}";
-        }
-
-        return message;
+        return BuildMessage(
+            (int)response.StatusCode,
+            problem?.ErrorCode,
+            $"{method} {uri}",
+            reason,
+            legacy?.Errors);
     }
 }

@@ -27,8 +27,6 @@ namespace EConomic.SpecConverter;
 /// </remarks>
 public static class WriteResponseCorrector
 {
-    private const string RefPrefix = "#/components/schemas/";
-
     /// <summary>Rewrites the write responses in a document.</summary>
     /// <param name="document">An OpenAPI document, modified in place.</param>
     /// <returns>The number of responses corrected.</returns>
@@ -77,11 +75,11 @@ public static class WriteResponseCorrector
                     if (isCollection)
                     {
                         schema["type"] = "array";
-                        schema["items"] = new JsonObject { ["$ref"] = RefPrefix + entity };
+                        schema["items"] = new JsonObject { ["$ref"] = SchemaReference.Prefix + entity };
                     }
                     else
                     {
-                        schema["$ref"] = RefPrefix + entity;
+                        schema["$ref"] = SchemaReference.Prefix + entity;
                     }
 
                     corrected++;
@@ -155,14 +153,14 @@ public static class WriteResponseCorrector
                     continue;
                 }
 
-                if (Reference(operation["requestBody"]?["content"]?["application/json"]?["schema"]) is { } body)
+                if (SchemaReference.Name(operation["requestBody"]?["content"]?["application/json"]?["schema"]) is { } body)
                 {
                     requestBodies.Add(body);
                 }
 
                 foreach (var (_, response) in operation["responses"]?.AsObject() ?? [])
                 {
-                    if (Reference(response?["content"]?["application/json"]?["schema"]) is { } used)
+                    if (SchemaReference.Name(response?["content"]?["application/json"]?["schema"]) is { } used)
                     {
                         otherUses.Add(used);
                     }
@@ -292,9 +290,9 @@ public static class WriteResponseCorrector
         {
             if (path.TrimEnd('/').EndsWith('}')
                 || item?["get"] is not JsonObject get
-                || Reference(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } envelope
+                || SchemaReference.Name(get["responses"]?["200"]?["content"]?["application/json"]?["schema"]) is not { } envelope
                 || schemas[envelope] is not JsonObject envelopeSchema
-                || Reference(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
+                || SchemaReference.Name(envelopeSchema["properties"]?["collection"]?["items"]) is not { } entity)
             {
                 continue;
             }
@@ -305,9 +303,4 @@ public static class WriteResponseCorrector
         return entities;
     }
 
-    private static string? Reference(JsonNode? node) =>
-        node?["$ref"]?.GetValue<string>() is { } reference
-        && reference.StartsWith(RefPrefix, StringComparison.Ordinal)
-            ? reference[RefPrefix.Length..]
-            : null;
 }

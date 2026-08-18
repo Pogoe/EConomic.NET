@@ -124,7 +124,11 @@ public sealed class EconomicRetryHandler : DelegatingHandler
                 return response;
             }
 
-            var retryAfter = _options.RespectRetryAfter ? response.Headers.RetryAfter?.Delta : null;
+            // Read against the injected clock, so a Retry-After given as an HTTP-date is turned
+            // into a delay the tests can advance through rather than one tied to the wall clock.
+            var retryAfter = _options.RespectRetryAfter
+                ? HeaderReading.RetryAfter(response.Headers, _timeProvider.GetUtcNow())
+                : null;
             response.Dispose();
 
             await DelayAsync(attempt, retryAfter, cancellationToken).ConfigureAwait(false);
@@ -143,8 +147,14 @@ public sealed class EconomicRetryHandler : DelegatingHandler
 
     private TimeSpan Backoff(int attempt)
     {
-        var exponential = _options.BaseDelay * Math.Pow(2, attempt - 1);
-        var capped = exponential > _options.MaxDelay ? _options.MaxDelay : exponential;
+        // Doubled in ticks rather than as a TimeSpan. Multiplying a TimeSpan by a large enough
+        // double throws OverflowException rather than producing a value for the cap to clamp, and
+        // with the default one-second base that arrives around the fortieth attempt — reachable by
+        // raising MaxAttempts, where the whole point of the cap is that the delay stops growing.
+        var exponential = _options.BaseDelay.Ticks * Math.Pow(2, attempt - 1);
+        var capped = exponential > _options.MaxDelay.Ticks
+            ? _options.MaxDelay
+            : TimeSpan.FromTicks((long)exponential);
 
         // Full jitter. Without it, clients that were throttled together retry together and
         // throttle each other again.

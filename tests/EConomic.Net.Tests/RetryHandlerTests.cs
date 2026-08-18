@@ -202,6 +202,35 @@ public class RetryHandlerTests
     }
 
     [Fact]
+    public async Task Retry_after_is_honoured_when_the_server_sends_a_date_instead_of_a_delay()
+    {
+        // The other legal form of the header. Reading only Delta ignored it, so the handler used
+        // its own millisecond backoff against a server asking for seven seconds — the retry storm
+        // Retry-After exists to prevent.
+        var time = new FakeTimeProvider();
+        var recorder = new SequenceHandler(HttpStatusCode.TooManyRequests, HttpStatusCode.OK)
+        {
+            RetryAfterDate = time.GetUtcNow().AddSeconds(7),
+        };
+
+        var options = new EconomicRetryOptions { MaxAttempts = 2, BaseDelay = TimeSpan.FromMilliseconds(1) };
+        using var invoker = new HttpMessageInvoker(
+            new EconomicRetryHandler(options, time) { InnerHandler = recorder });
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://restapi.e-conomic.com/customers");
+        var pending = invoker.SendAsync(request, TestContext.Current.CancellationToken);
+
+        time.Advance(TimeSpan.FromSeconds(6));
+        Assert.False(pending.IsCompleted);
+
+        time.Advance(TimeSpan.FromSeconds(1));
+        using var response = await pending;
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(2, recorder.Attempts);
+    }
+
+    [Fact]
     public void An_unusable_policy_is_rejected()
     {
         Assert.Throws<InvalidOperationException>(
@@ -234,6 +263,8 @@ public class RetryHandlerTests
 
         public TimeSpan? RetryAfter { get; init; }
 
+        public DateTimeOffset? RetryAfterDate { get; init; }
+
         public List<string> Bodies { get; } = [];
 
         public List<string> IdempotencyKeys { get; } = [];
@@ -256,9 +287,16 @@ public class RetryHandlerTests
             }
 
             var response = new HttpResponseMessage(status) { RequestMessage = request };
-            if (RetryAfter is { } delay && status == HttpStatusCode.TooManyRequests)
+            if (status == HttpStatusCode.TooManyRequests)
             {
-                response.Headers.RetryAfter = new System.Net.Http.Headers.RetryConditionHeaderValue(delay);
+                if (RetryAfter is { } delay)
+                {
+                    response.Headers.RetryAfter = new System.Net.Http.Headers.RetryConditionHeaderValue(delay);
+                }
+                else if (RetryAfterDate is { } date)
+                {
+                    response.Headers.RetryAfter = new System.Net.Http.Headers.RetryConditionHeaderValue(date);
+                }
             }
 
             return response;

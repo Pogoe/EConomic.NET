@@ -100,8 +100,12 @@ public static class FilterTranslator
             _ => throw Unsupported(binary),
         };
 
-        var field = FieldName(binary.Left) ?? FieldName(binary.Right) ?? throw Unsupported(binary);
-        var value = ValueOf(FieldName(binary.Left) is null ? binary.Left : binary.Right);
+        // Either side may carry the field, so whichever one does names it and the other is the
+        // value. Resolved once: FieldName throws for a property missing its attribute, so calling
+        // it twice on the same side is both wasted work and a second chance to throw.
+        var left = FieldName(binary.Left);
+        var field = left ?? FieldName(binary.Right) ?? throw Unsupported(binary);
+        var value = ValueOf(left is null ? binary.Left : binary.Right);
 
         // $null: is a value, not an operator: `name$null:` is a syntax error, and the server
         // replies listing the operators it expected. It has to be written `name$eq:$null:`.

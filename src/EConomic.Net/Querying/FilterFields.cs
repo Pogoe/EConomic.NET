@@ -12,6 +12,11 @@ using System.Diagnostics.CodeAnalysis;
 //
 // Removing any of them would delete the compile-time guard this whole surface exists to provide.
 // See the remarks on EconomicFilterField.
+//
+// Every field type below repeats the same Equals and GetHashCode overrides the base class already
+// declares. That is not duplication to consolidate: CS0660 and CS0661 are raised against the type
+// that *declares* an == or != operator, and an inherited override does not satisfy them — verified
+// by compiling the pattern. With warnings as errors, deleting a pair fails the build.
 #pragma warning disable S3877, S3875, S2325
 
 namespace EConomic.Querying;

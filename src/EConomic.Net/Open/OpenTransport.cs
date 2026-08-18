@@ -1,6 +1,6 @@
-using System.Globalization;
 using System.Net;
 using EConomic.Exceptions;
+using EConomic.Http;
 
 namespace EConomic.Open;
 
@@ -62,14 +62,17 @@ internal static class OpenTransport
     /// its own copy rather than borrowing the legacy surface's: the two surfaces share a transport
     /// and a query language, and nothing above that, and a shared helper is how that starts to slip.
     /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException"><paramref name="value"/> is not one of the values.</exception>
     public static TEnum ParseEnum<TEnum>(string? value)
         where TEnum : struct, Enum
     {
-        if (value is null)
-        {
-            return default;
-        }
+        // Rejected rather than defaulted. This converts a *required* enum, so answering null with
+        // `default` sends e-conomic the first member the generator happened to emit — a value the
+        // caller never chose, on a property the server insists on. That is this library's recurring
+        // write bug in miniature: it compiles, it round-trips, and only the server disagrees.
+        // ParseOptionalEnum is the shape for a property that may genuinely be unset.
+        ArgumentNullException.ThrowIfNull(value);
 
         if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed))
         {
@@ -98,13 +101,18 @@ internal static class OpenTransport
         var problem = EconomicProblemDetails.TryParse(exception.Response);
         var reason = problem?.Detail ?? problem?.Title ?? exception.Message;
 
-        var message = string.Create(
-            CultureInfo.InvariantCulture,
-            $"e-conomic returned {exception.StatusCode} for {description}: {reason}");
+        // These services do send an errorCode, and it is what their documentation is indexed by,
+        // so it belongs in the message rather than only on the exception. legacyErrors is null
+        // because this surface has no legacy error shape to carry any.
+        var message = EconomicApiException.BuildMessage(
+            exception.StatusCode, problem?.ErrorCode, description, reason, legacyErrors: null);
 
-        var requestId = exception.Headers.TryGetValue(EconomicApiException.RequestIdHeader, out var ids)
-            ? ids.FirstOrDefault()
-            : null;
+        // Read without regard to case, for the same reason the budget below is.
+        var requestId = HeaderReading.Value(exception.Headers, EconomicApiException.RequestIdHeader);
+
+        // Both surfaces spend one agreement-wide budget, and it is reported on failures too. This is
+        // the only place a generated failure can still see it — the response itself is already gone.
+        var rateLimit = RateLimitStatus.FromHeaders(exception.Headers);
 
         // A 409 here is always the objectVersion check: the record changed since it was read, and
         // retrying the same request cannot succeed. Verified against a live agreement.
@@ -116,11 +124,11 @@ internal static class OpenTransport
         if (status == HttpStatusCode.TooManyRequests)
         {
             return new EconomicRateLimitException(
-                message, problem, legacyError: null, requestId, rawBody: exception.Response);
+                message, problem, legacyError: null, requestId, rateLimit, rawBody: exception.Response);
         }
 
         return new EconomicApiException(
-            message, status, problem, legacyError: null, requestId, rateLimit: null,
+            message, status, problem, legacyError: null, requestId, rateLimit,
             rawBody: exception.Response, innerException: exception);
     }
 }

@@ -156,6 +156,7 @@ public sealed class EconomicOpenQuery<TResource, TFilter, TSort>
     /// <param name="selector">The property to sort by.</param>
     /// <returns>A query carrying both orderings.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="selector"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">No ordering has been established yet.</exception>
     public EconomicOpenQuery<TResource, TFilter, TSort> ThenBy(Expression<Func<TSort, EconomicSortField>> selector) =>
         WithSort(selector, SortDirection.Ascending, replace: false);
 
@@ -163,6 +164,7 @@ public sealed class EconomicOpenQuery<TResource, TFilter, TSort>
     /// <param name="selector">The property to sort by.</param>
     /// <returns>A query carrying both orderings.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="selector"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">No ordering has been established yet.</exception>
     public EconomicOpenQuery<TResource, TFilter, TSort> ThenByDescending(
         Expression<Func<TSort, EconomicSortField>> selector) =>
         WithSort(selector, SortDirection.Descending, replace: false);
@@ -312,9 +314,21 @@ public sealed class EconomicOpenQuery<TResource, TFilter, TSort>
         SortDirection direction,
         bool replace)
     {
+        ArgumentNullException.ThrowIfNull(selector);
+
+        // Rejected rather than promoted to the primary ordering, which is what this did and what the
+        // legacy query has always refused. A ThenBy with nothing to follow is a mistake at the call
+        // site, and quietly reinterpreting it is the behaviour this library exists to prevent —
+        // the same reason GetCursorPageAsync refuses a sort instead of dropping it.
+        if (!replace && _sort is null)
+        {
+            throw new InvalidOperationException(
+                "ThenBy requires an existing ordering. Call OrderBy or OrderByDescending first.");
+        }
+
         var clause = new SortClause(SortTranslator.FieldName(selector), direction).ToString();
 
-        return new(_source, _filter, replace || _sort is null ? clause : $"{_sort},{clause}", _pageSize);
+        return new(_source, _filter, replace ? clause : $"{_sort},{clause}", _pageSize);
     }
 
     private static string Combine(string? existing, string addition)

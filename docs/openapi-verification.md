@@ -164,8 +164,12 @@ The inline copy is dropped in preparation, leaving the reference.
 - [ ] Whether a cursor survives an intervening write, and what happens when it does not
 - [x] **`/count` does respect `filter`.** `/customers/count` answers `4`, the same count under
       `?filter=customerNumber$gt:0` answers `4`, and under a filter matching nothing answers `0`.
-- [ ] Whether `429` carries the same `X-RateLimiting` budget as the legacy surface. Deliberately
-      not probed: forcing one means exhausting a shared bucket on a live agreement.
+- [~] **A rejected call carries the budget, on both surfaces.** A `400` provoked with a bogus filter
+      answers with `X-RateLimiting` *and* `X-CallCost` — so a failure is priced, not just counted,
+      and an exception reporting no budget is a defect rather than the server's habit. That is what
+      the facade's failure path depends on, and it is now covered live by
+      `RateLimitOnFailureTests`. **`429` specifically is still unprobed**, and stays that way for
+      the original reason: forcing one means exhausting a shared bucket on a live agreement.
 - [x] **`$like:` is "contains" here too.** `productsapi` answers `name$like:robe` with
       `ZZ Probe booking product`, identically to `name$like:*robe*`. Checked on products because the
       customers service publishes no `like` at all — `name$like:` there is

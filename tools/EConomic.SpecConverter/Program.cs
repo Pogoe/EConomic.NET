@@ -596,6 +596,7 @@ return 0;
 static JsonObject BuildMergedDocument(string directory, List<string> conflicts)
 {
     JsonObject? merged = null;
+    JsonNode? securitySchemes = null;
     var paths = new JsonObject();
     var schemas = new JsonObject();
 
@@ -622,6 +623,12 @@ static JsonObject BuildMergedDocument(string directory, List<string> conflicts)
             ["security"] = document["security"]!.DeepClone(),
         };
 
+        // Every per-resource document carries the same block, so the first one settles it. Taken
+        // from this loop rather than by re-reading the directory: `Directory.GetFiles` has no
+        // guaranteed order, and `files` above is sorted ordinally precisely so that a run on
+        // Windows and a run on Linux CI produce byte-identical output.
+        securitySchemes ??= document["components"]!["securitySchemes"]!.DeepClone();
+
         foreach (var (path, item) in document["paths"]!.AsObject())
         {
             paths[path] = item!.DeepClone();
@@ -647,10 +654,7 @@ static JsonObject BuildMergedDocument(string directory, List<string> conflicts)
     merged!["paths"] = paths;
     merged["components"] = new JsonObject
     {
-        ["securitySchemes"] = JsonNode
-            .Parse(File.ReadAllText(Directory.GetFiles(directory, "*.json")
-                .First(f => !Path.GetFileName(f).StartsWith('_'))))!["components"]!["securitySchemes"]!
-            .DeepClone(),
+        ["securitySchemes"] = securitySchemes!,
         ["schemas"] = schemas,
     };
 

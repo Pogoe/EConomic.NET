@@ -40,22 +40,9 @@ public static class EconomicClientServiceCollectionExtensions
         services.AddOptions<EconomicOptions>()
             .Configure(configure)
             // Fail at startup rather than on the first call, when the cause is far away.
-            .Validate(
-                options =>
-                {
-                    try
-                    {
-                        options.Validate();
-                        return true;
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        return false;
-                    }
-                },
-                $"{nameof(EconomicOptions.AppSecretToken)} and {nameof(EconomicOptions.AgreementGrantToken)} "
-                + "are both required. Create them at https://www.e-conomic.com/developer/connect.")
             .ValidateOnStart();
+
+        services.AddSingleton<IValidateOptions<EconomicOptions>>(new EconomicOptionsValidator());
 
         services.AddTransient(provider => new EconomicAuthenticationHandler(Resolve(provider)));
         services.AddTransient(provider => new EconomicIdempotencyHandler(Resolve(provider)));
@@ -67,8 +54,11 @@ public static class EconomicClientServiceCollectionExtensions
             .AddHttpClient<EconomicClient>((provider, client) => client.BaseAddress = Resolve(provider).RestApiBaseAddress)
 
             // Constructed explicitly: EconomicClient offers a second constructor for callers not
-            // using DI, and the default activator cannot choose between the two.
-            .AddTypedClient((httpClient, _) => new EconomicClient(httpClient))
+            // using DI, and the default activator cannot choose between the two. The OpenAPI
+            // address is passed in because those services are addressed absolutely rather than
+            // through the transport's base address, so configuring it was otherwise a no-op.
+            .AddTypedClient((httpClient, provider) =>
+                new EconomicClient(httpClient, Resolve(provider).OpenApiBaseAddress))
 
             // Order matters. Idempotency runs first so a key is assigned once and every retry
             // reuses it; retry sits inside it, and authentication applies to each attempt.
@@ -79,4 +69,29 @@ public static class EconomicClientServiceCollectionExtensions
 
     private static EconomicOptions Resolve(IServiceProvider provider) =>
         provider.GetRequiredService<IOptions<EconomicOptions>>().Value;
+
+    /// <summary>Reports <see cref="EconomicOptions.Validate"/>'s own message at startup.</summary>
+    /// <remarks>
+    /// A predicate-and-message <c>Validate</c> call cannot do this: it carries one fixed string, so
+    /// every rejection read as a missing token — including a retry policy turned down by
+    /// <see cref="EconomicRetryOptions.Validate"/>, which names a different property entirely.
+    /// Registered as an instance rather than by type so nothing has to be activated by reflection.
+    /// </remarks>
+    private sealed class EconomicOptionsValidator : IValidateOptions<EconomicOptions>
+    {
+        public ValidateOptionsResult Validate(string? name, EconomicOptions options)
+        {
+            ArgumentNullException.ThrowIfNull(options);
+
+            try
+            {
+                options.Validate();
+                return ValidateOptionsResult.Success;
+            }
+            catch (InvalidOperationException exception)
+            {
+                return ValidateOptionsResult.Fail(exception.Message);
+            }
+        }
+    }
 }

@@ -1,6 +1,6 @@
-using System.Globalization;
 using System.Net;
 using EConomic.Exceptions;
+using EConomic.Http;
 using Generated = EConomic.Rest.Generated;
 
 namespace EConomic.Rest;
@@ -120,7 +120,7 @@ internal static class FacadeTransport
             return [];
         }
 
-        var mapped = new List<TResult>();
+        var mapped = new List<TResult>(Capacity(source));
         foreach (var item in source)
         {
             mapped.Add(map(item));
@@ -156,7 +156,7 @@ internal static class FacadeTransport
             return [];
         }
 
-        var built = new List<TTarget>();
+        var built = new List<TTarget>(Capacity(source));
         foreach (var item in source)
         {
             var target = new TTarget();
@@ -183,7 +183,7 @@ internal static class FacadeTransport
             return [];
         }
 
-        var parsed = new List<TEnum>();
+        var parsed = new List<TEnum>(Capacity(values));
         foreach (var value in values)
         {
             parsed.Add(ParseEnum<TEnum>(value, default));
@@ -191,6 +191,20 @@ internal static class FacadeTransport
 
         return parsed;
     }
+
+    /// <summary>The capacity to give a list built from <paramref name="source"/>.</summary>
+    /// <typeparam name="T">The element type.</typeparam>
+    /// <param name="source">The sequence about to be walked.</param>
+    /// <returns>Its length when that is known without enumerating it, otherwise zero.</returns>
+    /// <remarks>
+    /// Every caller here is copying a deserialized array whose length is already known, so the
+    /// growth doubling a default-sized list does — reallocating and copying at 4, 8, 16 and on up —
+    /// is entirely avoidable. Only counted when it is free: <c>TryGetNonEnumeratedCount</c> refuses
+    /// a sequence it would have to walk, which matters because these overloads accept a plain
+    /// <see cref="IEnumerable{T}"/> and enumerating one twice can be wrong as well as slow.
+    /// </remarks>
+    private static int Capacity<T>(IEnumerable<T> source) =>
+        source.TryGetNonEnumeratedCount(out var count) ? count : 0;
 
     /// <summary>Issues a <c>DELETE</c>, which has no generated method.</summary>
     /// <param name="httpClient">The configured transport.</param>
@@ -232,22 +246,26 @@ internal static class FacadeTransport
         // Falling back to the generated message matters: it also reports a failure to deserialize
         // a *successful* response, which has no error body to parse at all.
         var reason = problem?.Detail ?? problem?.Title ?? legacy?.Message ?? exception.Message;
-        var errors = legacy?.Errors is { Count: > 0 } list ? " " + string.Join(" ", list) : string.Empty;
 
-        var message = string.Create(
-            CultureInfo.InvariantCulture,
-            $"e-conomic returned {exception.StatusCode} for {description}: {reason}{errors}");
+        var message = EconomicApiException.BuildMessage(
+            exception.StatusCode, problem?.ErrorCode, description, reason, legacy?.Errors);
 
-        var requestId = exception.Headers.TryGetValue(EconomicApiException.RequestIdHeader, out var ids)
-            ? ids.FirstOrDefault()
-            : null;
+        // Read without regard to case, for the same reason the budget below is: the generated
+        // clients key these by whatever casing arrived, and this is the identifier e-conomic's
+        // support asks for, so losing it costs more than the miss is worth.
+        var requestId = HeaderReading.Value(exception.Headers, EconomicApiException.RequestIdHeader);
+
+        // e-conomic reports the budget on every response, failures included, and this is the only
+        // place a generated failure can still see it — the response itself is already gone.
+        var rateLimit = RateLimitStatus.FromHeaders(exception.Headers);
 
         if (status == HttpStatusCode.TooManyRequests)
         {
-            return new EconomicRateLimitException(message, problem, legacy, requestId, rawBody: exception.Response);
+            return new EconomicRateLimitException(
+                message, problem, legacy, requestId, rateLimit, rawBody: exception.Response);
         }
 
         return new EconomicApiException(
-            message, status, problem, legacy, requestId, rawBody: exception.Response, innerException: exception);
+            message, status, problem, legacy, requestId, rateLimit, exception.Response, exception);
     }
 }
